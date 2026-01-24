@@ -1,44 +1,235 @@
 <template>
-  <div class="home">
-    <header class="hero">
-      <h1>ÅbenForms</h1>
-      <p class="tagline">{{ $t('hero.tagline') }}</p>
-      <div class="cta-buttons">
-        <button class="btn btn-primary">{{ $t('hero.cta.demo') }}</button>
-        <button class="btn btn-secondary">{{ $t('hero.cta.learn') }}</button>
-      </div>
-    </header>
-
-    <section class="features">
-      <h2>{{ $t('features.title') }}</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>🔄 {{ $t('features.workflows.title') }}</h3>
-          <p>{{ $t('features.workflows.description') }}</p>
-        </div>
-        <div class="feature-card">
-          <h3>🏢 {{ $t('features.multiTenant.title') }}</h3>
-          <p>{{ $t('features.multiTenant.description') }}</p>
-        </div>
-        <div class="feature-card">
-          <h3>🇩🇰 {{ $t('features.danish.title') }}</h3>
-          <p>{{ $t('features.danish.description') }}</p>
-        </div>
-        <div class="feature-card">
-          <h3>🔐 {{ $t('features.security.title') }}</h3>
-          <p>{{ $t('features.security.description') }}</p>
+  <div class="min-h-screen bg-neutral-50">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center">
+          <h1 class="text-5xl md:text-6xl font-bold mb-6">
+            ÅbenForms
+          </h1>
+          <p class="text-xl md:text-2xl mb-8 text-primary-100 max-w-3xl mx-auto">
+            {{ $t('hero.tagline') }}
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <UiButton
+              size="lg"
+              variant="secondary"
+              @click="scrollToDemo"
+            >
+              {{ $t('hero.cta.demo') }}
+            </UiButton>
+            <UiButton
+              size="lg"
+              variant="outline"
+              class="!bg-white/10 !text-white !border-white hover:!bg-white/20"
+            >
+              {{ $t('hero.cta.learn') }}
+            </UiButton>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="status">
-      <h2>System Status</h2>
-      <div v-if="apiStatus.loading">Loading API connection...</div>
-      <div v-else-if="apiStatus.error" class="error">
-        API Error: {{ apiStatus.error }}
+    <!-- Features Grid -->
+    <section class="py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-bold text-center text-neutral-900 mb-12">
+          {{ $t('features.title') }}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div
+            v-for="feature in features"
+            :key="feature.icon"
+            class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 border border-neutral-200"
+          >
+            <div class="text-4xl mb-4">{{ feature.icon }}</div>
+            <h3 class="text-xl font-semibold text-neutral-900 mb-2">
+              {{ $t(feature.titleKey) }}
+            </h3>
+            <p class="text-neutral-600">
+              {{ $t(feature.descKey) }}
+            </p>
+          </div>
+        </div>
       </div>
-      <div v-else class="success">
-        ✓ Connected to backend: {{ apiStatus.data?.meta?.links?.self?.href }}
+    </section>
+
+    <!-- Demo Forms Section -->
+    <section id="demo" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-bold text-center text-neutral-900 mb-4">
+          {{ $t('demo.title') }}
+        </h2>
+        <p class="text-xl text-center text-neutral-600 mb-12 max-w-3xl mx-auto">
+          {{ $t('demo.subtitle') }}
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Contact Form Example -->
+          <div class="bg-neutral-50 rounded-xl p-8 border-2 border-primary-200">
+            <h3 class="text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+              <span class="text-primary-600">📝</span>
+              {{ $t('demo.forms.contact.title') }}
+            </h3>
+            <form @submit.prevent="handleContactSubmit" class="space-y-4">
+              <UiInput
+                v-model="contactForm.name"
+                :label="$t('demo.forms.contact.name')"
+                required
+                placeholder="Anders Jensen"
+              />
+              <UiInput
+                v-model="contactForm.email"
+                type="email"
+                :label="$t('demo.forms.contact.email')"
+                required
+                placeholder="anders@example.dk"
+              />
+              <UiSelect
+                v-model="contactForm.subject"
+                :label="$t('demo.forms.contact.subject')"
+                :options="subjectOptions"
+                required
+                :placeholder="$t('demo.forms.contact.selectSubject')"
+              />
+              <UiTextarea
+                v-model="contactForm.message"
+                :label="$t('demo.forms.contact.message')"
+                required
+                :placeholder="$t('demo.forms.contact.messagePlaceholder')"
+                :rows="5"
+              />
+              <UiButton type="submit" size="lg" full-width>
+                {{ $t('demo.forms.contact.submit') }}
+              </UiButton>
+            </form>
+          </div>
+
+          <!-- Application Form Example -->
+          <div class="bg-neutral-50 rounded-xl p-8 border-2 border-success-200">
+            <h3 class="text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
+              <span class="text-success-600">📋</span>
+              {{ $t('demo.forms.application.title') }}
+            </h3>
+            <form @submit.prevent="handleApplicationSubmit" class="space-y-4">
+              <UiInput
+                v-model="applicationForm.cpr"
+                :label="$t('demo.forms.application.cpr')"
+                required
+                placeholder="DDMMÅÅ-XXXX"
+                :help-text="$t('demo.forms.application.cprHelp')"
+              />
+              <UiInput
+                v-model="applicationForm.address"
+                :label="$t('demo.forms.application.address')"
+                required
+                placeholder="Rådhuspladsen 1, 1550 København"
+              />
+              <UiSelect
+                v-model="applicationForm.category"
+                :label="$t('demo.forms.application.category')"
+                :options="categoryOptions"
+                required
+                :placeholder="$t('demo.forms.application.selectCategory')"
+              />
+              <UiTextarea
+                v-model="applicationForm.description"
+                :label="$t('demo.forms.application.description')"
+                required
+                :rows="6"
+              />
+              <div class="bg-primary-50 border border-primary-200 rounded-lg p-4">
+                <p class="text-sm text-primary-900">
+                  <strong class="font-semibold">🔐 {{ $t('demo.security.title') }}:</strong>
+                  {{ $t('demo.security.message') }}
+                </p>
+              </div>
+              <UiButton type="submit" size="lg" full-width variant="secondary">
+                {{ $t('demo.forms.application.submit') }}
+              </UiButton>
+            </form>
+          </div>
+        </div>
+
+        <!-- Demo Success Message -->
+        <div v-if="showSuccess" class="mt-8 bg-success-50 border border-success-200 rounded-lg p-6 text-center">
+          <div class="text-4xl mb-2">✅</div>
+          <h4 class="text-xl font-semibold text-success-900 mb-2">
+            {{ $t('demo.success.title') }}
+          </h4>
+          <p class="text-success-700">
+            {{ $t('demo.success.message') }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="py-20 bg-neutral-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-bold text-center text-neutral-900 mb-12">
+          {{ $t('useCases.title') }}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            v-for="useCase in useCases"
+            :key="useCase.icon"
+            class="bg-white rounded-xl p-8 shadow-md"
+          >
+            <div class="text-5xl mb-4">{{ useCase.icon }}</div>
+            <h3 class="text-2xl font-semibold text-neutral-900 mb-3">
+              {{ $t(useCase.titleKey) }}
+            </h3>
+            <p class="text-neutral-600 mb-4">
+              {{ $t(useCase.descKey) }}
+            </p>
+            <ul class="space-y-2">
+              <li
+                v-for="example in useCase.examples"
+                :key="example"
+                class="text-sm text-neutral-700 flex items-start gap-2"
+              >
+                <span class="text-primary-600 mt-1">•</span>
+                {{ $t(example) }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-primary-600 text-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl font-bold mb-6">
+          {{ $t('cta.title') }}
+        </h2>
+        <p class="text-xl mb-8 text-primary-100">
+          {{ $t('cta.subtitle') }}
+        </p>
+        <UiButton size="lg" variant="secondary">
+          {{ $t('cta.button') }}
+        </UiButton>
+      </div>
+    </section>
+
+    <!-- API Status Footer -->
+    <section class="py-8 bg-neutral-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="text-sm text-neutral-400">
+            © 2026 ÅbenForms. {{ $t('footer.license') }}
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-neutral-400">{{ $t('footer.apiStatus') }}:</span>
+            <span v-if="apiStatus.loading" class="text-warning-400">{{ $t('footer.connecting') }}...</span>
+            <span v-else-if="apiStatus.error" class="text-error-400">{{ $t('footer.offline') }}</span>
+            <span v-else class="flex items-center gap-2 text-success-400">
+              <span class="w-2 h-2 bg-success-400 rounded-full animate-pulse"></span>
+              {{ $t('footer.online') }}
+            </span>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -48,10 +239,12 @@
 const { t } = useI18n()
 const { fetchApiIndex } = useApi()
 
-// Test API connection on mount
+// Test API connection
 const apiStatus = ref<{ loading: boolean; data?: any; error?: string }>({
   loading: true
 })
+
+const showSuccess = ref(false)
 
 onMounted(async () => {
   try {
@@ -61,108 +254,81 @@ onMounted(async () => {
     apiStatus.value = { loading: false, error: error.message }
   }
 })
+
+// Feature cards
+const features = [
+  { icon: '🔄', titleKey: 'features.workflows.title', descKey: 'features.workflows.description' },
+  { icon: '🏢', titleKey: 'features.multiTenant.title', descKey: 'features.multiTenant.description' },
+  { icon: '🇩🇰', titleKey: 'features.danish.title', descKey: 'features.danish.description' },
+  { icon: '🔐', titleKey: 'features.security.title', descKey: 'features.security.description' }
+]
+
+// Use cases
+const useCases = [
+  {
+    icon: '🏛️',
+    titleKey: 'useCases.municipal.title',
+    descKey: 'useCases.municipal.desc',
+    examples: ['useCases.municipal.ex1', 'useCases.municipal.ex2', 'useCases.municipal.ex3']
+  },
+  {
+    icon: '🏢',
+    titleKey: 'useCases.business.title',
+    descKey: 'useCases.business.desc',
+    examples: ['useCases.business.ex1', 'useCases.business.ex2', 'useCases.business.ex3']
+  },
+  {
+    icon: '🎓',
+    titleKey: 'useCases.education.title',
+    descKey: 'useCases.education.desc',
+    examples: ['useCases.education.ex1', 'useCases.education.ex2', 'useCases.education.ex3']
+  }
+]
+
+// Demo forms
+const contactForm = ref({
+  name: '',
+  email: '',
+  subject: '',
+  message: ''
+})
+
+const applicationForm = ref({
+  cpr: '',
+  address: '',
+  category: '',
+  description: ''
+})
+
+const subjectOptions = [
+  { value: 'general', label: t('demo.forms.contact.subjects.general') },
+  { value: 'support', label: t('demo.forms.contact.subjects.support') },
+  { value: 'demo', label: t('demo.forms.contact.subjects.demo') },
+  { value: 'other', label: t('demo.forms.contact.subjects.other') }
+]
+
+const categoryOptions = [
+  { value: 'building', label: t('demo.forms.application.categories.building') },
+  { value: 'social', label: t('demo.forms.application.categories.social') },
+  { value: 'education', label: t('demo.forms.application.categories.education') },
+  { value: 'other', label: t('demo.forms.application.categories.other') }
+]
+
+const handleContactSubmit = () => {
+  console.log('Contact form submitted:', contactForm.value)
+  showSuccess.value = true
+  setTimeout(() => (showSuccess.value = false), 5000)
+  contactForm.value = { name: '', email: '', subject: '', message: '' }
+}
+
+const handleApplicationSubmit = () => {
+  console.log('Application form submitted:', applicationForm.value)
+  showSuccess.value = true
+  setTimeout(() => (showSuccess.value = false), 5000)
+  applicationForm.value = { cpr: '', address: '', category: '', description: '' }
+}
+
+const scrollToDemo = () => {
+  document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })
+}
 </script>
-
-<style scoped>
-.home {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.hero {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 12px;
-  margin-bottom: 3rem;
-}
-
-.hero h1 {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-}
-
-.tagline {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-}
-
-.cta-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.btn {
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn-primary {
-  background: white;
-  color: #667eea;
-  font-weight: 600;
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid white;
-}
-
-.features {
-  margin-bottom: 3rem;
-}
-
-.features h2 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-}
-
-.feature-card {
-  padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #667eea;
-}
-
-.feature-card h3 {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-}
-
-.status {
-  padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.success {
-  color: #28a745;
-  font-weight: 600;
-}
-
-.error {
-  color: #dc3545;
-  font-weight: 600;
-}
-</style>

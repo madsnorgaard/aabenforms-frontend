@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: [
+    '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     '@vueuse/nuxt'

@@ -1,6 +1,6 @@
 {
   "hero": {
-    "tagline": "Workflow automation for Danish municipalities",
+    "tagline": "Modern workflow automation for Danish municipalities and businesses",
     "cta": {
       "demo": "Try Demo",
       "learn": "Learn More"
@@ -10,19 +10,101 @@
     "title": "Features",
     "workflows": {
       "title": "Advanced Workflows",
-      "description": "ECA-based event-driven automation for complex business processes"
+      "description": "ECA-based event-driven automation for complex business processes with BPMN visual editor"
     },
     "multiTenant": {
-      "title": "Multi-Tenant",
-      "description": "Run multiple municipalities/organizations on one platform with full isolation"
+      "title": "Multi-Tenant Platform",
+      "description": "Run multiple municipalities or organizations on one platform with complete data isolation and branding"
     },
     "danish": {
       "title": "Danish Integrations",
-      "description": "MitID, CPR lookup, Digital Post, and other Serviceplatformen integrations"
+      "description": "MitID, CPR lookup, CVR data, Digital Post and other Serviceplatformen integrations ready to use"
     },
     "security": {
       "title": "GDPR & Security",
-      "description": "Field-level CPR encryption, audit logs, and automated data deletion"
+      "description": "Field-level encryption of CPR numbers, automatic audit logging and compliance with Danish regulations"
     }
+  },
+  "demo": {
+    "title": "Try the Platform Features",
+    "subtitle": "See how ÅbenForms handles different form types with modern UX and Danish design",
+    "forms": {
+      "contact": {
+        "title": "Contact Form",
+        "name": "Your name",
+        "email": "Your email",
+        "subject": "Subject",
+        "selectSubject": "Select a subject",
+        "message": "Your message",
+        "messagePlaceholder": "Write your message here...",
+        "submit": "Send Message",
+        "subjects": {
+          "general": "General inquiry",
+          "support": "Support",
+          "demo": "Book a demo",
+          "other": "Other"
+        }
+      },
+      "application": {
+        "title": "Application Form",
+        "cpr": "CPR number",
+        "cprHelp": "Your CPR number will be encrypted and handled securely",
+        "address": "Address",
+        "category": "Category",
+        "selectCategory": "Select category",
+        "description": "Application description",
+        "submit": "Submit Application",
+        "categories": {
+          "building": "Building permit",
+          "social": "Social services",
+          "education": "Education",
+          "other": "Other"
+        }
+      }
+    },
+    "security": {
+      "title": "Security",
+      "message": "All personal data is automatically encrypted upon submission and handled according to GDPR"
+    },
+    "success": {
+      "title": "Thank you for your submission!",
+      "message": "This is a demo - no data has been saved. In production, your application would now be sent for processing."
+    }
+  },
+  "useCases": {
+    "title": "Use Cases",
+    "municipal": {
+      "title": "Municipalities",
+      "desc": "Digitize citizen services with secure, GDPR-compliant workflows",
+      "ex1": "Building permit applications with automated case handling",
+      "ex2": "Social services with CPR lookup",
+      "ex3": "Digital Post integration for notifications"
+    },
+    "business": {
+      "title": "Businesses",
+      "desc": "Automate internal processes with MitID Erhverv authentication",
+      "ex1": "Employee onboarding workflows",
+      "ex2": "Expense reimbursement and approvals",
+      "ex3": "HR processes and document management"
+    },
+    "education": {
+      "title": "Educational Institutions",
+      "desc": "Manage student administration and communication efficiently",
+      "ex1": "Applications for courses and programs",
+      "ex2": "Exam registration and grades",
+      "ex3": "Student counseling and case management"
+    }
+  },
+  "cta": {
+    "title": "Ready to get started?",
+    "subtitle": "Contact us for a demo or try the platform free for 30 days",
+    "button": "Contact Us"
+  },
+  "footer": {
+    "license": "Open source under GPL-2.0 license",
+    "apiStatus": "Backend API",
+    "connecting": "Connecting",
+    "offline": "Offline",
+    "online": "Online"
   }
 }

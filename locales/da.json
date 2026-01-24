@@ -1,6 +1,6 @@
 {
   "hero": {
-    "tagline": "Workflow-automatisering for danske kommuner",
+    "tagline": "Modern workflow-automatisering for danske kommuner og virksomheder",
     "cta": {
       "demo": "Prøv Demo",
       "learn": "Læs Mere"
@@ -10,19 +10,101 @@
     "title": "Funktioner",
     "workflows": {
       "title": "Avancerede Workflows",
-      "description": "ECA-baseret hændelses-drevet automatisering til komplekse forretningsprocesser"
+      "description": "ECA-baseret hændelses-drevet automatisering til komplekse forretningsprocesser med BPMN visuel editor"
     },
     "multiTenant": {
-      "title": "Multi-Tenant",
-      "description": "Kør flere kommuner/organisationer på samme platform med fuld isolation"
+      "title": "Multi-Tenant Platform",
+      "description": "Kør flere kommuner eller organisationer på samme platform med fuld dataisolation og branding"
     },
     "danish": {
       "title": "Danske Integrationer",
-      "description": "MitID, CPR-opslag, Digital Post, og andre Serviceplatformen-integrationer"
+      "description": "MitID, CPR-opslag, CVR-data, Digital Post og andre Serviceplatformen-integrationer klar til brug"
     },
     "security": {
       "title": "GDPR & Sikkerhed",
-      "description": "Felt-niveau kryptering af CPR, audit logs, og automatisk datasletning"
+      "description": "Felt-niveau kryptering af CPR-numre, automatisk audit logging og compliance med danske love"
     }
+  },
+  "demo": {
+    "title": "Prøv Platformens Funktioner",
+    "subtitle": "Se hvordan ÅbenForms håndterer forskellige typer formularer med moderne UX og dansk design",
+    "forms": {
+      "contact": {
+        "title": "Kontaktformular",
+        "name": "Dit navn",
+        "email": "Din e-mail",
+        "subject": "Emne",
+        "selectSubject": "Vælg et emne",
+        "message": "Din besked",
+        "messagePlaceholder": "Skriv din besked her...",
+        "submit": "Send Besked",
+        "subjects": {
+          "general": "Generel henvendelse",
+          "support": "Support",
+          "demo": "Book en demo",
+          "other": "Andet"
+        }
+      },
+      "application": {
+        "title": "Ansøgningsformular",
+        "cpr": "CPR-nummer",
+        "cprHelp": "Dit CPR-nummer bliver krypteret og håndteret sikkert",
+        "address": "Adresse",
+        "category": "Kategori",
+        "selectCategory": "Vælg kategori",
+        "description": "Beskrivelse af ansøgning",
+        "submit": "Indsend Ansøgning",
+        "categories": {
+          "building": "Byggesag",
+          "social": "Social hjælp",
+          "education": "Uddannelse",
+          "other": "Andet"
+        }
+      }
+    },
+    "security": {
+      "title": "Sikkerhed",
+      "message": "Alle persondata krypteres automatisk ved indsendelse og håndteres i henhold til GDPR"
+    },
+    "success": {
+      "title": "Tak for din indsendelse!",
+      "message": "Dette er en demo - ingen data er blevet gemt. I produktion ville din ansøgning nu blive sendt til sagsbehandling."
+    }
+  },
+  "useCases": {
+    "title": "Anvendelsesmuligheder",
+    "municipal": {
+      "title": "Kommuner",
+      "desc": "Digitalisér borgerservices med sikre, GDPR-compliant workflows",
+      "ex1": "Byggeansøgninger med automatisk sagsgang",
+      "ex2": "Socialforvaltning med CPR-opslag",
+      "ex3": "Digital Post integration til beskeder"
+    },
+    "business": {
+      "title": "Virksomheder",
+      "desc": "Automatisér interne processer med MitID Erhverv authentication",
+      "ex1": "Medarbejder onboarding workflows",
+      "ex2": "Udgiftsrefusion og godkendelser",
+      "ex3": "HR-processer og dokumenthåndtering"
+    },
+    "education": {
+      "title": "Uddannelsesinstitutioner",
+      "desc": "Håndtér studieadministration og kommunikation effektivt",
+      "ex1": "Ansøgninger til kurser og uddannelser",
+      "ex2": "Eksamenstilmelding og karakterer",
+      "ex3": "Studievejledning og sagsbehandling"
+    }
+  },
+  "cta": {
+    "title": "Klar til at komme i gang?",
+    "subtitle": "Kontakt os for en demo eller prøv platformen gratis i 30 dage",
+    "button": "Kontakt Os"
+  },
+  "footer": {
+    "license": "Open source under GPL-2.0 licens",
+    "apiStatus": "Backend API",
+    "connecting": "Forbinder",
+    "offline": "Offline",
+    "online": "Online"
   }
 }
