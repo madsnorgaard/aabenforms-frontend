@@ -1,0 +1,28 @@
+{
+  "name": "aabenforms-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxtjs/i18n": "^8.5.0",
+    "@pinia/nuxt": "^0.5.0",
+    "@vueuse/nuxt": "^11.0.0",
+    "nuxt": "^3.15.0",
+    "ofetch": "^1.4.0",
+    "vue": "^3.5.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vue-tsc": "^2.1.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

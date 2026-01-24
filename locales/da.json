@@ -1,0 +1,28 @@
+{
+  "hero": {
+    "tagline": "Workflow-automatisering for danske kommuner",
+    "cta": {
+      "demo": "Prøv Demo",
+      "learn": "Læs Mere"
+    }
+  },
+  "features": {
+    "title": "Funktioner",
+    "workflows": {
+      "title": "Avancerede Workflows",
+      "description": "ECA-baseret hændelses-drevet automatisering til komplekse forretningsprocesser"
+    },
+    "multiTenant": {
+      "title": "Multi-Tenant",
+      "description": "Kør flere kommuner/organisationer på samme platform med fuld isolation"
+    },
+    "danish": {
+      "title": "Danske Integrationer",
+      "description": "MitID, CPR-opslag, Digital Post, og andre Serviceplatformen-integrationer"
+    },
+    "security": {
+      "title": "GDPR & Sikkerhed",
+      "description": "Felt-niveau kryptering af CPR, audit logs, og automatisk datasletning"
+    }
+  }
+}
