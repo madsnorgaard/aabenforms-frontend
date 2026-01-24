@@ -22,7 +22,7 @@ omit_containers: [db]
 # Run Nuxt dev server
 web_extra_daemons:
   - name: "nuxt-dev"
-    command: "pnpm run dev"
+    command: "pnpm run dev --host"
     directory: /var/www/html
 
 # Expose Nuxt dev server port

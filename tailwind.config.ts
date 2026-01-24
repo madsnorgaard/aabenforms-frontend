@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss'
 
 // Danish government design system inspired colors
 // Based on DKFDS (Det Fælles Designsystem) color palette
-export default {
+const config: Config = {
   content: [
     './components/**/*.{js,vue,ts}',
     './layouts/**/*.vue',
@@ -131,4 +131,6 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config
+}
+
+export default config

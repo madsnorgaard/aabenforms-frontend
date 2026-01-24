@@ -42,9 +42,20 @@ export default defineNuxtConfig({
   // Vite configuration
   vite: {
     server: {
+      host: true, // Listen on all addresses
+      strictPort: false,
+      hmr: {
+        protocol: 'wss',
+        clientPort: 3001
+      },
       watch: {
         usePolling: true // Needed for DDEV file watching
       }
     }
+  },
+
+  // Disable host check in development
+  devServer: {
+    host: '0.0.0.0'
   }
 })
