@@ -25,14 +25,62 @@
       "description": "Felt-niveau kryptering af CPR-numre, automatisk audit logging og compliance med danske love"
     }
   },
+  "workflow": {
+    "title": "Multi-Party Workflow Automatisering",
+    "subtitle": "Se hvordan ÅbenForms håndterer komplekse sagsforløb med flere parter og automatiske integrationer",
+    "example": {
+      "title": "Eksempel: Byggetilladelse Workflow"
+    },
+    "steps": {
+      "citizen": {
+        "actor": "Borger",
+        "role": "Ansøger",
+        "action": "Indsender byggetilladelse med MitID-login. System henter automatisk CPR-data og validerer byggeadresse via DAWA."
+      },
+      "caseworker": {
+        "actor": "Sagsbehandler",
+        "role": "Kommunal medarbejder",
+        "action": "Modtager notifikation via Digital Post. Gennemgår ansøgning, opretter sag i SBSYS og tildeler til teknisk revisor."
+      },
+      "technical": {
+        "actor": "Teknisk Revisor",
+        "role": "Bygningskyndig",
+        "action": "Vurderer byggetegninger og compliance med bygningsreglement. Godkender eller anmoder om ændringer."
+      },
+      "approval": {
+        "actor": "Endelig Godkendelse",
+        "role": "Automatisk eller manuel",
+        "action": "Ved godkendelse sendes tilladelse som PDF via Digital Post. Borger får real-time status opdateringer."
+      }
+    },
+    "integrations": {
+      "mitid": "MitID",
+      "cpr": "CPR Opslag",
+      "cvr": "CVR Data",
+      "dawa": "DAWA Adresse",
+      "digitalpost": "Digital Post",
+      "sbsys": "SBSYS Sag",
+      "pdf": "PDF Generering"
+    },
+    "eca": {
+      "title": "Moderne ECA Workflow Engine",
+      "description": "ÅbenForms bruger ECA (Event-Condition-Action) som en moderne, aktivt udviklet erstatning for det forældede Maestro system.",
+      "benefits": {
+        "visual": "Visuel BPMN-editor til nem workflow-design",
+        "modern": "Aktivt udviklet til Drupal 11 med moderne arkitektur",
+        "flexible": "Fleksibel event-drevet logik uden hard-coded forretningsregler",
+        "headless": "Headless-kompatibel med JSON:API integration"
+      }
+    }
+  },
   "demo": {
-    "title": "Prøv Platformens Funktioner",
-    "subtitle": "Se hvordan ÅbenForms håndterer forskellige typer formularer med moderne UX og dansk design",
     "forms": {
       "contact": {
         "title": "Kontaktformular",
         "name": "Dit navn",
+        "namePlaceholder": "Anders Jensen",
         "email": "Din e-mail",
+        "emailPlaceholder": "anders@example.dk",
         "subject": "Emne",
         "selectSubject": "Vælg et emne",
         "message": "Din besked",
@@ -45,21 +93,28 @@
           "other": "Andet"
         }
       },
-      "application": {
-        "title": "Ansøgningsformular",
+      "permit": {
+        "title": "Byggetilladelse (Trin 1)",
+        "step": "Trin 1 af 4:",
+        "stepInfo": "Borgerens ansøgning",
         "cpr": "CPR-nummer",
-        "cprHelp": "Dit CPR-nummer bliver krypteret og håndteret sikkert",
-        "address": "Adresse",
-        "category": "Kategori",
-        "selectCategory": "Vælg kategori",
-        "description": "Beskrivelse af ansøgning",
-        "submit": "Indsend Ansøgning",
-        "categories": {
-          "building": "Byggesag",
-          "social": "Social hjælp",
-          "education": "Uddannelse",
+        "cprHelp": "Auto-udfyldes efter MitID login i produktion",
+        "address": "Byggeadresse",
+        "addressPlaceholder": "Søg adresse...",
+        "addressHelp": "DAWA autocomplete med validering",
+        "buildingType": "Type af byggearbejde",
+        "selectType": "Vælg type",
+        "types": {
+          "extension": "Tilbygning",
+          "garage": "Garage",
+          "carport": "Carport",
           "other": "Andet"
-        }
+        },
+        "description": "Beskrivelse af projekt",
+        "documents": "Upload tegninger og dokumenter",
+        "uploadHelp": "Klik for at vælge filer eller træk og slip",
+        "uploadFormats": "PDF, DWG, JPG (maks 10 MB pr. fil)",
+        "submit": "Send Ansøgning"
       }
     },
     "security": {
@@ -68,7 +123,8 @@
     },
     "success": {
       "title": "Tak for din indsendelse!",
-      "message": "Dette er en demo - ingen data er blevet gemt. I produktion ville din ansøgning nu blive sendt til sagsbehandling."
+      "message": "Dette er en demo - ingen data er blevet gemt. I produktion ville din ansøgning nu blive sendt til sagsbehandling og du vil modtage bekræftelse via Digital Post.",
+      "close": "Luk"
     }
   },
   "useCases": {

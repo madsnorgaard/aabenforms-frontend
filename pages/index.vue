@@ -54,16 +54,98 @@
       </div>
     </section>
 
-    <!-- Demo Forms Section -->
+    <!-- Workflow Demo Section -->
     <section id="demo" class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-4xl font-bold text-center text-neutral-900 mb-4">
-          {{ $t('demo.title') }}
-        </h2>
-        <p class="text-xl text-center text-neutral-600 mb-12 max-w-3xl mx-auto">
-          {{ $t('demo.subtitle') }}
-        </p>
+        <div class="text-center mb-12">
+          <h2 class="text-4xl font-bold text-neutral-900 mb-4">
+            {{ $t('workflow.title') }}
+          </h2>
+          <p class="text-xl text-neutral-600 max-w-3xl mx-auto">
+            {{ $t('workflow.subtitle') }}
+          </p>
+        </div>
 
+        <!-- Workflow Visualization -->
+        <div class="bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl p-8 mb-12 border-2 border-primary-200">
+          <h3 class="text-2xl font-bold text-neutral-900 mb-6 text-center">
+            {{ $t('workflow.example.title') }}
+          </h3>
+
+          <!-- Multi-Party Workflow Steps -->
+          <div class="space-y-6">
+            <div
+              v-for="(step, index) in workflowSteps"
+              :key="index"
+              class="flex items-start gap-4"
+            >
+              <!-- Step Number -->
+              <div class="flex-shrink-0 w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                {{ index + 1 }}
+              </div>
+
+              <!-- Step Content -->
+              <div class="flex-1 bg-white rounded-lg p-6 shadow-sm border border-primary-200">
+                <div class="flex items-center gap-3 mb-3">
+                  <span class="text-3xl">{{ step.icon }}</span>
+                  <div>
+                    <h4 class="text-lg font-semibold text-neutral-900">
+                      {{ $t(step.actorKey) }}
+                    </h4>
+                    <p class="text-sm text-neutral-600">{{ $t(step.roleKey) }}</p>
+                  </div>
+                </div>
+                <p class="text-neutral-700 mb-3">
+                  {{ $t(step.actionKey) }}
+                </p>
+
+                <!-- Integrations Used -->
+                <div v-if="step.integrations" class="flex flex-wrap gap-2">
+                  <span
+                    v-for="integration in step.integrations"
+                    :key="integration"
+                    class="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium"
+                  >
+                    <span>{{ getIntegrationIcon(integration) }}</span>
+                    {{ $t(`workflow.integrations.${integration}`) }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Arrow to next step -->
+              <div v-if="index < workflowSteps.length - 1" class="flex-shrink-0 w-12 flex justify-center">
+                <div class="text-2xl text-primary-400">↓</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ECA Highlight -->
+          <div class="mt-8 bg-success-50 border-2 border-success-200 rounded-lg p-6">
+            <div class="flex items-start gap-3">
+              <span class="text-3xl">⚡</span>
+              <div>
+                <h4 class="text-lg font-semibold text-success-900 mb-2">
+                  {{ $t('workflow.eca.title') }}
+                </h4>
+                <p class="text-success-800 mb-3">
+                  {{ $t('workflow.eca.description') }}
+                </p>
+                <ul class="space-y-2">
+                  <li
+                    v-for="benefit in ecaBenefits"
+                    :key="benefit"
+                    class="flex items-start gap-2 text-sm text-success-900"
+                  >
+                    <span class="text-success-600 font-bold">✓</span>
+                    {{ $t(`workflow.eca.benefits.${benefit}`) }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Demo Forms -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <!-- Contact Form Example -->
           <div class="bg-neutral-50 rounded-xl p-8 border-2 border-primary-200">
@@ -75,91 +157,124 @@
               <UiInput
                 v-model="contactForm.name"
                 :label="$t('demo.forms.contact.name')"
+                :placeholder="$t('demo.forms.contact.namePlaceholder')"
                 required
-                placeholder="Anders Jensen"
               />
               <UiInput
                 v-model="contactForm.email"
                 type="email"
                 :label="$t('demo.forms.contact.email')"
+                :placeholder="$t('demo.forms.contact.emailPlaceholder')"
                 required
-                placeholder="anders@example.dk"
               />
               <UiSelect
                 v-model="contactForm.subject"
                 :label="$t('demo.forms.contact.subject')"
-                :options="subjectOptions"
-                required
                 :placeholder="$t('demo.forms.contact.selectSubject')"
+                :options="contactSubjects"
+                required
               />
               <UiTextarea
                 v-model="contactForm.message"
                 :label="$t('demo.forms.contact.message')"
-                required
                 :placeholder="$t('demo.forms.contact.messagePlaceholder')"
+                required
                 :rows="5"
               />
-              <UiButton type="submit" size="lg" full-width>
+              <UiButton type="submit" variant="primary" size="lg" full-width>
                 {{ $t('demo.forms.contact.submit') }}
               </UiButton>
             </form>
           </div>
 
-          <!-- Application Form Example -->
+          <!-- Building Permit Step 1 Demo -->
           <div class="bg-neutral-50 rounded-xl p-8 border-2 border-success-200">
             <h3 class="text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
-              <span class="text-success-600">📋</span>
-              {{ $t('demo.forms.application.title') }}
+              <span class="text-success-600">🏗️</span>
+              {{ $t('demo.forms.permit.title') }}
             </h3>
-            <form @submit.prevent="handleApplicationSubmit" class="space-y-4">
+            <div class="mb-4 bg-primary-50 border border-primary-200 rounded-lg p-4">
+              <p class="text-sm text-primary-900">
+                <strong>{{ $t('demo.forms.permit.step') }}</strong> {{ $t('demo.forms.permit.stepInfo') }}
+              </p>
+            </div>
+            <form @submit.prevent="handlePermitSubmit" class="space-y-4">
               <UiInput
-                v-model="applicationForm.cpr"
-                :label="$t('demo.forms.application.cpr')"
-                required
+                v-model="permitForm.cpr"
+                :label="$t('demo.forms.permit.cpr')"
                 placeholder="DDMMÅÅ-XXXX"
-                :help-text="$t('demo.forms.application.cprHelp')"
-              />
+                required
+              >
+                <template #help>
+                  <span class="text-xs text-primary-600">
+                    🔐 {{ $t('demo.forms.permit.cprHelp') }}
+                  </span>
+                </template>
+              </UiInput>
               <UiInput
-                v-model="applicationForm.address"
-                :label="$t('demo.forms.application.address')"
+                v-model="permitForm.address"
+                :label="$t('demo.forms.permit.address')"
+                :placeholder="$t('demo.forms.permit.addressPlaceholder')"
                 required
-                placeholder="Rådhuspladsen 1, 1550 København"
-              />
+              >
+                <template #help>
+                  <span class="text-xs text-neutral-500">
+                    {{ $t('demo.forms.permit.addressHelp') }}
+                  </span>
+                </template>
+              </UiInput>
               <UiSelect
-                v-model="applicationForm.category"
-                :label="$t('demo.forms.application.category')"
-                :options="categoryOptions"
+                v-model="permitForm.buildingType"
+                :label="$t('demo.forms.permit.buildingType')"
+                :placeholder="$t('demo.forms.permit.selectType')"
+                :options="buildingTypes"
                 required
-                :placeholder="$t('demo.forms.application.selectCategory')"
               />
               <UiTextarea
-                v-model="applicationForm.description"
-                :label="$t('demo.forms.application.description')"
+                v-model="permitForm.description"
+                :label="$t('demo.forms.permit.description')"
                 required
-                :rows="6"
+                :rows="4"
               />
-              <div class="bg-primary-50 border border-primary-200 rounded-lg p-4">
-                <p class="text-sm text-primary-900">
-                  <strong class="font-semibold">🔐 {{ $t('demo.security.title') }}:</strong>
+
+              <!-- File Upload Simulation -->
+              <div>
+                <label class="block text-sm font-medium text-neutral-700 mb-2">
+                  {{ $t('demo.forms.permit.documents') }}
+                </label>
+                <div class="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center hover:border-primary-400 transition-colors cursor-pointer">
+                  <span class="text-4xl mb-2 block">📎</span>
+                  <p class="text-sm text-neutral-600">{{ $t('demo.forms.permit.uploadHelp') }}</p>
+                  <p class="text-xs text-neutral-500 mt-1">{{ $t('demo.forms.permit.uploadFormats') }}</p>
+                </div>
+              </div>
+
+              <div class="bg-success-50 border border-success-200 rounded-lg p-4">
+                <p class="text-sm text-success-900">
+                  <strong class="font-semibold">{{ $t('demo.security.title') }}:</strong>
                   {{ $t('demo.security.message') }}
                 </p>
               </div>
-              <UiButton type="submit" size="lg" full-width variant="secondary">
-                {{ $t('demo.forms.application.submit') }}
+
+              <UiButton type="submit" variant="secondary" size="lg" full-width>
+                {{ $t('demo.forms.permit.submit') }}
               </UiButton>
             </form>
           </div>
         </div>
 
         <!-- Demo Success Message -->
-        <div v-if="showSuccess" class="mt-8 bg-success-50 border border-success-200 rounded-lg p-6 text-center">
-          <div class="text-4xl mb-2">✅</div>
-          <h4 class="text-xl font-semibold text-success-900 mb-2">
+        <div v-if="showSuccess" class="mt-8 bg-success-100 border-2 border-success-300 rounded-lg p-8 text-center">
+          <div class="text-5xl mb-4">✅</div>
+          <h3 class="text-2xl font-bold text-success-900 mb-3">
             {{ $t('demo.success.title') }}
-          </h4>
-          <p class="text-success-700">
+          </h3>
+          <p class="text-success-800 mb-4">
             {{ $t('demo.success.message') }}
           </p>
+          <UiButton variant="secondary" @click="showSuccess = false">
+            {{ $t('demo.success.close') }}
+          </UiButton>
         </div>
       </div>
     </section>
@@ -207,7 +322,7 @@
         <p class="text-xl mb-8 text-primary-100">
           {{ $t('cta.subtitle') }}
         </p>
-        <UiButton size="lg" variant="secondary">
+        <UiButton variant="secondary" size="lg">
           {{ $t('cta.button') }}
         </UiButton>
       </div>
@@ -224,10 +339,7 @@
             <span class="text-sm text-neutral-400">{{ $t('footer.apiStatus') }}:</span>
             <span v-if="apiStatus.loading" class="text-warning-400">{{ $t('footer.connecting') }}...</span>
             <span v-else-if="apiStatus.error" class="text-error-400">{{ $t('footer.offline') }}</span>
-            <span v-else class="flex items-center gap-2 text-success-400">
-              <span class="w-2 h-2 bg-success-400 rounded-full animate-pulse"></span>
-              {{ $t('footer.online') }}
-            </span>
+            <span v-else class="text-success-400">{{ $t('footer.online') }}</span>
           </div>
         </div>
       </div>
@@ -236,31 +348,58 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 const { fetchApiIndex } = useApi()
 
-// Test API connection
-const apiStatus = ref<{ loading: boolean; data?: any; error?: string }>({
-  loading: true
-})
-
-const showSuccess = ref(false)
-
-onMounted(async () => {
-  try {
-    const data = await fetchApiIndex()
-    apiStatus.value = { loading: false, data }
-  } catch (error: any) {
-    apiStatus.value = { loading: false, error: error.message }
-  }
-})
-
-// Feature cards
+// Features data
 const features = [
   { icon: '🔄', titleKey: 'features.workflows.title', descKey: 'features.workflows.description' },
   { icon: '🏢', titleKey: 'features.multiTenant.title', descKey: 'features.multiTenant.description' },
   { icon: '🇩🇰', titleKey: 'features.danish.title', descKey: 'features.danish.description' },
   { icon: '🔐', titleKey: 'features.security.title', descKey: 'features.security.description' }
+]
+
+// Workflow steps for building permit
+const workflowSteps = [
+  {
+    icon: '👤',
+    actorKey: 'workflow.steps.citizen.actor',
+    roleKey: 'workflow.steps.citizen.role',
+    actionKey: 'workflow.steps.citizen.action',
+    integrations: ['mitid', 'cpr', 'dawa']
+  },
+  {
+    icon: '👔',
+    actorKey: 'workflow.steps.caseworker.actor',
+    roleKey: 'workflow.steps.caseworker.role',
+    actionKey: 'workflow.steps.caseworker.action',
+    integrations: ['digitalpost', 'sbsys']
+  },
+  {
+    icon: '🔧',
+    actorKey: 'workflow.steps.technical.actor',
+    roleKey: 'workflow.steps.technical.role',
+    actionKey: 'workflow.steps.technical.action',
+    integrations: null
+  },
+  {
+    icon: '✅',
+    actorKey: 'workflow.steps.approval.actor',
+    roleKey: 'workflow.steps.approval.role',
+    actionKey: 'workflow.steps.approval.action',
+    integrations: ['digitalpost', 'pdf']
+  }
+]
+
+// ECA benefits
+const ecaBenefits = [
+  'visual',
+  'modern',
+  'flexible',
+  'headless'
 ]
 
 // Use cases
@@ -285,7 +424,7 @@ const useCases = [
   }
 ]
 
-// Demo forms
+// Form data
 const contactForm = ref({
   name: '',
   email: '',
@@ -293,42 +432,69 @@ const contactForm = ref({
   message: ''
 })
 
-const applicationForm = ref({
+const permitForm = ref({
   cpr: '',
   address: '',
-  category: '',
+  buildingType: '',
   description: ''
 })
 
-const subjectOptions = [
-  { value: 'general', label: t('demo.forms.contact.subjects.general') },
-  { value: 'support', label: t('demo.forms.contact.subjects.support') },
-  { value: 'demo', label: t('demo.forms.contact.subjects.demo') },
-  { value: 'other', label: t('demo.forms.contact.subjects.other') }
+const contactSubjects = [
+  { label: t('demo.forms.contact.subjects.general'), value: 'general' },
+  { label: t('demo.forms.contact.subjects.support'), value: 'support' },
+  { label: t('demo.forms.contact.subjects.demo'), value: 'demo' },
+  { label: t('demo.forms.contact.subjects.other'), value: 'other' }
 ]
 
-const categoryOptions = [
-  { value: 'building', label: t('demo.forms.application.categories.building') },
-  { value: 'social', label: t('demo.forms.application.categories.social') },
-  { value: 'education', label: t('demo.forms.application.categories.education') },
-  { value: 'other', label: t('demo.forms.application.categories.other') }
+const buildingTypes = [
+  { label: t('demo.forms.permit.types.extension'), value: 'extension' },
+  { label: t('demo.forms.permit.types.garage'), value: 'garage' },
+  { label: t('demo.forms.permit.types.carport'), value: 'carport' },
+  { label: t('demo.forms.permit.types.other'), value: 'other' }
 ]
 
-const handleContactSubmit = () => {
-  console.log('Contact form submitted:', contactForm.value)
-  showSuccess.value = true
-  setTimeout(() => (showSuccess.value = false), 5000)
-  contactForm.value = { name: '', email: '', subject: '', message: '' }
-}
+const showSuccess = ref(false)
 
-const handleApplicationSubmit = () => {
-  console.log('Application form submitted:', applicationForm.value)
-  showSuccess.value = true
-  setTimeout(() => (showSuccess.value = false), 5000)
-  applicationForm.value = { cpr: '', address: '', category: '', description: '' }
-}
+// API status
+const apiStatus = ref<{ loading: boolean; data?: any; error?: string }>({
+  loading: true
+})
 
+// Methods
 const scrollToDemo = () => {
   document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })
 }
+
+const handleContactSubmit = () => {
+  showSuccess.value = true
+  contactForm.value = { name: '', email: '', subject: '', message: '' }
+}
+
+const handlePermitSubmit = () => {
+  showSuccess.value = true
+  permitForm.value = { cpr: '', address: '', buildingType: '', description: '' }
+}
+
+const getIntegrationIcon = (integration: string): string => {
+  const icons: Record<string, string> = {
+    mitid: '🔐',
+    cpr: '👤',
+    cvr: '🏢',
+    dawa: '📍',
+    digitalpost: '✉️',
+    sbsys: '📋',
+    pdf: '📄'
+  }
+  return icons[integration] || '🔧'
+}
+
+// Check API status on mount
+onMounted(async () => {
+  try {
+    const data = await fetchApiIndex()
+    apiStatus.value = { loading: false, data }
+  } catch (error: any) {
+    apiStatus.value = { loading: false, error: error.message }
+  }
+})
 </script>

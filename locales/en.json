@@ -25,14 +25,62 @@
       "description": "Field-level encryption of CPR numbers, automatic audit logging and compliance with Danish regulations"
     }
   },
+  "workflow": {
+    "title": "Multi-Party Workflow Automation",
+    "subtitle": "See how ÅbenForms handles complex case flows with multiple parties and automatic integrations",
+    "example": {
+      "title": "Example: Building Permit Workflow"
+    },
+    "steps": {
+      "citizen": {
+        "actor": "Citizen",
+        "role": "Applicant",
+        "action": "Submits building permit with MitID login. System automatically retrieves CPR data and validates building address via DAWA."
+      },
+      "caseworker": {
+        "actor": "Case Worker",
+        "role": "Municipal employee",
+        "action": "Receives notification via Digital Post. Reviews application, creates case in SBSYS and assigns to technical reviewer."
+      },
+      "technical": {
+        "actor": "Technical Reviewer",
+        "role": "Building specialist",
+        "action": "Assesses building plans and compliance with building regulations. Approves or requests changes."
+      },
+      "approval": {
+        "actor": "Final Approval",
+        "role": "Automatic or manual",
+        "action": "Upon approval, permit is sent as PDF via Digital Post. Citizen receives real-time status updates."
+      }
+    },
+    "integrations": {
+      "mitid": "MitID",
+      "cpr": "CPR Lookup",
+      "cvr": "CVR Data",
+      "dawa": "DAWA Address",
+      "digitalpost": "Digital Post",
+      "sbsys": "SBSYS Case",
+      "pdf": "PDF Generation"
+    },
+    "eca": {
+      "title": "Modern ECA Workflow Engine",
+      "description": "ÅbenForms uses ECA (Event-Condition-Action) as a modern, actively developed replacement for the legacy Maestro system.",
+      "benefits": {
+        "visual": "Visual BPMN editor for easy workflow design",
+        "modern": "Actively developed for Drupal 11 with modern architecture",
+        "flexible": "Flexible event-driven logic without hard-coded business rules",
+        "headless": "Headless-compatible with JSON:API integration"
+      }
+    }
+  },
   "demo": {
-    "title": "Try the Platform Features",
-    "subtitle": "See how ÅbenForms handles different form types with modern UX and Danish design",
     "forms": {
       "contact": {
         "title": "Contact Form",
         "name": "Your name",
+        "namePlaceholder": "John Doe",
         "email": "Your email",
+        "emailPlaceholder": "john@example.com",
         "subject": "Subject",
         "selectSubject": "Select a subject",
         "message": "Your message",
@@ -45,21 +93,28 @@
           "other": "Other"
         }
       },
-      "application": {
-        "title": "Application Form",
+      "permit": {
+        "title": "Building Permit (Step 1)",
+        "step": "Step 1 of 4:",
+        "stepInfo": "Citizen application",
         "cpr": "CPR number",
-        "cprHelp": "Your CPR number will be encrypted and handled securely",
-        "address": "Address",
-        "category": "Category",
-        "selectCategory": "Select category",
-        "description": "Application description",
-        "submit": "Submit Application",
-        "categories": {
-          "building": "Building permit",
-          "social": "Social services",
-          "education": "Education",
+        "cprHelp": "Auto-filled after MitID login in production",
+        "address": "Building address",
+        "addressPlaceholder": "Search address...",
+        "addressHelp": "DAWA autocomplete with validation",
+        "buildingType": "Type of construction",
+        "selectType": "Select type",
+        "types": {
+          "extension": "Extension",
+          "garage": "Garage",
+          "carport": "Carport",
           "other": "Other"
-        }
+        },
+        "description": "Project description",
+        "documents": "Upload plans and documents",
+        "uploadHelp": "Click to select files or drag and drop",
+        "uploadFormats": "PDF, DWG, JPG (max 10 MB per file)",
+        "submit": "Submit Application"
       }
     },
     "security": {
@@ -68,7 +123,8 @@
     },
     "success": {
       "title": "Thank you for your submission!",
-      "message": "This is a demo - no data has been saved. In production, your application would now be sent for processing."
+      "message": "This is a demo - no data has been saved. In production, your application would now be sent for processing and you will receive confirmation via Digital Post.",
+      "close": "Close"
     }
   },
   "useCases": {
