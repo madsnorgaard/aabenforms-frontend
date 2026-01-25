@@ -80,7 +80,7 @@
         "name": "Your name",
         "namePlaceholder": "John Doe",
         "email": "Your email",
-        "emailPlaceholder": "john@example.com",
+        "emailPlaceholder": "john{'@'}example.com",
         "subject": "Subject",
         "selectSubject": "Select a subject",
         "message": "Your message",

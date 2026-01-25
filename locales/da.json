@@ -80,7 +80,7 @@
         "name": "Dit navn",
         "namePlaceholder": "Anders Jensen",
         "email": "Din e-mail",
-        "emailPlaceholder": "anders@example.dk",
+        "emailPlaceholder": "anders{'@'}example.dk",
         "subject": "Emne",
         "selectSubject": "Vælg et emne",
         "message": "Din besked",
