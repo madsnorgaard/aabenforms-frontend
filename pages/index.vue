@@ -28,7 +28,7 @@
 
             <!-- Login Button -->
             <div class="sm:ml-4">
-              <LoginButton />
+              <AuthLoginButton />
             </div>
           </div>
         </div>
