@@ -25,6 +25,11 @@
             >
               {{ $t('hero.cta.learn') }}
             </UiButton>
+
+            <!-- Login Button -->
+            <div class="sm:ml-4">
+              <LoginButton />
+            </div>
           </div>
         </div>
       </div>
