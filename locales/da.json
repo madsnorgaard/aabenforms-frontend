@@ -162,5 +162,17 @@
     "connecting": "Forbinder",
     "offline": "Offline",
     "online": "Online"
+  },
+  "form": {
+    "loading": "Indlæser formular...",
+    "retry": "Prøv igen",
+    "submit": "Indsend",
+    "submitting": "Indsender...",
+    "success": "Tak for din indsendelse! Vi vender tilbage hurtigst muligt.",
+    "loadError": "Kunne ikke indlæse formularen. Prøv venligst igen.",
+    "submitError": "Der opstod en fejl ved indsendelse. Prøv venligst igen.",
+    "validationErrors": "Ret venligst følgende fejl:",
+    "unknownError": "Ukendt fejl",
+    "unsupportedFieldType": "Dette felttype understøttes ikke endnu"
   }
 }

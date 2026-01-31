@@ -162,5 +162,17 @@
     "connecting": "Connecting",
     "offline": "Offline",
     "online": "Online"
+  },
+  "form": {
+    "loading": "Loading form...",
+    "retry": "Retry",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "success": "Thank you for your submission! We will get back to you as soon as possible.",
+    "loadError": "Could not load the form. Please try again.",
+    "submitError": "An error occurred during submission. Please try again.",
+    "validationErrors": "Please correct the following errors:",
+    "unknownError": "Unknown error",
+    "unsupportedFieldType": "This field type is not yet supported"
   }
 }
