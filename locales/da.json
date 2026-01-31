@@ -174,5 +174,18 @@
     "validationErrors": "Ret venligst følgende fejl:",
     "unknownError": "Ukendt fejl",
     "unsupportedFieldType": "Dette felttype understøttes ikke endnu"
+  },
+  "auth": {
+    "loginWithMitId": "Log ind med MitID",
+    "loggingIn": "Logger ind...",
+    "logout": "Log ud",
+    "user": "Bruger",
+    "cpr": "CPR",
+    "myTasks": "Mine opgaver",
+    "sessionExpired": "Din session er udløbet. Log venligst ind igen.",
+    "loginRequired": "Du skal være logget ind for at se denne side.",
+    "loginFailed": "Login mislykkedes",
+    "loginSuccess": "Du er nu logget ind",
+    "returnHome": "Tilbage til forsiden"
   }
 }

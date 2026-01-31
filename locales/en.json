@@ -174,5 +174,18 @@
     "validationErrors": "Please correct the following errors:",
     "unknownError": "Unknown error",
     "unsupportedFieldType": "This field type is not yet supported"
+  },
+  "auth": {
+    "loginWithMitId": "Log in with MitID",
+    "loggingIn": "Logging in...",
+    "logout": "Log out",
+    "user": "User",
+    "cpr": "CPR",
+    "myTasks": "My tasks",
+    "sessionExpired": "Your session has expired. Please log in again.",
+    "loginRequired": "You must be logged in to view this page.",
+    "loginFailed": "Login failed",
+    "loginSuccess": "You are now logged in",
+    "returnHome": "Return to home"
   }
 }
