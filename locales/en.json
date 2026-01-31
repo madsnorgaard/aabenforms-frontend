@@ -187,5 +187,39 @@
     "loginFailed": "Login failed",
     "loginSuccess": "You are now logged in",
     "returnHome": "Return to home"
+  },
+  "workflow": {
+    "myTasks": "My Tasks",
+    "taskCount": "{count} tasks",
+    "loadingTasks": "Loading tasks...",
+    "loadError": "Could not load tasks. Please try again.",
+    "retry": "Retry",
+    "noTasks": "No tasks to display",
+    "filterAll": "All",
+    "filterPending": "Pending",
+    "filterApproved": "Approved",
+    "filterRejected": "Rejected",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "in_progress": "In Progress",
+      "completed": "Completed"
+    },
+    "highPriority": "High Priority",
+    "formData": "Form Data",
+    "approve": "Approve",
+    "reject": "Reject",
+    "addComment": "Add Comment",
+    "commentPlaceholder": "Write your comment here...",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "actionError": "Action failed. Please try again.",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{days} days ago",
+    "previous": "Previous",
+    "next": "Next",
+    "pageInfo": "Page {current} of {total}"
   }
 }

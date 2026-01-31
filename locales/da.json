@@ -187,5 +187,39 @@
     "loginFailed": "Login mislykkedes",
     "loginSuccess": "Du er nu logget ind",
     "returnHome": "Tilbage til forsiden"
+  },
+  "workflow": {
+    "myTasks": "Mine opgaver",
+    "taskCount": "{count} opgaver",
+    "loadingTasks": "Indlæser opgaver...",
+    "loadError": "Kunne ikke indlæse opgaver. Prøv venligst igen.",
+    "retry": "Prøv igen",
+    "noTasks": "Ingen opgaver at vise",
+    "filterAll": "Alle",
+    "filterPending": "Afventende",
+    "filterApproved": "Godkendt",
+    "filterRejected": "Afvist",
+    "status": {
+      "pending": "Afventende",
+      "approved": "Godkendt",
+      "rejected": "Afvist",
+      "in_progress": "I gang",
+      "completed": "Færdig"
+    },
+    "highPriority": "Høj prioritet",
+    "formData": "Formulardata",
+    "approve": "Godkend",
+    "reject": "Afvis",
+    "addComment": "Tilføj kommentar",
+    "commentPlaceholder": "Skriv din kommentar her...",
+    "cancel": "Annuller",
+    "submit": "Indsend",
+    "actionError": "Handlingen mislykkedes. Prøv venligst igen.",
+    "today": "I dag",
+    "yesterday": "I går",
+    "daysAgo": "{days} dage siden",
+    "previous": "Forrige",
+    "next": "Næste",
+    "pageInfo": "Side {current} af {total}"
   }
 }
