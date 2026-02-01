@@ -165,9 +165,11 @@ const submitting = ref(false)
 const success = ref(false)
 const validationErrors = ref<string[]>([])
 
-// Load form schema on mount
+// Load form schema on mount (client-side only)
 onMounted(() => {
-  loadForm()
+  if (process.client) {
+    loadForm()
+  }
 })
 
 // Load webform schema from backend
@@ -176,10 +178,22 @@ async function loadForm() {
   error.value = null
 
   try {
-    const response = await fetchResource(`webform/webform/${props.webformId}`)
+    const config = useRuntimeConfig()
+
+    // Use custom API endpoint instead of JSON:API (bypasses permissions)
+    const response = await $fetch(`${config.public.apiBase}/api/webform/${props.webformId}`, {
+      method: 'GET'
+    })
+
+    // Check if we got a valid response
+    if (!response.data || !response.data.attributes) {
+      throw new Error(t('form.loadError'))
+    }
+
     schema.value = response.data.attributes
     loading.value = false
   } catch (e: any) {
+    console.error('Failed to load webform:', e)
     error.value = e.message || t('form.loadError')
     loading.value = false
   }
@@ -192,13 +206,22 @@ async function submitForm() {
   success.value = false
 
   try {
-    await postResource(`webform_submission/${props.webformId}`, {
-      data: {
-        type: `webform_submission--${props.webformId}`,
-        attributes: {
-          data: formData.value
+    const config = useRuntimeConfig()
+
+    // Use custom API endpoint for submission
+    await $fetch(`${config.public.apiBase}/api/webform/${props.webformId}/submit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: {
+          type: `webform_submission--${props.webformId}`,
+          attributes: {
+            data: formData.value
+          }
         }
-      }
+      })
     })
 
     success.value = true

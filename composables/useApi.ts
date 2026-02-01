@@ -21,12 +21,13 @@ export const useApi = () => {
   /**
    * Fetch a specific resource from JSON:API
    */
-  const fetchResource = async (resourcePath: string) => {
+  const fetchResource = async (resourcePath: string, options?: { params?: Record<string, any> }) => {
     const response = await $fetch(`${apiBase}/jsonapi/${resourcePath}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/vnd.api+json'
-      }
+      },
+      params: options?.params
     })
     return response
   }
