@@ -107,3 +107,107 @@ export interface TaskActionPayload {
   comment?: string
   assignTo?: string
 }
+
+/**
+ * Workflow execution step
+ */
+export interface WorkflowStep {
+  /**
+   * Step ID (UUID or task ID)
+   */
+  id: string
+
+  /**
+   * Step name/title
+   */
+  name: string
+
+  /**
+   * Step description
+   */
+  description?: string
+
+  /**
+   * Current status of the step
+   */
+  status: 'pending' | 'active' | 'completed' | 'failed'
+
+  /**
+   * When the step started (ISO 8601)
+   */
+  startedAt?: string
+
+  /**
+   * When the step completed (ISO 8601)
+   */
+  completedAt?: string
+
+  /**
+   * Step duration in milliseconds
+   */
+  duration?: number
+
+  /**
+   * Error message if failed
+   */
+  error?: string
+
+  /**
+   * Whether this step represents a branching point
+   */
+  isBranching?: boolean
+
+  /**
+   * Parallel branches if this is a branching step
+   */
+  branches?: Array<{
+    id: string
+    name: string
+    status: string
+  }>
+}
+
+/**
+ * Workflow execution tracking
+ */
+export interface WorkflowExecution {
+  /**
+   * Execution ID (UUID)
+   */
+  id: string
+
+  /**
+   * Workflow ID this execution belongs to
+   */
+  workflowId: string
+
+  /**
+   * Overall execution status
+   */
+  status: 'running' | 'completed' | 'failed'
+
+  /**
+   * When the workflow was submitted (ISO 8601)
+   */
+  submittedAt: string
+
+  /**
+   * When the workflow completed (ISO 8601)
+   */
+  completedAt?: string
+
+  /**
+   * Array of workflow steps
+   */
+  steps: WorkflowStep[]
+
+  /**
+   * Workflow name/title
+   */
+  name?: string
+
+  /**
+   * Form submission ID if triggered by a form
+   */
+  submissionId?: string
+}

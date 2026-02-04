@@ -1,10 +1,25 @@
 <template>
-  <form @submit.prevent="submitForm" class="webform-renderer">
-    <div v-if="loading" class="loading">
+  <form
+    @submit.prevent="submitForm"
+    class="webform-renderer"
+    :aria-label="schema?.title || 'Form'"
+    novalidate
+  >
+    <div
+      v-if="loading"
+      class="loading"
+      role="status"
+      aria-live="polite"
+    >
       <p>{{ $t('form.loading') }}</p>
     </div>
 
-    <div v-else-if="error" class="error">
+    <div
+      v-else-if="error"
+      class="error"
+      role="alert"
+      aria-live="assertive"
+    >
       <p class="error-message">{{ error }}</p>
       <button type="button" @click="loadForm" class="retry-button">
         {{ $t('form.retry') }}
@@ -133,12 +148,25 @@
       </div>
 
       <!-- Success message -->
-      <div v-if="success" class="success">
+      <div
+        v-if="success"
+        class="success"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <p>{{ schema.settings?.confirmation_message || $t('form.success') }}</p>
       </div>
 
       <!-- Validation errors -->
-      <div v-if="validationErrors.length > 0" class="validation-errors">
+      <div
+        v-if="validationErrors.length > 0"
+        class="validation-errors"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        id="form-errors"
+      >
         <p class="error-title">{{ $t('form.validationErrors') }}</p>
         <ul>
           <li v-for="(err, idx) in validationErrors" :key="idx">{{ err }}</li>
