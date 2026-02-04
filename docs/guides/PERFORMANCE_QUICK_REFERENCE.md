@@ -202,7 +202,7 @@ npm run analyze
 - 📄 [Full Report](../PERFORMANCE_OPTIMIZATION.md)
 - 📚 [Best Practices](./performance-best-practices.md)
 - 🖼️ [Image Guide](./image-optimization-guide.md)
-- 🚀 [Quick Start](./PERFORMANCE_README.md)
+-  [Quick Start](./PERFORMANCE_README.md)
 
 ---
 

@@ -481,7 +481,7 @@ Before committing code, verify:
 
 ## Common Pitfalls
 
-### ❌ Loading Everything Upfront
+###  Loading Everything Upfront
 
 ```typescript
 // Bad
@@ -498,7 +498,7 @@ onMounted(async () => {
 })
 ```
 
-### ❌ Watching Everything
+###  Watching Everything
 
 ```typescript
 // Bad
@@ -512,7 +512,7 @@ watch(() => data1.specificProperty, () => {
 })
 ```
 
-### ❌ Not Using Skeleton Loaders
+###  Not Using Skeleton Loaders
 
 ```vue
 <!-- Bad: Blank screen during load -->
@@ -529,7 +529,7 @@ watch(() => data1.specificProperty, () => {
 </div>
 ```
 
-### ❌ Ignoring Bundle Size
+###  Ignoring Bundle Size
 
 ```bash
 # Always check before adding dependencies

@@ -496,7 +496,7 @@ function getAriaDescribedBy(): string | undefined {
 | **2.2.1 Timing Adjustable** | A |  Pass | Auto-refresh can be disabled (via autoRefresh prop). No time limits on forms. |
 | **2.2.2 Pause, Stop, Hide** | A |  Pass | Animations can be paused via prefers-reduced-motion. |
 | **2.3.1 Three Flashes or Below** | A |  Pass | No flashing content. |
-| **2.4.1 Bypass Blocks** | A | ⚠️ Partial | Skip links should be added to main layout. |
+| **2.4.1 Bypass Blocks** | A |  Partial | Skip links should be added to main layout. |
 | **2.4.2 Page Titled** | A |  Pass | All pages have descriptive titles via Nuxt metadata. |
 | **2.4.3 Focus Order** | A |  Pass | Tab order follows logical sequence. |
 | **2.4.4 Link Purpose (In Context)** | A |  Pass | Link text is descriptive. |
@@ -691,7 +691,7 @@ All colors meet WCAG AA contrast requirements (4.5:1 for normal text, 3:1 for la
 | Primary Dark | `#005a9e` | Hover states | 7.14:1 | 2.94:1 |  Pass |
 | Success Green | `#28a745` | Success states | 3.36:1 | 6.24:1 |  Pass (large text) |
 | Error Red | `#dc3545` | Error states | 4.52:1 | 4.64:1 |  Pass |
-| Warning Yellow | `#ffc107` | Warning states | 1.79:1 | 11.70:1 | ⚠️ Dark text only |
+| Warning Yellow | `#ffc107` | Warning states | 1.79:1 | 11.70:1 |  Dark text only |
 
 #### Text Colors
 
@@ -871,7 +871,7 @@ Use this checklist when creating or modifying components:
 
 ### 1. Skip Navigation Links
 
-**Status**: ⚠️ Recommended Enhancement
+**Status**:  Recommended Enhancement
 
 **Issue**: Skip links to main content not implemented in default layout.
 
@@ -912,7 +912,7 @@ Use this checklist when creating or modifying components:
 
 ### 2. Third-Party Content
 
-**Status**: ⚠️ Limited Control
+**Status**:  Limited Control
 
 **Issue**: Drupal backend may serve content not under our control (e.g., user-generated content, embeds).
 
@@ -925,7 +925,7 @@ Use this checklist when creating or modifying components:
 
 ### 3. PDF Generation
 
-**Status**: ⚠️ Accessibility Unknown
+**Status**:  Accessibility Unknown
 
 **Issue**: Generated PDFs (receipts, documents) may not be screen reader accessible.
 
@@ -939,7 +939,7 @@ Use this checklist when creating or modifying components:
 
 ### 4. CAPTCHA (If Implemented)
 
-**Status**: ⚠️ Not Yet Implemented
+**Status**:  Not Yet Implemented
 
 **Issue**: Traditional CAPTCHAs are inaccessible to blind users.
 
@@ -1082,9 +1082,9 @@ The application is now accessible to users with disabilities, including those us
 ### Next Steps
 
 1.  Implement skip navigation links in layout
-2. ⚠️ Add PDF/UA support for generated documents
-3. ⚠️ Create content authoring accessibility guidelines for Drupal backend
-4. ⚠️ Consider external accessibility audit for legal compliance verification
+2.  Add PDF/UA support for generated documents
+3.  Create content authoring accessibility guidelines for Drupal backend
+4.  Consider external accessibility audit for legal compliance verification
 
 ---
 
