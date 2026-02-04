@@ -2,9 +2,10 @@
 
 **Nuxt 3 multi-tenant UI for Danish municipal workflow automation**
 
-[![Nuxt](https://img.shields.io/badge/Nuxt-3.21.0-00DC82)](https://nuxt.com)
+[![Nuxt](https://img.shields.io/badge/Nuxt-3.15.0-00DC82)](https://nuxt.com)
 [![Vue](https://img.shields.io/badge/Vue-3.5.27-4FC08D)](https://vuejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6)](https://www.typescriptlang.org)
+[![Pinia](https://img.shields.io/badge/Pinia-2.3.0-yellow)](https://pinia.vuejs.org)
 [![License](https://img.shields.io/badge/License-GPL--2.0-green)](LICENSE)
 
 ## Overview
@@ -15,6 +16,28 @@ Modern, responsive frontend for the ÅbenForms platform that provides:
 - 🔄 Workflow task management dashboards
 - 🌍 Danish/English localization
 - 📱 Mobile-first responsive design
+
+## Implementation Status
+
+**Phase 2 Complete** (February 2026)
+
+✅ **Completed Features:**
+- Homepage with marketing content and navigation
+- Dynamic webform renderer component (WebformRenderer.vue)
+- Workflow task dashboard with filtering and pagination
+- MitID authentication UI (login button, callback handler)
+- Multi-tenant branding system with CSS theming
+- Pinia state management (user, tenant, form stores)
+- Composables for API, auth, and tenant management
+- Full i18n support (Danish/English)
+
+⏳ **Requires Backend:**
+- Form submission (backend JSON:API endpoint needed)
+- MitID OIDC flow (backend /mitid/login endpoint needed)
+- Workflow task data (backend ECA workflow system needed)
+- Tenant configuration from Domain module
+
+> **Note:** Frontend is fully functional in dev/preview mode. Some features require corresponding backend implementations to be production-ready.
 
 ## Quick Start
 
@@ -107,12 +130,35 @@ const form = await fetchResource('webform/webform/contact')
 await postResource('webform_submission/contact', data)
 ```
 
+## State Management
+
+Centralized state management with Pinia stores:
+
+```typescript
+// User authentication state
+import { useUserStore } from '~/stores/user'
+const userStore = useUserStore()
+
+// Tenant configuration state
+import { useTenantStore } from '~/stores/tenant'
+const tenantStore = useTenantStore()
+
+// Form data and submission state
+import { useFormStore } from '~/stores/form'
+const formStore = useFormStore()
+```
+
+**Available Stores:**
+- **user.ts**: Authentication, session management, CPR handling
+- **tenant.ts**: Multi-tenant configuration, branding, domain detection
+- **form.ts**: Webform loading, validation, submission
+
 ## Multi-Tenancy
 
 Automatic tenant detection from domain:
 
 ```typescript
-// composables/useTenant.ts
+// composables/useTenant.ts (uses Pinia store internally)
 const { detectTenant } = useTenant()
 
 await detectTenant()
@@ -144,12 +190,16 @@ For detailed information, see:
 
 | Technology | Version | Purpose |
 |-----------|---------|---------|
-| Nuxt | 3.21.0 | Framework |
+| Nuxt | 3.15.0 | Framework |
 | Vue | 3.5.27 | UI library |
 | TypeScript | 5.9.3 | Type safety |
-| Pinia | - | State management |
-| i18n | 8.5.6 | Internationalization |
-| VueUse | 11.3.0 | Composition utilities |
+| Pinia | 2.3.0 | State management |
+| @nuxtjs/i18n | 8.5.5 | Internationalization |
+| @vueuse/nuxt | 11.3.0 | Composition utilities |
+| Tailwind CSS | 3.4.0 | Styling framework |
+| Headless UI | 1.7.23 | Accessible components |
+
+> **Important:** Nuxt 3.15.0 is required (not 3.21.0) due to compatibility with @nuxtjs/i18n 8.5.5. Nuxt 3.21.0 causes `getActiveHead` export errors with the i18n module.
 
 ## Building for Production
 

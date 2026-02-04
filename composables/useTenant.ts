@@ -1,49 +1,56 @@
 import type { Tenant } from '~/types/tenant'
+import { useTenantStore } from '~/stores/tenant'
 
 /**
- * Composable for tenant detection and configuration
+ * Composable for tenant detection and configuration.
+ *
+ * Uses Drupal Domain Access module for multi-tenancy.
+ * Fetches domain-specific configuration including:
+ * - Tenant name and domain
+ * - Branding (logo, colors)
+ * - Custom settings
+ *
+ * Now uses Pinia tenant store for centralized state management.
  */
 export const useTenant = () => {
-  const tenant = useState<Tenant | null>('tenant', () => null)
-  const { fetchResource } = useApi()
+  const tenantStore = useTenantStore()
+
+  // Access state from Pinia store
+  const tenant = computed(() => tenantStore.tenant)
+  const loading = computed(() => tenantStore.loading)
+  const isDefaultTenant = computed(() => tenantStore.isDefaultTenant)
 
   /**
-   * Detect tenant from current domain and fetch configuration
+   * Detect tenant from current domain and fetch configuration.
+   * Delegates to Pinia store.
    */
   const detectTenant = async () => {
-    if (import.meta.server) {
-      return null
-    }
-
-    const hostname = window.location.hostname
-
-    try {
-      // Fetch tenant config from backend based on domain
-      const response = await fetchResource(
-        `node/tenant?filter[domain]=${hostname}`
-      )
-
-      if (response.data && response.data.length > 0) {
-        tenant.value = response.data[0].attributes as Tenant
-      }
-
-      return tenant.value
-    } catch (error) {
-      console.error('Failed to fetch tenant config:', error)
-      return null
-    }
+    return await tenantStore.detectTenant()
   }
 
   /**
    * Get current tenant configuration
    */
   const getTenant = () => {
-    return tenant.value
+    return tenantStore.tenant
+  }
+
+  /**
+   * Apply tenant branding to page
+   */
+  const applyBranding = () => {
+    tenantStore.applyBranding()
   }
 
   return {
+    // State (from Pinia store)
     tenant,
+    loading,
+    isDefaultTenant,
+
+    // Methods
     detectTenant,
-    getTenant
+    getTenant,
+    applyBranding,
   }
 }
