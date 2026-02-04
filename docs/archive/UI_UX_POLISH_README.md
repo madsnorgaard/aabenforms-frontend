@@ -31,7 +31,7 @@ All components are fully accessible, mobile-responsive, and well-documented.
 - Both Danish (da.json) and English (en.json) fully updated
 - User-friendly error messages with actionable recovery options
 
-### ♿ Accessibility Foundation
+###  Accessibility Foundation
 
 - ARIA labels on all interactive elements
 - Keyboard navigation support
@@ -48,7 +48,7 @@ All components are fully accessible, mobile-responsive, and well-documented.
 
 - [📋 Full Checklist](./UI_UX_POLISH_CHECKLIST.md) - Detailed status of all polish items
 - [📖 Component Guide](./COMPONENT_USAGE_GUIDE.md) - How to use the new UI components
-- [📊 Summary Report](./UI_UX_POLISH_SUMMARY.md) - Executive summary and roadmap
+- [ Summary Report](./UI_UX_POLISH_SUMMARY.md) - Executive summary and roadmap
 
 ### Components
 

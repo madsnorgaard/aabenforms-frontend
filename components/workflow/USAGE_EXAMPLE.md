@@ -264,12 +264,12 @@ function logPaymentComplete(receipt: PaymentReceipt) {
 }
 
 function logPaymentCancel() {
-  console.log('❌ Payment Cancelled')
+  console.log(' Payment Cancelled')
   alert('Payment was cancelled')
 }
 
 function logPaymentError(error: string) {
-  console.error('⚠️ Payment Error:', error)
+  console.error(' Payment Error:', error)
   alert(`Payment failed: ${error}`)
 }
 </script>
