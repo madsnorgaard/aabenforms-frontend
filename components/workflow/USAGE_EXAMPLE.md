@@ -259,7 +259,7 @@ const showCancel = ref(true)
 const selectedMethods = ref<PaymentMethodId[]>(['nets_easy', 'credit_card'])
 
 function logPaymentComplete(receipt: PaymentReceipt) {
-  console.log('✅ Payment Complete:', receipt)
+  console.log(' Payment Complete:', receipt)
   alert(`Payment successful! Transaction ID: ${receipt.transactionId}`)
 }
 
