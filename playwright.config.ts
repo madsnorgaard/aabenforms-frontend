@@ -84,15 +84,15 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run dev',
+    command: 'pnpm run dev',
     url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120000,
   },
 
   /* Global setup and teardown */
-  globalSetup: require.resolve('./tests/global-setup.ts'),
-  globalTeardown: require.resolve('./tests/global-teardown.ts'),
+  // globalSetup: './tests/global-setup.ts',
+  // globalTeardown: './tests/global-teardown.ts',
 
   /* Test timeout */
   timeout: 60000,
