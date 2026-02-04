@@ -8,7 +8,7 @@
 
 This report documents the accessibility audit and improvements made to the ÅbenForms frontend application to achieve WCAG 2.1 AA compliance. All interactive components have been enhanced with proper ARIA attributes, keyboard navigation, screen reader support, and sufficient color contrast ratios.
 
-**Compliance Status**: ✅ **WCAG 2.1 AA Compliant**
+**Compliance Status**:  **WCAG 2.1 AA Compliant**
 
 ---
 
@@ -54,7 +54,7 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 
 #### Accessibility Enhancements
 
-✅ **ARIA Attributes Added**:
+ **ARIA Attributes Added**:
 - `role="region"` on main container with descriptive `aria-label`
 - `role="alert"` on validation errors with `aria-live="assertive"`
 - `role="status"` on processing/success states with `aria-live="polite"`
@@ -64,20 +64,20 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 - `aria-hidden="true"` on decorative icons
 - `aria-label` on all interactive buttons
 
-✅ **Keyboard Navigation**:
+ **Keyboard Navigation**:
 - Arrow key navigation (Up/Down/Left/Right) for payment method selection
 - Space and Enter keys to select payment method
 - Tab order follows logical flow
 - Focus trap not needed (not a modal)
 - `tabindex` management for radio group pattern
 
-✅ **Screen Reader Announcements**:
+ **Screen Reader Announcements**:
 - Payment method selection announced via hidden live region
 - Processing status updates announced
 - Success/error states announced
 - Dynamic content changes announced
 
-✅ **Focus Indicators**:
+ **Focus Indicators**:
 - Visible 3px solid outline on all interactive elements
 - 2px outline offset for better visibility
 - Color: `#007acc` (primary blue) with 4.5:1+ contrast ratio
@@ -88,7 +88,7 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
   - Download receipt button
   - Retry button
 
-✅ **Form Accessibility**:
+ **Form Accessibility**:
 - All buttons have explicit `type="button"` (non-submit)
 - `aria-disabled` on disabled buttons
 - Payment amount has semantic `aria-label`
@@ -129,7 +129,7 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 
 #### Accessibility Enhancements
 
-✅ **ARIA Attributes Added**:
+ **ARIA Attributes Added**:
 - `role="region"` on main container with `aria-label="Appointment booking"`
 - `role="search"` on date range filter
 - `role="status"` on loading state with `aria-live="polite"`
@@ -140,21 +140,21 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 - `aria-busy` on confirm booking button during submission
 - `aria-label` on all form inputs and buttons
 
-✅ **Keyboard Navigation**:
+ **Keyboard Navigation**:
 - Tab order follows logical flow through date filters → time slots → booking panel
 - All interactive elements keyboard accessible
 - Date inputs use native HTML5 date picker (keyboard accessible by default)
 - Time slot buttons fully keyboard operable
 - Clear focus indicators on all elements
 
-✅ **Screen Reader Announcements**:
+ **Screen Reader Announcements**:
 - Selected slot announced with full date/time details
 - Loading states announced
 - Error messages announced assertively
 - Filter changes announced
 - Booking confirmation announced
 
-✅ **Focus Indicators**:
+ **Focus Indicators**:
 - 3px solid `#007acc` outline on all interactive elements
 - 2px outline offset
 - Focus styles on:
@@ -164,7 +164,7 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
   - Cancel button
   - Confirm booking button
 
-✅ **Semantic HTML**:
+ **Semantic HTML**:
 - Proper use of `<h2>`, `<h3>` for headings
 - Descriptive labels for all form controls
 - `aria-describedby` for contextual help
@@ -197,7 +197,7 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 
 #### Accessibility Enhancements
 
-✅ **ARIA Attributes Added**:
+ **ARIA Attributes Added**:
 - `role="region"` on main container with `aria-label="Workflow progress tracker"`
 - `role="progressbar"` on progress bar with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`
 - `role="list"` and `role="listitem"` on steps list
@@ -206,19 +206,19 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 - `aria-live="polite"` on progress updates
 - `aria-atomic="true"` for complete announcements
 
-✅ **Keyboard Navigation**:
+ **Keyboard Navigation**:
 - All content is readable via keyboard navigation
 - Tab order follows logical flow
 - Retry button keyboard accessible
 - No interactive elements trapped
 
-✅ **Screen Reader Announcements**:
+ **Screen Reader Announcements**:
 - Progress percentage announced as it updates
 - Step status changes announced
 - Completion/failure announced
 - Auto-refresh status announced
 
-✅ **Visual Indicators**:
+ **Visual Indicators**:
 - Clear color coding for step status:
   - **Pending**: Gray (#f5f5f5 background, #ddd border)
   - **Active**: Blue (#007acc) with pulse animation
@@ -227,7 +227,7 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 - Animated pulse effect on active step
 - Progress bar with gradient fill
 
-✅ **Semantic Structure**:
+ **Semantic Structure**:
 - Proper heading hierarchy (h2, h3)
 - Descriptive labels for all sections
 - Status badges with text (not just color)
@@ -264,31 +264,31 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 
 #### Accessibility Enhancements
 
-✅ **ARIA Attributes Added**:
+ **ARIA Attributes Added**:
 - `role="dialog"` on modal container
 - `aria-modal="true"` to indicate modal behavior
 - `aria-labelledby` pointing to modal title
 - Unique ID on title element
 
-✅ **Keyboard Navigation**:
+ **Keyboard Navigation**:
 - **Focus Trap**: Focus confined within modal using `@vueuse/integrations/useFocusTrap`
 - **ESC Key**: Closes modal (existing implementation)
 - **Tab Navigation**: Cycles through interactive elements within modal
 - Close button has minimum 44x44px touch target
 - All buttons have visible focus indicators
 
-✅ **Screen Reader Support**:
+ **Screen Reader Support**:
 - Modal announced as dialog when opened
 - Title read first via `aria-labelledby`
 - Body content fully accessible
 - Close button has descriptive `aria-label`
 
-✅ **Body Scroll Lock**:
+ **Body Scroll Lock**:
 - Prevents background scrolling when modal open
 - Restores scroll on close
 - Prevents focus from leaving modal
 
-✅ **Focus Management**:
+ **Focus Management**:
 - Focus moves to modal on open
 - Focus trap activated
 - Focus returned to trigger element on close
@@ -335,31 +335,31 @@ The accessibility audit was conducted following the WCAG 2.1 Level AA success cr
 
 #### Accessibility Enhancements
 
-✅ **ARIA Attributes Added**:
+ **ARIA Attributes Added**:
 - `aria-invalid="true"` on fields with errors
 - `aria-describedby` linking to help text and error messages
 - `aria-label="required"` on required field asterisks
 - Unique IDs on all form controls
 - `role="alert"` on error messages
 
-✅ **Form Validation**:
+ **Form Validation**:
 - Error messages associated with inputs via `aria-describedby`
 - Help text associated with inputs
 - Required fields indicated visually and programmatically
 - Error state indicated by color AND text
 
-✅ **Touch Targets**:
+ **Touch Targets**:
 - Minimum 44x44px height for inputs (`min-h-[44px]`)
 - Minimum 88px height for textareas (`min-h-[88px]`)
 - Labels fully clickable (activate associated input)
 
-✅ **Focus Indicators**:
+ **Focus Indicators**:
 - 2px ring with offset
 - Primary color (#007acc) for normal state
 - Error color (#dc3545) for error state
 - High contrast ratio (4.5:1+)
 
-✅ **Keyboard Navigation**:
+ **Keyboard Navigation**:
 - All form controls keyboard accessible
 - Tab order follows visual flow
 - Native form behaviors preserved
@@ -409,7 +409,7 @@ function getAriaDescribedBy(): string | undefined {
 
 #### Accessibility Enhancements
 
-✅ **ARIA Attributes Added**:
+ **ARIA Attributes Added**:
 - `aria-label` on form element
 - `novalidate` attribute (custom validation with better UX)
 - `role="status"` on loading state
@@ -417,18 +417,18 @@ function getAriaDescribedBy(): string | undefined {
 - `id="form-errors"` on validation error summary
 - `aria-live` regions for dynamic content
 
-✅ **Form Validation**:
+ **Form Validation**:
 - Error summary at top of form
 - Individual field errors linked to inputs
 - Validation messages announced to screen readers
 - Focus moved to first error on submission
 
-✅ **Loading States**:
+ **Loading States**:
 - Loading announced via `aria-live="polite"`
 - Visual spinner with semantic meaning
 - Non-intrusive loading indicator
 
-✅ **Success Messages**:
+ **Success Messages**:
 - Success announced via `aria-live="polite"`
 - Clear confirmation message
 - Smooth scroll to success message
@@ -441,18 +441,18 @@ function getAriaDescribedBy(): string | undefined {
 
 #### Existing Accessibility Features
 
-✅ **ARIA Attributes**:
+ **ARIA Attributes**:
 - `role="alert"` on container
 - `aria-live="assertive"` for errors, `aria-live="polite"` for info
 - `aria-hidden="true"` on decorative icons
 - `aria-label` on dismiss button
 
-✅ **Color Coding**:
+ **Color Coding**:
 - Not relying solely on color
 - Icons AND text for each variant
 - Sufficient contrast ratios
 
-✅ **Interactive Elements**:
+ **Interactive Elements**:
 - Dismiss button minimum 44x44px
 - Clear focus indicators
 - Keyboard accessible
@@ -465,71 +465,71 @@ function getAriaDescribedBy(): string | undefined {
 
 | Criterion | Level | Status | Notes |
 |-----------|-------|--------|-------|
-| **1.1.1 Non-text Content** | A | ✅ Pass | All images have alt text or aria-label. Decorative images marked with aria-hidden. |
-| **1.2.1 Audio-only and Video-only** | A | ✅ N/A | No audio/video content in application |
-| **1.2.2 Captions (Prerecorded)** | A | ✅ N/A | No video content |
-| **1.2.3 Audio Description or Media Alternative** | A | ✅ N/A | No video content |
-| **1.2.4 Captions (Live)** | AA | ✅ N/A | No live audio content |
-| **1.2.5 Audio Description (Prerecorded)** | AA | ✅ N/A | No video content |
-| **1.3.1 Info and Relationships** | A | ✅ Pass | Semantic HTML used throughout. Headings, lists, labels properly marked up. |
-| **1.3.2 Meaningful Sequence** | A | ✅ Pass | DOM order matches visual order. Tab order is logical. |
-| **1.3.3 Sensory Characteristics** | A | ✅ Pass | Instructions don't rely solely on shape, size, visual location, or sound. |
-| **1.3.4 Orientation** | AA | ✅ Pass | Content works in both portrait and landscape. No orientation restrictions. |
-| **1.3.5 Identify Input Purpose** | AA | ✅ Pass | Form inputs have autocomplete attributes where appropriate. |
-| **1.4.1 Use of Color** | A | ✅ Pass | Color is not the only means of conveying information. Icons + text used. |
-| **1.4.2 Audio Control** | A | ✅ N/A | No auto-playing audio |
-| **1.4.3 Contrast (Minimum)** | AA | ✅ Pass | All text meets 4.5:1 contrast ratio. Large text meets 3:1. See [Color Contrast](#color-contrast-verification). |
-| **1.4.4 Resize Text** | AA | ✅ Pass | Text can be resized to 200% without loss of functionality. |
-| **1.4.5 Images of Text** | AA | ✅ Pass | No images of text used except logos. |
-| **1.4.10 Reflow** | AA | ✅ Pass | Content reflows to 320px width without horizontal scrolling. |
-| **1.4.11 Non-text Contrast** | AA | ✅ Pass | Interactive elements meet 3:1 contrast ratio. |
-| **1.4.12 Text Spacing** | AA | ✅ Pass | Layout adapts to increased text spacing. |
-| **1.4.13 Content on Hover or Focus** | AA | ✅ Pass | Tooltips and popovers dismissible, hoverable, and persistent. |
+| **1.1.1 Non-text Content** | A |  Pass | All images have alt text or aria-label. Decorative images marked with aria-hidden. |
+| **1.2.1 Audio-only and Video-only** | A |  N/A | No audio/video content in application |
+| **1.2.2 Captions (Prerecorded)** | A |  N/A | No video content |
+| **1.2.3 Audio Description or Media Alternative** | A |  N/A | No video content |
+| **1.2.4 Captions (Live)** | AA |  N/A | No live audio content |
+| **1.2.5 Audio Description (Prerecorded)** | AA |  N/A | No video content |
+| **1.3.1 Info and Relationships** | A |  Pass | Semantic HTML used throughout. Headings, lists, labels properly marked up. |
+| **1.3.2 Meaningful Sequence** | A |  Pass | DOM order matches visual order. Tab order is logical. |
+| **1.3.3 Sensory Characteristics** | A |  Pass | Instructions don't rely solely on shape, size, visual location, or sound. |
+| **1.3.4 Orientation** | AA |  Pass | Content works in both portrait and landscape. No orientation restrictions. |
+| **1.3.5 Identify Input Purpose** | AA |  Pass | Form inputs have autocomplete attributes where appropriate. |
+| **1.4.1 Use of Color** | A |  Pass | Color is not the only means of conveying information. Icons + text used. |
+| **1.4.2 Audio Control** | A |  N/A | No auto-playing audio |
+| **1.4.3 Contrast (Minimum)** | AA |  Pass | All text meets 4.5:1 contrast ratio. Large text meets 3:1. See [Color Contrast](#color-contrast-verification). |
+| **1.4.4 Resize Text** | AA |  Pass | Text can be resized to 200% without loss of functionality. |
+| **1.4.5 Images of Text** | AA |  Pass | No images of text used except logos. |
+| **1.4.10 Reflow** | AA |  Pass | Content reflows to 320px width without horizontal scrolling. |
+| **1.4.11 Non-text Contrast** | AA |  Pass | Interactive elements meet 3:1 contrast ratio. |
+| **1.4.12 Text Spacing** | AA |  Pass | Layout adapts to increased text spacing. |
+| **1.4.13 Content on Hover or Focus** | AA |  Pass | Tooltips and popovers dismissible, hoverable, and persistent. |
 
 ### Principle 2: Operable
 
 | Criterion | Level | Status | Notes |
 |-----------|-------|--------|-------|
-| **2.1.1 Keyboard** | A | ✅ Pass | All functionality available via keyboard. |
-| **2.1.2 No Keyboard Trap** | A | ✅ Pass | Focus can move away from all components. Modal has proper focus management. |
-| **2.1.4 Character Key Shortcuts** | A | ✅ Pass | No single-character shortcuts implemented. |
-| **2.2.1 Timing Adjustable** | A | ✅ Pass | Auto-refresh can be disabled (via autoRefresh prop). No time limits on forms. |
-| **2.2.2 Pause, Stop, Hide** | A | ✅ Pass | Animations can be paused via prefers-reduced-motion. |
-| **2.3.1 Three Flashes or Below** | A | ✅ Pass | No flashing content. |
+| **2.1.1 Keyboard** | A |  Pass | All functionality available via keyboard. |
+| **2.1.2 No Keyboard Trap** | A |  Pass | Focus can move away from all components. Modal has proper focus management. |
+| **2.1.4 Character Key Shortcuts** | A |  Pass | No single-character shortcuts implemented. |
+| **2.2.1 Timing Adjustable** | A |  Pass | Auto-refresh can be disabled (via autoRefresh prop). No time limits on forms. |
+| **2.2.2 Pause, Stop, Hide** | A |  Pass | Animations can be paused via prefers-reduced-motion. |
+| **2.3.1 Three Flashes or Below** | A |  Pass | No flashing content. |
 | **2.4.1 Bypass Blocks** | A | ⚠️ Partial | Skip links should be added to main layout. |
-| **2.4.2 Page Titled** | A | ✅ Pass | All pages have descriptive titles via Nuxt metadata. |
-| **2.4.3 Focus Order** | A | ✅ Pass | Tab order follows logical sequence. |
-| **2.4.4 Link Purpose (In Context)** | A | ✅ Pass | Link text is descriptive. |
-| **2.4.5 Multiple Ways** | AA | ✅ Pass | Navigation menu, breadcrumbs, and search available. |
-| **2.4.6 Headings and Labels** | AA | ✅ Pass | Headings describe topics. Labels describe purpose. |
-| **2.4.7 Focus Visible** | AA | ✅ Pass | Clear focus indicators on all interactive elements. 3px solid outline. |
-| **2.5.1 Pointer Gestures** | A | ✅ Pass | No complex gestures required. |
-| **2.5.2 Pointer Cancellation** | A | ✅ Pass | Click actions fire on mouseup/touchend. |
-| **2.5.3 Label in Name** | A | ✅ Pass | Accessible names include visible text labels. |
-| **2.5.4 Motion Actuation** | A | ✅ N/A | No motion-based controls. |
+| **2.4.2 Page Titled** | A |  Pass | All pages have descriptive titles via Nuxt metadata. |
+| **2.4.3 Focus Order** | A |  Pass | Tab order follows logical sequence. |
+| **2.4.4 Link Purpose (In Context)** | A |  Pass | Link text is descriptive. |
+| **2.4.5 Multiple Ways** | AA |  Pass | Navigation menu, breadcrumbs, and search available. |
+| **2.4.6 Headings and Labels** | AA |  Pass | Headings describe topics. Labels describe purpose. |
+| **2.4.7 Focus Visible** | AA |  Pass | Clear focus indicators on all interactive elements. 3px solid outline. |
+| **2.5.1 Pointer Gestures** | A |  Pass | No complex gestures required. |
+| **2.5.2 Pointer Cancellation** | A |  Pass | Click actions fire on mouseup/touchend. |
+| **2.5.3 Label in Name** | A |  Pass | Accessible names include visible text labels. |
+| **2.5.4 Motion Actuation** | A |  N/A | No motion-based controls. |
 
 ### Principle 3: Understandable
 
 | Criterion | Level | Status | Notes |
 |-----------|-------|--------|-------|
-| **3.1.1 Language of Page** | A | ✅ Pass | HTML lang attribute set (da-DK or en-US). |
-| **3.1.2 Language of Parts** | AA | ✅ Pass | lang attribute used for multi-language content. |
-| **3.2.1 On Focus** | A | ✅ Pass | Focus doesn't trigger unexpected context changes. |
-| **3.2.2 On Input** | A | ✅ Pass | Input doesn't trigger unexpected context changes. |
-| **3.2.3 Consistent Navigation** | AA | ✅ Pass | Navigation consistent across pages. |
-| **3.2.4 Consistent Identification** | AA | ✅ Pass | Components used consistently throughout. |
-| **3.3.1 Error Identification** | A | ✅ Pass | Errors clearly identified and described. |
-| **3.3.2 Labels or Instructions** | A | ✅ Pass | All inputs have labels. Required fields marked. |
-| **3.3.3 Error Suggestion** | AA | ✅ Pass | Error messages include correction suggestions. |
-| **3.3.4 Error Prevention (Legal, Financial, Data)** | AA | ✅ Pass | Confirmation required for payment. Can review before submit. |
+| **3.1.1 Language of Page** | A |  Pass | HTML lang attribute set (da-DK or en-US). |
+| **3.1.2 Language of Parts** | AA |  Pass | lang attribute used for multi-language content. |
+| **3.2.1 On Focus** | A |  Pass | Focus doesn't trigger unexpected context changes. |
+| **3.2.2 On Input** | A |  Pass | Input doesn't trigger unexpected context changes. |
+| **3.2.3 Consistent Navigation** | AA |  Pass | Navigation consistent across pages. |
+| **3.2.4 Consistent Identification** | AA |  Pass | Components used consistently throughout. |
+| **3.3.1 Error Identification** | A |  Pass | Errors clearly identified and described. |
+| **3.3.2 Labels or Instructions** | A |  Pass | All inputs have labels. Required fields marked. |
+| **3.3.3 Error Suggestion** | AA |  Pass | Error messages include correction suggestions. |
+| **3.3.4 Error Prevention (Legal, Financial, Data)** | AA |  Pass | Confirmation required for payment. Can review before submit. |
 
 ### Principle 4: Robust
 
 | Criterion | Level | Status | Notes |
 |-----------|-------|--------|-------|
-| **4.1.1 Parsing** | A | ✅ Pass | Valid HTML. No duplicate IDs. Proper nesting. |
-| **4.1.2 Name, Role, Value** | A | ✅ Pass | All components have accessible names, roles, and values. |
-| **4.1.3 Status Messages** | AA | ✅ Pass | Status messages announced via aria-live regions. |
+| **4.1.1 Parsing** | A |  Pass | Valid HTML. No duplicate IDs. Proper nesting. |
+| **4.1.2 Name, Role, Value** | A |  Pass | All components have accessible names, roles, and values. |
+| **4.1.3 Status Messages** | AA |  Pass | Status messages announced via aria-live regions. |
 
 ### Overall Compliance
 
@@ -687,20 +687,20 @@ All colors meet WCAG AA contrast requirements (4.5:1 for normal text, 3:1 for la
 
 | Color | Hex | Use Case | Contrast on White | Contrast on Black | Status |
 |-------|-----|----------|-------------------|-------------------|--------|
-| Primary Blue | `#007acc` | Links, buttons, focus | 4.54:1 | 4.62:1 | ✅ Pass |
-| Primary Dark | `#005a9e` | Hover states | 7.14:1 | 2.94:1 | ✅ Pass |
-| Success Green | `#28a745` | Success states | 3.36:1 | 6.24:1 | ✅ Pass (large text) |
-| Error Red | `#dc3545` | Error states | 4.52:1 | 4.64:1 | ✅ Pass |
+| Primary Blue | `#007acc` | Links, buttons, focus | 4.54:1 | 4.62:1 |  Pass |
+| Primary Dark | `#005a9e` | Hover states | 7.14:1 | 2.94:1 |  Pass |
+| Success Green | `#28a745` | Success states | 3.36:1 | 6.24:1 |  Pass (large text) |
+| Error Red | `#dc3545` | Error states | 4.52:1 | 4.64:1 |  Pass |
 | Warning Yellow | `#ffc107` | Warning states | 1.79:1 | 11.70:1 | ⚠️ Dark text only |
 
 #### Text Colors
 
 | Color | Hex | Use Case | Contrast on White | Status |
 |-------|-----|----------|-------------------|--------|
-| Text Dark | `#1a1a1a` | Primary text | 16.05:1 | ✅ Pass |
-| Text Medium | `#333333` | Headings | 12.63:1 | ✅ Pass |
-| Text Light | `#666666` | Secondary text | 5.74:1 | ✅ Pass |
-| Text Muted | `#888888` | Timestamps | 3.54:1 | ✅ Pass (large text) |
+| Text Dark | `#1a1a1a` | Primary text | 16.05:1 |  Pass |
+| Text Medium | `#333333` | Headings | 12.63:1 |  Pass |
+| Text Light | `#666666` | Secondary text | 5.74:1 |  Pass |
+| Text Muted | `#888888` | Timestamps | 3.54:1 |  Pass (large text) |
 
 #### Background Colors
 
@@ -714,10 +714,10 @@ All colors meet WCAG AA contrast requirements (4.5:1 for normal text, 3:1 for la
 
 | State | Background | Border | Text | Icon | Contrast Ratio | Status |
 |-------|------------|--------|------|------|----------------|--------|
-| Success | `#d4edda` | `#28a745` | `#155724` | `#28a745` | 8.59:1 | ✅ Pass |
-| Error | `#f8d7da` | `#dc3545` | `#721c24` | `#dc3545` | 9.47:1 | ✅ Pass |
-| Warning | `#fff3cd` | `#ffc107` | `#856404` | `#ffc107` | 6.50:1 | ✅ Pass |
-| Info | `#d1ecf1` | `#0c8feb` | `#0c5460` | `#0c8feb` | 7.92:1 | ✅ Pass |
+| Success | `#d4edda` | `#28a745` | `#155724` | `#28a745` | 8.59:1 |  Pass |
+| Error | `#f8d7da` | `#dc3545` | `#721c24` | `#dc3545` | 9.47:1 |  Pass |
+| Warning | `#fff3cd` | `#ffc107` | `#856404` | `#ffc107` | 6.50:1 |  Pass |
+| Info | `#d1ecf1` | `#0c8feb` | `#0c5460` | `#0c8feb` | 7.92:1 |  Pass |
 
 ### Focus Indicator Contrast
 
@@ -725,9 +725,9 @@ All focus indicators use 3px solid `#007acc` outline with 2px offset.
 
 | Element | Background | Focus Outline | Contrast Ratio | Status |
 |---------|------------|---------------|----------------|--------|
-| Button (white bg) | `#ffffff` | `#007acc` | 4.54:1 | ✅ Pass |
-| Input (white bg) | `#ffffff` | `#007acc` | 4.54:1 | ✅ Pass |
-| Link (white bg) | `#ffffff` | `#007acc` | 4.54:1 | ✅ Pass |
+| Button (white bg) | `#ffffff` | `#007acc` | 4.54:1 |  Pass |
+| Input (white bg) | `#ffffff` | `#007acc` | 4.54:1 |  Pass |
+| Link (white bg) | `#ffffff` | `#007acc` | 4.54:1 |  Pass |
 
 ### Testing Tool Results
 
@@ -1067,13 +1067,13 @@ Before approving a pull request, verify:
 
 The ÅbenForms frontend application has been thoroughly audited and enhanced to meet WCAG 2.1 Level AA compliance. All major components now include:
 
-✅ Proper ARIA attributes for screen reader support
-✅ Full keyboard navigation with visible focus indicators
-✅ Sufficient color contrast ratios (4.5:1 for text, 3:1 for UI)
-✅ Form validation with accessible error messaging
-✅ Live regions for dynamic content announcements
-✅ Semantic HTML structure
-✅ Touch targets meeting minimum size requirements
+ Proper ARIA attributes for screen reader support
+ Full keyboard navigation with visible focus indicators
+ Sufficient color contrast ratios (4.5:1 for text, 3:1 for UI)
+ Form validation with accessible error messaging
+ Live regions for dynamic content announcements
+ Semantic HTML structure
+ Touch targets meeting minimum size requirements
 
 **Compliance Rate**: 97.9% (46/47 applicable WCAG 2.1 AA criteria)
 
@@ -1081,7 +1081,7 @@ The application is now accessible to users with disabilities, including those us
 
 ### Next Steps
 
-1. ✅ Implement skip navigation links in layout
+1.  Implement skip navigation links in layout
 2. ⚠️ Add PDF/UA support for generated documents
 3. ⚠️ Create content authoring accessibility guidelines for Drupal backend
 4. ⚠️ Consider external accessibility audit for legal compliance verification

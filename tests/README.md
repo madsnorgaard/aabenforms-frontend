@@ -69,11 +69,11 @@ npx playwright test --grep "should complete full parking permit workflow"
 
 Tests the `WorkflowPayment.vue` component:
 
-- ✅ **Display payment component** - Verifies amount, currency display
-- ✅ **Process payment successfully** - Tests Nets Easy payment flow
-- ✅ **Handle payment errors** - Tests error states and messages
-- ✅ **Support MobilePay** - Tests alternative payment method
-- ✅ **Display payment receipt** - Tests receipt modal
+-  **Display payment component** - Verifies amount, currency display
+-  **Process payment successfully** - Tests Nets Easy payment flow
+-  **Handle payment errors** - Tests error states and messages
+-  **Support MobilePay** - Tests alternative payment method
+-  **Display payment receipt** - Tests receipt modal
 
 **Tested Features:**
 - Payment method selection (Nets Easy, MobilePay, Bank Transfer)
@@ -87,11 +87,11 @@ Tests the `WorkflowPayment.vue` component:
 
 Tests the `AppointmentPicker.vue` component:
 
-- ✅ **Display available slots** - Verifies calendar and slot rendering
-- ✅ **Filter slots by date** - Tests date selection
-- ✅ **Book selected slot** - Tests booking process
-- ✅ **Prevent double booking** - Tests slot locking
-- ✅ **Display slot duration** - Verifies time slot metadata
+-  **Display available slots** - Verifies calendar and slot rendering
+-  **Filter slots by date** - Tests date selection
+-  **Book selected slot** - Tests booking process
+-  **Prevent double booking** - Tests slot locking
+-  **Display slot duration** - Verifies time slot metadata
 
 **Tested Features:**
 - Calendar navigation
@@ -106,11 +106,11 @@ Tests the `AppointmentPicker.vue` component:
 
 Tests the `WorkflowExecutionTracker.vue` component:
 
-- ✅ **Display workflow progress** - Tests step visualization
-- ✅ **Update progress real-time** - Tests live updates
-- ✅ **Show step details on hover** - Tests tooltips
-- ✅ **Display error states** - Tests error visualization
-- ✅ **Show estimated time** - Tests time estimates
+-  **Display workflow progress** - Tests step visualization
+-  **Update progress real-time** - Tests live updates
+-  **Show step details on hover** - Tests tooltips
+-  **Display error states** - Tests error visualization
+-  **Show estimated time** - Tests time estimates
 
 **Tested Features:**
 - Step progress visualization
@@ -124,8 +124,8 @@ Tests the `WorkflowExecutionTracker.vue` component:
 
 Full workflow integration tests:
 
-- ✅ **Complete full workflow** - Tests 7-step process
-- ✅ **Allow workflow restart** - Tests starting new application
+-  **Complete full workflow** - Tests 7-step process
+-  **Allow workflow restart** - Tests starting new application
 
 **Workflow Steps Tested:**
 1. Fill application form
@@ -140,9 +140,9 @@ Full workflow integration tests:
 
 Full marriage booking workflow:
 
-- ✅ **Complete full workflow** - Tests 8-step process
-- ✅ **Send confirmations to both partners** - Tests dual notifications
-- ✅ **Handle slot unavailability** - Tests race conditions
+-  **Complete full workflow** - Tests 8-step process
+-  **Send confirmations to both partners** - Tests dual notifications
+-  **Handle slot unavailability** - Tests race conditions
 
 **Workflow Steps Tested:**
 1. Fill partner 1 details
