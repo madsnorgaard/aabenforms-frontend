@@ -74,29 +74,7 @@ export default defineNuxtConfig({
       // Chunk size warning limit (in KB)
       chunkSizeWarningLimit: 1000,
 
-      // Manual chunk splitting for better caching
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            // Vendor chunks
-            'vendor-vue': ['vue', '@vueuse/core'],
-            'vendor-i18n': ['@nuxtjs/i18n'],
-
-            // UI components
-            'ui-components': [
-              './components/ui/Button.vue',
-              './components/ui/Input.vue',
-              './components/ui/Select.vue',
-              './components/ui/Modal.vue',
-              './components/ui/Alert.vue',
-              './components/ui/Skeleton.vue',
-              './components/ui/Spinner.vue',
-              './components/ui/Textarea.vue',
-              './components/ui/Tooltip.vue',
-            ],
-          },
-        },
-      },
+      // Let Nuxt handle chunk splitting automatically
     },
 
     // CSS code splitting
