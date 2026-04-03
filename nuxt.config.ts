@@ -79,7 +79,7 @@ export default defineNuxtConfig({
         output: {
           manualChunks: {
             // Vendor chunks
-            'vendor-vue': ['vue', '@vueuse/core', '@vueuse/nuxt'],
+            'vendor-vue': ['vue', '@vueuse/core'],
             'vendor-i18n': ['@nuxtjs/i18n'],
 
             // UI components
@@ -105,14 +105,15 @@ export default defineNuxtConfig({
     },
 
     server: {
-      host: true, // Listen on all addresses
+      host: true,
       strictPort: false,
+      allowedHosts: ['aabenforms-frontend.ddev.site', 'localhost', '127.0.0.1'],
       hmr: {
         protocol: 'wss',
         clientPort: 3001
       },
       watch: {
-        usePolling: true // Needed for DDEV file watching
+        usePolling: true
       }
     },
 

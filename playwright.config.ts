@@ -8,8 +8,8 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests/e2e',
 
-  /* Run tests in files in parallel */
-  fullyParallel: true,
+  /* Run tests in files in parallel - limited for DDEV */
+  fullyParallel: false,
 
   /* Fail the build on CI if you accidentally left test.only in the source code */
   forbidOnly: !!process.env.CI,
@@ -17,8 +17,8 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
 
-  /* Opt out of parallel tests on CI */
-  workers: process.env.CI ? 1 : undefined,
+  /* Single worker for DDEV local testing */
+  workers: 1,
 
   /* Reporter to use */
   reporter: [
@@ -46,6 +46,9 @@ export default defineConfig({
 
     /* Maximum navigation time */
     navigationTimeout: 30000,
+
+    /* Don't wait for all resources - DDEV backend may be slow */
+    launchOptions: {},
   },
 
   /* Configure projects for major browsers */
@@ -82,13 +85,15 @@ export default defineConfig({
     },
   ],
 
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'pnpm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true,
-    timeout: 120000,
-  },
+  /* When running via DDEV, the server is already running. Set BASE_URL env var.
+   * For local non-DDEV: uncomment the webServer block below.
+   */
+  // webServer: {
+  //   command: 'pnpm run dev',
+  //   url: 'http://localhost:3000',
+  //   reuseExistingServer: true,
+  //   timeout: 120000,
+  // },
 
   /* Global setup and teardown */
   // globalSetup: './tests/global-setup.ts',

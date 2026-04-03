@@ -93,8 +93,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['IBM Plex Sans', 'system-ui', '-apple-system', 'sans-serif'],
-        heading: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
+        sans: ['Atkinson Hyperlegible Next', 'system-ui', '-apple-system', 'sans-serif'],
+        heading: ['Atkinson Hyperlegible Next', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],

@@ -41,7 +41,7 @@ defineEmits<{
   'update:modelValue': [value: string]
 }>()
 
-const inputId = `input-${Math.random().toString(36).substr(2, 9)}`
+const inputId = useId()!
 
 const inputClasses = computed(() => {
   const base = 'block w-full rounded-lg border px-4 py-2 text-base transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:bg-neutral-100 disabled:cursor-not-allowed min-h-[44px]'

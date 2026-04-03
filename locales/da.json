@@ -25,7 +25,7 @@
       "description": "Felt-niveau kryptering af CPR-numre, automatisk audit logging og compliance med danske love"
     }
   },
-  "workflow": {
+  "workflowDemo": {
     "title": "Multi-Party Workflow Automatisering",
     "subtitle": "Se hvordan ÅbenForms håndterer komplekse sagsforløb med flere parter og automatiske integrationer",
     "example": {
@@ -152,9 +152,9 @@
     }
   },
   "cta": {
-    "title": "Klar til at komme i gang?",
-    "subtitle": "Kontakt os for en demo eller prøv platformen gratis i 30 dage",
-    "button": "Kontakt Os"
+    "title": "Udforsk platformen",
+    "subtitle": "Kør dit eget proof of concept eller book en guidet demo-session",
+    "button": "Book en Demo"
   },
   "footer": {
     "license": "Open source under GPL-2.0 licens",

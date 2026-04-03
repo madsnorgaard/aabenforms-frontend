@@ -26,13 +26,16 @@ export const useAuth = () => {
    * Redirects to backend /mitid/login endpoint
    */
   function login(returnUrl?: string) {
-    // Store return URL in sessionStorage to redirect after callback
+    // Store the intended destination for after auth completes
     if (returnUrl) {
       sessionStorage.setItem('mitid_return_url', returnUrl)
     }
 
-    // Redirect to backend MitID login endpoint
-    window.location.href = `${apiBase}/mitid/login`
+    // Build the auth callback URL on the frontend
+    const callbackUrl = `${window.location.origin}/auth/callback`
+
+    // Redirect to backend MitID login, telling it to return to our callback page
+    window.location.href = `${apiBase}/mitid/login?return_url=${encodeURIComponent(callbackUrl)}`
   }
 
   /**
@@ -70,8 +73,10 @@ export const useAuth = () => {
    */
   async function loadUserFromSession(sid: string) {
     try {
-      // Call backend to get session data
-      const response = await fetchResource(`mitid/session/${sid}`)
+      // Call backend MitID session endpoint directly (not via JSON:API)
+      const response = await $fetch<{ data: { attributes: { name: string; cpr: string; email: string; expiry: string } } }>(`${apiBase}/mitid/session/${sid}`, {
+        headers: { 'Accept': 'application/json' },
+      })
 
       if (!response.data) {
         throw new Error('Invalid session')
@@ -79,7 +84,6 @@ export const useAuth = () => {
 
       const sessionData = response.data.attributes
 
-      // Store user data in Pinia store
       const userData: User = {
         cpr: sessionData.cpr,
         name: sessionData.name || '',
@@ -118,6 +122,9 @@ export const useAuth = () => {
     return userStore.isSessionExpired
   }
 
+  // Expose error state for callback page
+  const error = ref<string | null>(null)
+
   return {
     // State (from Pinia store)
     user,
@@ -125,6 +132,7 @@ export const useAuth = () => {
     loading,
     isAuthenticated,
     maskedCpr,
+    error,
 
     // Methods
     login,

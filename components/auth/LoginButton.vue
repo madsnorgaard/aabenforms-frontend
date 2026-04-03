@@ -71,14 +71,22 @@ function toggleMenu() {
 }
 
 // Close menu when clicking outside
+const handleClickOutside = (e: MouseEvent) => {
+  const target = e.target as HTMLElement
+  if (!target.closest('.user-menu')) {
+    menuOpen.value = false
+  }
+}
+
 onMounted(() => {
   if (process.client) {
-    document.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement
-      if (!target.closest('.user-menu')) {
-        menuOpen.value = false
-      }
-    })
+    document.addEventListener('click', handleClickOutside)
+  }
+})
+
+onUnmounted(() => {
+  if (process.client) {
+    document.removeEventListener('click', handleClickOutside)
   }
 })
 </script>

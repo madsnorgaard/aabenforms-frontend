@@ -6,7 +6,7 @@
  *
  * Checks if user is authenticated and redirects to login if not.
  */
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const { isAuthenticated, restoreSession, isSessionExpired } = useAuth()
 
   // Try to restore session from localStorage on first access
@@ -29,8 +29,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
   if (isSessionExpired()) {
     // Clear expired session and redirect
     if (process.client) {
-      const { clearSession } = useAuth()
-      clearSession()
+      const { logout } = useAuth()
+      await logout()
       sessionStorage.setItem('mitid_return_url', to.fullPath)
     }
 

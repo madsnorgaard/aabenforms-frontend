@@ -3,14 +3,22 @@
  * Includes caching, retry logic, and request deduplication
  */
 
-// Simple in-memory cache
-const cache = new Map<string, { data: any; timestamp: number }>()
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
-// Request deduplication - prevent duplicate concurrent requests
-const pendingRequests = new Map<string, Promise<any>>()
+// Client-side cache (safe - single user per browser)
+const clientCache = new Map<string, { data: any; timestamp: number }>()
+const clientPendingRequests = new Map<string, Promise<any>>()
 
 export const useApi = () => {
+  // Use per-request cache on server to prevent data leakage between users.
+  // On client, use the shared module-level cache (single user).
+  const ssrEvent = import.meta.server ? useRequestEvent() : null
+  const cache: Map<string, { data: any; timestamp: number }> = import.meta.server
+    ? (ssrEvent?.__apiCache ?? (ssrEvent!.__apiCache = new Map()))
+    : clientCache
+  const pendingRequests: Map<string, Promise<any>> = import.meta.server
+    ? (ssrEvent?.__apiPending ?? (ssrEvent!.__apiPending = new Map()))
+    : clientPendingRequests
   const config = useRuntimeConfig()
   const apiBase = config.public.apiBase
 
@@ -64,16 +72,17 @@ export const useApi = () => {
    */
   const fetchWithRetry = async <T>(
     fetchFn: () => Promise<T>,
-    retries = 3,
+    retries?: number,
     delay = 1000
   ): Promise<T> => {
+    // No retries during SSR - prevents SSR from hanging on backend timeouts
+    const maxRetries = retries ?? (import.meta.server ? 0 : 3)
     try {
       return await fetchFn()
     } catch (error: any) {
-      if (retries > 0 && error?.statusCode >= 500) {
-        // Only retry on server errors
+      if (maxRetries > 0 && error?.statusCode >= 500) {
         await new Promise(resolve => setTimeout(resolve, delay))
-        return fetchWithRetry(fetchFn, retries - 1, delay * 2)
+        return fetchWithRetry(fetchFn, maxRetries - 1, delay * 2)
       }
       throw error
     }
@@ -166,7 +175,7 @@ export const useApi = () => {
           'Accept': 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json'
         },
-        body: JSON.stringify(data)
+        body: data
       }),
       2 // Fewer retries for POST requests
     )

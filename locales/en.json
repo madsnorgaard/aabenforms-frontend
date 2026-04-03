@@ -25,7 +25,7 @@
       "description": "Field-level encryption of CPR numbers, automatic audit logging and compliance with Danish regulations"
     }
   },
-  "workflow": {
+  "workflowDemo": {
     "title": "Multi-Party Workflow Automation",
     "subtitle": "See how ÅbenForms handles complex case flows with multiple parties and automatic integrations",
     "example": {
@@ -152,9 +152,9 @@
     }
   },
   "cta": {
-    "title": "Ready to get started?",
-    "subtitle": "Contact us for a demo or try the platform free for 30 days",
-    "button": "Contact Us"
+    "title": "Explore the platform",
+    "subtitle": "Run your own proof of concept or book a guided demo session",
+    "button": "Request a Demo"
   },
   "footer": {
     "license": "Open source under GPL-2.0 license",

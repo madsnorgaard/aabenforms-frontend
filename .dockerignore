@@ -1,0 +1,10 @@
+node_modules
+.nuxt
+.output
+.ddev
+.git
+test-results
+playwright-report
+.pnpm-store
+*.spec.ts
+tests
