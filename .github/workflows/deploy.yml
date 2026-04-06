@@ -24,5 +24,6 @@ jobs:
             {
               "project_dir": "aabenforms.dk",
               "project_type": "nuxt",
+              "repo_name": "aabenforms-frontend",
               "force_recreate": "${{ github.event.inputs.force_recreate || 'false' }}"
             }
