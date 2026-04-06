@@ -13,6 +13,8 @@ RUN pnpm install --frozen-lockfile
 
 # Copy source and build
 COPY . .
+ARG API_BASE_URL=https://api.aabenforms.dk
+ENV API_BASE_URL=$API_BASE_URL
 RUN pnpm run build
 
 # Stage 2: production runner
