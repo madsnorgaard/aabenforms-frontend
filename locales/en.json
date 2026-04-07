@@ -224,7 +224,7 @@
     "name": "Your name",
     "namePlaceholder": "Full name",
     "email": "Email",
-    "emailPlaceholder": "your.email@example.dk",
+    "emailPlaceholder": "your.email{'@'}example.dk",
     "organization": "Organization",
     "organizationPlaceholder": "Municipality or organization name",
     "message": "Message (optional)",
