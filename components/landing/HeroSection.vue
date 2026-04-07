@@ -9,10 +9,15 @@
     <div class="relative max-w-6xl mx-auto px-6 lg:px-8 pt-20 pb-24 lg:pt-28 lg:pb-32">
       <div class="max-w-3xl">
         <!-- Badge -->
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 border border-primary-200 text-primary-700 text-xs font-semibold tracking-wide uppercase mb-8 reveal-up">
+        <a
+          href="https://github.com/madsnorgaard/aabenforms"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 border border-primary-200 text-primary-700 text-xs font-semibold tracking-wide uppercase mb-8 reveal-up hover:bg-primary-100 transition-colors"
+        >
           <span class="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse" />
           Open Source - GPL 2.0
-        </div>
+        </a>
 
         <!-- Main heading -->
         <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight text-neutral-900 mb-6 reveal-up delay-1">

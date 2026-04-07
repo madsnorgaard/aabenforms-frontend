@@ -15,8 +15,8 @@
 
       <!-- Timeline -->
       <div class="relative ml-4 lg:ml-6">
-        <!-- Vertical rail (centered on dots at left-[9px]) -->
-        <div class="absolute left-[9px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-300 via-primary-400 to-success-400" aria-hidden="true" />
+        <!-- Vertical rail (centered on 20px dots: (20-2)/2 = 9px) -->
+        <div class="absolute left-[9px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary-300 via-primary-400 to-success-400" aria-hidden="true" />
 
         <div class="space-y-0">
           <div
