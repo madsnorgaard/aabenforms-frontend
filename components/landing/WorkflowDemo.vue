@@ -249,14 +249,14 @@ const completedSteps = computed(() => [
   { role: t('demo.step.caseworkerName'), action: t('demo.step.caseworkerAction') },
 ])
 
-const lifecycleSteps: WorkflowStep[] = [
-  { id: 'lc_email_p1', name: 'Parent 1 Approval Email', description: 'Secure approval link sent with 7-day deadline', status: 'next' },
-  { id: 'lc_email_p2', name: 'Parent 2 Approval Email', description: 'Secure approval link sent with 7-day deadline', status: 'next' },
-  { id: 'lc_mitid_p1', name: 'Parent 1 MitID Authentication', description: 'Parent authenticates with MitID and approves', status: 'next' },
-  { id: 'lc_mitid_p2', name: 'Parent 2 MitID Authentication', description: 'Parent authenticates with MitID and approves', status: 'next' },
-  { id: 'lc_caseworker', name: 'Caseworker Review', description: 'Both parents approved - case assigned to caseworker', status: 'next' },
-  { id: 'lc_decision', name: 'Decision via Digital Post', description: 'Official decision delivered to citizen', status: 'next' },
-]
+const lifecycleSteps = computed<WorkflowStep[]>(() => [
+  { id: 'lc_email_p1', name: t('demo.step.emailParent1'), description: t('demo.step.emailParentDesc'), status: 'next' },
+  { id: 'lc_email_p2', name: t('demo.step.emailParent2'), description: t('demo.step.emailParentDesc'), status: 'next' },
+  { id: 'lc_mitid_p1', name: t('demo.step.mitidParent1'), description: t('demo.step.mitidParentDesc'), status: 'next' },
+  { id: 'lc_mitid_p2', name: t('demo.step.mitidParent2'), description: t('demo.step.mitidParentDesc'), status: 'next' },
+  { id: 'lc_caseworker', name: t('demo.step.caseworkerAssigned'), description: t('demo.step.caseworkerAssignedDesc'), status: 'next' },
+  { id: 'lc_decision', name: t('demo.step.decision'), description: t('demo.step.decisionDesc'), status: 'next' },
+])
 
 const buildingTypes = computed(() => [
   { label: t('demo.forms.permit.types.extension'), value: 'extension' },
