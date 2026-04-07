@@ -14,23 +14,23 @@
       </div>
 
       <!-- Timeline -->
-      <div class="relative">
-        <!-- Vertical rail -->
-        <div class="absolute left-6 lg:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-primary-300 via-primary-400 to-success-400" aria-hidden="true" />
+      <div class="relative ml-4 lg:ml-6">
+        <!-- Vertical rail (centered on dots at left-[9px]) -->
+        <div class="absolute left-[9px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-300 via-primary-400 to-success-400" aria-hidden="true" />
 
         <div class="space-y-0">
           <div
             v-for="(step, index) in steps"
             :key="index"
-            class="relative pl-16 lg:pl-20 pb-12 last:pb-0 group"
+            class="relative pl-12 pb-10 last:pb-0 group"
           >
-            <!-- Node on rail -->
+            <!-- Node centered on rail -->
             <div
-              class="absolute left-3.5 lg:left-5.5 top-1 w-5 h-5 rounded-full border-[3px] border-white ring-2 transition-all duration-300"
+              class="absolute left-0 top-1 w-[20px] h-[20px] rounded-full border-[3px] border-white transition-all duration-300"
               :class="[
                 index === activeStep
-                  ? 'bg-primary-600 ring-primary-300 scale-125'
-                  : 'bg-neutral-300 ring-neutral-200 group-hover:bg-primary-400 group-hover:ring-primary-200'
+                  ? 'bg-primary-600 ring-2 ring-primary-300 scale-110'
+                  : 'bg-neutral-300 ring-1 ring-neutral-200 group-hover:bg-primary-400 group-hover:ring-primary-200'
               ]"
             />
 
@@ -79,8 +79,10 @@
 
       <!-- ECA callout -->
       <div class="mt-12 rounded-xl border border-success-200 bg-success-50/50 p-6 lg:p-8 flex gap-4">
-        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-success-100 flex items-center justify-center text-lg">
-          ⚡
+        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-success-100 flex items-center justify-center">
+          <svg class="w-5 h-5 text-success-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+          </svg>
         </div>
         <div>
           <h4 class="text-base font-bold text-neutral-900 mb-1">
