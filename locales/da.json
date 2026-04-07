@@ -125,6 +125,13 @@
       "title": "Tak for din indsendelse!",
       "message": "Dette er en demo - ingen data er blevet gemt. I produktion ville din ansøgning nu blive sendt til sagsbehandling og du vil modtage bekræftelse via Digital Post.",
       "close": "Luk"
+    },
+    "workflow": {
+      "title": "Workflow gennemfort",
+      "failedTitle": "Workflow gennemfort med fejl",
+      "submissionId": "Indsendelse",
+      "stepsCompleted": "trin gennemfort",
+      "submitAnother": "Indsend en ny formular"
     }
   },
   "useCases": {

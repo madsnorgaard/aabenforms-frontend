@@ -138,7 +138,24 @@
         {{ errorMessage }}
       </div>
 
-      <!-- Success toast -->
+      <!-- Workflow result modal -->
+      <Transition name="modal">
+        <div
+          v-if="workflowResult"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 backdrop-blur-sm p-4"
+          @click.self="workflowResult = null"
+        >
+          <div class="max-w-lg w-full">
+            <LandingWorkflowResultPanel
+              :steps="workflowResult.steps"
+              :submission-id="workflowResult.submissionId"
+              @close="workflowResult = null"
+            />
+          </div>
+        </div>
+      </Transition>
+
+      <!-- Success toast (fallback when no workflow data) -->
       <Transition name="toast">
         <div v-if="showSuccess" class="fixed bottom-6 right-6 z-50 max-w-sm">
           <div class="rounded-xl border border-success-200 bg-white shadow-xl shadow-neutral-900/10 p-4 flex items-start gap-3">
@@ -172,12 +189,26 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const { apiBase } = useRuntimeConfig().public
 
+interface WorkflowStep {
+  id: string
+  name: string
+  description: string
+  status: 'completed' | 'failed'
+  error?: string | null
+}
+
+interface SubmissionResponse {
+  data: { id: string }
+  workflow?: { status: string; step_count: number; steps: WorkflowStep[] }
+}
+
 const contactForm = ref({ name: '', email: '', subject: '', message: '' })
 const permitForm = ref({ cpr: '', address: '', buildingType: '', description: '' })
 const showSuccess = ref(false)
 const submitting = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
+const workflowResult = ref<{ steps: WorkflowStep[]; submissionId: string } | null>(null)
 
 const contactSubjects = computed(() => [
   { label: t('demo.forms.contact.subjects.general'), value: 'general' },
@@ -208,17 +239,30 @@ const showSuccessToast = (msg: string) => {
   successTimeout = setTimeout(dismissSuccess, 6000)
 }
 
+const handleWorkflowResponse = (res: SubmissionResponse, resetForm: () => void) => {
+  if (res.workflow?.steps?.length) {
+    workflowResult.value = {
+      steps: res.workflow.steps,
+      submissionId: String(res.data?.id),
+    }
+  } else {
+    showSuccessToast(`Submission #${res.data?.id} created`)
+  }
+  resetForm()
+}
+
 const handleContactSubmit = async () => {
   submitting.value = true
   errorMessage.value = ''
   try {
-    const res = await $fetch<{ data: { id: string } }>(`${apiBase}/api/webform/contact/submit`, {
+    const res = await $fetch<SubmissionResponse>(`${apiBase}/api/webform/contact/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: { data: { ...contactForm.value } },
     })
-    showSuccessToast(`Submission #${res.data?.id} created`)
-    contactForm.value = { name: '', email: '', subject: '', message: '' }
+    handleWorkflowResponse(res, () => {
+      contactForm.value = { name: '', email: '', subject: '', message: '' }
+    })
   } catch (e: any) {
     errorMessage.value = e?.data?.message || 'Submission failed - backend may be offline'
   } finally {
@@ -230,7 +274,7 @@ const handlePermitSubmit = async () => {
   submitting.value = true
   errorMessage.value = ''
   try {
-    const res = await $fetch<{ data: { id: string } }>(`${apiBase}/api/webform/parent_request_form/submit`, {
+    const res = await $fetch<SubmissionResponse>(`${apiBase}/api/webform/parent_request_form/submit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: {
@@ -244,8 +288,9 @@ const handlePermitSubmit = async () => {
         },
       },
     })
-    showSuccessToast(`Submission #${res.data?.id} created - workflow triggered`)
-    permitForm.value = { cpr: '', address: '', buildingType: '', description: '' }
+    handleWorkflowResponse(res, () => {
+      permitForm.value = { cpr: '', address: '', buildingType: '', description: '' }
+    })
   } catch (e: any) {
     errorMessage.value = e?.data?.message || 'Submission failed - backend may be offline'
   } finally {
@@ -269,5 +314,24 @@ const handlePermitSubmit = async () => {
 @keyframes toastOut {
   from { opacity: 1; transform: translateY(0) scale(1); }
   to { opacity: 0; transform: translateY(8px) scale(0.97); }
+}
+
+.modal-enter-active {
+  transition: opacity 0.25s ease;
+}
+.modal-enter-active > div {
+  animation: modalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-leave-active {
+  transition: opacity 0.2s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 </style>

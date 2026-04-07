@@ -125,6 +125,13 @@
       "title": "Thank you for your submission!",
       "message": "This is a demo - no data has been saved. In production, your application would now be sent for processing and you will receive confirmation via Digital Post.",
       "close": "Close"
+    },
+    "workflow": {
+      "title": "Workflow Executed Successfully",
+      "failedTitle": "Workflow Completed with Errors",
+      "submissionId": "Submission",
+      "stepsCompleted": "steps completed",
+      "submitAnother": "Submit another form"
     }
   },
   "useCases": {
