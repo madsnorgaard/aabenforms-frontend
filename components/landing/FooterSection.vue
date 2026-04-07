@@ -13,9 +13,12 @@
             </p>
           </div>
           <div class="flex flex-col sm:flex-row gap-3">
-            <a href="#demo" class="inline-flex items-center justify-center px-6 py-3 rounded-lg text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-colors">
+            <button
+              @click="showDemoModal = true"
+              class="inline-flex items-center justify-center px-6 py-3 rounded-lg text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-colors"
+            >
               {{ $t('cta.button') }}
-            </a>
+            </button>
             <a
               href="https://github.com/madsnorgaard/aabenforms"
               target="_blank"
@@ -54,6 +57,8 @@
         </div>
       </div>
     </div>
+    <!-- Demo request modal -->
+    <LandingDemoRequestModal :open="showDemoModal" @close="showDemoModal = false" />
   </footer>
 </template>
 
@@ -61,4 +66,6 @@
 defineProps<{
   apiStatus: { loading: boolean; data?: any; error?: string }
 }>()
+
+const showDemoModal = ref(false)
 </script>

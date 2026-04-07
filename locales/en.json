@@ -218,6 +218,23 @@
     "subtitle": "Run your own proof of concept or book a guided demo session",
     "button": "Request a Demo"
   },
+  "demoRequest": {
+    "title": "Request a Demo",
+    "subtitle": "We will contact you within 24 hours to schedule a guided session.",
+    "name": "Your name",
+    "namePlaceholder": "Full name",
+    "email": "Email",
+    "emailPlaceholder": "your.email@example.dk",
+    "organization": "Organization",
+    "organizationPlaceholder": "Municipality or organization name",
+    "message": "Message (optional)",
+    "messagePlaceholder": "Tell us about your use case or questions...",
+    "submit": "Send Request",
+    "submitting": "Sending...",
+    "error": "Could not send your request. Please try again.",
+    "successTitle": "Request Received",
+    "successMessage": "Thank you! We will contact you within 24 hours to schedule your demo session."
+  },
   "footer": {
     "license": "Open source under GPL-2.0 license",
     "apiStatus": "Backend API",

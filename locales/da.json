@@ -218,6 +218,23 @@
     "subtitle": "Kør dit eget proof of concept eller book en guidet demo-session",
     "button": "Book en Demo"
   },
+  "demoRequest": {
+    "title": "Book en demo",
+    "subtitle": "Vi kontakter dig inden for 24 timer for at planlægge en guidet session.",
+    "name": "Dit navn",
+    "namePlaceholder": "Fulde navn",
+    "email": "E-mail",
+    "emailPlaceholder": "din.email@eksempel.dk",
+    "organization": "Organisation",
+    "organizationPlaceholder": "Kommune eller organisationsnavn",
+    "message": "Besked (valgfri)",
+    "messagePlaceholder": "Fortael os om jeres behov eller spoergsmaal...",
+    "submit": "Send anmodning",
+    "submitting": "Sender...",
+    "error": "Kunne ikke sende din anmodning. Proev venligst igen.",
+    "successTitle": "Anmodning modtaget",
+    "successMessage": "Tak! Vi kontakter dig inden for 24 timer for at planlægge din demo-session."
+  },
   "footer": {
     "license": "Open source under GPL-2.0 licens",
     "apiStatus": "Backend API",
