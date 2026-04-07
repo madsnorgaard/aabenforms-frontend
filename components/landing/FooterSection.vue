@@ -13,15 +13,20 @@
             </p>
           </div>
           <div class="flex flex-col sm:flex-row gap-3">
-            <UiButton variant="secondary" size="lg">
+            <a href="#demo" class="inline-flex items-center justify-center px-6 py-3 rounded-lg text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 transition-colors">
               {{ $t('cta.button') }}
-            </UiButton>
-            <UiButton variant="ghost" size="lg" class="!text-neutral-300 hover:!text-white hover:!bg-neutral-800">
+            </a>
+            <a
+              href="https://github.com/madsnorgaard/aabenforms"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-neutral-300 hover:text-white border border-neutral-700 hover:border-neutral-500 transition-colors"
+            >
               GitHub
-              <svg class="w-4 h-4 ml-1.5 -mr-0.5" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
                 <path d="M4 12l8-8M6 4h6v6" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-            </UiButton>
+            </a>
           </div>
         </div>
       </div>
