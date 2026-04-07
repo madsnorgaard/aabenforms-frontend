@@ -224,7 +224,7 @@
     "name": "Dit navn",
     "namePlaceholder": "Fulde navn",
     "email": "E-mail",
-    "emailPlaceholder": "din.email@eksempel.dk",
+    "emailPlaceholder": "din.email{'@'}eksempel.dk",
     "organization": "Organisation",
     "organizationPlaceholder": "Kommune eller organisationsnavn",
     "message": "Besked (valgfri)",
