@@ -71,9 +71,9 @@
             <div v-else class="min-w-0 pt-px">
               <p class="text-sm font-semibold leading-tight"
                  :class="step.phase === 'lifecycle' ? 'text-neutral-700' : 'text-neutral-900'">
-                {{ step.name }}
+                {{ translateStep(step.name) }}
               </p>
-              <p class="text-xs text-neutral-500 mt-0.5 leading-relaxed">{{ step.description }}</p>
+              <p class="text-xs text-neutral-500 mt-0.5 leading-relaxed">{{ translateDesc(step.description) }}</p>
             </div>
           </div>
         </TransitionGroup>
@@ -142,6 +142,18 @@ const visibleSteps = computed(() => allSteps.value.slice(0, visibleCount.value))
 const progress = computed(() =>
   allSteps.value.length ? Math.round((visibleCount.value / allSteps.value.length) * 100) : 0
 )
+
+function translateStep(name: string): string {
+  const key = `demo.step.backendSteps.${name}`
+  const translated = t(key)
+  return translated === key ? name : translated
+}
+
+function translateDesc(desc: string): string {
+  const key = `demo.step.backendDescs.${desc}`
+  const translated = t(key)
+  return translated === key ? desc : translated
+}
 
 function stepIndicatorClass(step: WorkflowStep) {
   if (step._separator) return 'bg-primary-500 border-primary-500'

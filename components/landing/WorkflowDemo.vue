@@ -4,7 +4,7 @@
     <div class="absolute top-4 right-4 z-10">
       <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider bg-primary-100 text-primary-700 border border-primary-200">
         <span class="w-1.5 h-1.5 rounded-full bg-primary-500" />
-        Interactive Demo
+        {{ $t('demo.interactiveDemo') }}
       </span>
     </div>
 
@@ -56,13 +56,13 @@
           <h3 class="text-base font-bold text-neutral-900 mb-2">{{ $t('demo.step.approvalReceived') }}</h3>
           <p class="text-sm text-neutral-500 mb-5">{{ $t('demo.step.approvalDesc') }}</p>
           <div class="bg-white rounded-lg border border-neutral-200 p-4 mb-5 space-y-2">
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Address</span><span class="font-medium text-neutral-900">{{ applicationSummary.address }}</span></div>
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Type</span><span class="font-medium text-neutral-900">{{ applicationSummary.type }}</span></div>
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Description</span><span class="font-medium text-neutral-900 text-right max-w-[60%]">{{ applicationSummary.description }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.address') }}</span><span class="font-medium text-neutral-900">{{ applicationSummary.address }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.type') }}</span><span class="font-medium text-neutral-900">{{ applicationSummary.type }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.descriptionLabel') }}</span><span class="font-medium text-neutral-900 text-right max-w-[60%]">{{ applicationSummary.description }}</span></div>
           </div>
           <button @click="advanceWithDelay('parent2')" :disabled="processing" class="w-full py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2" :class="processing ? 'bg-neutral-200 text-neutral-500 cursor-wait' : 'bg-primary-600 text-white hover:bg-primary-700'">
             <svg v-if="processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-            {{ processing ? 'Processing...' : $t('demo.step.authenticateApprove') }}
+            {{ processing ? $t('demo.step.processing') : $t('demo.step.authenticateApprove') }}
           </button>
         </div>
 
@@ -86,13 +86,13 @@
           <h3 class="text-base font-bold text-neutral-900 mb-2">{{ $t('demo.step.approvalReceived') }}</h3>
           <p class="text-sm text-neutral-500 mb-5">{{ $t('demo.step.approvalDesc') }}</p>
           <div class="bg-white rounded-lg border border-neutral-200 p-4 mb-5 space-y-2">
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Address</span><span class="font-medium text-neutral-900">{{ applicationSummary.address }}</span></div>
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Type</span><span class="font-medium text-neutral-900">{{ applicationSummary.type }}</span></div>
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Description</span><span class="font-medium text-neutral-900 text-right max-w-[60%]">{{ applicationSummary.description }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.address') }}</span><span class="font-medium text-neutral-900">{{ applicationSummary.address }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.type') }}</span><span class="font-medium text-neutral-900">{{ applicationSummary.type }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.descriptionLabel') }}</span><span class="font-medium text-neutral-900 text-right max-w-[60%]">{{ applicationSummary.description }}</span></div>
           </div>
           <button @click="advanceWithDelay('caseworker')" :disabled="processing" class="w-full py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2" :class="processing ? 'bg-neutral-200 text-neutral-500 cursor-wait' : 'bg-primary-600 text-white hover:bg-primary-700'">
             <svg v-if="processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-            {{ processing ? 'Processing...' : $t('demo.step.authenticateApprove') }}
+            {{ processing ? $t('demo.step.processing') : $t('demo.step.authenticateApprove') }}
           </button>
         </div>
 
@@ -122,13 +122,13 @@
           <h3 class="text-base font-bold text-neutral-900 mb-2">{{ $t('demo.step.caseReview') }}</h3>
           <p class="text-sm text-neutral-500 mb-5">{{ $t('demo.step.caseReviewDesc') }}</p>
           <div class="bg-white rounded-lg border border-neutral-200 p-4 mb-5 space-y-2">
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Address</span><span class="font-medium text-neutral-900">{{ applicationSummary.address }}</span></div>
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Type</span><span class="font-medium text-neutral-900">{{ applicationSummary.type }}</span></div>
-            <div class="flex justify-between text-xs"><span class="text-neutral-500">Description</span><span class="font-medium text-neutral-900 text-right max-w-[60%]">{{ applicationSummary.description }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.address') }}</span><span class="font-medium text-neutral-900">{{ applicationSummary.address }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.type') }}</span><span class="font-medium text-neutral-900">{{ applicationSummary.type }}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-neutral-500">{{ $t('demo.step.descriptionLabel') }}</span><span class="font-medium text-neutral-900 text-right max-w-[60%]">{{ applicationSummary.description }}</span></div>
           </div>
           <button @click="advanceWithDelay('complete')" :disabled="processing" class="w-full py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2" :class="processing ? 'bg-neutral-200 text-neutral-500 cursor-wait' : 'bg-success-600 text-white hover:bg-success-700'">
             <svg v-if="processing" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-            {{ processing ? 'Processing...' : $t('demo.step.approveApplication') }}
+            {{ processing ? $t('demo.step.processing') : $t('demo.step.approveApplication') }}
           </button>
         </div>
 

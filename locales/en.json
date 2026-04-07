@@ -74,6 +74,8 @@
     }
   },
   "demo": {
+    "interactive": "Interactive",
+    "interactiveDemo": "Interactive Demo",
     "forms": {
       "contact": {
         "title": "Contact Form",
@@ -155,6 +157,10 @@
       "approveApplication": "Approve Application",
       "completeTitle": "Workflow Complete",
       "completeDesc": "The building permit application has been processed through all 4 stages - from citizen submission through dual-parent MitID authentication to caseworker approval.",
+      "processing": "Processing...",
+      "address": "Address",
+      "type": "Type",
+      "descriptionLabel": "Description",
       "digitalPost": "Decision delivered to citizen via Digital Post",
       "runAgain": "Run demo again",
       "citizenAction": "Application submitted and validated",
@@ -169,7 +175,17 @@
       "caseworkerAssigned": "Caseworker Review",
       "caseworkerAssignedDesc": "Both parents approved - case assigned to caseworker",
       "decision": "Decision via Digital Post",
-      "decisionDesc": "Official decision delivered to citizen"
+      "decisionDesc": "Official decision delivered to citizen",
+      "backendSteps": {
+        "MitID Identity Validation": "MitID Identity Validation",
+        "CPR Registry Lookup": "CPR Registry Lookup",
+        "GDPR Audit Trail": "GDPR Audit Trail"
+      },
+      "backendDescs": {
+        "Citizen identity verified via NemID/MitID national eID": "Citizen identity verified via NemID/MitID national eID",
+        "Personal data retrieved from the national CPR registry (SF1520)": "Personal data retrieved from the national CPR registry (SF1520)",
+        "Audit log entry created for regulatory compliance": "Audit log entry created for regulatory compliance"
+      }
     }
   },
   "useCases": {

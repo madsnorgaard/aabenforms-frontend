@@ -3,7 +3,7 @@
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
       <div class="max-w-2xl mb-14">
         <p class="text-xs font-semibold tracking-widest uppercase text-primary-600 mb-3">
-          Interactive
+          {{ $t('demo.interactive') }}
         </p>
         <h2 class="text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mb-4">
           {{ $t('demo.forms.contact.title') }} &amp; {{ $t('demo.forms.permit.title') }}

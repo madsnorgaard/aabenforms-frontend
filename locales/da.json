@@ -74,6 +74,8 @@
     }
   },
   "demo": {
+    "interactive": "Interaktiv",
+    "interactiveDemo": "Interaktiv Demo",
     "forms": {
       "contact": {
         "title": "Kontaktformular",
@@ -155,6 +157,10 @@
       "approveApplication": "Godkend ansoegning",
       "completeTitle": "Workflow gennemfort",
       "completeDesc": "Byggetilladelsesansoegningen er behandlet gennem alle 4 faser - fra borgerindsendelse gennem dobbelt-foralder MitID-godkendelse til sagsbehandler-godkendelse.",
+      "processing": "Behandler...",
+      "address": "Adresse",
+      "type": "Type",
+      "descriptionLabel": "Beskrivelse",
       "digitalPost": "Afgoerelse leveret til borger via Digital Post",
       "runAgain": "Koer demo igen",
       "citizenAction": "Ansoegning indsendt og valideret",
@@ -169,7 +175,17 @@
       "caseworkerAssigned": "Sagsbehandler-gennemgang",
       "caseworkerAssignedDesc": "Begge foraeldre godkendt - sag tildelt sagsbehandler",
       "decision": "Afgoerelse via Digital Post",
-      "decisionDesc": "Officiel afgoerelse leveret til borger"
+      "decisionDesc": "Officiel afgoerelse leveret til borger",
+      "backendSteps": {
+        "MitID Identity Validation": "MitID Identitetsvalidering",
+        "CPR Registry Lookup": "CPR-registret Opslag",
+        "GDPR Audit Trail": "GDPR Revisionslog"
+      },
+      "backendDescs": {
+        "Citizen identity verified via NemID/MitID national eID": "Borgeridentitet bekraeftet via NemID/MitID nationalt eID",
+        "Personal data retrieved from the national CPR registry (SF1520)": "Persondata hentet fra det nationale CPR-register (SF1520)",
+        "Audit log entry created for regulatory compliance": "Revisionslog-post oprettet for lovmaessig overholdelse"
+      }
     }
   },
   "useCases": {
