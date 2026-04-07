@@ -1,21 +1,19 @@
 <template>
-  <div class="relative rounded-xl border border-neutral-200 bg-neutral-50/50 overflow-hidden">
-    <!-- Demo badge -->
-    <div class="absolute top-4 right-4 z-10">
-      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider bg-primary-100 text-primary-700 border border-primary-200">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary-500" />
-        {{ $t('demo.interactiveDemo') }}
-      </span>
-    </div>
-
+  <div class="rounded-xl border border-neutral-200 bg-neutral-50/50 overflow-hidden">
     <div class="p-6 lg:p-8">
-      <!-- Step progress indicator -->
-      <div class="flex items-center gap-2 mb-2">
-        <div
-          v-for="n in 4" :key="n"
-          class="h-1.5 flex-1 rounded-full transition-all duration-500"
-          :class="stepBarClass(n)"
-        />
+      <!-- Badge + step indicator -->
+      <div class="flex items-center gap-3 mb-2">
+        <div class="flex items-center gap-2 flex-1">
+          <div
+            v-for="n in 4" :key="n"
+            class="h-1.5 flex-1 rounded-full transition-all duration-500"
+            :class="stepBarClass(n)"
+          />
+        </div>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider bg-primary-100 text-primary-700 border border-primary-200 whitespace-nowrap flex-shrink-0">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary-500" />
+          {{ $t('demo.interactiveDemo') }}
+        </span>
       </div>
       <p class="text-[11px] text-neutral-400 font-medium tracking-wide uppercase mb-6">
         {{ stepLabels[currentStepIndex] }}
@@ -236,11 +234,14 @@ const stepLabels = computed(() => [
   `${t('demo.step.step')} 4: ${t('demo.step.caseworker')}`,
 ])
 
-const applicationSummary = computed(() => ({
-  address: form.value.address || 'Vestergade 12, 8000 Aarhus',
-  type: form.value.buildingType || 'Extension',
-  description: form.value.description || 'New extension to existing building',
-}))
+const applicationSummary = computed(() => {
+  const typeLabel = buildingTypes.value.find(o => o.value === form.value.buildingType)?.label || form.value.buildingType
+  return {
+    address: form.value.address || 'Vestergade 12, 8000 Aarhus',
+    type: typeLabel || t('demo.forms.permit.types.extension'),
+    description: form.value.description || t('demo.forms.permit.description'),
+  }
+})
 
 const completedSteps = computed(() => [
   { role: t('demo.step.citizen'), action: t('demo.step.citizenAction') },

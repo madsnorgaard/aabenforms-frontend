@@ -97,6 +97,7 @@
       },
       "permit": {
         "title": "Byggetilladelse (Trin 1)",
+        "sectionTitle": "Byggetilladelse",
         "step": "Trin 1 af 4:",
         "stepInfo": "Borgerens ansøgning",
         "cpr": "CPR-nummer",

@@ -97,6 +97,7 @@
       },
       "permit": {
         "title": "Building Permit (Step 1)",
+        "sectionTitle": "Building Permit",
         "step": "Step 1 of 4:",
         "stepInfo": "Citizen application",
         "cpr": "CPR number",

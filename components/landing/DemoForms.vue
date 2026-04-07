@@ -6,7 +6,7 @@
           {{ $t('demo.interactive') }}
         </p>
         <h2 class="text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mb-4">
-          {{ $t('demo.forms.contact.title') }} &amp; {{ $t('demo.forms.permit.title') }}
+          {{ $t('demo.forms.contact.title') }} &amp; {{ $t('demo.forms.permit.sectionTitle') }}
         </h2>
         <p class="text-lg text-neutral-500">
           {{ $t('demo.security.message') }}
