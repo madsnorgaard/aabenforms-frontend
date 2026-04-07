@@ -86,7 +86,7 @@
         @click="$emit('close')"
         class="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors bg-neutral-900 text-white hover:bg-neutral-800"
       >
-        {{ $t('demo.workflow.submitAnother') }}
+        {{ continueLabel || $t('demo.workflow.submitAnother') }}
       </button>
     </div>
   </div>
@@ -111,6 +111,7 @@ const props = defineProps<{
   steps: WorkflowStep[]
   lifecycleSteps?: WorkflowStep[]
   submissionId: string
+  continueLabel?: string
 }>()
 
 defineEmits<{

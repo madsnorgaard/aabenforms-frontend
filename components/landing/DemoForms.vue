@@ -63,74 +63,8 @@
           </div>
         </div>
 
-        <!-- Building Permit Form -->
-        <div class="relative rounded-xl border border-neutral-200 bg-neutral-50/50 overflow-hidden">
-          <!-- Demo badge -->
-          <div class="absolute top-4 right-4 z-10">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold uppercase tracking-wider bg-warning-100 text-warning-700 border border-warning-200">
-              <span class="w-1.5 h-1.5 rounded-full bg-warning-500" />
-              Demo
-            </span>
-          </div>
-
-          <div class="p-6 lg:p-8">
-            <h3 class="text-lg font-bold text-neutral-900 mb-2">
-              {{ $t('demo.forms.permit.title') }}
-            </h3>
-
-            <!-- Step indicator -->
-            <div class="flex items-center gap-2 mb-6">
-              <div v-for="n in 4" :key="n"
-                   class="h-1 flex-1 rounded-full"
-                   :class="n === 1 ? 'bg-primary-500' : 'bg-neutral-200'" />
-            </div>
-
-            <form @submit.prevent="handlePermitSubmit" class="space-y-4">
-              <UiInput
-                v-model="permitForm.cpr"
-                :label="$t('demo.forms.permit.cpr')"
-                placeholder="DDMMYY-XXXX"
-                :help-text="$t('demo.forms.permit.cprHelp')"
-                required
-              />
-              <UiInput
-                v-model="permitForm.address"
-                :label="$t('demo.forms.permit.address')"
-                :placeholder="$t('demo.forms.permit.addressPlaceholder')"
-                :help-text="$t('demo.forms.permit.addressHelp')"
-                required
-              />
-              <UiSelect
-                v-model="permitForm.buildingType"
-                :label="$t('demo.forms.permit.buildingType')"
-                :placeholder="$t('demo.forms.permit.selectType')"
-                :options="buildingTypes"
-                required
-              />
-              <UiTextarea
-                v-model="permitForm.description"
-                :label="$t('demo.forms.permit.description')"
-                required
-                :rows="3"
-              />
-
-              <!-- File upload area -->
-              <div>
-                <label class="block text-sm font-medium text-neutral-700 mb-1.5">
-                  {{ $t('demo.forms.permit.documents') }}
-                </label>
-                <div class="border-2 border-dashed border-neutral-300 rounded-lg p-5 text-center hover:border-primary-300 transition-colors cursor-pointer bg-white">
-                  <p class="text-sm text-neutral-500">{{ $t('demo.forms.permit.uploadHelp') }}</p>
-                  <p class="text-xs text-neutral-400 mt-1">{{ $t('demo.forms.permit.uploadFormats') }}</p>
-                </div>
-              </div>
-
-              <UiButton type="submit" variant="primary" full-width :disabled="submitting">
-                {{ submitting ? '...' : $t('demo.forms.permit.submit') }}
-              </UiButton>
-            </form>
-          </div>
-        </div>
+        <!-- Building Permit Interactive Workflow Demo -->
+        <LandingWorkflowDemo />
       </div>
 
       <!-- Error display -->
@@ -204,26 +138,15 @@ interface SubmissionResponse {
 }
 
 const contactForm = ref({ name: '', email: '', subject: '', message: '' })
-const permitForm = ref({ cpr: '', address: '', buildingType: '', description: '' })
 const showSuccess = ref(false)
 const submitting = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
 const workflowResult = ref<{ steps: WorkflowStep[]; lifecycleSteps: WorkflowStep[]; submissionId: string } | null>(null)
 
-// What happens next in the full workflow (shown after real backend steps)
 const contactLifecycle: WorkflowStep[] = [
   { id: 'lc_notify', name: 'Caseworker Notification', description: 'Case assigned to available caseworker via task queue', status: 'next' },
   { id: 'lc_response', name: 'Response via Digital Post', description: 'Citizen receives official response in their Digital Post inbox', status: 'next' },
-]
-
-const permitLifecycle: WorkflowStep[] = [
-  { id: 'lc_email_p1', name: 'Parent 1 Approval Email', description: 'Secure approval link sent to first parent with 7-day deadline', status: 'next' },
-  { id: 'lc_email_p2', name: 'Parent 2 Approval Email', description: 'Secure approval link sent to second parent with 7-day deadline', status: 'next' },
-  { id: 'lc_mitid_p1', name: 'Parent 1 MitID Authentication', description: 'First parent authenticates with MitID and approves the application', status: 'next' },
-  { id: 'lc_mitid_p2', name: 'Parent 2 MitID Authentication', description: 'Second parent authenticates with MitID and approves the application', status: 'next' },
-  { id: 'lc_caseworker', name: 'Caseworker Review', description: 'Both parents approved - case assigned to municipal caseworker', status: 'next' },
-  { id: 'lc_decision', name: 'Decision via Digital Post', description: 'Official decision delivered to citizen through Digital Post', status: 'next' },
 ]
 
 const contactSubjects = computed(() => [
@@ -231,13 +154,6 @@ const contactSubjects = computed(() => [
   { label: t('demo.forms.contact.subjects.support'), value: 'support' },
   { label: t('demo.forms.contact.subjects.demo'), value: 'demo' },
   { label: t('demo.forms.contact.subjects.other'), value: 'other' },
-])
-
-const buildingTypes = computed(() => [
-  { label: t('demo.forms.permit.types.extension'), value: 'extension' },
-  { label: t('demo.forms.permit.types.garage'), value: 'garage' },
-  { label: t('demo.forms.permit.types.carport'), value: 'carport' },
-  { label: t('demo.forms.permit.types.other'), value: 'other' },
 ])
 
 let successTimeout: ReturnType<typeof setTimeout> | null = null
@@ -255,11 +171,11 @@ const showSuccessToast = (msg: string) => {
   successTimeout = setTimeout(dismissSuccess, 6000)
 }
 
-const handleWorkflowResponse = (res: SubmissionResponse, formType: 'contact' | 'permit', resetForm: () => void) => {
+const handleWorkflowResponse = (res: SubmissionResponse, resetForm: () => void) => {
   if (res.workflow?.steps?.length) {
     workflowResult.value = {
       steps: res.workflow.steps,
-      lifecycleSteps: formType === 'permit' ? permitLifecycle : contactLifecycle,
+      lifecycleSteps: contactLifecycle,
       submissionId: String(res.data?.id),
     }
   } else {
@@ -277,7 +193,7 @@ const handleContactSubmit = async () => {
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: { data: { ...contactForm.value } },
     })
-    handleWorkflowResponse(res, 'contact', () => {
+    handleWorkflowResponse(res, () => {
       contactForm.value = { name: '', email: '', subject: '', message: '' }
     })
   } catch (e: any) {
@@ -287,33 +203,6 @@ const handleContactSubmit = async () => {
   }
 }
 
-const handlePermitSubmit = async () => {
-  submitting.value = true
-  errorMessage.value = ''
-  try {
-    const res = await $fetch<SubmissionResponse>(`${apiBase}/api/webform/parent_request_form/submit`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: {
-        data: {
-          child_name: permitForm.value.address,
-          child_cpr: permitForm.value.cpr.replace(/[^0-9]/g, ''),
-          parent1_email: 'demo@aabenforms.dk',
-          parent2_email: 'demo@aabenforms.dk',
-          parents_together: 'together',
-          request_details: `${permitForm.value.buildingType}: ${permitForm.value.description}`,
-        },
-      },
-    })
-    handleWorkflowResponse(res, 'permit', () => {
-      permitForm.value = { cpr: '', address: '', buildingType: '', description: '' }
-    })
-  } catch (e: any) {
-    errorMessage.value = e?.data?.message || 'Submission failed - backend may be offline'
-  } finally {
-    submitting.value = false
-  }
-}
 </script>
 
 <style scoped>
