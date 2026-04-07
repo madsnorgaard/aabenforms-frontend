@@ -148,6 +148,7 @@
           <div class="max-w-lg w-full">
             <LandingWorkflowResultPanel
               :steps="workflowResult.steps"
+              :lifecycle-steps="workflowResult.lifecycleSteps"
               :submission-id="workflowResult.submissionId"
               @close="workflowResult = null"
             />
@@ -208,7 +209,22 @@ const showSuccess = ref(false)
 const submitting = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
-const workflowResult = ref<{ steps: WorkflowStep[]; submissionId: string } | null>(null)
+const workflowResult = ref<{ steps: WorkflowStep[]; lifecycleSteps: WorkflowStep[]; submissionId: string } | null>(null)
+
+// What happens next in the full workflow (shown after real backend steps)
+const contactLifecycle: WorkflowStep[] = [
+  { id: 'lc_notify', name: 'Caseworker Notification', description: 'Case assigned to available caseworker via task queue', status: 'next' },
+  { id: 'lc_response', name: 'Response via Digital Post', description: 'Citizen receives official response in their Digital Post inbox', status: 'next' },
+]
+
+const permitLifecycle: WorkflowStep[] = [
+  { id: 'lc_email_p1', name: 'Parent 1 Approval Email', description: 'Secure approval link sent to first parent with 7-day deadline', status: 'next' },
+  { id: 'lc_email_p2', name: 'Parent 2 Approval Email', description: 'Secure approval link sent to second parent with 7-day deadline', status: 'next' },
+  { id: 'lc_mitid_p1', name: 'Parent 1 MitID Authentication', description: 'First parent authenticates with MitID and approves the application', status: 'next' },
+  { id: 'lc_mitid_p2', name: 'Parent 2 MitID Authentication', description: 'Second parent authenticates with MitID and approves the application', status: 'next' },
+  { id: 'lc_caseworker', name: 'Caseworker Review', description: 'Both parents approved - case assigned to municipal caseworker', status: 'next' },
+  { id: 'lc_decision', name: 'Decision via Digital Post', description: 'Official decision delivered to citizen through Digital Post', status: 'next' },
+]
 
 const contactSubjects = computed(() => [
   { label: t('demo.forms.contact.subjects.general'), value: 'general' },
@@ -239,10 +255,11 @@ const showSuccessToast = (msg: string) => {
   successTimeout = setTimeout(dismissSuccess, 6000)
 }
 
-const handleWorkflowResponse = (res: SubmissionResponse, resetForm: () => void) => {
+const handleWorkflowResponse = (res: SubmissionResponse, formType: 'contact' | 'permit', resetForm: () => void) => {
   if (res.workflow?.steps?.length) {
     workflowResult.value = {
       steps: res.workflow.steps,
+      lifecycleSteps: formType === 'permit' ? permitLifecycle : contactLifecycle,
       submissionId: String(res.data?.id),
     }
   } else {
@@ -260,7 +277,7 @@ const handleContactSubmit = async () => {
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: { data: { ...contactForm.value } },
     })
-    handleWorkflowResponse(res, () => {
+    handleWorkflowResponse(res, 'contact', () => {
       contactForm.value = { name: '', email: '', subject: '', message: '' }
     })
   } catch (e: any) {
@@ -288,7 +305,7 @@ const handlePermitSubmit = async () => {
         },
       },
     })
-    handleWorkflowResponse(res, () => {
+    handleWorkflowResponse(res, 'permit', () => {
       permitForm.value = { cpr: '', address: '', buildingType: '', description: '' }
     })
   } catch (e: any) {

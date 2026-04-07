@@ -131,6 +131,8 @@
       "failedTitle": "Workflow Completed with Errors",
       "submissionId": "Submission",
       "stepsCompleted": "steps completed",
+      "nextPhase": "What happens next",
+      "nextPhaseDesc": "The following steps execute automatically in production",
       "submitAnother": "Submit another form"
     }
   },

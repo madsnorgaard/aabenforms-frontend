@@ -131,6 +131,8 @@
       "failedTitle": "Workflow gennemfort med fejl",
       "submissionId": "Indsendelse",
       "stepsCompleted": "trin gennemfort",
+      "nextPhase": "Hvad sker der nu",
+      "nextPhaseDesc": "Folgende trin korer automatisk i produktion",
       "submitAnother": "Indsend en ny formular"
     }
   },
