@@ -15,6 +15,8 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 ARG API_BASE_URL=https://api.aabenforms.dk
 ENV API_BASE_URL=$API_BASE_URL
+ARG NUXT_PUBLIC_MITID_ENABLED=false
+ENV NUXT_PUBLIC_MITID_ENABLED=$NUXT_PUBLIC_MITID_ENABLED
 RUN pnpm run build
 
 # Stage 2: production runner

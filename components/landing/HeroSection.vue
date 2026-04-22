@@ -57,7 +57,7 @@
           <UiButton size="lg" variant="primary" @click="$emit('scrollToDemo')">
             {{ $t('hero.cta.demo') }}
           </UiButton>
-          <ClientOnly>
+          <ClientOnly v-if="mitidEnabled">
             <AuthLoginButton />
           </ClientOnly>
         </div>
@@ -84,6 +84,8 @@
 <script setup lang="ts">
 const { locale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
+const { public: publicConfig } = useRuntimeConfig()
+const mitidEnabled = computed(() => publicConfig.mitidEnabled)
 
 defineEmits<{
   scrollToDemo: []
