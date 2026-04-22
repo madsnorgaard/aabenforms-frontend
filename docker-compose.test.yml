@@ -1,0 +1,107 @@
+# End-to-end test stack for aabenforms frontend.
+#
+# Spins up two services:
+#   1. frontend-preview - the Nuxt app, built from Dockerfile.test using the
+#      prod toolchain (node:22-alpine + pnpm). Serves .output via
+#      `nuxt preview` on :3000 inside the container. Host-exposed on 3000.
+#   2. playwright - microsoft/playwright image matching the installed
+#      @playwright/test version (1.58.1). Mounts the repo, installs deps,
+#      runs the chromium project.
+#
+# Both services join the external `ddev_default` network so they can reach
+# the DDEV backend containers (ddev-aabenforms-web, ddev-aabenforms-keycloak)
+# without going through the host network stack.
+#
+# The tests currently hardcode `aabenforms.ddev.site` and `localhost:8080`.
+# We don't rewrite the specs. Instead:
+#   - `aabenforms.ddev.site` resolves to the host gateway via extra_hosts,
+#     which hits the ddev-router on the host's 443 port.
+#   - `localhost:8080` is left alone; auth tests that use it may fail from
+#     the playwright container, which is a known limitation noted in the
+#     handoff. Backend-API tests in workflows.spec.ts use BASE_URL, which we
+#     override via env.
+#
+# Run:
+#   docker compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from playwright
+#
+# Or use the provided run-e2e-container.sh wrapper.
+
+services:
+  frontend-preview:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        # Point the preview server's SSR fetch at the DDEV backend via its
+        # internal network alias. Browsers inside the playwright container
+        # still fetch the public hostname for API tests, but Nuxt's own SSR
+        # HTTP calls stay on the docker network.
+        API_BASE_URL: http://ddev-aabenforms-web
+        NUXT_PUBLIC_MITID_ENABLED: "true"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      NITRO_HOST: 0.0.0.0
+      NITRO_PORT: 3000
+      API_BASE_URL: http://ddev-aabenforms-web
+      NUXT_PUBLIC_MITID_ENABLED: "true"
+    # No host port bind: Playwright reaches the preview via docker DNS on the
+    # shared network. Avoids conflicting with the DDEV nuxt-dev daemon that
+    # already binds host :3000.
+    expose:
+      - "3000"
+    networks:
+      - ddev_default
+    # node:22-alpine has no wget/curl by default; use node's built-in http.
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:3000/', r => process.exit(r.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 15s
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.58.1-jammy
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - /workspace/node_modules
+    environment:
+      # Point Playwright at the preview container inside the compose network.
+      BASE_URL: http://frontend-preview:3000
+      # Point backend-API tests at the DDEV backend via the docker network
+      # alias. https isn't needed inside this network.
+      API_BASE_URL: http://ddev-aabenforms-web
+      # Let the auth spec reach Keycloak via its DDEV container alias. The
+      # spec still hardcodes localhost:8080 for one check, so we also add an
+      # alias below.
+      KEYCLOAK_BASE_URL: http://ddev-aabenforms-keycloak:8080
+      CI: "true"
+    # Map hostnames the specs hardcode to the right container on the shared
+    # network. docker-compose sets these in /etc/hosts.
+    extra_hosts:
+      - "aabenforms.ddev.site:host-gateway"
+    networks:
+      ddev_default:
+        aliases:
+          - playwright-runner
+    depends_on:
+      frontend-preview:
+        condition: service_healthy
+    # Install dev deps into an image-local node_modules (the volume above
+    # masks host node_modules so we don't pick up host-node-24 built
+    # binaries), then run chromium only. Keep it to landing + workflows for
+    # the first green run; auth tests remain available via `pnpm exec
+    # playwright test` inside the container.
+    command: >
+      bash -lc "
+        set -e
+        cd /workspace
+        npm install --no-audit --no-fund --ignore-scripts
+        npx playwright install chromium
+        npx playwright test --project=chromium tests/e2e/landing.spec.ts tests/e2e/workflows.spec.ts
+      "
+
+networks:
+  ddev_default:
+    external: true

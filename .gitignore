@@ -6,6 +6,10 @@
 .cache
 dist
 
+# Playwright test artifacts - regenerated every run
+/test-results/
+/playwright-report/
+
 # Node dependencies
 node_modules
 .pnpm-store
