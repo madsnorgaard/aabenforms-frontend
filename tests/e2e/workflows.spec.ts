@@ -11,6 +11,7 @@ test.describe('Demo Form Interaction', () => {
     sharedPage = await context.newPage()
     await sharedPage.goto('/', { waitUntil: 'commit', timeout: 20000 })
     await sharedPage.waitForSelector('h1', { timeout: 15000 })
+    await sharedPage.waitForSelector('#demo', { timeout: 15000 })
     await sharedPage.locator('#demo').scrollIntoViewIfNeeded()
   })
 

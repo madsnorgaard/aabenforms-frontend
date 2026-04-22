@@ -12,6 +12,8 @@ test.describe('Landing Page', () => {
     sharedPage = await context.newPage()
     await sharedPage.goto('/', { waitUntil: 'commit', timeout: 20000 })
     await sharedPage.waitForSelector('h1', { timeout: 15000 })
+    // AuthLoginButton sits inside <ClientOnly> - wait for client hydration.
+    await sharedPage.waitForSelector('button:has-text("MitID")', { timeout: 15000 })
   })
 
   test.afterAll(async () => {

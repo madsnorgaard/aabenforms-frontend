@@ -1,67 +1,116 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 import { testUsers, loginWithMitId } from '../fixtures/test-helpers'
 
-test.describe('MitID Authentication', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/')
+// Nuxt SSR dev server crashes after ~7 rapid full renders, matching the
+// pattern already used by landing.spec.ts and workflows.spec.ts. Each
+// describe block owns one shared page, so each block triggers at most
+// one Nuxt render. Tests inside a block read state from that single page.
+
+test.describe('MitID Authentication - Landing', () => {
+  test.describe.configure({ mode: 'serial' })
+  let sharedPage: Page
+
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext({ ignoreHTTPSErrors: true })
+    sharedPage = await context.newPage()
+    await sharedPage.goto('/', { waitUntil: 'commit', timeout: 20000 })
+    await sharedPage.waitForSelector('h1', { timeout: 15000 })
+    // AuthLoginButton sits inside <ClientOnly> - wait for client hydration.
+    await sharedPage.waitForSelector('button:has-text("MitID")', { timeout: 15000 })
   })
 
-  test('MitID login button is visible on landing page', async ({ page }) => {
-    const loginButton = page.getByRole('button', { name: /MitID/i })
-    await expect(loginButton).toBeVisible()
+  test.afterAll(async () => { await sharedPage?.context().close() })
+
+  test('MitID login button is visible on landing page', async () => {
+    await expect(sharedPage.getByRole('button', { name: /MitID/i })).toBeVisible()
+  })
+})
+
+test.describe('MitID Authentication - Keycloak redirect', () => {
+  test.describe.configure({ mode: 'serial' })
+  let sharedPage: Page
+
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext({ ignoreHTTPSErrors: true })
+    sharedPage = await context.newPage()
+    await sharedPage.goto('/', { waitUntil: 'commit', timeout: 20000 })
+    await sharedPage.waitForSelector('h1', { timeout: 15000 })
+    // AuthLoginButton sits inside <ClientOnly> - wait for client hydration.
+    await sharedPage.waitForSelector('button:has-text("MitID")', { timeout: 15000 })
+    await sharedPage.getByRole('button', { name: /MitID/i }).click()
+    await sharedPage.waitForURL(/localhost:8080|keycloak/, { timeout: 20000 })
   })
 
-  test('clicking MitID button redirects to Keycloak', async ({ page }) => {
-    const loginButton = page.getByRole('button', { name: /MitID/i })
-    await loginButton.click()
+  test.afterAll(async () => { await sharedPage?.context().close() })
 
-    // Should navigate to Keycloak login page
-    await page.waitForURL(/localhost:8080|keycloak/, { timeout: 15000 })
-
-    // Keycloak login form should be visible
-    await expect(page.locator('#username, #kc-form-login')).toBeVisible({ timeout: 10000 })
+  test('clicking MitID button redirects to Keycloak', async () => {
+    await expect(sharedPage.locator('#username, #kc-form-login')).toBeVisible({ timeout: 10000 })
   })
 
-  test('full login flow with test user freja.nielsen', async ({ page }) => {
-    await loginWithMitId(page, testUsers.citizen)
-
-    // After successful login, should be back on the frontend
-    await expect(page).toHaveURL(/aabenforms/)
-
-    // User should see their name or a user menu indicator
-    // (The exact UI depends on whether the auth callback page redirects)
-  })
-
-  test('Keycloak shows Danish test realm login page', async ({ page }) => {
-    const loginButton = page.getByRole('button', { name: /MitID/i })
-    await loginButton.click()
-
-    await page.waitForURL(/localhost:8080/, { timeout: 15000 })
-
-    // The realm should be "danish-gov-test"
-    const pageUrl = page.url()
-    expect(pageUrl).toContain('danish-gov-test')
+  test('Keycloak shows Danish test realm login page', async () => {
+    expect(sharedPage.url()).toContain('danish-gov-test')
   })
 })
 
 test.describe('MitID Authentication - Protected Routes', () => {
-  test('unauthenticated user redirected from /workflows/tasks', async ({ page }) => {
-    await page.goto('/workflows/tasks')
+  test.describe.configure({ mode: 'serial' })
+  let sharedPage: Page
 
-    // Should redirect to home with auth=required query param
-    // or show login required message
-    await page.waitForTimeout(2000)
-    const url = page.url()
-    expect(url.includes('auth=required') || url === '/' || url.endsWith('/en')).toBeTruthy()
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext({ ignoreHTTPSErrors: true })
+    sharedPage = await context.newPage()
+    await sharedPage.goto('/workflows/tasks', { waitUntil: 'commit', timeout: 20000 })
+    await sharedPage.waitForLoadState('domcontentloaded', { timeout: 15000 })
+  })
+
+  test.afterAll(async () => { await sharedPage?.context().close() })
+
+  test('unauthenticated user redirected from /workflows/tasks', async () => {
+    const url = sharedPage.url()
+    const path = new URL(url).pathname
+    const redirected = url.includes('auth=required') || /^\/(en|da)?\/?$/.test(path)
+    expect(redirected).toBeTruthy()
   })
 })
 
-test.describe('MitID Authentication - Multiple Personas', () => {
-  test('can log in as business owner (karen.christensen)', async ({ page }) => {
-    await page.goto('/')
-    await loginWithMitId(page, testUsers.businessOwner)
+test.describe('MitID Authentication - Citizen login (freja.nielsen)', () => {
+  test.describe.configure({ mode: 'serial' })
+  let sharedPage: Page
 
-    // Should complete auth without errors
-    await expect(page).toHaveURL(/aabenforms/)
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext({ ignoreHTTPSErrors: true })
+    sharedPage = await context.newPage()
+    await sharedPage.goto('/', { waitUntil: 'commit', timeout: 20000 })
+    await sharedPage.waitForSelector('h1', { timeout: 15000 })
+    // AuthLoginButton sits inside <ClientOnly> - wait for client hydration.
+    await sharedPage.waitForSelector('button:has-text("MitID")', { timeout: 15000 })
+    await loginWithMitId(sharedPage, testUsers.citizen)
+  })
+
+  test.afterAll(async () => { await sharedPage?.context().close() })
+
+  test('login with test user freja.nielsen lands back on frontend', async () => {
+    await expect(sharedPage).toHaveURL(/aabenforms-frontend\.ddev\.site|localhost:300/)
+  })
+})
+
+test.describe('MitID Authentication - Business owner login (karen.christensen)', () => {
+  test.describe.configure({ mode: 'serial' })
+  let sharedPage: Page
+
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext({ ignoreHTTPSErrors: true })
+    sharedPage = await context.newPage()
+    await sharedPage.goto('/', { waitUntil: 'commit', timeout: 20000 })
+    await sharedPage.waitForSelector('h1', { timeout: 15000 })
+    // AuthLoginButton sits inside <ClientOnly> - wait for client hydration.
+    await sharedPage.waitForSelector('button:has-text("MitID")', { timeout: 15000 })
+    await loginWithMitId(sharedPage, testUsers.businessOwner)
+  })
+
+  test.afterAll(async () => { await sharedPage?.context().close() })
+
+  test('login with case owner karen.christensen lands back on frontend', async () => {
+    await expect(sharedPage).toHaveURL(/aabenforms-frontend\.ddev\.site|localhost:300/)
   })
 })
