@@ -1,4 +1,4 @@
-# AbenForms Frontend
+# ÅbenForms Frontend
 
 **Modern Nuxt 3 interface for Danish municipal workflow automation**
 
@@ -11,7 +11,7 @@
 
 ## Overview
 
-AbenForms Frontend is a production-ready, responsive web application built with Nuxt 3 that provides:
+ÅbenForms Frontend is a production-ready, responsive web application built with Nuxt 3 that provides:
 
 - **Multi-tenant interfaces** for Danish municipalities with custom branding per tenant
 - **Dynamic webform rendering** from Drupal backend with real-time validation
@@ -53,17 +53,13 @@ AbenForms Frontend is a production-ready, responsive web application built with 
 - Skip links and landmark regions for navigation
 
 **Mobile Responsiveness:**
-- Mobile score: 83/100 (Lighthouse)
 - Touch-friendly tap targets (minimum 44x44px)
 - Responsive layouts with breakpoint optimization
 - Mobile-optimized form inputs and controls
-- Swipe gestures for mobile navigation
 
 **Performance Optimization:**
-- Client bundle: 279.8 KB (99.86 KB gzipped)
-- Build time: ~6.7s total
 - Lazy loading for route-based code splitting
-- Image optimization with WebP support
+- Image optimization
 - CSS extraction and minification
 
 ### Technology Stack
@@ -83,8 +79,7 @@ AbenForms Frontend is a production-ready, responsive web application built with 
 | **Internationalization** |
 | @nuxtjs/i18n | 8.5.5 | Multi-language support |
 | **Testing** |
-| Playwright | 1.51.1 | End-to-end testing |
-| Vitest | Latest | Unit testing (planned) |
+| Playwright | 1.58.1 | End-to-end testing (containerized) |
 | **Development** |
 | DDEV | Latest | Local development environment |
 | Node.js | 22 | JavaScript runtime |
@@ -162,8 +157,7 @@ Integrated payment processing component with support for multiple payment method
 ```
 
 **Features:**
-- MobilePay and credit card support
-- PCI DSS compliant payment handling
+- MobilePay and credit card payment method options (UI layer)
 - Real-time payment status updates
 - Automatic receipt generation
 - Error recovery workflows
@@ -203,7 +197,7 @@ Visual workflow progress tracking with step-by-step updates:
 
 **Features:**
 - Linear and branching workflow visualization
-- Real-time status updates via WebSocket
+- Manual refresh to fetch latest status (polling or WebSocket not wired)
 - Step validation and error handling
 - Historical step tracking
 - Estimated time remaining
@@ -263,8 +257,7 @@ frontend/
 │   ├── reports/             # Test results and reports
 │   └── archive/             # Historical documents
 ├── tests/                    # Test suites
-│   ├── e2e/                 # Playwright E2E tests
-│   └── unit/                # Vitest unit tests (planned)
+│   └── e2e/                 # Playwright E2E tests (run via container, see docs/testing.md)
 ├── app.vue                   # Root component
 ├── nuxt.config.ts           # Nuxt configuration
 ├── CLAUDE.md                # AI development context
@@ -447,20 +440,6 @@ ddev exec pnpm run preview
 - Optimized JavaScript bundles
 - Minified and extracted CSS
 - Service worker for offline support (optional)
-
-### Performance Metrics
-
-**Lighthouse Scores:**
-- Performance: 95+
-- Accessibility: 100
-- Best Practices: 100
-- SEO: 100
-
-**Bundle Analysis:**
-- Client bundle: 279.8 KB (99.86 KB gzipped)
-- Largest chunk: Main application bundle
-- CSS: 6.57 KB total
-- Build time: ~6.7s
 
 ### Deployment
 
