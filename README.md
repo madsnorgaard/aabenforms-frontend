@@ -393,30 +393,41 @@ const message = t('form.submit')
 
 ### Testing
 
-**End-to-End Testing with Playwright:**
+End-to-end tests run against a containerized production preview build,
+**not** the Nuxt dev server. Nuxt 3.15 + vue-router 4.6.4 has an SSR
+crash in dev mode that locks up the server under Playwright load. See
+[`docs/testing.md`](docs/testing.md) for the background.
 
 ```bash
-# Run all E2E tests
-ddev exec pnpm test:e2e
+# Default: landing + workflows specs on chromium
+bash run-e2e-container.sh
 
-# Run specific test file
-ddev exec pnpm test:e2e tests/e2e/workflow-payment.spec.ts
+# All specs including auth
+bash run-e2e-container.sh all
 
-# Run tests in headed mode (with browser)
-ddev exec pnpm test:e2e --headed
-
-# Generate test report
-ddev exec pnpm test:e2e --reporter=html
+# Drop into the Playwright container shell
+bash run-e2e-container.sh shell
 ```
 
-**Test Coverage:**
-- Component interaction flows
-- Form submission and validation
-- Workflow execution paths
-- Payment processing
-- Appointment booking
-- Multi-language support
-- Accessibility compliance
+Prerequisites:
+- DDEV backend must be running (`ddev start` in the backend repo) so the
+  test container can reach Drupal and Keycloak via the `ddev_default`
+  docker network.
+- `node_modules/` in this repo is masked inside the container and
+  rebuilt, so host Node version does not affect the run.
+
+Spec layout as of Apr 23, 2026:
+- `tests/e2e/landing.spec.ts` - 11 tests, green against the preview build.
+- `tests/e2e/workflows.spec.ts` - 3 UI tests + 3 backend API tests.
+- `tests/e2e/auth.spec.ts` - 5 describe blocks for the MitID flow. Not
+  yet reliably green inside the container because the spec hardcodes
+  `localhost:8080` for one Keycloak assertion, which from inside the
+  Playwright container resolves to the container itself, not Keycloak.
+  Fix paths documented in [`docs/testing.md`](docs/testing.md).
+
+Danish strings in `locales/da.json` must use proper Unicode (æ/ø/å).
+On Apr 23, 2026 27 strings were corrected from ae/oe/aa romanization
+(Foralder → Forælder, etc.).
 
 ## Production Build
 
@@ -453,19 +464,42 @@ ddev exec pnpm run preview
 
 ### Deployment
 
-Production deployment via Upsun (Platform.sh):
+Production: https://aabenforms.dk on Contabo VPS2 (Docker + Traefik +
+Let's Encrypt). Image built from this repo's `Dockerfile` using
+node:22-alpine + pnpm; final stage runs `node server/index.mjs` on
+port 3000.
 
-```bash
-# Deployment is handled by CI/CD pipeline
-# See aabenforms-upsun repository for configuration
-```
+**Deploy flow**: push to `main` fires a `repository_dispatch` into
+[contabo-infrastructure](https://github.com/madsnorgaard/contabo-infrastructure)
+`.github/workflows/deploy.yml`, which runs on a self-hosted runner on
+VPS2. The runner rsyncs the repo and rebuilds the image.
 
-**Deployment Features:**
-- Zero-downtime deployments
-- Automatic SSL certificates
-- CDN with global edge caching
-- Health checks and rollback support
-- Environment-specific configuration
+**Repo layout**: this is a *flat* Nuxt repo - the repo root IS the Nuxt
+app. The orchestrator workflow auto-detects layout and also supports
+the monorepo pattern (`frontend/` subdir) used by other projects.
+
+**Readiness gate**: the deploy workflow checks for
+`~/docker/aabenforms.dk/.env` on VPS2 and silently skips if absent.
+This guard once caused six weeks of no-op deploys from Apr 6 - Apr 22
+before it was found; a placeholder `.env` now lives there.
+
+**Build-time flags on the Dockerfile**:
+
+| ARG | Default | Purpose |
+|-----|---------|---------|
+| `API_BASE_URL` | `https://api.aabenforms.dk` | Baked into `runtimeConfig.public.apiBase`. |
+| `NUXT_PUBLIC_MITID_ENABLED` | `false` | When `false`, hides the MitID login button on the landing page. |
+
+`NUXT_PUBLIC_MITID_ENABLED=false` in prod is deliberate. The Drupal
+`authorization_endpoint` config on `api.aabenforms.dk` currently points
+at the local DDEV Keycloak mock (`http://localhost:8080`), so the MitID
+button would redirect every visitor to a URL only the developer's
+laptop can reach. Until real MitID test-gateway registration with
+Digitaliseringsstyrelsen lands, the button is hidden on prod. Flip the
+build ARG to `true` when real MitID is wired.
+
+Local dev (`nuxt dev`) defaults to `mitidEnabled: true` so the button
+stays visible and Playwright auth tests still work.
 
 ## Documentation
 
@@ -522,7 +556,7 @@ We welcome contributions from the community. To contribute:
 ## Related Projects
 
 - **Backend:** [aabenforms](https://github.com/madsnorgaard/aabenforms) - Drupal 11 backend with JSON:API
-- **Platform:** [aabenforms-upsun](https://github.com/madsnorgaard/aabenforms-upsun) - Upsun deployment configuration
+- **Deployment orchestrator:** [contabo-infrastructure](https://github.com/madsnorgaard/contabo-infrastructure) - shared deploy workflow for this project and others on VPS2
 
 ## License
 
