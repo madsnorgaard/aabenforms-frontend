@@ -90,3 +90,137 @@ test.describe('Backend API', () => {
     expect(response.status()).toBe(404)
   })
 })
+
+test.describe('OS2Forms stub workflows', () => {
+  test('POST /api/webform/hr_onboarding/submit accepts data', async ({ request }) => {
+    const response = await request.post(`${API_BASE}/api/webform/hr_onboarding/submit`, {
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      data: {
+        data: {
+          new_hire_name: 'Playwright New Hire',
+          new_hire_email: 'hire@test.dk',
+          start_date: '2026-05-01',
+          department: 'Digitalisering',
+          job_title: 'Developer',
+          manager_email: 'manager@test.dk',
+          it_distribution_email: 'it@test.dk',
+          equipment_needs: 'MacBook, iPhone, access to GitLab',
+        },
+      },
+      ignoreHTTPSErrors: true,
+    })
+    expect(response.status()).toBe(201)
+    const body = await response.json()
+    expect(body.data).toHaveProperty('id')
+  })
+
+  test('POST /api/webform/mileage_expense/submit accepts data', async ({ request }) => {
+    const response = await request.post(`${API_BASE}/api/webform/mileage_expense/submit`, {
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      data: {
+        data: {
+          employee_name: 'Playwright Employee',
+          employee_id: 'E12345',
+          claim_type: 'mileage',
+          claim_date: '2026-04-20',
+          amount: 250,
+          kilometres: 45,
+          purpose: 'Client visit',
+          manager_email: 'manager@test.dk',
+        },
+      },
+      ignoreHTTPSErrors: true,
+    })
+    expect(response.status()).toBe(201)
+    const body = await response.json()
+    expect(body.data).toHaveProperty('id')
+  })
+
+  test('POST /api/webform/phone_declaration/submit accepts data', async ({ request }) => {
+    const response = await request.post(`${API_BASE}/api/webform/phone_declaration/submit`, {
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      data: {
+        data: {
+          employee_name: 'Playwright Employee',
+          employee_id: 'E12345',
+          tax_year: '2026',
+          phone_number: '12345678',
+          private_use_declared: 'yes',
+          manager_email: 'manager@test.dk',
+          declaration_date: '2026-04-23',
+        },
+      },
+      ignoreHTTPSErrors: true,
+    })
+    expect(response.status()).toBe(201)
+    const body = await response.json()
+    expect(body.data).toHaveProperty('id')
+  })
+
+  test('POST /api/webform/citizen_service_application/submit accepts data', async ({ request }) => {
+    const response = await request.post(`${API_BASE}/api/webform/citizen_service_application/submit`, {
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      data: {
+        data: {
+          applicant_name: 'Freja Nielsen',
+          applicant_cpr: '0101904521',
+          applicant_email: 'citizen@test.dk',
+          service_type: 'housing_benefit',
+          application_details: 'Applying for housing benefit due to income change.',
+          supporting_info: 'Documentation attached separately in production.',
+          caseworker_email: 'caseworker@test.dk',
+        },
+      },
+      ignoreHTTPSErrors: true,
+    })
+    expect(response.status()).toBe(201)
+    const body = await response.json()
+    expect(body.data).toHaveProperty('id')
+  })
+
+  test('POST /api/webform/association_booking/submit accepts data', async ({ request }) => {
+    const response = await request.post(`${API_BASE}/api/webform/association_booking/submit`, {
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      data: {
+        data: {
+          association_name: 'Test Forening',
+          cvr: '12345678',
+          contact_name: 'Karen Christensen',
+          contact_email: 'association@test.dk',
+          contact_phone: '87654321',
+          request_type: 'booking',
+          facility_or_purpose: 'Community hall for annual meeting',
+          requested_date: '2026-06-15',
+          amount: 500,
+          reviewer_email: 'reviewer@test.dk',
+        },
+      },
+      ignoreHTTPSErrors: true,
+    })
+    expect(response.status()).toBe(201)
+    const body = await response.json()
+    expect(body.data).toHaveProperty('id')
+  })
+
+  test('POST /api/webform/med_election_nomination/submit accepts data', async ({ request }) => {
+    const response = await request.post(`${API_BASE}/api/webform/med_election_nomination/submit`, {
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      data: {
+        data: {
+          election_id: 'MED-2026-Q2',
+          nomination_type: 'self',
+          nominator_name: 'Sofie Hansen',
+          nominator_cpr: '2506924015',
+          nominee_name: 'Sofie Hansen',
+          nominee_department: 'IT',
+          statement: 'Candidate statement for MED committee',
+          consent: true,
+        },
+      },
+      ignoreHTTPSErrors: true,
+    })
+    expect(response.status()).toBe(201)
+    const body = await response.json()
+    expect(body.data).toHaveProperty('id')
+  })
+})
