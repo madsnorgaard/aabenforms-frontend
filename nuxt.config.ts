@@ -10,6 +10,48 @@ export default defineNuxtConfig({
     '@vueuse/nuxt'
   ],
 
+  app: {
+    head: {
+      htmlAttrs: { lang: 'da' },
+      title: 'AabenForms',
+      titleTemplate: (title?: string) =>
+        title && title !== 'AabenForms' ? `${title} · AabenForms` : 'AabenForms',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          name: 'description',
+          content: 'Open-source workflow automation for Danish municipalities.',
+        },
+        { name: 'theme-color', content: '#0071b9' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:site_name', content: 'AabenForms' },
+        { property: 'og:title', content: 'AabenForms' },
+        {
+          property: 'og:description',
+          content: 'Open-source workflow automation for Danish municipalities.',
+        },
+        { property: 'og:url', content: 'https://aabenforms.dk' },
+        { property: 'og:image', content: 'https://aabenforms.dk/og-image.png' },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'AabenForms' },
+        {
+          name: 'twitter:description',
+          content: 'Open-source workflow automation for Danish municipalities.',
+        },
+        { name: 'twitter:image', content: 'https://aabenforms.dk/og-image.png' },
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon-180.png' },
+        { rel: 'manifest', href: '/manifest.webmanifest' },
+      ],
+    },
+  },
+
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL || 'https://aabenforms.ddev.site',
