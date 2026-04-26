@@ -52,19 +52,23 @@
           Drupal 11 &middot; Nuxt 3 &middot; ECA Workflows &middot; JSON:API
         </p>
 
-        <!-- Actions: primary jumps straight into the live demo, secondary is the
-             contact path for high-intent visitors who don't want to play first. -->
+        <!-- Actions: primary jumps straight into the live demo when it's
+             enabled (DDEV); on production the demo route is gated, so we
+             route the primary CTA to /kontakt for a live walkthrough
+             instead of dead-ending on the disabled-state page. Secondary
+             is always the meeting-booking link for high-intent visitors. -->
         <div class="flex flex-col sm:flex-row sm:items-center gap-4 reveal-up delay-3">
           <NuxtLink
-            to="/demo/byggetilladelse"
+            :to="demoEnabled ? '/demo/byggetilladelse' : '/kontakt'"
             class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold bg-neutral-900 text-white hover:bg-neutral-800 transition-all shadow-sm"
           >
-            {{ $t('hero.cta.demo') }}
+            {{ demoEnabled ? $t('hero.cta.demo') : $t('hero.cta.demoOffline') }}
             <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
               <path d="M3 8h10m-4-4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </NuxtLink>
           <NuxtLink
+            v-if="demoEnabled"
             to="/kontakt"
             class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-neutral-600 hover:text-neutral-900 transition-colors"
           >
@@ -94,6 +98,8 @@
 <script setup lang="ts">
 const { locale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
+const config = useRuntimeConfig()
+const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilladelseEnabled))
 </script>
 
 <style scoped>

@@ -40,21 +40,38 @@
       </template>
 
       <template v-else>
-        <div class="max-w-md mx-auto text-center py-16">
-          <div class="inline-flex w-12 h-12 items-center justify-center rounded-full bg-neutral-100 mb-4">
-            <svg class="w-6 h-6 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M12 9v3m0 4h.01M5.07 19h13.86a2 2 0 001.74-3l-6.93-12a2 2 0 00-3.48 0L3.33 16a2 2 0 001.74 3z" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h1 class="text-xl font-bold text-neutral-900 mb-2">
+        <div class="max-w-2xl mx-auto py-12 lg:py-16">
+          <p class="text-xs font-semibold tracking-widest uppercase text-secondary-600 mb-3">
+            {{ $t('demo.byggetilladelse.disabled.eyebrow') }}
+          </p>
+          <h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-neutral-900 mb-5 leading-tight">
             {{ $t('demo.byggetilladelse.disabled.heading') }}
           </h1>
-          <p class="text-sm text-neutral-500 mb-6">
+          <p class="text-lg text-neutral-600 leading-relaxed mb-8">
             {{ $t('demo.byggetilladelse.disabled.body') }}
           </p>
-          <NuxtLink to="/" class="inline-flex px-4 py-2 rounded-lg bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-800 transition-all">
-            {{ $t('demo.byggetilladelse.complete.gotoLanding') }}
-          </NuxtLink>
+
+          <div class="rounded-2xl bg-gradient-to-br from-neutral-900 to-neutral-800 text-neutral-100 p-7 lg:p-9">
+            <div class="flex flex-wrap items-center gap-4">
+              <NuxtLink
+                to="/kontakt"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold bg-secondary-500 text-white hover:bg-secondary-600 transition-all shadow-lg"
+              >
+                {{ $t('demo.byggetilladelse.disabled.primary') }}
+                <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path d="M3 8h10m-4-4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </NuxtLink>
+              <a
+                :href="$t('demo.byggetilladelse.disabled.githubUrl')"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-300 hover:text-white transition-colors"
+              >
+                {{ $t('demo.byggetilladelse.disabled.secondary') }} →
+              </a>
+            </div>
+          </div>
         </div>
       </template>
     </main>
