@@ -7,19 +7,7 @@
     <div class="relative">
       <div class="h-1 bg-gradient-to-r from-secondary-500 via-secondary-400 to-warning-400" />
       <div class="absolute right-6 lg:right-8 top-3">
-        <div class="flex items-center gap-1 text-xs font-medium">
-          <NuxtLink
-            :to="switchLocalePath('da')"
-            class="px-2 py-1 rounded transition-colors"
-            :class="locale === 'da' ? 'bg-primary-100 text-primary-700 font-bold' : 'text-neutral-400 hover:text-neutral-600'"
-          >DA</NuxtLink>
-          <span class="text-neutral-300">|</span>
-          <NuxtLink
-            :to="switchLocalePath('en')"
-            class="px-2 py-1 rounded transition-colors"
-            :class="locale === 'en' ? 'bg-primary-100 text-primary-700 font-bold' : 'text-neutral-400 hover:text-neutral-600'"
-          >EN</NuxtLink>
-        </div>
+        <LanguageSwitcher />
       </div>
     </div>
 
@@ -96,8 +84,6 @@
 </template>
 
 <script setup lang="ts">
-const { locale } = useI18n()
-const switchLocalePath = useSwitchLocalePath()
 const config = useRuntimeConfig()
 const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilladelseEnabled))
 </script>
