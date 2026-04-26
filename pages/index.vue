@@ -1,9 +1,14 @@
 <template>
   <div class="min-h-screen">
-    <LandingHeroSection @scroll-to-demo="scrollToDemo" />
+    <LandingHeroSection />
+    <!-- Order is conversion-tuned: demo CTA is the punchline so it goes
+         right after the hero. Comparison creates instant relevance for the
+         exact buyers we want. CapabilitiesGrid is proof. WorkflowTimeline
+         is the deeper-dive narrative for stakeholders who want to read on. -->
+    <LandingDemoForms />
+    <LandingComparison />
     <LandingCapabilitiesGrid />
     <LandingWorkflowTimeline />
-    <LandingDemoForms />
     <LandingFooterSection :api-status="apiStatus" />
   </div>
 </template>
@@ -14,10 +19,6 @@ const { fetchApiIndex } = useApi()
 const apiStatus = ref<{ loading: boolean; data?: any; error?: string }>({
   loading: true,
 })
-
-const scrollToDemo = () => {
-  document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })
-}
 
 onMounted(async () => {
   try {

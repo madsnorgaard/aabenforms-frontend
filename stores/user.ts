@@ -68,28 +68,65 @@ export const useUserStore = defineStore('user', {
     },
 
     /**
-     * Load user from session ID
+     * Load user from session ID via the MitID session endpoint.
+     *
+     * Same endpoint useAuth.loadUserFromSession hits - this path is the
+     * page-reload restore (localStorage -> fetch latest claims). The
+     * response shape is JSON:API-style with the additive demo fields
+     * (given_name/family_name/birthdate/address/assurance_level).
      */
     async loadSession(sessionId: string) {
       this.loading = true
       const config = useRuntimeConfig()
 
       try {
-        const response = await $fetch(`${config.public.apiBase}/api/session/${sessionId}`, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
+        const response = await $fetch<{
+          data: {
+            attributes: {
+              name: string
+              cpr: string
+              email: string
+              expiry: string
+              given_name?: string
+              family_name?: string
+              birthdate?: string
+              assurance_level?: string
+              address?: {
+                street?: string | null
+                postal_code?: string | null
+                city?: string | null
+                municipality_code?: string | null
+              } | null
+            }
           }
+        }>(`${config.public.apiBase}/mitid/session/${sessionId}`, {
+          method: 'GET',
+          headers: { Accept: 'application/json' },
         })
 
-        if (response && typeof response === 'object' && 'user' in response) {
-          const data = response as { user: User; expiry?: string }
-          this.setUser(data.user, sessionId, data.expiry)
+        if (!response?.data) {
+          throw new Error('Invalid session response')
         }
-      } catch (error) {
+
+        const a = response.data.attributes
+        const user: User = {
+          cpr: a.cpr,
+          name: a.name || '',
+          email: a.email || '',
+          sessionExpiry: a.expiry,
+          given_name: a.given_name || undefined,
+          family_name: a.family_name || undefined,
+          birthdate: a.birthdate || undefined,
+          assurance_level: a.assurance_level || undefined,
+          address: a.address || null,
+        }
+        this.setUser(user, sessionId, a.expiry)
+      }
+      catch (error) {
         console.error('Failed to load session:', error)
         this.clearSession()
-      } finally {
+      }
+      finally {
         this.loading = false
       }
     },

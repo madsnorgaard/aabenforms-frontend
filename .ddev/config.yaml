@@ -16,6 +16,8 @@ use_dns_when_possible: true
 composer_version: "2"
 web_environment:
     - API_BASE_URL=https://aabenforms.ddev.site
+    - NUXT_PUBLIC_MITID_ENABLED=true
+    - NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true
 corepack_enable: true
 web_extra_exposed_ports:
     - name: nuxt

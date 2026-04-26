@@ -52,14 +52,24 @@
           Drupal 11 &middot; Nuxt 3 &middot; ECA Workflows &middot; JSON:API
         </p>
 
-        <!-- Actions -->
-        <div class="flex flex-col sm:flex-row items-start gap-4 reveal-up delay-3">
-          <UiButton size="lg" variant="primary" @click="$emit('scrollToDemo')">
+        <!-- Actions: primary jumps straight into the live demo, secondary is the
+             contact path for high-intent visitors who don't want to play first. -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 reveal-up delay-3">
+          <NuxtLink
+            to="/demo/byggetilladelse"
+            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold bg-neutral-900 text-white hover:bg-neutral-800 transition-all shadow-sm"
+          >
             {{ $t('hero.cta.demo') }}
-          </UiButton>
-          <ClientOnly v-if="mitidEnabled">
-            <AuthLoginButton />
-          </ClientOnly>
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M3 8h10m-4-4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </NuxtLink>
+          <NuxtLink
+            to="/kontakt"
+            class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-neutral-600 hover:text-neutral-900 transition-colors"
+          >
+            {{ $t('hero.cta.book') }}
+          </NuxtLink>
         </div>
       </div>
 
@@ -84,12 +94,6 @@
 <script setup lang="ts">
 const { locale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
-const { public: publicConfig } = useRuntimeConfig()
-const mitidEnabled = computed(() => publicConfig.mitidEnabled)
-
-defineEmits<{
-  scrollToDemo: []
-}>()
 </script>
 
 <style scoped>
