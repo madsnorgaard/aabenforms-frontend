@@ -10,15 +10,18 @@
             Live demo
           </span>
         </NuxtLink>
-        <NuxtLink
-          to="/"
-          class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
-        >
-          <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M13 8H3m4-4l-4 4 4 4" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          {{ $t('demo.byggetilladelse.complete.gotoLanding') }}
-        </NuxtLink>
+        <div class="flex items-center gap-3">
+          <LanguageSwitcher />
+          <NuxtLink
+            to="/"
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M13 8H3m4-4l-4 4 4 4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            {{ $t('demo.byggetilladelse.complete.gotoLanding') }}
+          </NuxtLink>
+        </div>
       </div>
     </header>
 
