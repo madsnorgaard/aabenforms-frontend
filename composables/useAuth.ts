@@ -73,8 +73,30 @@ export const useAuth = () => {
    */
   async function loadUserFromSession(sid: string) {
     try {
-      // Call backend MitID session endpoint directly (not via JSON:API)
-      const response = await $fetch<{ data: { attributes: { name: string; cpr: string; email: string; expiry: string } } }>(`${apiBase}/mitid/session/${sid}`, {
+      // Call backend MitID session endpoint directly (not via JSON:API).
+      // The address block is populated only when the IdP issued address
+      // claims (demo Keycloak yes; real MitID/NemLog-in no) - treated as
+      // optional throughout the frontend.
+      const response = await $fetch<{
+        data: {
+          attributes: {
+            name: string
+            cpr: string
+            email: string
+            expiry: string
+            given_name?: string
+            family_name?: string
+            birthdate?: string
+            assurance_level?: string
+            address?: {
+              street?: string | null
+              postal_code?: string | null
+              city?: string | null
+              municipality_code?: string | null
+            } | null
+          }
+        }
+      }>(`${apiBase}/mitid/session/${sid}`, {
         headers: { 'Accept': 'application/json' },
       })
 
@@ -89,6 +111,11 @@ export const useAuth = () => {
         name: sessionData.name || '',
         email: sessionData.email || '',
         sessionExpiry: sessionData.expiry,
+        given_name: sessionData.given_name || undefined,
+        family_name: sessionData.family_name || undefined,
+        birthdate: sessionData.birthdate || undefined,
+        assurance_level: sessionData.assurance_level || undefined,
+        address: sessionData.address || null,
       }
 
       userStore.setUser(userData, sid, sessionData.expiry)

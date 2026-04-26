@@ -53,12 +53,14 @@ test.describe('Landing Page', () => {
     await expect(sharedPage.locator('text=/Approval|Godkendelse/i').first()).toBeVisible()
   })
 
-  test('renders demo forms with Demo badges', async () => {
+  test('renders interactive-demo CTA section', async () => {
     await sharedPage.locator('#demo').scrollIntoViewIfNeeded()
-    const contactForm = sharedPage.locator('form').first()
-    await expect(contactForm).toBeVisible()
-    const demoBadges = sharedPage.locator('text=Demo')
-    expect(await demoBadges.count()).toBeGreaterThanOrEqual(2)
+    // Landing slot is now a single CTA pointing at /demo/byggetilladelse - the
+    // contact form lives at /kontakt and the four-phase Byggetilladelse demo
+    // runs on the dedicated /demo/byggetilladelse page.
+    const ctaLink = sharedPage.locator('a[href="/demo/byggetilladelse"]').first()
+    await expect(ctaLink).toBeVisible()
+    await expect(sharedPage.locator('text=/Live demo/i').first()).toBeVisible()
   })
 
   test('CTA has POC-appropriate language', async () => {

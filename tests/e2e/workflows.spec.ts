@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 const API_BASE = process.env.API_BASE_URL || 'https://aabenforms.ddev.site'
 
-test.describe('Demo Form Interaction', () => {
+test.describe('Landing demo CTA', () => {
   test.describe.configure({ mode: 'serial' })
   let sharedPage: any
 
@@ -19,19 +19,16 @@ test.describe('Demo Form Interaction', () => {
     await sharedPage?.context().close()
   })
 
-  test('contact form has input fields', async () => {
-    const contactForm = sharedPage.locator('form').first()
-    await expect(contactForm).toBeVisible()
-    await expect(contactForm.locator('input').first()).toBeVisible()
+  test('landing #demo slot points at the dedicated /demo/byggetilladelse page', async () => {
+    // The landing slot is now a CTA card - the interactive contact form
+    // moved to /kontakt and the four-phase Byggetilladelse demo lives at
+    // /demo/byggetilladelse. See tests/e2e/byggetilladelse-demo.spec.ts
+    // for the full-flow coverage.
+    const ctaLink = sharedPage.locator('a[href="/demo/byggetilladelse"]').first()
+    await expect(ctaLink).toBeVisible()
   })
 
-  test('building permit form has CPR and address fields', async () => {
-    const permitForm = sharedPage.locator('form').nth(1)
-    await expect(permitForm).toBeVisible()
-    await expect(permitForm.locator('text=/CPR/i')).toBeVisible()
-  })
-
-  test('workflow timeline shows all 4 steps', async () => {
+  test('workflow timeline section still shows ECA + Case Worker context', async () => {
     await expect(sharedPage.locator('text=/Case Worker|Sagsbehandler/i').first()).toBeVisible()
     await expect(sharedPage.locator('text=/ECA/i').first()).toBeVisible()
   })

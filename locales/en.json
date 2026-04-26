@@ -1,28 +1,61 @@
 {
   "hero": {
-    "tagline": "Modern workflow automation for Danish municipalities and businesses",
+    "tagline": "The full MitID flow for a building permit in 60 seconds. Open source on bare Drupal 11. No licence fees, no per-form charges.",
     "cta": {
-      "demo": "Try Demo",
+      "demo": "Open interactive demo",
+      "book": "Book a 30-min meeting →",
       "learn": "Learn More"
     }
   },
+  "comparison": {
+    "eyebrow": "Compared to alternatives",
+    "themLabel": "Proprietary alternatives",
+    "heading": "What you get that proprietary alternatives don't offer",
+    "lead": "Most workflow platforms in the Danish municipal market are closed, licence-based and vendor-hosted. Here's how we differ:",
+    "row1": {
+      "title": "Source code",
+      "us": "Open source (EUPL-1.2)",
+      "them": "Closed - vendor licence"
+    },
+    "row2": {
+      "title": "BPMN editing",
+      "us": "Open it, read it, change it yourself",
+      "them": "Consultancy project with the vendor"
+    },
+    "row3": {
+      "title": "Hosting",
+      "us": "Own server or EU VPS, ideally Denmark - you own the data and the location",
+      "them": "Vendor-hosted, monthly licence"
+    },
+    "row4": {
+      "title": "Pricing model",
+      "us": "Free software. You only pay for hosting and optional consulting.",
+      "them": "Annual licence plus a fee per submitted form or case"
+    },
+    "row5": {
+      "title": "Dependencies",
+      "us": "Bare Drupal 11 + drupal:key",
+      "them": "Complex ecosystem of dependencies"
+    },
+    "footnote": "The proprietary alternatives solve their problem just fine. We solve it in a way you can maintain yourself, without licence costs that scale with case volume."
+  },
   "features": {
-    "title": "Features",
+    "title": "What you get from day 1",
     "workflows": {
-      "title": "Advanced Workflows",
-      "description": "ECA-based event-driven automation for complex business processes with BPMN visual editor"
+      "title": "13 BPMN case types ready",
+      "description": "Building permit, parking permit, marriage booking, parental approval, formal complaint and 8 other flows shipped and ready - or write your own in the visual BPMN editor."
     },
     "multiTenant": {
-      "title": "Multi-Tenant Platform",
-      "description": "Run multiple municipalities or organizations on one platform with complete data isolation and branding"
+      "title": "MitID + NemLog-in OIDC",
+      "description": "OIDC with PKCE S256, CPR pre-fill from claims, NSIS substantial/high. NemLog-in Erhverv on the roadmap. One core, both citizen and business."
     },
     "danish": {
-      "title": "Danish Integrations",
-      "description": "MitID, CPR lookup, CVR data, Digital Post and other Serviceplatformen integrations ready to use"
+      "title": "Digital Post (SF1601)",
+      "description": "fake_db for local dev, WireMock for tests, Serviceplatformen for production - same code, four modes, one switch."
     },
     "security": {
-      "title": "GDPR & Security",
-      "description": "Field-level encryption of CPR numbers, automatic audit logging and compliance with Danish regulations"
+      "title": "GDPR by design",
+      "description": "Field-level CPR encryption, audit log on every MitID session and Digital Post send, deletion after workflow completion."
     }
   },
   "workflowDemo": {
@@ -187,7 +220,134 @@
         "Personal data retrieved from the national CPR registry (SF1520)": "Personal data retrieved from the national CPR registry (SF1520)",
         "Audit log entry created for regulatory compliance": "Audit log entry created for regulatory compliance"
       }
+    },
+    "byggetilladelse": {
+      "kickoff": {
+        "eyebrow": "Live demo · Building permit",
+        "heading": "Click through the full MitID flow in 60 seconds",
+        "lead": "From the citizen's MitID login through CPR-prefilled form to BPMN execution and Digital Post delivery - every step runs against real backend integrations, not setTimeout fakery.",
+        "cta": "Start demo with MitID",
+        "altCta": "Read the technical walkthrough",
+        "runtime": "About 60 seconds"
+      },
+      "mockBanner": {
+        "title": "Mock IdP - not real MitID",
+        "body": "You're authenticating against a local Keycloak instance that mimics MitID. No real CPR number is transmitted."
+      },
+      "steps": {
+        "auth": "Authenticate",
+        "form": "Confirm data",
+        "workflow": "Workflow",
+        "inbox": "Digital Post"
+      },
+      "auth": {
+        "heading": "Step 1 · Authenticate with MitID",
+        "body": "You'll be redirected to the mock MitID to sign in. Pick a demo user, e.g. Freja Nielsen, password test1234.",
+        "cta": "Sign in via mock MitID",
+        "processing": "Preparing authentication …",
+        "callbackProcessing": "Loading your MitID data …"
+      },
+      "form": {
+        "heading": "Step 2 · Confirm building details",
+        "body": "MitID claims have been retrieved and the form pre-filled. Add the missing details about your building project.",
+        "prefilledPill": "Auto-filled from MitID",
+        "manualPill": "Manual entry",
+        "editLink": "Edit",
+        "lockLink": "Lock again",
+        "logout": "Log out",
+        "fields": {
+          "cpr": "CPR number",
+          "applicantName": "Applicant name",
+          "address": "Building address",
+          "addressPlaceholder": "Street and number, postal code and city",
+          "description": "Project description",
+          "descriptionPlaceholder": "E.g. 30m² extension on the north facade, level 1, materials …"
+        },
+        "submit": "Submit application",
+        "submitting": "Submitting to the ECA engine …",
+        "validation": "Please complete all fields before submitting"
+      },
+      "workflow": {
+        "heading": "Step 3 · Workflow running",
+        "body": "The ECA flow is executing step-by-step on the server. These are real plugin actions - CPR lookup, audit log and Digital Post send.",
+        "waiting": "Waiting for the server …",
+        "completed": "All steps complete",
+        "noSteps": "The workflow returned no steps. Check the backend log."
+      },
+      "inbox": {
+        "heading": "Step 4 · Decision delivered",
+        "body": "The confirmation has been written to Digital Post. In production this letter would land in the citizen's NgDP inbox. Here you can see the actual message from the log table.",
+        "empty": "No letters found yet - give it a couple of seconds.",
+        "refresh": "Refresh",
+        "refreshing": "Loading …",
+        "expand": "Show letter",
+        "collapse": "Hide letter",
+        "received": "Received",
+        "transactionId": "Transaction",
+        "from": "Sender"
+      },
+      "complete": {
+        "heading": "That's it - flow complete",
+        "body": "From citizen click to Digital Post receipt with no manual server steps. Want to run it again with a different test user?",
+        "runAgain": "Run again",
+        "gotoLanding": "Back to the home page"
+      },
+      "contactCta": {
+        "eyebrow": "Seen enough?",
+        "heading": "Let's get your own instance running",
+        "body": "We'll spin up a POC instance for your team - your subdomain, your workflows, your branding. 1-2 weeks from first call to live demo.",
+        "primary": "Book a 30-min meeting",
+        "secondary": "Or send an email",
+        "secondaryEmail": "mads{'@'}aabenforms.dk"
+      },
+      "commentary": {
+        "title": "What's happening behind the scenes",
+        "auth": "The frontend redirects to /mitid/login. Drupal generates state + nonce + PKCE challenge and forwards you to Keycloak.",
+        "form": "We fetch /mitid/session/{id} and pre-fill the form with id_token claims. CPR is shown masked in the UI.",
+        "workflow": "POST to /api/webform/building_permit/submit runs the entire ECA flow synchronously and returns workflow.steps in the same response.",
+        "inbox": "GET /api/digital-post/recent looks up aabenforms_digital_post_log by SHA-256 of your session CPR. The letter body is sanitised server-side."
+      },
+      "assurance": {
+        "label": "NSIS level",
+        "low": "Low",
+        "substantial": "Substantial",
+        "high": "High"
+      },
+      "capabilities": {
+        "title": "What's actually running",
+        "bpmn": "BPMN",
+        "bpmnDesc": "Process flows defined in visual BPMN, executed by ECA",
+        "eca": "ECA",
+        "ecaDesc": "Event-Condition-Action plugin pipeline",
+        "mitid": "MitID OIDC",
+        "mitidDesc": "Authorization Code Flow with PKCE S256 and nonce validation",
+        "digitalPost": "Digital Post (NgDP)",
+        "digitalPostDesc": "SF1601 transport - fake_db / wiremock / live test gateway",
+        "gdpr": "GDPR audit",
+        "gdprDesc": "Every MitID session and Digital Post send is logged for audit"
+      },
+      "disabled": {
+        "heading": "The demo is not enabled here",
+        "body": "Set NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true on the next deploy to open it."
+      }
     }
+  },
+  "landingCta": {
+    "eyebrow": "Live demo",
+    "heading": "We eat MitID for breakfast",
+    "lead": "Click through the full building-permit flow - sign in with our mock MitID, watch the ECA flow run live, and find the decision in the Digital Post inbox.",
+    "cta": "Open interactive demo",
+    "altCta": "Read the technical walkthrough",
+    "bullet1": "Real OIDC handshake with PKCE and nonce",
+    "bullet2": "ECA flow runs synchronously and returns all steps",
+    "bullet3": "Letter retrieved from the Digital Post log after dispatch"
+  },
+  "kontakt": {
+    "title": "Contact",
+    "heading": "Get in touch",
+    "lead": "We'll get back to you as soon as possible. Note: this is a POC platform - not production-grade bandwidth.",
+    "successTitle": "Thanks for your message",
+    "successMessage": "We've received your enquiry and will get back to you as soon as possible."
   },
   "useCases": {
     "title": "Use Cases",

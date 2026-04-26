@@ -55,7 +55,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL || 'https://aabenforms.ddev.site',
-      mitidEnabled: process.env.NUXT_PUBLIC_MITID_ENABLED !== 'false'
+      mitidEnabled: process.env.NUXT_PUBLIC_MITID_ENABLED !== 'false',
+      demoByggetilladelseEnabled: process.env.NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED === 'true'
     }
   },
 

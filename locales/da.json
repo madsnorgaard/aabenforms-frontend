@@ -1,28 +1,61 @@
 {
   "hero": {
-    "tagline": "Modern workflow-automatisering for danske kommuner og virksomheder",
+    "tagline": "Hele MitID-flowet for en byggetilladelse på 60 sekunder. Åben kildekode på bare Drupal 11. Ingen licens-omkostninger, ingen pris per indsendt formular.",
     "cta": {
-      "demo": "Prøv Demo",
+      "demo": "Åben interaktiv demo",
+      "book": "Book et 30-min møde →",
       "learn": "Læs Mere"
     }
   },
+  "comparison": {
+    "eyebrow": "Sammenligning",
+    "themLabel": "Proprietære alternativer",
+    "heading": "Hvad får du, som de proprietære alternativer ikke giver?",
+    "lead": "De fleste workflow-platforme på det danske kommunale marked er lukkede, licens-baserede og hostet hos leverandøren. Sådan ser vi forskellene:",
+    "row1": {
+      "title": "Kildekode",
+      "us": "Åben kildekode (EUPL-1.2)",
+      "them": "Lukket - leverandør-licens"
+    },
+    "row2": {
+      "title": "BPMN-redigering",
+      "us": "Du kan selv åbne, læse og ændre flowet",
+      "them": "Konsulentopgave hos leverandøren"
+    },
+    "row3": {
+      "title": "Hosting",
+      "us": "Egen server eller VPS i Europa, helst Danmark - du ejer dataene og lokationen",
+      "them": "Leverandør-hostet, månedlig licens"
+    },
+    "row4": {
+      "title": "Pris-model",
+      "us": "Gratis software. Du betaler kun for hosting og evt. konsulent.",
+      "them": "Årlig licens plus pris per indsendt formular eller sagsforløb"
+    },
+    "row5": {
+      "title": "Afhængigheder",
+      "us": "Bare Drupal 11 + drupal:key",
+      "them": "Komplekst økosystem af afhængigheder"
+    },
+    "footnote": "De proprietære alternativer løser deres problem fint. Vi løser det bare på en måde du selv kan vedligeholde, uden licens-omkostninger der vokser med antallet af sager."
+  },
   "features": {
-    "title": "Funktioner",
+    "title": "Hvad får du fra dag 1?",
     "workflows": {
-      "title": "Avancerede Workflows",
-      "description": "ECA-baseret hændelses-drevet automatisering til komplekse forretningsprocesser med BPMN visuel editor"
+      "title": "13 BPMN-sagstyper klar",
+      "description": "Byggetilladelse, parkeringstilladelse, vielsesbooking, forældregodkendelse, klage og 8 andre forløb pakket og klar - eller skriv dine egne i den visuelle BPMN-editor."
     },
     "multiTenant": {
-      "title": "Multi-Tenant Platform",
-      "description": "Kør flere kommuner eller organisationer på samme platform med fuld dataisolation og branding"
+      "title": "MitID + NemLog-in OIDC",
+      "description": "OIDC med PKCE S256, CPR-prefill fra claims, NSIS-niveau substantial/high. NemLog-in Erhverv på vej. Én kerne, både borger og virksomhed."
     },
     "danish": {
-      "title": "Danske Integrationer",
-      "description": "MitID, CPR-opslag, CVR-data, Digital Post og andre Serviceplatformen-integrationer klar til brug"
+      "title": "Digital Post (SF1601)",
+      "description": "fake_db til lokal udvikling, WireMock til test, Serviceplatformen til produktion - samme kode, fire modes, ét greb."
     },
     "security": {
-      "title": "GDPR & Sikkerhed",
-      "description": "Felt-niveau kryptering af CPR-numre, automatisk audit logging og compliance med danske love"
+      "title": "Indbygget GDPR",
+      "description": "Felt-niveau kryptering af CPR, audit-log på hver MitID-session og Digital Post-afsendelse, sletning efter sagsafslutning."
     }
   },
   "workflowDemo": {
@@ -187,7 +220,134 @@
         "Personal data retrieved from the national CPR registry (SF1520)": "Persondata hentet fra det nationale CPR-register (SF1520)",
         "Audit log entry created for regulatory compliance": "Revisionslog-post oprettet for lovmæssig overholdelse"
       }
+    },
+    "byggetilladelse": {
+      "kickoff": {
+        "eyebrow": "Live demo · Byggetilladelse",
+        "heading": "Klik dig gennem hele MitID-flowet på 60 sekunder",
+        "lead": "Fra borgerens MitID-login over CPR-udfyldning og BPMN-workflow til Digital Post-leveringen - alle trin kører på rigtige integrationer, ikke setTimeout-tricks.",
+        "cta": "Start demo med MitID",
+        "altCta": "Læs den tekniske gennemgang",
+        "runtime": "Cirka 60 sekunder"
+      },
+      "mockBanner": {
+        "title": "Mock-IdP - ikke ægte MitID",
+        "body": "Du autentificerer mod en lokal Keycloak-instans der efterligner MitID. Intet rigtigt CPR-nummer transmitteres."
+      },
+      "steps": {
+        "auth": "Autentificering",
+        "form": "Bekræft data",
+        "workflow": "Workflow",
+        "inbox": "Digital Post"
+      },
+      "auth": {
+        "heading": "Trin 1 · Autentificer med MitID",
+        "body": "Du sendes til mock-MitID for at logge ind. Vælg en demo-bruger, fx Freja Nielsen, kodeord test1234.",
+        "cta": "Log ind via mock-MitID",
+        "processing": "Forbereder autentificering …",
+        "callbackProcessing": "Henter dine MitID-data …"
+      },
+      "form": {
+        "heading": "Trin 2 · Bekræft byggeoplysninger",
+        "body": "MitID-claims er hentet og udfyldt på forhånd. Tilføj de manglende detaljer om dit byggeprojekt.",
+        "prefilledPill": "Udfyldt fra MitID",
+        "manualPill": "Manuel indtastning",
+        "editLink": "Rediger",
+        "lockLink": "Lås igen",
+        "logout": "Log ud",
+        "fields": {
+          "cpr": "CPR-nummer",
+          "applicantName": "Ansøgers navn",
+          "address": "Byggeadresse",
+          "addressPlaceholder": "Vej og nummer, postnr. og by",
+          "description": "Beskrivelse af projektet",
+          "descriptionPlaceholder": "Fx tilbygning på 30 m² mod nordfacaden, etage 1, materialer …"
+        },
+        "submit": "Indsend ansøgning",
+        "submitting": "Indsender til ECA-engine …",
+        "validation": "Udfyld venligst alle felter inden indsendelse"
+      },
+      "workflow": {
+        "heading": "Trin 3 · Workflow kører",
+        "body": "ECA-flowet kører trin for trin på serveren. Hvert trin er en rigtig plugin-handling - CPR-opslag, audit-log og afsendelse til Digital Post.",
+        "waiting": "Venter på serverens svar …",
+        "completed": "Alle trin gennemført",
+        "noSteps": "Workflowet returnerede ingen trin. Tjek backend-loggen."
+      },
+      "inbox": {
+        "heading": "Trin 4 · Afgørelse leveret",
+        "body": "Bekræftelsen er skrevet til Digital Post. I produktion landede dette brev i borgerens NgDP-indbakke. Her ser du den faktiske besked fra log-tabellen.",
+        "empty": "Ingen breve fundet endnu - det kan tage et par sekunder.",
+        "refresh": "Opdater",
+        "refreshing": "Henter …",
+        "expand": "Vis brev",
+        "collapse": "Skjul brev",
+        "received": "Modtaget",
+        "transactionId": "Transaktion",
+        "from": "Afsender"
+      },
+      "complete": {
+        "heading": "Sådan - flowet er fuldført",
+        "body": "Det var fra borgerklik til Digital Post-bekræftelse uden et eneste manuelt skridt på serveren. Vil du køre det igen med en anden testbruger?",
+        "runAgain": "Kør igen",
+        "gotoLanding": "Tilbage til forsiden"
+      },
+      "contactCta": {
+        "eyebrow": "Set nok?",
+        "heading": "Lad os få jeres egen instans op at køre",
+        "body": "Vi sætter en POC-instans op til jeres team - eget subdomæne, jeres workflows, jeres branding. Tager 1-2 uger fra første møde til kørende demo.",
+        "primary": "Book et 30-min møde",
+        "secondary": "Skriv en mail i stedet",
+        "secondaryEmail": "mads{'@'}aabenforms.dk"
+      },
+      "commentary": {
+        "title": "Hvad sker der bag kulisserne",
+        "auth": "Frontend redirecter til /mitid/login. Drupal genererer state + nonce + PKCE-challenge og sender dig til Keycloak.",
+        "form": "Vi henter /mitid/session/{id} og pre-udfylder felter med claims fra id_token. CPR vises maskeret i UI’et.",
+        "workflow": "POST til /api/webform/building_permit/submit kører hele ECA-flowet synkront og returnerer workflow.steps i samme svar.",
+        "inbox": "GET /api/digital-post/recent slår op i aabenforms_digital_post_log via SHA-256 af din session-CPR. Brevteksten renses på serveren, før den vises."
+      },
+      "assurance": {
+        "label": "NSIS-niveau",
+        "low": "Lav",
+        "substantial": "Betydelig",
+        "high": "Høj"
+      },
+      "capabilities": {
+        "title": "Det her kører rigtigt",
+        "bpmn": "BPMN",
+        "bpmnDesc": "Procesflows defineret i visuel BPMN, eksekveret af ECA",
+        "eca": "ECA",
+        "ecaDesc": "Event-Condition-Action plugin pipeline",
+        "mitid": "MitID OIDC",
+        "mitidDesc": "Authorization Code Flow med PKCE S256 og nonce-validering",
+        "digitalPost": "Digital Post (NgDP)",
+        "digitalPostDesc": "SF1601 transport, fake_db / wiremock / live test gateway",
+        "gdpr": "GDPR audit",
+        "gdprDesc": "Hver MitID-session og Digital Post-afsendelse logges revisionsgodkendt"
+      },
+      "disabled": {
+        "heading": "Demoen er ikke aktiveret her",
+        "body": "Sæt NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true ved næste deploy for at åbne demoen."
+      }
     }
+  },
+  "landingCta": {
+    "eyebrow": "Live demo",
+    "heading": "Vi spiser MitID til morgenmad",
+    "lead": "Klik dig gennem hele byggetilladelsesflowet - autentificer med vores mock-MitID, se ECA-flowet køre live, og find afgørelsen i Digital Post-indbakken.",
+    "cta": "Åben interaktiv demo",
+    "altCta": "Læs den tekniske gennemgang",
+    "bullet1": "Rigtigt OIDC-håndtryk med PKCE og nonce",
+    "bullet2": "ECA-flow kører synkront og returnerer alle steps",
+    "bullet3": "Brev hentes ud af Digital Post-loggen efter afsendelse"
+  },
+  "kontakt": {
+    "title": "Kontakt",
+    "heading": "Skriv til os",
+    "lead": "Vi vender tilbage hurtigst muligt. Bemærk: dette er en POC-platform - ikke en produktionsbåndbredde.",
+    "successTitle": "Tak for din besked",
+    "successMessage": "Vi har modtaget din henvendelse og vender tilbage hurtigst muligt."
   },
   "useCases": {
     "title": "Anvendelsesmuligheder",
