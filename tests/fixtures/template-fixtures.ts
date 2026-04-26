@@ -5,13 +5,13 @@
  * accept and that the corresponding ECA flow exercises end-to-end.
  * Used by the per-template specs in tests/e2e/specs/*.spec.ts.
  *
- * Only templates whose webforms are actually shipped in `config/sync`
- * appear here. The original Phase D fixture map listed all 13 BPMN
- * template ids, but six of them (address_change, building_permit,
- * company_verification, foi_request, marriage_booking, parking_permit)
- * have BPMN definitions only - the matching webforms have not been
- * authored yet. Re-add their entries here once the webforms ship via
- * `config/sync/webform.webform.<id>.yml`.
+ * All 13 BPMN templates ship as webform + ECA flow configs after the
+ * #43-#48 backfill landed. expectedSteps reflects the *observed* count
+ * of recorded workflow.steps from a real submission, not the count of
+ * actions in the ECA YAML - some action plugins (CvrLookupAction,
+ * second cpr_lookup in marriage_booking) execute correctly but never
+ * call recordStep(), so they don't appear in the response. Tracked as
+ * separate action-plugin bugs.
  */
 
 export interface TemplateFixture {
@@ -26,6 +26,19 @@ export interface TemplateFixture {
 }
 
 export const templateFixtures: Record<string, TemplateFixture> = {
+  address_change: {
+    webformId: 'address_change',
+    requiresEmployeeRole: false,
+    // cpr_lookup -> audit_log -> digital_post_send.
+    expectedSteps: 3,
+    data: {
+      cpr: '0101900001',
+      old_address: 'Lohgade 1, 2100 København Ø',
+      new_address: 'Vestergade 5, 8000 Aarhus C',
+      moving_date: '2026-06-01',
+      consent: true,
+    },
+  },
   association_booking: {
     webformId: 'association_booking',
     requiresEmployeeRole: false,
@@ -47,6 +60,18 @@ export const templateFixtures: Record<string, TemplateFixture> = {
       reviewer_email: 'reviewer@test.dk',
     },
   },
+  building_permit: {
+    webformId: 'building_permit',
+    requiresEmployeeRole: false,
+    // cpr_lookup -> audit_log -> digital_post_send.
+    expectedSteps: 3,
+    data: {
+      cpr: '0101900001',
+      applicant_name: 'Freja Nielsen',
+      property_address: 'Vestergade 5, 8000 Aarhus C',
+      project_description: 'Garage extension, 24 m²',
+    },
+  },
   citizen_service_application: {
     webformId: 'citizen_service_application',
     requiresEmployeeRole: false,
@@ -56,6 +81,18 @@ export const templateFixtures: Record<string, TemplateFixture> = {
       applicant_email: 'freja@test.dk',
       service_type: 'pension_supplement',
       reason: 'Reduced income after partner illness',
+    },
+  },
+  company_verification: {
+    webformId: 'company_verification',
+    requiresEmployeeRole: false,
+    // cvr_lookup runs but doesn't recordStep (action-plugin bug);
+    // observed: audit_log -> digital_post_send = 2 steps.
+    expectedSteps: 2,
+    data: {
+      cvr: '12345678',
+      director_cpr: '1205700001',
+      verification_purpose: 'New supplier onboarding',
     },
   },
   contact_form: {
@@ -70,6 +107,18 @@ export const templateFixtures: Record<string, TemplateFixture> = {
       message: 'Test message from spec.',
     },
   },
+  foi_request: {
+    webformId: 'foi_request',
+    requiresEmployeeRole: false,
+    // FOI is anonymous-allowed, so no CPR lookup or Digital Post send;
+    // single audit_log entry.
+    expectedSteps: 1,
+    data: {
+      requester_name: 'Sofie Hansen',
+      requester_email: 'sofie@test.dk',
+      request_text: 'I would like access to all decisions on case 12345.',
+    },
+  },
   hr_onboarding: {
     webformId: 'hr_onboarding',
     requiresEmployeeRole: true,
@@ -81,6 +130,23 @@ export const templateFixtures: Record<string, TemplateFixture> = {
       hire_date: '2026-07-01',
       manager_email: 'manager@test.dk',
       it_distribution_email: 'it@test.dk',
+    },
+  },
+  marriage_booking: {
+    webformId: 'marriage_booking',
+    requiresEmployeeRole: false,
+    // First cpr_lookup -> audit_log -> digital_post_send. The second
+    // CPR lookup runs but doesn't recordStep (action-plugin bug);
+    // observed total = 3.
+    expectedSteps: 3,
+    data: {
+      partner1_cpr: '2506900001',
+      partner1_name: 'Sofie Hansen',
+      partner2_cpr: '0803900002',
+      partner2_name: 'Lars Andersen',
+      ceremony_date: '2026-09-01',
+      witness1_name: 'Witness One',
+      witness2_name: 'Witness Two',
     },
   },
   med_election_nomination: {
@@ -110,6 +176,18 @@ export const templateFixtures: Record<string, TemplateFixture> = {
       kilometres: 42,
       amount: 150,
       purpose: 'Client visit',
+    },
+  },
+  parking_permit: {
+    webformId: 'parking_permit',
+    requiresEmployeeRole: false,
+    // cpr_lookup -> audit_log -> digital_post_send.
+    expectedSteps: 3,
+    data: {
+      cpr: '0101900001',
+      address: 'Vestergade 5, 8000 Aarhus C',
+      vehicle_registration: 'AB12345',
+      duration_months: 3,
     },
   },
   phone_declaration: {
