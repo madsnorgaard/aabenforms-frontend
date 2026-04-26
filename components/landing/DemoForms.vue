@@ -31,9 +31,10 @@
         </div>
 
         <!-- Visual column: the whole preview panel is the click target so we
-             don't repeat the hero CTA button. Hover treatment + the cursor
-             change make the affordance clear. -->
-        <NuxtLink to="/demo/byggetilladelse" class="relative block group" :aria-label="$t('landingCta.cta')">
+             don't repeat the hero CTA button. When the live demo flag is
+             off (production today) we route to /kontakt instead so visitors
+             don't dead-end on the disabled-state page. -->
+        <NuxtLink :to="demoEnabled ? '/demo/byggetilladelse' : '/kontakt'" class="relative block group" :aria-label="$t('landingCta.cta')">
           <div class="absolute -inset-6 bg-gradient-to-br from-secondary-100/50 to-primary-100/40 rounded-[28px] blur-2xl opacity-60 group-hover:opacity-90 transition-opacity" aria-hidden="true" />
           <div class="relative rounded-2xl border border-neutral-200 bg-neutral-900 text-neutral-100 overflow-hidden shadow-2xl shadow-neutral-900/15 group-hover:shadow-neutral-900/25 group-hover:-translate-y-0.5 transition-all">
             <div class="px-5 py-4 border-b border-white/5 flex items-center gap-2">
@@ -104,4 +105,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 useI18n()
+const config = useRuntimeConfig()
+const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilladelseEnabled))
 </script>

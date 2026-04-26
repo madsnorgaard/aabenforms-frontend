@@ -3,6 +3,7 @@
     "tagline": "Hele MitID-flowet for en byggetilladelse på 60 sekunder. Åben kildekode på bare Drupal 11. Ingen licens-omkostninger, ingen pris per indsendt formular.",
     "cta": {
       "demo": "Åben interaktiv demo",
+      "demoOffline": "Book en live demonstration",
       "book": "Book et 30-min møde →",
       "learn": "Læs Mere"
     }
@@ -327,8 +328,12 @@
         "gdprDesc": "Hver MitID-session og Digital Post-afsendelse logges revisionsgodkendt"
       },
       "disabled": {
-        "heading": "Demoen er ikke aktiveret her",
-        "body": "Sæt NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true ved næste deploy for at åbne demoen."
+        "eyebrow": "Live walkthrough",
+        "heading": "Den interaktive demo kører lokalt - vi viser den gerne live",
+        "body": "Det fulde flow - MitID-login, ECA-workflow og Digital Post-bekræftelse - kører i en lokal DDEV-opsætning med en mock identitetsudbyder. Book et 15-min møde, så viser vi det hele i jeres tempo og svarer på det tekniske.",
+        "primary": "Book et 15-min møde",
+        "secondary": "Læs den tekniske gennemgang på GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
       }
     }
   },
