@@ -3,6 +3,7 @@
     "tagline": "The full MitID flow for a building permit in 60 seconds. Open source on bare Drupal 11. No licence fees, no per-form charges.",
     "cta": {
       "demo": "Open interactive demo",
+      "demoOffline": "Book a live walkthrough",
       "book": "Book a 30-min meeting →",
       "learn": "Learn More"
     }
@@ -327,8 +328,12 @@
         "gdprDesc": "Every MitID session and Digital Post send is logged for audit"
       },
       "disabled": {
-        "heading": "The demo is not enabled here",
-        "body": "Set NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true on the next deploy to open it."
+        "eyebrow": "Live walkthrough",
+        "heading": "The interactive demo runs locally - we'll happily walk you through it",
+        "body": "The full flow - MitID login, ECA workflow and Digital Post receipt - runs in a local DDEV setup with a mock identity provider. Book a 15-min meeting and we'll walk it end-to-end at your pace and answer the technical questions.",
+        "primary": "Book a 15-min meeting",
+        "secondary": "Read the technical walkthrough on GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
       }
     }
   },
