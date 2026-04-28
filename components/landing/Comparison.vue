@@ -14,27 +14,31 @@
       </div>
 
       <div class="rounded-2xl border border-neutral-200 bg-white overflow-hidden">
-        <div class="grid grid-cols-[1fr_minmax(0,1.2fr)_minmax(0,1.2fr)] text-sm">
-          <!-- Header -->
-          <div class="px-5 py-4 border-b border-neutral-200 bg-neutral-50/60 text-xs font-semibold uppercase tracking-widest text-neutral-500">
+        <div class="grid grid-cols-2 md:grid-cols-[1fr_minmax(0,1.2fr)_minmax(0,1.2fr)] text-sm">
+          <!-- Header (md+ only; on mobile we use per-row mini-headers) -->
+          <div class="hidden md:block px-5 py-4 border-b border-neutral-200 bg-neutral-50/60 text-xs font-semibold uppercase tracking-widest text-neutral-500">
             &nbsp;
           </div>
-          <div class="px-5 py-4 border-b border-neutral-200 bg-neutral-900 text-white">
+          <div class="hidden md:block px-5 py-4 border-b border-neutral-200 bg-neutral-900 text-white">
             <div class="flex items-center gap-2">
               <span class="w-1.5 h-1.5 rounded-full bg-secondary-400"></span>
               <span class="text-xs font-bold uppercase tracking-widest">ÅbenForms</span>
             </div>
           </div>
-          <div class="px-5 py-4 border-b border-neutral-200 bg-neutral-50 text-xs font-semibold uppercase tracking-widest text-neutral-500">
+          <div class="hidden md:block px-5 py-4 border-b border-neutral-200 bg-neutral-50 text-xs font-semibold uppercase tracking-widest text-neutral-500">
             {{ $t('comparison.themLabel') }}
           </div>
 
           <!-- Rows -->
           <template v-for="row in rows" :key="row.key">
-            <div class="px-5 py-4 border-b border-neutral-100 bg-neutral-50/60 font-semibold text-neutral-900">
+            <div class="col-span-2 md:col-span-1 px-5 py-3 md:py-4 border-b border-neutral-100 bg-neutral-50/60 font-semibold text-neutral-900">
               {{ row.title }}
             </div>
-            <div class="px-5 py-4 border-b border-neutral-100 bg-white">
+            <div class="px-4 md:px-5 py-4 border-b border-neutral-100 bg-white">
+              <div class="md:hidden mb-2 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary-500"></span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-900">ÅbenForms</span>
+              </div>
               <div class="flex items-start gap-2">
                 <span class="mt-0.5 inline-flex w-4 h-4 rounded-full bg-success-50 border border-success-200 items-center justify-center flex-shrink-0">
                   <svg class="w-2 h-2 text-success-600" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -44,7 +48,10 @@
                 <span class="text-neutral-800">{{ row.us }}</span>
               </div>
             </div>
-            <div class="px-5 py-4 border-b border-neutral-100 bg-neutral-50/40 text-neutral-500">
+            <div class="px-4 md:px-5 py-4 border-b border-neutral-100 bg-neutral-50/40 text-neutral-500">
+              <div class="md:hidden mb-2 text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+                {{ $t('comparison.themLabel') }}
+              </div>
               {{ row.them }}
             </div>
           </template>

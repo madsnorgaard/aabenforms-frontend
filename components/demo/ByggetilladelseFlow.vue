@@ -3,19 +3,20 @@
     <DemoMockIdPBanner />
 
     <!-- Phase indicator strip -->
-    <div class="grid grid-cols-4 gap-2">
+    <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
       <div
         v-for="(stepKey, idx) in phaseSteps"
         :key="stepKey"
-        class="space-y-1.5"
+        class="space-y-1.5 min-w-0"
       >
         <div
           class="h-1.5 rounded-full transition-all duration-500"
           :class="phaseBarClass(idx)"
         />
         <p
-          class="text-[10px] font-semibold tracking-widest uppercase"
+          class="text-[11px] sm:text-[10px] font-semibold sm:tracking-widest sm:uppercase truncate sm:whitespace-normal"
           :class="idx <= currentPhaseIdx ? 'text-neutral-900' : 'text-neutral-400'"
+          :title="$t(`demo.byggetilladelse.steps.${stepKey}`)"
         >
           {{ $t(`demo.byggetilladelse.steps.${stepKey}`) }}
         </p>
