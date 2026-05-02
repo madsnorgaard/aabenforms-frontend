@@ -1,26 +1,6 @@
 <template>
   <div class="min-h-screen bg-neutral-50">
-    <header class="border-b border-neutral-200 bg-white">
-      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
-        <NuxtLink to="/" class="inline-flex items-center gap-2 sm:gap-2.5 text-sm font-bold text-neutral-900 hover:opacity-80 transition-opacity min-w-0">
-          <img src="/favicon.svg" alt="" class="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" />
-          <span class="truncate">ÅbenForms</span>
-        </NuxtLink>
-        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-          <LanguageSwitcher />
-          <NuxtLink
-            to="/"
-            class="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-lg text-sm font-semibold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
-            :aria-label="$t('demo.byggetilladelse.complete.gotoLanding')"
-          >
-            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M13 8H3m4-4l-4 4 4 4" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <span class="hidden sm:inline">{{ $t('demo.byggetilladelse.complete.gotoLanding') }}</span>
-          </NuxtLink>
-        </div>
-      </div>
-    </header>
+    <SiteHeader />
 
     <main class="max-w-2xl mx-auto px-6 lg:px-8 py-16">
       <p class="text-xs font-semibold tracking-widest uppercase text-primary-600 mb-3">

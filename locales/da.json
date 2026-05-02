@@ -417,7 +417,13 @@
     "submitError": "Der opstod en fejl ved indsendelse. Prøv venligst igen.",
     "validationErrors": "Ret venligst følgende fejl:",
     "unknownError": "Ukendt fejl",
-    "unsupportedFieldType": "Dette felttype understøttes ikke endnu"
+    "unsupportedFieldType": "Dette felttype understøttes ikke endnu",
+    "dawa": {
+      "searchPlaceholder": "Søg adresse...",
+      "noResults": "Ingen adresser fundet",
+      "clear": "Ryd",
+      "attribution": "Adressedata leveres af Dataforsyningen (DAWA)"
+    }
   },
   "auth": {
     "loginWithMitId": "Log ind med MitID",
@@ -522,6 +528,11 @@
     "bookingError": "Booking fejlede. Prøv venligst igen.",
     "bookingSuccess": "Din booking er bekræftet!",
     "bookingSuccessMessage": "Du vil modtage en bekræftelse via e-mail og SMS."
+  },
+  "siteHeader": {
+    "gotoLanding": "Tilbage til forsiden",
+    "liveDemo": "Live demo",
+    "liveDemoShort": "Live"
   },
   "common": {
     "loading": "Indlæser...",
