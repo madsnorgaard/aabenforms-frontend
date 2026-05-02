@@ -417,7 +417,13 @@
     "submitError": "An error occurred during submission. Please try again.",
     "validationErrors": "Please correct the following errors:",
     "unknownError": "Unknown error",
-    "unsupportedFieldType": "This field type is not yet supported"
+    "unsupportedFieldType": "This field type is not yet supported",
+    "dawa": {
+      "searchPlaceholder": "Search address...",
+      "noResults": "No addresses found",
+      "clear": "Clear",
+      "attribution": "Address data from Dataforsyningen (DAWA)"
+    }
   },
   "auth": {
     "loginWithMitId": "Log in with MitID",
@@ -522,6 +528,11 @@
     "bookingError": "Booking failed. Please try again.",
     "bookingSuccess": "Your booking is confirmed!",
     "bookingSuccessMessage": "You will receive a confirmation via email and SMS."
+  },
+  "siteHeader": {
+    "gotoLanding": "Back to the home page",
+    "liveDemo": "Live demo",
+    "liveDemoShort": "Live"
   },
   "common": {
     "loading": "Loading...",

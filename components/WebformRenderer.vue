@@ -97,37 +97,14 @@
           class="cvr-field"
         />
 
-        <!-- DAWA Address (simplified for now) -->
-        <div v-else-if="field['#type'] === 'dawa_address'" class="dawa-address-field">
-          <label>{{ field['#title'] }}</label>
-          <UiInput
-            v-model="formData[key + '_search']"
-            placeholder="Søg adresse..."
-            type="text"
-          />
-          <UiInput
-            v-model="formData[key + '_street']"
-            placeholder="Vejnavn og nummer"
-            type="text"
-            readonly
-          />
-          <div class="address-details">
-            <UiInput
-              v-model="formData[key + '_postal_code']"
-              placeholder="Postnr."
-              type="text"
-              class="postal-code"
-              readonly
-            />
-            <UiInput
-              v-model="formData[key + '_city']"
-              placeholder="By"
-              type="text"
-              class="city"
-              readonly
-            />
-          </div>
-        </div>
+        <!-- DAWA Address - real autocomplete against api.dataforsyningen.dk -->
+        <DawaAddressField
+          v-else-if="field['#type'] === 'dawa_address'"
+          :model-value="dawaModels[key] || null"
+          :label="field['#title']"
+          :required="field['#required']"
+          @update:model-value="(v) => onDawaUpdate(String(key), v)"
+        />
 
         <!-- Fallback for unsupported field types -->
         <div v-else class="unsupported-field">
@@ -189,9 +166,27 @@ const loading = ref(true)
 const error = ref<string | null>(null)
 const schema = ref<any>(null)
 const formData = ref<Record<string, any>>({})
+const dawaModels = ref<Record<string, { id: string; street: string; postal_code: string; city: string } | null>>({})
 const submitting = ref(false)
 const success = ref(false)
 const validationErrors = ref<string[]>([])
+
+// Mirror a DAWA-selected address into the flat keys the backend expects
+// (`<key>_street`, `<key>_postal_code`, `<key>_city`, `<key>_id`).
+function onDawaUpdate(key: string, value: { id: string; street: string; postal_code: string; city: string } | null) {
+  dawaModels.value[key] = value
+  if (value) {
+    formData.value[key + '_street'] = value.street
+    formData.value[key + '_postal_code'] = value.postal_code
+    formData.value[key + '_city'] = value.city
+    formData.value[key + '_id'] = value.id
+  } else {
+    delete formData.value[key + '_street']
+    delete formData.value[key + '_postal_code']
+    delete formData.value[key + '_city']
+    delete formData.value[key + '_id']
+  }
+}
 
 // Load form schema on mount (client-side only)
 onMounted(() => {
@@ -322,18 +317,6 @@ async function submitForm() {
 
 .form-field {
   position: relative;
-}
-
-.dawa-address-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.address-details {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 0.75rem;
 }
 
 .unsupported-field {
