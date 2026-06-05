@@ -15,7 +15,7 @@
     "lead": "De fleste workflow-platforme på det danske kommunale marked er lukkede, licens-baserede og hostet hos leverandøren. Sådan ser vi forskellene:",
     "row1": {
       "title": "Kildekode",
-      "us": "Åben kildekode (EUPL-1.2)",
+      "us": "Åben kildekode (GPL-2.0)",
       "them": "Lukket - leverandør-licens"
     },
     "row2": {

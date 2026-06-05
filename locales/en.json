@@ -15,7 +15,7 @@
     "lead": "Most workflow platforms in the Danish municipal market are closed, licence-based and vendor-hosted. Here's how we differ:",
     "row1": {
       "title": "Source code",
-      "us": "Open source (EUPL-1.2)",
+      "us": "Open source (GPL-2.0)",
       "them": "Closed - vendor licence"
     },
     "row2": {
