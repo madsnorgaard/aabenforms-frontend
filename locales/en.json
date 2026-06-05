@@ -15,7 +15,7 @@
     "lead": "Most workflow platforms in the Danish municipal market are closed, licence-based and vendor-hosted. Here's how we differ:",
     "row1": {
       "title": "Source code",
-      "us": "Open source (EUPL-1.2)",
+      "us": "Open source (GPL-2.0)",
       "them": "Closed - vendor licence"
     },
     "row2": {
@@ -56,7 +56,7 @@
     },
     "security": {
       "title": "GDPR by design",
-      "description": "Field-level CPR encryption, audit log on every MitID session and Digital Post send, deletion after workflow completion."
+      "description": "Field-level CPR encryption and an audit log on every MitID session and Digital Post send."
     }
   },
   "workflowDemo": {
@@ -226,7 +226,7 @@
       "kickoff": {
         "eyebrow": "Live demo · Building permit",
         "heading": "Click through the full MitID flow in 60 seconds",
-        "lead": "From the citizen's MitID login through CPR-prefilled form to BPMN execution and Digital Post delivery - every step runs against real backend integrations, not setTimeout fakery.",
+        "lead": "From the citizen's MitID login through CPR-prefilled form to BPMN execution and Digital Post delivery. The ECA workflow runs for real on the server; CPR lookup and Digital Post run in demo mode with test data until Serviceplatformen certificates and MitID registration are in place.",
         "cta": "Start demo with MitID",
         "altCta": "Read the technical walkthrough",
         "runtime": "About 60 seconds"
@@ -315,7 +315,7 @@
         "high": "High"
       },
       "capabilities": {
-        "title": "What's actually running",
+        "title": "How it works",
         "bpmn": "BPMN",
         "bpmnDesc": "Process flows defined in visual BPMN, executed by ECA",
         "eca": "ECA",
