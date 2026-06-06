@@ -19,8 +19,8 @@
       "them": "Closed - vendor licence"
     },
     "row2": {
-      "title": "BPMN editing",
-      "us": "Open it, read it, change it yourself",
+      "title": "Visual modeler",
+      "us": "Open it, read it, change it yourself in the visual modeler",
       "them": "Consultancy project with the vendor"
     },
     "row3": {
@@ -43,8 +43,8 @@
   "features": {
     "title": "What you get from day 1",
     "workflows": {
-      "title": "13 BPMN case types ready",
-      "description": "Building permit, parking permit, marriage booking, parental approval, formal complaint and 8 other flows shipped and ready - or write your own in the visual BPMN editor."
+      "title": "13 case types ready",
+      "description": "Building permit, parking permit, marriage booking, parental approval, formal complaint and 8 other flows shipped and ready - or draw your own in the visual modeler."
     },
     "multiTenant": {
       "title": "MitID + NemLog-in OIDC",
@@ -100,7 +100,7 @@
       "title": "Modern ECA Workflow Engine",
       "description": "ÅbenForms uses ECA (Event-Condition-Action) as a modern, actively developed replacement for the legacy Maestro system.",
       "benefits": {
-        "visual": "Visual BPMN editor for easy workflow design",
+        "visual": "Visual modeler for easy workflow design",
         "modern": "Actively developed for Drupal 11 with modern architecture",
         "flexible": "Flexible event-driven logic without hard-coded business rules",
         "headless": "Headless-compatible with JSON:API integration"
@@ -226,7 +226,7 @@
       "kickoff": {
         "eyebrow": "Live demo · Building permit",
         "heading": "Click through the full MitID flow in 60 seconds",
-        "lead": "From the citizen's MitID login through CPR-prefilled form to BPMN execution and Digital Post delivery. The ECA workflow runs for real on the server; CPR lookup and Digital Post run in demo mode with test data until Serviceplatformen certificates and MitID registration are in place.",
+        "lead": "From the citizen's MitID login through CPR-prefilled form to the visual workflow and Digital Post delivery. The ECA workflow runs for real on the server; CPR lookup and Digital Post run in demo mode with test data until Serviceplatformen certificates and MitID registration are in place.",
         "cta": "Start demo with MitID",
         "altCta": "Read the technical walkthrough",
         "runtime": "About 60 seconds"
@@ -316,8 +316,8 @@
       },
       "capabilities": {
         "title": "How it works",
-        "bpmn": "BPMN",
-        "bpmnDesc": "Process flows defined in visual BPMN, executed by ECA",
+        "bpmn": "Modeler",
+        "bpmnDesc": "Process flows drawn in the visual modeler, executed by ECA",
         "eca": "ECA",
         "ecaDesc": "Event-Condition-Action plugin pipeline",
         "mitid": "MitID OIDC",
