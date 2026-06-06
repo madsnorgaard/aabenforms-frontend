@@ -155,7 +155,12 @@ export const useByggetilladelseDemo = () => {
     const u = user.value as User
     const body = {
       data: {
+        // The MitID session cookie is not shared cross-origin, so the gate
+        // can't read it from a cookie. Send the workflow id (the bearer
+        // capability we got at login) in the payload so the backend can scope
+        // the identity gate to our session. Same handle used for the inbox.
         attributes: {
+          workflow_id: sessionId.value,
           data: {
             cpr: u.cpr,
             applicant_name: u.name,
