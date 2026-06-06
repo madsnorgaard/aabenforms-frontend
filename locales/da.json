@@ -19,8 +19,8 @@
       "them": "Lukket - leverandør-licens"
     },
     "row2": {
-      "title": "BPMN-redigering",
-      "us": "Du kan selv åbne, læse og ændre flowet",
+      "title": "Visuel modeler",
+      "us": "Du kan selv åbne, læse og ændre flowet i den visuelle modeler",
       "them": "Konsulentopgave hos leverandøren"
     },
     "row3": {
@@ -43,8 +43,8 @@
   "features": {
     "title": "Hvad får du fra dag 1?",
     "workflows": {
-      "title": "13 BPMN-sagstyper klar",
-      "description": "Byggetilladelse, parkeringstilladelse, vielsesbooking, forældregodkendelse, klage og 8 andre forløb pakket og klar - eller skriv dine egne i den visuelle BPMN-editor."
+      "title": "13 sagstyper klar",
+      "description": "Byggetilladelse, parkeringstilladelse, vielsesbooking, forældregodkendelse, klage og 8 andre forløb pakket og klar - eller tegn dine egne i den visuelle modeler."
     },
     "multiTenant": {
       "title": "MitID + NemLog-in OIDC",
@@ -100,7 +100,7 @@
       "title": "Moderne ECA Workflow Engine",
       "description": "ÅbenForms bruger ECA (Event-Condition-Action) som en moderne, aktivt udviklet erstatning for det forældede Maestro system.",
       "benefits": {
-        "visual": "Visuel BPMN-editor til nem workflow-design",
+        "visual": "Visuel modeler til nem workflow-design",
         "modern": "Aktivt udviklet til Drupal 11 med moderne arkitektur",
         "flexible": "Fleksibel event-drevet logik uden hard-coded forretningsregler",
         "headless": "Headless-kompatibel med JSON:API integration"
@@ -226,7 +226,7 @@
       "kickoff": {
         "eyebrow": "Live demo · Byggetilladelse",
         "heading": "Klik dig gennem hele MitID-flowet på 60 sekunder",
-        "lead": "Fra borgerens MitID-login over CPR-udfyldning og BPMN-workflow til Digital Post-leveringen. ECA-workflowet kører rigtigt på serveren; CPR-opslag og Digital Post kører i demo-tilstand med testdata, indtil Serviceplatformen-certifikater og MitID-registrering er på plads.",
+        "lead": "Fra borgerens MitID-login over CPR-udfyldning og det visuelle workflow til Digital Post-leveringen. ECA-workflowet kører rigtigt på serveren; CPR-opslag og Digital Post kører i demo-tilstand med testdata, indtil Serviceplatformen-certifikater og MitID-registrering er på plads.",
         "cta": "Start demo med MitID",
         "altCta": "Læs den tekniske gennemgang",
         "runtime": "Cirka 60 sekunder"
@@ -316,8 +316,8 @@
       },
       "capabilities": {
         "title": "Sådan virker det",
-        "bpmn": "BPMN",
-        "bpmnDesc": "Procesflows defineret i visuel BPMN, eksekveret af ECA",
+        "bpmn": "Modeler",
+        "bpmnDesc": "Procesflows tegnet i den visuelle modeler, eksekveret af ECA",
         "eca": "ECA",
         "ecaDesc": "Event-Condition-Action plugin pipeline",
         "mitid": "MitID OIDC",
