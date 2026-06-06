@@ -15,7 +15,7 @@
     "lead": "De fleste workflow-platforme på det danske kommunale marked er lukkede, licens-baserede og hostet hos leverandøren. Sådan ser vi forskellene:",
     "row1": {
       "title": "Kildekode",
-      "us": "Åben kildekode (EUPL-1.2)",
+      "us": "Åben kildekode (GPL-2.0)",
       "them": "Lukket - leverandør-licens"
     },
     "row2": {
@@ -56,7 +56,7 @@
     },
     "security": {
       "title": "Indbygget GDPR",
-      "description": "Felt-niveau kryptering af CPR, audit-log på hver MitID-session og Digital Post-afsendelse, sletning efter sagsafslutning."
+      "description": "Felt-niveau kryptering af CPR og audit-log på hver MitID-session og Digital Post-afsendelse."
     }
   },
   "workflowDemo": {
@@ -226,7 +226,7 @@
       "kickoff": {
         "eyebrow": "Live demo · Byggetilladelse",
         "heading": "Klik dig gennem hele MitID-flowet på 60 sekunder",
-        "lead": "Fra borgerens MitID-login over CPR-udfyldning og BPMN-workflow til Digital Post-leveringen - alle trin kører på rigtige integrationer, ikke setTimeout-tricks.",
+        "lead": "Fra borgerens MitID-login over CPR-udfyldning og BPMN-workflow til Digital Post-leveringen. ECA-workflowet kører rigtigt på serveren; CPR-opslag og Digital Post kører i demo-tilstand med testdata, indtil Serviceplatformen-certifikater og MitID-registrering er på plads.",
         "cta": "Start demo med MitID",
         "altCta": "Læs den tekniske gennemgang",
         "runtime": "Cirka 60 sekunder"
@@ -315,7 +315,7 @@
         "high": "Høj"
       },
       "capabilities": {
-        "title": "Det her kører rigtigt",
+        "title": "Sådan virker det",
         "bpmn": "BPMN",
         "bpmnDesc": "Procesflows defineret i visuel BPMN, eksekveret af ECA",
         "eca": "ECA",
