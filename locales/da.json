@@ -69,7 +69,7 @@
       "citizen": {
         "actor": "Borger",
         "role": "Ansøger",
-        "action": "Indsender byggetilladelse med MitID-login. System henter automatisk CPR-data og validerer byggeadresse via DAWA."
+        "action": "Indsender byggetilladelse med MitID-login. System henter automatisk CPR-data og validerer byggeadresse mod Danmarks Adresseregister."
       },
       "caseworker": {
         "actor": "Sagsbehandler",
@@ -91,7 +91,7 @@
       "mitid": "MitID",
       "cpr": "CPR Opslag",
       "cvr": "CVR Data",
-      "dawa": "DAWA Adresse",
+      "address": "Adresse",
       "digitalpost": "Digital Post",
       "sbsys": "SBSYS Sag",
       "pdf": "PDF Generering"
@@ -138,7 +138,7 @@
         "cprHelp": "Auto-udfyldes efter MitID login i produktion",
         "address": "Byggeadresse",
         "addressPlaceholder": "Søg adresse...",
-        "addressHelp": "DAWA autocomplete med validering",
+        "addressHelp": "Adressevælger autocomplete med validering",
         "buildingType": "Type af byggearbejde",
         "selectType": "Vælg type",
         "types": {
@@ -418,11 +418,11 @@
     "validationErrors": "Ret venligst følgende fejl:",
     "unknownError": "Ukendt fejl",
     "unsupportedFieldType": "Dette felttype understøttes ikke endnu",
-    "dawa": {
+    "address": {
       "searchPlaceholder": "Søg adresse...",
       "noResults": "Ingen adresser fundet",
       "clear": "Ryd",
-      "attribution": "Adressedata leveres af Dataforsyningen (DAWA)"
+      "attribution": "Adressedata leveres af Danmarks Adresseregister (Dataforsyningen)"
     }
   },
   "auth": {
@@ -607,9 +607,9 @@
       "title": "CVR-nummer",
       "text": "CVR-nummeret er virksomhedens identifikationsnummer i formatet 12 34 56 78."
     },
-    "dawa": {
+    "address": {
       "title": "Adressesøgning",
-      "text": "Begynd at skrive din adresse, og vælg fra listen. Adressen valideres automatisk via DAWA (Danmarks Adressers Web API)."
+      "text": "Begynd at skrive din adresse, og vælg fra listen. Adressen valideres automatisk mod Danmarks Adresseregister."
     },
     "mitid": {
       "title": "MitID login",

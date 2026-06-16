@@ -66,5 +66,5 @@ export type FieldType =
   | 'file'
   | 'cpr'
   | 'cvr'
-  | 'dawa_address'
+  | 'address'
   | 'hidden'

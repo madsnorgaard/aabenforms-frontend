@@ -182,7 +182,7 @@ The ÅbenForms frontend has undergone significant UI/UX improvements to enhance 
 3. **Help Content** (`help`)
    - CPR number explanation and format
    - CVR number guidance
-   - DAWA address search help
+   - Adressevælger address search help
    - MitID login information
    - Workflow status tracking
 
@@ -237,7 +237,7 @@ The ÅbenForms frontend has undergone significant UI/UX improvements to enhance 
 -  Basic error handling
 -  Needs skeleton loaders for form fields
 -  Needs inline field validation with tooltips
--  Needs help tooltips for CPR, CVR, DAWA fields
+-  Needs help tooltips for CPR, CVR, Adressevælger fields
 -  Needs mobile optimization
 
 ---
@@ -428,7 +428,7 @@ The ÅbenForms frontend has undergone significant UI/UX improvements to enhance 
 2. **Implement Help Tooltips**
    - [ ] CPR field: Format tooltip
    - [ ] CVR field: Format tooltip
-   - [ ] DAWA address: Search help
+   - [ ] Adressevælger address: Search help
    - [ ] Payment methods: Description tooltips
 
 3. **Mobile Device Testing**

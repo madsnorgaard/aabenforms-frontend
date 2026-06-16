@@ -53,6 +53,11 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    // Server-only: Adressevælger access token, injected by the proxy route so it
+    // never reaches the browser. Defaults to our own unique token (never the shared
+    // demo token), swappable for a registered token when KDS Brugerstyring launches.
+    adressevaelgerToken: process.env.NUXT_ADRESSEVAELGER_TOKEN || 'aabenforms-adr-2026',
+    adressevaelgerApiUrl: process.env.NUXT_ADRESSEVAELGER_API_URL || 'https://adressevaelger.dk',
     public: {
       apiBase: process.env.API_BASE_URL || 'https://aabenforms.ddev.site',
       mitidEnabled: process.env.NUXT_PUBLIC_MITID_ENABLED !== 'false',

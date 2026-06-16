@@ -266,7 +266,7 @@ $t('errors.invalidCPR')   // Invalid CPR format
 $t('help.cpr.title')      // "CPR-nummer" / "CPR Number"
 $t('help.cpr.text')       // Explanation text
 $t('help.cvr.title')      // "CVR-nummer" / "CVR Number"
-$t('help.dawa.title')     // Address search help
+$t('help.address.title')     // Address search help
 ```
 
 ### Accessibility
@@ -284,7 +284,7 @@ $t('accessibility.loading')       // Loading content label
 ### Immediate (This Week)
 
 1. **Add Skeleton Loaders** - Integrate into WebformRenderer and WorkflowDashboard
-2. **Add Help Tooltips** - CPR, CVR, and DAWA fields
+2. **Add Help Tooltips** - CPR, CVR, and Adressevælger fields
 3. **Mobile Testing** - Test on real iOS and Android devices
 4. **Lighthouse Audit** - Run performance and accessibility audits
 
