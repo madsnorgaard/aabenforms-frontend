@@ -97,13 +97,13 @@
           class="cvr-field"
         />
 
-        <!-- DAWA Address - real autocomplete against api.dataforsyningen.dk -->
-        <DawaAddressField
-          v-else-if="field['#type'] === 'dawa_address'"
-          :model-value="dawaModels[key] || null"
+        <!-- Danish address autocomplete (Adressevælger) -->
+        <AddressAutocomplete
+          v-else-if="field['#type'] === 'address'"
+          :model-value="addressModels[key] || null"
           :label="field['#title']"
           :required="field['#required']"
-          @update:model-value="(v) => onDawaUpdate(String(key), v)"
+          @update:model-value="(v) => onAddressUpdate(String(key), v)"
         />
 
         <!-- Fallback for unsupported field types -->
@@ -166,15 +166,15 @@ const loading = ref(true)
 const error = ref<string | null>(null)
 const schema = ref<any>(null)
 const formData = ref<Record<string, any>>({})
-const dawaModels = ref<Record<string, { id: string; street: string; postal_code: string; city: string } | null>>({})
+const addressModels = ref<Record<string, { id: string; street: string; postal_code: string; city: string } | null>>({})
 const submitting = ref(false)
 const success = ref(false)
 const validationErrors = ref<string[]>([])
 
-// Mirror a DAWA-selected address into the flat keys the backend expects
+// Mirror a selected address into the flat keys the backend expects
 // (`<key>_street`, `<key>_postal_code`, `<key>_city`, `<key>_id`).
-function onDawaUpdate(key: string, value: { id: string; street: string; postal_code: string; city: string } | null) {
-  dawaModels.value[key] = value
+function onAddressUpdate(key: string, value: { id: string; street: string; postal_code: string; city: string } | null) {
+  addressModels.value[key] = value
   if (value) {
     formData.value[key + '_street'] = value.street
     formData.value[key + '_postal_code'] = value.postal_code

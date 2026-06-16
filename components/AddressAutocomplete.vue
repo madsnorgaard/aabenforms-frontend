@@ -46,7 +46,7 @@
         v-else-if="open && !loading && query.length >= 2"
         class="address-empty"
       >
-        {{ $t('form.dawa.noResults') }}
+        {{ $t('form.address.noResults') }}
       </p>
     </div>
     <div v-if="modelValue?.street" class="address-selected" data-testid="address-selected">
@@ -57,10 +57,10 @@
         class="address-clear"
         @click="clear"
       >
-        {{ $t('form.dawa.clear') }}
+        {{ $t('form.address.clear') }}
       </button>
     </div>
-    <p class="address-attribution">{{ $t('form.dawa.attribution') }}</p>
+    <p class="address-attribution">{{ $t('form.address.attribution') }}</p>
   </div>
 </template>
 
@@ -127,7 +127,7 @@ const activeIndex = ref(-1)
 const inputEl = ref<HTMLInputElement | null>(null)
 const listboxId = `address-listbox-${Math.random().toString(36).slice(2, 9)}`
 
-const placeholderText = computed(() => props.placeholder || t('form.dawa.searchPlaceholder'))
+const placeholderText = computed(() => props.placeholder || t('form.address.searchPlaceholder'))
 
 let abortCtrl: AbortController | null = null
 let debounceTimer: ReturnType<typeof setTimeout> | null = null

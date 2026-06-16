@@ -1,16 +1,15 @@
 /**
- * Address search client for the Klimadatastyrelsen Adressevælger service
- * (the successor to DAWA, which is decommissioned 17 August 2026).
+ * Address search client for the Klimadatastyrelsen Adressevælger service.
  *
  * This is a framework-agnostic, dependency-free implementation of the upstream
  * library's API contract (github.com/Klimadatastyrelsen/adressevaelger), routed
  * through our own server proxy (`/api/adressevaelger`) so the access token stays
  * server-side. It powers the accessible <AddressAutocomplete> combobox.
  *
- * Feature parity with DAWA autocomplete: full (non-fuzzy) prefix/substring search,
- * stepwise narrowing (street -> postal district -> house number), and a normalized
- * selected address. Optional municipality scoping, access-address-only mode,
- * provisional addresses and a result cap mirror the upstream options.
+ * Features: full (non-fuzzy) prefix/substring search, stepwise narrowing
+ * (street -> postal district -> house number), and a normalized selected
+ * address. Optional municipality scoping, access-address-only mode, provisional
+ * addresses and a result cap mirror the upstream options.
  */
 
 /** A single suggestion returned by `/{endpoint}/soeg`. */

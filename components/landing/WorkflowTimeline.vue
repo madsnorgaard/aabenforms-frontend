@@ -114,7 +114,7 @@ const steps = [
     actorKey: 'workflowDemo.steps.citizen.actor',
     roleKey: 'workflowDemo.steps.citizen.role',
     actionKey: 'workflowDemo.steps.citizen.action',
-    integrations: ['mitid', 'cpr', 'dawa'],
+    integrations: ['mitid', 'cpr', 'address'],
   },
   {
     actorKey: 'workflowDemo.steps.caseworker.actor',
