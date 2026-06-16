@@ -1,4 +1,27 @@
 {
+  "caseInbox": {
+    "title": "Case inbox",
+    "subtitle": "Open cases and their deadlines.",
+    "loading": "Loading cases...",
+    "loadError": "Could not load cases.",
+    "empty": "No cases.",
+    "colId": "ID",
+    "colTitle": "Title",
+    "colType": "Type",
+    "colStatus": "Status",
+    "colFrist": "Deadline",
+    "filterAll": "All",
+    "filterOpen": "Open",
+    "filterOverdue": "Overdue"
+  },
+  "caseStatus": {
+    "modtaget": "Received",
+    "oplyst": "Investigated",
+    "partshoering": "Party hearing",
+    "afgoerelse": "Decision",
+    "paaklaget": "Appealed",
+    "lukket": "Closed"
+  },
   "hero": {
     "tagline": "The full MitID flow for a building permit in 60 seconds. Open source on bare Drupal 11. No licence fees, no per-form charges.",
     "cta": {

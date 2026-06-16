@@ -1,4 +1,27 @@
 {
+  "caseInbox": {
+    "title": "Sagsindbakke",
+    "subtitle": "Åbne sager og deres frister.",
+    "loading": "Indlæser sager...",
+    "loadError": "Kunne ikke indlæse sager.",
+    "empty": "Ingen sager.",
+    "colId": "ID",
+    "colTitle": "Titel",
+    "colType": "Type",
+    "colStatus": "Status",
+    "colFrist": "Frist",
+    "filterAll": "Alle",
+    "filterOpen": "Åbne",
+    "filterOverdue": "Overskredet"
+  },
+  "caseStatus": {
+    "modtaget": "Modtaget",
+    "oplyst": "Oplyst",
+    "partshoering": "Partshøring",
+    "afgoerelse": "Afgørelse",
+    "paaklaget": "Påklaget",
+    "lukket": "Lukket"
+  },
   "hero": {
     "tagline": "Hele MitID-flowet for en byggetilladelse på 60 sekunder. Åben kildekode på bare Drupal 11. Ingen licens-omkostninger, ingen pris per indsendt formular.",
     "cta": {
