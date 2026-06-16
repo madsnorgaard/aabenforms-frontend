@@ -422,7 +422,7 @@
       "searchPlaceholder": "Search address...",
       "noResults": "No addresses found",
       "clear": "Clear",
-      "attribution": "Address data from Dataforsyningen (DAWA)"
+      "attribution": "Address data from Denmark's Address Register (Dataforsyningen)"
     }
   },
   "auth": {
@@ -609,7 +609,7 @@
     },
     "dawa": {
       "title": "Address Search",
-      "text": "Start typing your address and select from the list. The address is automatically validated via DAWA (Denmark's Address Web API)."
+      "text": "Start typing your address and select from the list. The address is automatically validated against Denmark's Address Register."
     },
     "mitid": {
       "title": "MitID Login",

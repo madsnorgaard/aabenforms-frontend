@@ -422,7 +422,7 @@
       "searchPlaceholder": "Søg adresse...",
       "noResults": "Ingen adresser fundet",
       "clear": "Ryd",
-      "attribution": "Adressedata leveres af Dataforsyningen (DAWA)"
+      "attribution": "Adressedata leveres af Danmarks Adresseregister (Dataforsyningen)"
     }
   },
   "auth": {
@@ -609,7 +609,7 @@
     },
     "dawa": {
       "title": "Adressesøgning",
-      "text": "Begynd at skrive din adresse, og vælg fra listen. Adressen valideres automatisk via DAWA (Danmarks Adressers Web API)."
+      "text": "Begynd at skrive din adresse, og vælg fra listen. Adressen valideres automatisk mod Danmarks Adresseregister."
     },
     "mitid": {
       "title": "MitID login",
