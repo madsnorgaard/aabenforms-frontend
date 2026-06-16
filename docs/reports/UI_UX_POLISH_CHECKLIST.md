@@ -93,7 +93,7 @@ Comprehensive checklist of all UI/UX improvements for production readiness.
 -  WebformRenderer: Field help text, needs tooltips for complex fields
 -  CPR field: Format help tooltip (DDMMYY-XXXX)
 -  CVR field: Format help tooltip (12 34 56 78)
--  DAWA address: Autocomplete help text
+-  Adressevælger address: Autocomplete help text
 
 ### 3.3 Contextual Help Modals
 -  Created reusable `Modal.vue` component
@@ -269,7 +269,7 @@ Comprehensive checklist of all UI/UX improvements for production readiness.
 -  Debounce text inputs (300ms)
 -  Throttle autocomplete requests
 -  Debounce workflow builder changes
--  Optimize DAWA address search
+-  Optimize Adressevælger address search
 -  Implement virtual scrolling for long lists
 
 ### 7.3 Component Re-render Optimization
