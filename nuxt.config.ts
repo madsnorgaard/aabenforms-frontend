@@ -89,23 +89,29 @@ export default defineNuxtConfig({
   ssr: true,
 
   // Production build optimizations
+  // Note: do NOT transpile 'vue' here - it drags the CJS compiler through
+  // interop and breaks the server build ("entities/decode" default export).
   build: {
-    transpile: ['vue', 'pinia'],
+    transpile: ['pinia'],
   },
 
   // Nitro configuration for production
+  // NUXT_SKIP_PRERENDER=1 builds without prerendering, for environments where
+  // the backend is not reachable at build time (e.g. local demo builds).
   nitro: {
     compressPublicAssets: true,
-    prerender: {
-      crawlLinks: true,
-      routes: ['/'],
-    },
+    prerender: process.env.NUXT_SKIP_PRERENDER
+      ? { crawlLinks: false, routes: [] }
+      : {
+          crawlLinks: true,
+          routes: ['/'],
+        },
   },
 
   // Route rules for caching and optimization
   routeRules: {
     // Static pages - cache for 1 hour
-    '/': { prerender: true },
+    '/': { prerender: !process.env.NUXT_SKIP_PRERENDER },
 
     // API routes - no caching
     '/api/**': { cors: true, headers: { 'cache-control': 'no-cache' } },
