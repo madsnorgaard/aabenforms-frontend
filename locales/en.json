@@ -446,7 +446,9 @@
       "noResults": "No addresses found",
       "clear": "Clear",
       "attribution": "Address data from Denmark's Address Register (Dataforsyningen)"
-    }
+    },
+    "mitidRequired": "This application requires you to confirm your identity with MitID before you can fill it in.",
+    "mitidLoggedInAs": "Logged in with MitID as"
   },
   "auth": {
     "loginWithMitId": "Log in with MitID",
