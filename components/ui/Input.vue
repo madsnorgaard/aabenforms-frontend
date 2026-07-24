@@ -11,8 +11,12 @@
       :placeholder="placeholder"
       :required="required"
       :disabled="disabled"
+      :inputmode="inputMode"
+      :autocomplete="autocomplete"
+      :maxlength="maxlength"
       :class="inputClasses"
       :aria-invalid="error ? 'true' : 'false'"
+      :aria-required="required ? 'true' : undefined"
       :aria-describedby="getAriaDescribedBy()"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     />
@@ -31,6 +35,9 @@ const props = withDefaults(defineProps<{
   disabled?: boolean
   error?: string
   helpText?: string
+  inputMode?: 'text' | 'numeric' | 'decimal' | 'tel' | 'email' | 'url' | 'search' | 'none'
+  autocomplete?: string
+  maxlength?: number | string
 }>(), {
   type: 'text',
   required: false,

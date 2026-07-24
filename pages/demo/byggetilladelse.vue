@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gradient-to-b from-neutral-50 to-white">
     <SiteHeader sticky live-badge />
 
-    <main class="max-w-6xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
+    <main id="main" tabindex="-1" class="max-w-6xl mx-auto px-6 lg:px-8 py-12 lg:py-16">
       <template v-if="enabled">
         <div class="mb-10 max-w-2xl">
           <p class="text-xs font-semibold tracking-widest uppercase text-secondary-600 mb-3">

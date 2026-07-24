@@ -2,8 +2,8 @@
   <div class="min-h-screen bg-neutral-50">
     <SiteHeader />
 
-    <main class="max-w-2xl mx-auto px-6 lg:px-8 py-16">
-      <p class="text-xs font-semibold tracking-widest uppercase text-primary-600 mb-3">
+    <main id="main" tabindex="-1" class="max-w-2xl mx-auto px-6 lg:px-8 py-16">
+      <p class="text-xs font-semibold tracking-widest uppercase text-primary-700 mb-3">
         {{ $t('kontakt.title') }}
       </p>
       <h1 class="text-3xl font-bold text-neutral-900 tracking-tight mb-3">
