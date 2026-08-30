@@ -26,7 +26,19 @@
       </button>
     </div>
 
+    <!-- MitID gate: the flow behind this form validates identity, so demand a
+         session before showing the fields at all. -->
+    <div v-else-if="mitidGateActive" class="mitid-gate" role="region" :aria-label="$t('auth.loginRequired')">
+      <p class="mitid-gate-text">{{ $t('form.mitidRequired') }}</p>
+      <UiButton type="button" class="mitid-login-button" @click="startMitidLogin">
+        {{ $t('auth.loginWithMitId') }}
+      </UiButton>
+    </div>
+
     <div v-else-if="schema" class="form-fields">
+      <div v-if="schema.requires_mitid && isAuthenticated" class="mitid-session-banner" role="status">
+        {{ $t('form.mitidLoggedInAs') }} <strong>{{ user?.name }}</strong>
+      </div>
       <!-- Render each form field -->
       <div
         v-for="(field, key) in schema.elements"
@@ -73,9 +85,9 @@
           :options="field['#options'] || {}"
         />
 
-        <!-- CPR field (custom) -->
+        <!-- CPR field (custom; 'cpr_field' is the legacy element id) -->
         <UiInput
-          v-else-if="field['#type'] === 'cpr'"
+          v-else-if="field['#type'] === 'cpr' || field['#type'] === 'cpr_field'"
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
@@ -96,6 +108,19 @@
           maxlength="11"
           class="cvr-field"
         />
+
+        <!-- Number field -->
+        <UiInput
+          v-else-if="field['#type'] === 'number'"
+          v-model="formData[key]"
+          :label="field['#title']"
+          :required="field['#required']"
+          :placeholder="field['#placeholder']"
+          :type="'number'"
+        />
+
+        <!-- Hidden field: no visible output -->
+        <template v-else-if="field['#type'] === 'hidden'" />
 
         <!-- Danish address autocomplete (Adressevælger) -->
         <AddressAutocomplete
@@ -160,6 +185,8 @@ const props = defineProps<{
 
 const { fetchResource, postResource } = useApi()
 const { t } = useI18n()
+const route = useRoute()
+const { isAuthenticated, user, sessionId, login, restoreSession } = useAuth()
 
 // State
 const loading = ref(true)
@@ -188,9 +215,43 @@ function onAddressUpdate(key: string, value: { id: string; street: string; posta
   }
 }
 
+// The identity gate is declared by the workflow (requires_mitid on the
+// schema), not per page: no session means login instead of form fields.
+const mitidGateActive = computed(() =>
+  !!schema.value?.requires_mitid && !isAuthenticated.value
+)
+
+function startMitidLogin() {
+  login(route.fullPath)
+}
+
+// A CPR is formatted DDMMYY-XXXX for display; sessions hold 10 bare digits.
+function formatCpr(cpr: string): string {
+  return /^\d{10}$/.test(cpr) ? `${cpr.slice(0, 6)}-${cpr.slice(6)}` : cpr
+}
+
+// Prefill the first CPR element from the MitID session ("Udfyldes automatisk
+// fra MitID"), leaving anything the user already typed alone.
+function prefillCprFromSession() {
+  if (!schema.value?.requires_mitid || !user.value?.cpr) {
+    return
+  }
+  for (const [key, field] of Object.entries<any>(schema.value.elements || {})) {
+    if (field['#type'] === 'cpr' || field['#type'] === 'cpr_field') {
+      if (!formData.value[key]) {
+        formData.value[key] = formatCpr(user.value.cpr)
+      }
+      break
+    }
+  }
+}
+
+watch(isAuthenticated, () => prefillCprFromSession())
+
 // Load form schema on mount (client-side only)
-onMounted(() => {
+onMounted(async () => {
   if (process.client) {
+    await restoreSession()
     loadForm()
   }
 })
@@ -214,6 +275,14 @@ async function loadForm() {
     }
 
     schema.value = response.data.attributes
+
+    // Hidden elements are not rendered, so seed their default values here.
+    for (const [key, field] of Object.entries<any>(schema.value.elements || {})) {
+      if (field['#type'] === 'hidden' && field['#default_value'] !== undefined) {
+        formData.value[key] = field['#default_value']
+      }
+    }
+    prefillCprFromSession()
     loading.value = false
   } catch (e: any) {
     console.error('Failed to load webform:', e)
@@ -241,7 +310,11 @@ async function submitForm() {
         data: {
           type: `webform_submission--${props.webformId}`,
           attributes: {
-            data: formData.value
+            data: formData.value,
+            // The MitID session id doubles as the workflow id the backend
+            // identity gate validates (cross-origin, so it rides in the
+            // payload rather than a shared cookie).
+            ...(sessionId.value ? { workflow_id: sessionId.value } : {})
           }
         }
       })
@@ -324,6 +397,27 @@ async function submitForm() {
   background: #ffffcc;
   border: 1px solid #ffeb3b;
   border-radius: 4px;
+}
+
+.mitid-gate {
+  padding: 2rem;
+  background: #f0f6fc;
+  border: 1px solid #b6d4f0;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.mitid-gate-text {
+  margin: 0 0 1.5rem 0;
+}
+
+.mitid-session-banner {
+  padding: 0.75rem 1rem;
+  background: #efe;
+  border: 1px solid #cec;
+  border-radius: 8px;
+  color: #060;
+  font-size: 0.9rem;
 }
 
 .field-notice {
