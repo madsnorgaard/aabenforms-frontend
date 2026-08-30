@@ -63,7 +63,7 @@
 
             <!-- Separator before lifecycle steps -->
             <div v-if="step._separator" class="min-w-0 pt-px">
-              <p class="text-[11px] font-semibold text-primary-600 uppercase tracking-widest">{{ step.name }}</p>
+              <p class="text-[11px] font-semibold text-primary-700 uppercase tracking-widest">{{ step.name }}</p>
               <p class="text-xs text-neutral-400 mt-0.5">{{ step.description }}</p>
             </div>
 

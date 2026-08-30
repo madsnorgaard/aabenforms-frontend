@@ -1,6 +1,6 @@
 <template>
   <div class="inbox-page">
-    <div class="inbox-container">
+    <main id="main" tabindex="-1" class="inbox-container">
       <header class="inbox-header">
         <h1>{{ $t('caseInbox.title') }}</h1>
         <p class="inbox-sub">{{ $t('caseInbox.subtitle') }}</p>
@@ -48,7 +48,7 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </main>
   </div>
 </template>
 

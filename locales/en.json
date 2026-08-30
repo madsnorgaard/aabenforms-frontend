@@ -441,14 +441,24 @@
     "validationErrors": "Please correct the following errors:",
     "unknownError": "Unknown error",
     "unsupportedFieldType": "This field type is not yet supported",
+    "fieldRequired": "{field} is required",
+    "pageTitle": "Self-service form",
     "address": {
       "searchPlaceholder": "Search address...",
       "noResults": "No addresses found",
+      "resultCount": "{count} address suggestions",
+      "label": "Address",
       "clear": "Clear",
       "attribution": "Address data from Denmark's Address Register (Dataforsyningen)"
     },
     "mitidRequired": "This application requires you to confirm your identity with MitID before you can fill it in.",
     "mitidLoggedInAs": "Logged in with MitID as"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content"
+  },
+  "landing": {
+    "pageTitle": "AabenForms - self-service for Danish municipalities"
   },
   "auth": {
     "loginWithMitId": "Log in with MitID",

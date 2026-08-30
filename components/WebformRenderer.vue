@@ -36,6 +36,7 @@
     </div>
 
     <div v-else-if="schema" class="form-fields">
+      <h1 v-if="schema.title" class="webform-title">{{ schema.title }}</h1>
       <div v-if="schema.requires_mitid && isAuthenticated" class="mitid-session-banner" role="status">
         {{ $t('form.mitidLoggedInAs') }} <strong>{{ user?.name }}</strong>
       </div>
@@ -44,7 +45,7 @@
         v-for="(field, key) in schema.elements"
         :key="key"
         class="form-field"
-        :class="`field-type-${field['#type']}`"
+        :class="[`field-type-${field['#type']}`, `field-key-${cssSafe(String(key))}`]"
       >
         <!-- Text field -->
         <UiInput
@@ -53,6 +54,8 @@
           :label="field['#title']"
           :required="field['#required']"
           :placeholder="field['#placeholder']"
+          :help-text="field['#description']"
+          :error="fieldErrors[key]"
           :type="'text'"
         />
 
@@ -63,6 +66,9 @@
           :label="field['#title']"
           :required="field['#required']"
           :placeholder="field['#placeholder']"
+          :help-text="field['#description']"
+          :error="fieldErrors[key]"
+          autocomplete="email"
           :type="'email'"
         />
 
@@ -73,6 +79,8 @@
           :label="field['#title']"
           :required="field['#required']"
           :placeholder="field['#placeholder']"
+          :help-text="field['#description']"
+          :error="fieldErrors[key]"
           :rows="field['#rows'] || 4"
         />
 
@@ -82,6 +90,8 @@
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
+          :help-text="field['#description']"
+          :error="fieldErrors[key]"
           :options="field['#options'] || {}"
         />
 
@@ -91,8 +101,12 @@
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
+          :help-text="field['#description']"
+          :error="fieldErrors[key]"
           placeholder="DDMMYY-XXXX"
           type="text"
+          input-mode="numeric"
+          autocomplete="off"
           maxlength="11"
           class="cpr-field"
         />
@@ -103,8 +117,12 @@
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
+          :help-text="field['#description']"
+          :error="fieldErrors[key]"
           placeholder="12 34 56 78"
           type="text"
+          input-mode="numeric"
+          autocomplete="off"
           maxlength="11"
           class="cvr-field"
         />
@@ -116,6 +134,8 @@
           :label="field['#title']"
           :required="field['#required']"
           :placeholder="field['#placeholder']"
+          :help-text="field['#description']"
+          :error="fieldErrors[key]"
           :type="'number'"
         />
 
@@ -128,12 +148,13 @@
           :model-value="addressModels[key] || null"
           :label="field['#title']"
           :required="field['#required']"
+          :error="fieldErrors[key]"
           @update:model-value="(v) => onAddressUpdate(String(key), v)"
         />
 
         <!-- Fallback for unsupported field types -->
         <div v-else class="unsupported-field">
-          <label>{{ field['#title'] }} ({{ field['#type'] }})</label>
+          <p class="unsupported-label">{{ field['#title'] }} ({{ field['#type'] }})</p>
           <p class="field-notice">{{ $t('form.unsupportedFieldType') }}</p>
         </div>
       </div>
@@ -197,6 +218,9 @@ const addressModels = ref<Record<string, { id: string; street: string; postal_co
 const submitting = ref(false)
 const success = ref(false)
 const validationErrors = ref<string[]>([])
+// Per-field error messages keyed by element key. Bound to each field's :error
+// so the primitives' aria-invalid + aria-describedby + role=alert light up.
+const fieldErrors = ref<Record<string, string>>({})
 
 // Mirror a selected address into the flat keys the backend expects
 // (`<key>_street`, `<key>_postal_code`, `<key>_city`, `<key>_id`).
@@ -291,8 +315,63 @@ async function loadForm() {
   }
 }
 
+// Whether a field currently holds a value (address fields track a model).
+function fieldHasValue(key: string, field: any): boolean {
+  if (field['#type'] === 'address') {
+    return !!addressModels.value[key]
+  }
+  const value = formData.value[key]
+  return value !== undefined && value !== null && String(value).trim() !== ''
+}
+
+// Client-side required validation. Populates fieldErrors (per-field, named) and
+// the validation summary, and returns the first invalid element key (or null).
+// Error text names the field ("Byggeadresse er paakraevet"), per WCAG 3.3.1.
+function validateRequired(): string | null {
+  fieldErrors.value = {}
+  validationErrors.value = []
+  let firstInvalid: string | null = null
+  for (const [key, field] of Object.entries<any>(schema.value?.elements || {})) {
+    if (field['#type'] === 'hidden' || !field['#required']) {
+      continue
+    }
+    if (!fieldHasValue(key, field)) {
+      const label = field['#title'] || key
+      const message = t('form.fieldRequired', { field: label })
+      fieldErrors.value[key] = message
+      validationErrors.value.push(message)
+      if (firstInvalid === null) {
+        firstInvalid = key
+      }
+    }
+  }
+  return firstInvalid
+}
+
+// Moves keyboard focus to the first invalid field so a keyboard/AT user is
+// taken straight to what needs fixing (WCAG 3.3.1 / focus management).
+function focusField(key: string) {
+  setTimeout(() => {
+    const el = document.querySelector<HTMLElement>(
+      `.form-field.field-key-${cssSafe(key)} input, .form-field.field-key-${cssSafe(key)} select, .form-field.field-key-${cssSafe(key)} textarea`
+    )
+    el?.focus()
+  }, 50)
+}
+
+// A CSS-attribute-safe version of an element key for the selector above.
+function cssSafe(key: string): string {
+  return key.replace(/[^a-zA-Z0-9_-]/g, '-')
+}
+
 // Submit form to backend
 async function submitForm() {
+  const firstInvalid = validateRequired()
+  if (firstInvalid !== null) {
+    focusField(firstInvalid)
+    return
+  }
+
   submitting.value = true
   validationErrors.value = []
   success.value = false
@@ -380,6 +459,18 @@ async function submitForm() {
 
 .retry-button:hover {
   background: #a00;
+}
+
+.webform-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.unsupported-label {
+  font-weight: 600;
+  color: #262626;
 }
 
 .form-fields {

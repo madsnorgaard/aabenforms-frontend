@@ -38,10 +38,12 @@ const buttonClasses = computed(() => {
     ghost: 'text-primary-600 hover:bg-primary-50 focus:ring-primary-500'
   }
 
+  // All sizes keep a 44px minimum tap target (WCAG 2.5.5 / AAA-aligned, and a
+  // strong AA baseline for touch), even the small variant.
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg'
+    sm: 'min-h-[44px] px-3 py-1.5 text-sm',
+    md: 'min-h-[44px] px-4 py-2 text-base',
+    lg: 'min-h-[44px] px-6 py-3 text-lg'
   }
 
   const width = props.fullWidth ? 'w-full' : ''

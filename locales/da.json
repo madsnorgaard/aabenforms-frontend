@@ -441,14 +441,24 @@
     "validationErrors": "Ret venligst følgende fejl:",
     "unknownError": "Ukendt fejl",
     "unsupportedFieldType": "Dette felttype understøttes ikke endnu",
+    "fieldRequired": "{field} skal udfyldes",
+    "pageTitle": "Selvbetjeningsformular",
     "address": {
       "searchPlaceholder": "Søg adresse...",
       "noResults": "Ingen adresser fundet",
+      "resultCount": "{count} adresseforslag",
+      "label": "Adresse",
       "clear": "Ryd",
       "attribution": "Adressedata leveres af Danmarks Adresseregister (Dataforsyningen)"
     },
     "mitidRequired": "Denne ansøgning kræver, at du bekræfter din identitet med MitID, før du kan udfylde den.",
     "mitidLoggedInAs": "Logget ind med MitID som"
+  },
+  "a11y": {
+    "skipToContent": "Spring til hovedindhold"
+  },
+  "landing": {
+    "pageTitle": "AabenForms - selvbetjening for danske kommuner"
   },
   "auth": {
     "loginWithMitId": "Log ind med MitID",

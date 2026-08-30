@@ -28,7 +28,7 @@
         <NuxtLink
           v-if="backLink"
           to="/"
-          class="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-lg text-sm font-semibold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
+          class="inline-flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] p-2 sm:px-3 sm:py-2 rounded-lg text-sm font-semibold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
           :aria-label="$t('siteHeader.gotoLanding')"
         >
           <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

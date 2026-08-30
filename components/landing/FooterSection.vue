@@ -8,7 +8,7 @@
             <h2 class="text-2xl lg:text-3xl font-bold text-white tracking-tight mb-3">
               {{ $t('cta.title') }}
             </h2>
-            <p class="text-neutral-400 text-base">
+            <p class="text-neutral-300 text-base">
               {{ $t('cta.subtitle') }}
             </p>
           </div>
@@ -39,12 +39,12 @@
     <div class="max-w-6xl mx-auto px-6 lg:px-8 py-6">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <span class="text-sm font-bold text-neutral-500">ÅbenForms</span>
+          <span class="text-sm font-bold text-neutral-300">ÅbenForms</span>
           <span class="text-neutral-700">&middot;</span>
-          <span class="text-xs text-neutral-500">{{ $t('footer.license') }}</span>
+          <span class="text-xs text-neutral-300">{{ $t('footer.license') }}</span>
         </div>
         <div class="flex items-center gap-2 text-xs">
-          <span class="text-neutral-500">{{ $t('footer.apiStatus') }}</span>
+          <span class="text-neutral-300">{{ $t('footer.apiStatus') }}</span>
           <span v-if="apiStatus.loading" class="text-warning-400">{{ $t('footer.connecting') }}...</span>
           <span v-else-if="apiStatus.error" class="inline-flex items-center gap-1 text-error-400">
             <span class="w-1.5 h-1.5 rounded-full bg-error-400" />

@@ -1,8 +1,8 @@
 <template>
   <div class="form-page">
-    <div class="container">
+    <main id="main" tabindex="-1" class="container">
       <WebformRenderer :webform-id="slug" />
-    </div>
+    </main>
   </div>
 </template>
 
@@ -10,9 +10,11 @@
 const route = useRoute()
 const slug = route.params.slug as string
 
-// Set page meta
+// Set page meta. The human-readable form title comes from the schema (rendered
+// as the h1); this is the browser-tab fallback before the schema loads.
+const { t } = useI18n()
 useHead({
-  title: `Form: ${slug}`,
+  title: t('form.pageTitle'),
 })
 </script>
 
