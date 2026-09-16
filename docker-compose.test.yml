@@ -61,7 +61,7 @@ services:
       start_period: 15s
 
   playwright:
-    image: mcr.microsoft.com/playwright:v1.58.1-jammy
+    image: mcr.microsoft.com/playwright:v1.63.0-jammy
     working_dir: /workspace
     volumes:
       - .:/workspace
