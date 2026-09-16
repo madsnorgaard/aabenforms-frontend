@@ -1,6 +1,6 @@
 # Multi-stage Nuxt 3 SSR build for aabenforms.dk
 # Stage 1: build
-FROM node:22-alpine AS builder
+FROM node:26-alpine AS builder
 
 WORKDIR /app
 
@@ -22,7 +22,7 @@ ENV NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=$NUXT_PUBLIC_DEMO_BYGGETILLADELSE_E
 RUN pnpm run build
 
 # Stage 2: production runner
-FROM node:22-alpine AS runner
+FROM node:26-alpine AS runner
 
 WORKDIR /app
 
