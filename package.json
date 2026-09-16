@@ -18,7 +18,7 @@
     "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
-    "@nuxtjs/i18n": "^8.5.0",
+    "@nuxtjs/i18n": "^10.6.0",
     "@pinia/nuxt": "^0.5.0",
     "@vueuse/nuxt": "^11.0.0",
     "nuxt": "3.15.0",
