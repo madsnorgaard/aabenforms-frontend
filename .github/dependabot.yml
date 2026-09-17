@@ -7,9 +7,9 @@ updates:
       day: "monday"
     open-pull-requests-limit: 5
     ignore:
-      # Nuxt is pinned to 3.15.0; these majors break the build against it
-      # (i18n v10 needs the i18n/ directory layout and a newer Nuxt,
-      # @pinia/nuxt 0.7 fails prerender with "obj.hasOwnProperty is not a function").
+      # Nuxt 3.21 + @nuxtjs/i18n 9 (i18n/locales layout) is the tested pair.
+      # i18n majors and @pinia/nuxt 0.7 broke the image before (0.7 fails
+      # prerender with "obj.hasOwnProperty is not a function"); bump them deliberately.
       - dependency-name: "@nuxtjs/i18n"
         update-types: ["version-update:semver-major"]
       - dependency-name: "@pinia/nuxt"
