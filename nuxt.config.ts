@@ -113,6 +113,11 @@ export default defineNuxtConfig({
     // Static pages - cache for 1 hour
     '/': { prerender: !process.env.NUXT_SKIP_PRERENDER },
 
+    // The MitID callback depends on ?session=...; a prerendered copy hydrates with a
+    // query-less page route and stalls the login flow.
+    '/auth/callback': { prerender: false },
+    '/en/auth/callback': { prerender: false },
+
     // API routes - no caching
     '/api/**': { cors: true, headers: { 'cache-control': 'no-cache' } },
 
