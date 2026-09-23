@@ -23,7 +23,7 @@
     "@vueuse/nuxt": "^15.0.0",
     "nuxt": "3.21.11",
     "ofetch": "^1.4.0",
-    "vue": "^3.5.42",
+    "vue": "^3.5.43",
     "zod": "^4.6.5"
   },
   "devDependencies": {
