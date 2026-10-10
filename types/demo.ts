@@ -163,8 +163,11 @@ export interface DemoPrefillMapEntry {
   editable?: boolean
   /** i18n key for the hint under the editable input */
   editHintKey?: string
-  /** display formatting of a scalar value (e.g. "150.000 kr.") */
-  format?: (value: PrefillField['value']) => string
+  /**
+   * display formatting of a value (e.g. "150.000 kr."); gets `t` and the date
+   * formatter for values that need words or dates (e.g. an hours summary)
+   */
+  format?: (value: PrefillField['value'], t: DemoTranslate, d: DemoDateFormat) => string
   /** Value derived from a choice made in another row (e.g. the chosen child's current school). */
   derive?: (chosen: (key: string) => PrefillOption | null) => string
   /**

@@ -152,7 +152,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
       if (derived) return derived
     }
     if (field.value === null || field.value === undefined || field.value === '') return ''
-    return entry.format ? entry.format(field.value) : String(field.value)
+    return entry.format ? entry.format(field.value, translate, formatDate) : String(field.value)
   }
 
   function chosenOption(key: string): PrefillOption | null {

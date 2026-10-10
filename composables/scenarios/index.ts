@@ -3,6 +3,7 @@ import { byggetilladelseScenario } from './byggetilladelse'
 import { klageScenario } from './klage'
 import { merudgifterScenario } from './merudgifter'
 import { skoleskiftScenario } from './skoleskift'
+import { sygedagpengeScenario } from './sygedagpenge'
 
 /**
  * Registry of guided demo scenarios. The hub (/demo) renders one DKFDS card
@@ -16,6 +17,7 @@ export const demoScenarios: DemoScenarioConfig[] = [
   merudgifterScenario,
   skoleskiftScenario,
   klageScenario,
+  sygedagpengeScenario,
 ]
 
 export function findDemoScenario(id: string): DemoScenarioConfig | undefined {

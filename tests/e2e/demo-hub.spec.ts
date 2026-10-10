@@ -41,7 +41,7 @@ test.describe('Demo hub', () => {
 
   test('renders one DKFDS card per scenario with lists and difficulty', async () => {
     const cards = page.locator('.card-row .card')
-    await expect(cards).toHaveCount(4)
+    await expect(cards).toHaveCount(5)
 
     const bygge = page.locator('[data-scenario="byggetilladelse"] .card')
     await expect(bygge.locator('.card-heading')).toHaveText('Byggetilladelse')
@@ -50,12 +50,13 @@ test.describe('Demo hub', () => {
     await expect(bygge.locator('.badge', { hasText: 'Simpel' })).toBeVisible()
     await expect(bygge.getByText('Du er Freja Nielsen')).toBeVisible()
 
-    // All four scenarios have shipped: each card links to its wizard.
+    // All five scenarios have shipped: each card links to its wizard.
     const titles: Record<string, string> = {
       byggetilladelse: 'Byggetilladelse',
       merudgifter: 'Merudgifter til et barn med handicap',
       skoleskift: 'Skoleskift med to forældre',
       klage: 'Klage over en afgørelse',
+      sygedagpenge: 'Sygedagpenge',
     }
     for (const [id, title] of Object.entries(titles)) {
       const card = page.locator(`[data-scenario="${id}"] .card`)
@@ -66,6 +67,7 @@ test.describe('Demo hub', () => {
 
     // Klage carries the "Digital inklusion" tag.
     await expect(page.locator('[data-scenario="klage"] .tag')).toHaveText('Digital inklusion')
+    await expect(page.locator('[data-scenario="sygedagpenge"] .tag')).toHaveText('Digital inklusion')
   })
 
   test('has no WCAG 2.1 AA violations', async () => {
