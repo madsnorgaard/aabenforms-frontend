@@ -131,6 +131,177 @@
     }
   },
   "demo": {
+    "hub": {
+      "authority": "Demo Municipality",
+      "heading": "Try ÅbenForms",
+      "lead": "We do not ask for what we already know.",
+      "body": "Every demo is a real self-service flow: you log in with a mock MitID, we fetch what the municipality already holds in its registers, and you only type what only you know. Then the case runs and the decision lands in Digital Post. Every step shows which register we asked, on which legal basis, and whether the rail is live or demo.",
+      "allDemos": "All demos",
+      "fetched": "Fetched automatically:",
+      "typed": "You type:",
+      "persona": "You are {name}",
+      "open": "Try {title}",
+      "coming": "Coming",
+      "comingBody": "This scenario is on its way. Building permit can be tried now.",
+      "offline": "The demo runs locally with a mock MitID. Book a walkthrough via Contact.",
+      "honestHeading": "Honest status",
+      "honestBody": "Rails marked DEMO (e.g. CPR Family+ and eIndkomst) run against test data. LIVE-READY means the code is ready for the real service agreement. LIVE runs against a real source. The badges are the same as on the readiness board.",
+      "difficulty": {
+        "simple": "Simple",
+        "medium": "Medium",
+        "advanced": "Advanced"
+      },
+      "scenarios": {
+        "byggetilladelse": {
+          "title": "Building permit",
+          "story": "Freja wants to build an extension. She logs in, and the municipality already knows her name, CPR and address.",
+          "intro": "Log in with the mock MitID, see what the municipality already knows about you, describe your building project, and follow the case all the way to the letter in Digital Post.",
+          "addressHint": "Fetched from your login. Change the address if the project is elsewhere.",
+          "fetched": {
+            "name": "Name (MitID)",
+            "cpr": "CPR number, masked (MitID)",
+            "address": "Address (mock MitID, demo)"
+          },
+          "typed": {
+            "description": "Description of the building project"
+          },
+          "commentary": {
+            "prefill": "GET /api/prefill/building_permit?session=[id] runs the lookups the flow would run: name and CPR from the MitID session (masked by the backend), and every row gets its own audit entry. The address comes from the mock IdP's claims, which real MitID does not issue, hence DEMO."
+          }
+        },
+        "merudgifter": {
+          "title": "Extra expenses for a child",
+          "story": "Freja applies for extra expenses for Emil under the Social Services Act section 41. Children and household income are fetched; she picks the child and only types the need.",
+          "intro": "Apply for coverage of extra expenses for a child with a disability.",
+          "fetched": {
+            "children": "Children in your custody (CPR Family+, demo)",
+            "income": "Household income (eIndkomst, demo)",
+            "cpr": "Name and CPR (MitID)"
+          },
+          "typed": {
+            "disability": "The child's disability and needs",
+            "amount": "Monthly extra expense"
+          }
+        },
+        "skoleskift": {
+          "title": "School transfer with two parents",
+          "story": "Freja wants a school transfer for Emil. Joint custody is fetched from the register, and Lars co-signs with his own MitID.",
+          "intro": "Apply for a school transfer for a child in joint custody.",
+          "fetched": {
+            "child": "Child (CPR Family+, demo)",
+            "custody": "Custody (CPR Family+, demo)",
+            "parent2": "The other parent (CPR Family+, demo)"
+          },
+          "typed": {
+            "school": "Preferred school",
+            "reason": "Reason"
+          }
+        },
+        "klage": {
+          "title": "Appeal a decision",
+          "story": "Birthe helps her mother appeal. The cases and the appeal deadline are fetched; only the reason is typed.",
+          "intro": "Appeal a decision by the municipality with help from a relative.",
+          "fetched": {
+            "cases": "Your cases with the municipality (case register)",
+            "deadline": "Appeal deadline (case register)",
+            "cpr": "Name and CPR (MitID)"
+          },
+          "typed": {
+            "reason": "Reason for the appeal"
+          }
+        }
+      }
+    },
+    "wizard": {
+      "steps": {
+        "login": "Log in with MitID",
+        "prefill": "Fetched information",
+        "form": "What only you know",
+        "workflow": "Case processing",
+        "letter": "Digital Post"
+      },
+      "continue": "Continue",
+      "back": "Back",
+      "login": {
+        "body": "You are sent to the mock MitID. Log in as the demo person below; no real CPR number is involved.",
+        "personaHeading": "Demo person",
+        "personaBody": "Log in as {name} with these details:",
+        "username": "Username",
+        "password": "Password",
+        "loggedInAs": "You are logged in as {name}."
+      },
+      "prefill": {
+        "heading": "What we did not ask for",
+        "body": "The municipality already holds this information. Here you can see what we fetched, where it comes from, and on which legal basis. Every row has its own audit number.",
+        "tableHeading": "Fetched from the registers",
+        "caption": "Information fetched from the registers with source, legal basis and status",
+        "loading": "Fetching information from the registers ...",
+        "nothing": "No information was fetched for this form.",
+        "reload": "Fetch again",
+        "col": {
+          "field": "Information",
+          "value": "Value",
+          "source": "Source",
+          "legal": "Legal basis",
+          "status": "Status"
+        },
+        "audit": "audit #{id}",
+        "noAudit": "no audit entry",
+        "noValue": "not found",
+        "chooseBelow": "choose below",
+        "choose": "Choose {field}",
+        "chooseHint": "Fetched from {register}. Choose the one the application concerns.",
+        "chooseFirst": "Choose from the list above first.",
+        "youKnowHeading": "What only you know",
+        "youKnowNone": "Everything was fetched. There is nothing for you to type."
+      },
+      "form": {
+        "heading": "What only you know",
+        "body": "We filled in what the municipality already knows. Fill in the rest.",
+        "fromRegister": "from {register}",
+        "editHint": "Fetched from {register}. Change it if it is not right."
+      },
+      "workflow": {
+        "heading": "Case processing"
+      },
+      "letter": {
+        "heading": "Digital Post",
+        "noLetterHeading": "The letter has not arrived yet",
+        "noLetterBody": "The case ran, but the Digital Post log has no letter for this session yet. Press Refresh in a moment."
+      },
+      "complete": {
+        "heading": "The case is decided",
+        "body": "From login to a letter in Digital Post without a single manual step on the server."
+      },
+      "validation": {
+        "required": "Fill in {field}",
+        "number": "{field} must be a number",
+        "min": "{field} must be at least {min}",
+        "max": "{field} must be at most {max}"
+      },
+      "errors": {
+        "heading": "Something went wrong",
+        "sessionExpired": "Your MitID session has expired (15 minutes). Log in again.",
+        "prefillFailed": "The information could not be fetched from the registers. Try again.",
+        "formNotFound": "The form does not exist on the server.",
+        "submitFailed": "The application could not be sent. Try again."
+      },
+      "mode": {
+        "live": "LIVE",
+        "liveHelp": "real source",
+        "liveCapable": "LIVE-READY",
+        "liveCapableHelp": "ready for a service agreement",
+        "demo": "DEMO",
+        "demoHelp": "test data"
+      },
+      "commentary": {
+        "login": "The frontend sends you to /mitid/login. Drupal creates state, nonce and a PKCE challenge and sends you to the identity provider. Back on /auth/callback we exchange the code for a session.",
+        "prefill": "GET /api/prefill/[form]?session=[id] runs the register lookups the flow would run and returns every value with source, contract, legal basis and audit number. The CPR always arrives masked from the server.",
+        "form": "Only what the registers do not know is asked for. Choices from list sources (child, case) travel with the application.",
+        "workflow": "POST to /api/webform/[form]/submit runs the ECA flow synchronously and returns every step. The identity gate checks the session on the server.",
+        "letter": "GET /api/digital-post/recent looks up the Digital Post log for your session. In production this is an SF1601 call to NgDP."
+      }
+    },
     "interactive": "Interactive",
     "interactiveDemo": "Interactive Demo",
     "forms": {

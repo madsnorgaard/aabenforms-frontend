@@ -131,6 +131,177 @@
     }
   },
   "demo": {
+    "hub": {
+      "authority": "Demo-kommune",
+      "heading": "Prøv ÅbenForms",
+      "lead": "Vi spørger ikke om det, vi allerede ved.",
+      "body": "Hver demo er en rigtig selvbetjeningsløsning: du logger ind med en mock-MitID, vi henter det, kommunen allerede har i sine registre, og du skriver kun det, som kun du ved. Bagefter kører sagsbehandlingen, og afgørelsen lander i Digital Post. Hvert trin viser, hvilket register vi spurgte, med hvilken hjemmel, og om rammen er live eller demo.",
+      "allDemos": "Alle demoer",
+      "fetched": "Hentes automatisk:",
+      "typed": "Du skriver selv:",
+      "persona": "Du er {name}",
+      "open": "Prøv {title}",
+      "coming": "Kommer",
+      "comingBody": "Scenariet er på vej. Byggetilladelse kan prøves nu.",
+      "offline": "Demoen kører lokalt med mock-MitID. Book en gennemgang via Kontakt.",
+      "honestHeading": "Ærlig status",
+      "honestBody": "Rammer mærket DEMO (fx CPR Familie+ og eIndkomst) kører mod testdata. LIVE-PARAT betyder, at koden er klar til den rigtige serviceaftale. LIVE kører mod en rigtig kilde. Mærkerne er de samme som på parathedstavlen.",
+      "difficulty": {
+        "simple": "Simpel",
+        "medium": "Mellem",
+        "advanced": "Avanceret"
+      },
+      "scenarios": {
+        "byggetilladelse": {
+          "title": "Byggetilladelse",
+          "story": "Freja vil bygge en tilbygning. Hun logger ind, og kommunen kender allerede navn, CPR og adresse.",
+          "intro": "Log ind med mock-MitID, se hvad kommunen allerede ved om dig, beskriv dit byggeprojekt, og følg sagen hele vejen til brevet i Digital Post.",
+          "addressHint": "Hentet fra dit login. Ret adressen, hvis byggeriet ligger et andet sted.",
+          "fetched": {
+            "name": "Navn (MitID)",
+            "cpr": "CPR-nummer, maskeret (MitID)",
+            "address": "Adresse (mock-MitID, demo)"
+          },
+          "typed": {
+            "description": "Beskrivelse af byggeprojektet"
+          },
+          "commentary": {
+            "prefill": "GET /api/prefill/building_permit?session=[id] kører de opslag, flowet ville køre: navn og CPR fra MitID-sessionen (maskeret af backend), og hver linje får sin egen revisionspost. Adressen kommer fra mock-IdP'ens claims, som ægte MitID ikke udsteder, derfor DEMO."
+          }
+        },
+        "merudgifter": {
+          "title": "Merudgifter til barn",
+          "story": "Freja søger merudgifter til Emil efter serviceloven § 41. Børn og husstandsindkomst hentes, hun vælger barnet og skriver kun behovet.",
+          "intro": "Ansøg om dækning af merudgifter til et barn med funktionsnedsættelse.",
+          "fetched": {
+            "children": "Børn med forældremyndighed (CPR Familie+, demo)",
+            "income": "Husstandsindkomst (eIndkomst, demo)",
+            "cpr": "Navn og CPR (MitID)"
+          },
+          "typed": {
+            "disability": "Barnets funktionsnedsættelse og behov",
+            "amount": "Månedlig merudgift"
+          }
+        },
+        "skoleskift": {
+          "title": "Skoleskift med to forældre",
+          "story": "Freja ønsker skoleskift for Emil. Fælles forældremyndighed hentes fra registret, og Lars medunderskriver med sit eget MitID.",
+          "intro": "Ansøg om skoleskift for et barn med fælles forældremyndighed.",
+          "fetched": {
+            "child": "Barn (CPR Familie+, demo)",
+            "custody": "Forældremyndighed (CPR Familie+, demo)",
+            "parent2": "Den anden forælder (CPR Familie+, demo)"
+          },
+          "typed": {
+            "school": "Ønsket skole",
+            "reason": "Begrundelse"
+          }
+        },
+        "klage": {
+          "title": "Klage over afgørelse",
+          "story": "Birthe hjælper sin mor med at klage. Sagerne og klagefristen hentes, kun begrundelsen skrives.",
+          "intro": "Klag over en afgørelse fra kommunen med hjælp fra en pårørende.",
+          "fetched": {
+            "cases": "Dine sager hos kommunen (sagsregister)",
+            "deadline": "Klagefrist (sagsregister)",
+            "cpr": "Navn og CPR (MitID)"
+          },
+          "typed": {
+            "reason": "Begrundelse for klagen"
+          }
+        }
+      }
+    },
+    "wizard": {
+      "steps": {
+        "login": "Log ind med MitID",
+        "prefill": "Hentede oplysninger",
+        "form": "Det kun du ved",
+        "workflow": "Sagsbehandling",
+        "letter": "Digital Post"
+      },
+      "continue": "Fortsæt",
+      "back": "Tilbage",
+      "login": {
+        "body": "Du sendes til mock-MitID. Log ind som demo-personen herunder; intet rigtigt CPR-nummer er i spil.",
+        "personaHeading": "Demo-person",
+        "personaBody": "Log ind som {name} med disse oplysninger:",
+        "username": "Brugernavn",
+        "password": "Adgangskode",
+        "loggedInAs": "Du er logget ind som {name}."
+      },
+      "prefill": {
+        "heading": "Det spurgte vi ikke om",
+        "body": "Kommunen har allerede disse oplysninger. Her kan du se, hvad vi hentede, hvor det kommer fra, og med hvilken hjemmel. Hver linje har sit eget revisionsnummer.",
+        "tableHeading": "Hentet fra registrene",
+        "caption": "Oplysninger hentet fra registrene med kilde, hjemmel og status",
+        "loading": "Henter oplysninger fra registrene ...",
+        "nothing": "Der blev ikke hentet nogen oplysninger til denne formular.",
+        "reload": "Hent igen",
+        "col": {
+          "field": "Oplysning",
+          "value": "Værdi",
+          "source": "Kilde",
+          "legal": "Hjemmel",
+          "status": "Status"
+        },
+        "audit": "audit #{id}",
+        "noAudit": "ingen revisionspost",
+        "noValue": "ikke fundet",
+        "chooseBelow": "vælg nedenfor",
+        "choose": "Vælg {field}",
+        "chooseHint": "Hentet fra {register}. Vælg den, ansøgningen gælder.",
+        "chooseFirst": "Vælg først i listen ovenfor.",
+        "youKnowHeading": "Det kun du ved",
+        "youKnowNone": "Alt er hentet. Du skal ikke skrive noget."
+      },
+      "form": {
+        "heading": "Det kun du ved",
+        "body": "Vi har udfyldt det, kommunen allerede ved. Udfyld resten.",
+        "fromRegister": "fra {register}",
+        "editHint": "Hentet fra {register}. Ret, hvis det ikke passer."
+      },
+      "workflow": {
+        "heading": "Sagsbehandling"
+      },
+      "letter": {
+        "heading": "Digital Post",
+        "noLetterHeading": "Brevet er ikke nået frem endnu",
+        "noLetterBody": "Sagsbehandlingen kørte, men Digital Post-loggen har endnu ikke et brev til denne session. Tryk Opdater om lidt."
+      },
+      "complete": {
+        "heading": "Sagen er afgjort",
+        "body": "Fra login til brev i Digital Post uden et manuelt skridt på serveren."
+      },
+      "validation": {
+        "required": "Udfyld {field}",
+        "number": "{field} skal være et tal",
+        "min": "{field} skal være mindst {min}",
+        "max": "{field} må højst være {max}"
+      },
+      "errors": {
+        "heading": "Der opstod en fejl",
+        "sessionExpired": "Din MitID-session er udløbet (15 minutter). Log ind igen.",
+        "prefillFailed": "Oplysningerne kunne ikke hentes fra registrene. Prøv igen.",
+        "formNotFound": "Formularen findes ikke på serveren.",
+        "submitFailed": "Ansøgningen kunne ikke sendes. Prøv igen."
+      },
+      "mode": {
+        "live": "LIVE",
+        "liveHelp": "rigtig kilde",
+        "liveCapable": "LIVE-PARAT",
+        "liveCapableHelp": "klar til serviceaftale",
+        "demo": "DEMO",
+        "demoHelp": "testdata"
+      },
+      "commentary": {
+        "login": "Frontend sender dig til /mitid/login. Drupal laver state, nonce og PKCE-challenge og sender dig til identitetsudbyderen. Tilbage på /auth/callback bytter vi koden til en session.",
+        "prefill": "GET /api/prefill/[formular]?session=[id] kører de registeropslag, flowet ville køre, og returnerer hver værdi med kilde, kontrakt, hjemmel og revisionsnummer. CPR kommer altid maskeret fra serveren.",
+        "form": "Kun det, registrene ikke kender, bliver spurgt om. Valg fra listekilder (barn, sag) følger med i ansøgningen.",
+        "workflow": "POST til /api/webform/[formular]/submit kører ECA-flowet synkront og returnerer alle trin. Identitetsporten tjekker sessionen på serveren.",
+        "letter": "GET /api/digital-post/recent slår op i Digital Post-loggen for din session. I produktion er det et SF1601-kald til NgDP."
+      }
+    },
     "interactive": "Interaktiv",
     "interactiveDemo": "Interaktiv Demo",
     "forms": {
