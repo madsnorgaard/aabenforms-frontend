@@ -2,7 +2,7 @@
 # Mirrors the prod Dockerfile toolchain (node:22-alpine + pnpm) so tests
 # run against the same build that ships. Serves via `nuxt preview` on :3000.
 
-FROM node:22-alpine AS builder
+FROM node:26-alpine AS builder
 
 WORKDIR /app
 
@@ -31,7 +31,7 @@ RUN pnpm run build
 # Runner stage - keep pnpm so we can use `nuxt preview`, which serves
 # .output exactly as the prod image would but with a clearer local feedback
 # loop.
-FROM node:22-alpine AS runner
+FROM node:26-alpine AS runner
 
 WORKDIR /app
 

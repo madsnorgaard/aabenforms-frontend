@@ -1,0 +1,50 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    ignore:
+      # Nuxt 3.21 + @nuxtjs/i18n 9 (i18n/locales layout) is the tested pair.
+      # i18n majors and @pinia/nuxt 0.7 broke the image before (0.7 fails
+      # prerender with "obj.hasOwnProperty is not a function"); bump them deliberately.
+      - dependency-name: "@nuxtjs/i18n"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@pinia/nuxt"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # Majors that the build check rejected on 2026-09-17 (#50 tailwind 4, #52 nuxt 4).
+      # TypeScript 7 (#51) builds but is the new native compiler; vue-tsc support is
+      # not established, so it is also an upgrade to do on purpose.
+      - dependency-name: "nuxt"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    ignore:
+      # node:26-alpine ships without corepack, so pnpm is never installed. Stay on the LTS line.
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "docker-compose"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5

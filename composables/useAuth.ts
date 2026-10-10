@@ -21,6 +21,9 @@ export const useAuth = () => {
   const isAuthenticated = computed(() => userStore.isAuthenticated)
   const maskedCpr = computed(() => userStore.maskedCpr)
 
+  // Error state surfaced by the callback page
+  const error = ref<string | null>(null)
+
   /**
    * Initiate MitID login flow
    * Redirects to backend /mitid/login endpoint
@@ -43,10 +46,17 @@ export const useAuth = () => {
    * Extracts session ID from URL query parameter
    */
   async function handleCallback() {
+    // Read the session id from the real URL. Since Nuxt 3.19, useRoute() inside a
+    // page component returns the page's own (frozen) route, and on the prerendered
+    // callback page that route carries no query string during hydration - so the
+    // session id was silently missing and the flow stalled at "logged in".
     const route = useRoute()
-    const sessionIdParam = route.query.session as string | undefined
-
+    const sessionIdParam
+      = (import.meta.client ? new URLSearchParams(window.location.search).get('session') : null)
+        || (route.query.session as string | undefined)
+        || undefined
     if (!sessionIdParam) {
+      error.value = 'Missing session reference in callback URL'
       return false
     }
 
@@ -64,6 +74,7 @@ export const useAuth = () => {
       return true
     } catch (e: any) {
       console.error('Authentication failed:', e)
+      error.value = e?.data?.message || e?.message || 'Could not load MitID session'
       return false
     }
   }
@@ -148,10 +159,6 @@ export const useAuth = () => {
   function isSessionExpired(): boolean {
     return userStore.isSessionExpired
   }
-
-  // Expose error state for callback page
-  const error = ref<string | null>(null)
-
   return {
     // State (from Pinia store)
     user,
