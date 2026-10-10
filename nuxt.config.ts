@@ -49,7 +49,7 @@ export default defineNuxtConfig({
           name: 'description',
           content: 'Open-source workflow automation for Danish municipalities.',
         },
-        { name: 'theme-color', content: '#44831E' },
+        { name: 'theme-color', content: '#0059B3' },
         { property: 'og:type', content: 'website' },
         { property: 'og:site_name', content: 'AabenForms' },
         { property: 'og:title', content: 'AabenForms' },

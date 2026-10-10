@@ -1,4 +1,5 @@
-// DKFDS 11 (Det Fælles Designsystem), borger.dk theme.
+// DKFDS 11 (Det Fælles Designsystem), Virk theme (official DKFDS theme,
+// primary #0059B3). borger.dk green is kept as a Tailwind `accent` scale only.
 //
 // Loaded globally from nuxt.config.ts `css`. The paths point at the vendored
 // copy in public/dkfds/ (fonts, images and the svg-icons folder used by CSS
@@ -13,7 +14,7 @@
 // rebase.mjs rescales every rem in THIS file's output by 0.625 and the html
 // override below restores the 16px root, so DKFDS renders pixel-identical
 // while nothing else in the app shrinks. See docs/DKFDS_REFERENCE.md.
-@use '../../node_modules/dkfds/src/stylesheets/dkfds-borgerdk' with (
+@use '../../node_modules/dkfds/src/stylesheets/dkfds-virkdk' with (
   $font-path: '/dkfds/fonts/IBMPlexSans/',
   $image-path: '/dkfds/img/',
   $icons-folder-path: '/dkfds/img/svg-icons/'

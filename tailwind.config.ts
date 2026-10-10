@@ -1,12 +1,13 @@
 import type { Config } from 'tailwindcss'
 
 // Tailwind is kept for layout utilities during the DKFDS migration only.
-// DKFDS (Det Fælles Designsystem, borger.dk theme) owns base styles,
+// DKFDS (Det Fælles Designsystem, Virk theme) owns base styles,
 // typography, components and the palette; see docs/DKFDS_REFERENCE.md for
 // the load order and the shared-class-name rules.
 //
-// Palette below is the borger.dk theme so any remaining Tailwind colour
-// utility stays on-brand (primary #44831E, link #004D99, etc.).
+// Palette below follows the Virk theme so any remaining Tailwind colour
+// utility stays on-brand (primary #0059B3, link #004D99), with borger.dk
+// green kept as the `accent` scale for success and live states.
 const config: Config = {
   content: [
     './components/**/*.{js,vue,ts}',
@@ -27,8 +28,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // borger.dk primary green
+        // Virk theme primary blue (official DKFDS theme): 600 = #0059B3,
+        // 700 = dark #004993, 800 = darker #003972. 500 and up pass AA on
+        // white as text.
         primary: {
+          50: '#E6EFF8',
+          100: '#CCDEF0',
+          200: '#99BDE1',
+          300: '#5C95CF',
+          400: '#2A73BE',
+          500: '#0059B3',
+          600: '#0059B3',
+          700: '#004993',
+          800: '#003972',
+          900: '#002952',
+        },
+        // borger.dk green as the supporting accent: success states, the
+        // LIVE badge, positive outcome alerts. 500 = #44831E, 700 = #3C5C22,
+        // 900 = #233614.
+        accent: {
           50: '#F3F8EE',
           100: '#E3F0D8',
           200: '#C6E0B1',

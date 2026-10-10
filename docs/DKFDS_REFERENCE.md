@@ -15,15 +15,25 @@ changing markup; the component pages carry the authoritative HTML.
   $image-path: ..., $icons-folder-path: ...)`.
 - Intended for self-service solutions on borger.dk and Virk. Kommuner may use the
   system; the borger.dk and Virk logos belong to the portals. AabenForms uses the
-  borger.dk theme tokens with the kommune's own logo in the header.
+  Virk theme tokens with its own (or the kommune's) logo in the header.
 
-## Theme: borger.dk
+## Theme: Virk (primary) with borger.dk green as accent
+
+ÅbenForms uses the official DKFDS Virk theme (`dkfds-virkdk`). Virk is one of the two
+themes DKFDS ships, so the blue primary is a DKFDS colour, not a custom one. ÅbenForms
+is a platform for kommuner, not a borger.dk portal, so it does not borrow borger.dk's
+green identity as its primary colour. Green stays as a supporting accent (Tailwind
+`accent` scale plus DKFDS success colours): success states, the LIVE badge
+(`badge badge-success`), positive outcome alerts and the open source badge. Blue and
+green work together: blue for identity, actions and links, green for "it worked" and
+"live".
 
 | Role | Hex |
 |---|---|
-| Primary | #44831E |
-| Primary dark | #3C5C22 |
-| Primary darker | #233614 |
+| Primary (Virk) | #0059B3 (Tailwind `primary-500/600`) |
+| Primary dark | #004993 (`primary-700`) |
+| Primary darker | #003972 (`primary-800`) |
+| Accent (borger.dk green) | #44831E (`accent-500`), dark #3C5C22 (`accent-700`), darker #233614 (`accent-900`) |
 | Link | #004D99 (hover #1A1A1A, visited #800080) |
 | Focus | #454545 |
 | Success | #358000 (light #DDF7CE) |
@@ -33,7 +43,11 @@ changing markup; the component pages carry the authoritative HTML.
 | Gray 100..600 | #F5F5F5, #DCDCDC, #BFBFBF, #8E8E8E, #707070, #454545 |
 | Black / White | #1A1A1A / #FFFFFF |
 
-Virk theme primary is #0059B3 (dark #004993, darker #003972). Not used here.
+#0059B3 on white is 6.8:1 (AA) and #3C5C22 on white is 7.6:1 (AAA); #44831E is 4.7:1, AA for normal text.
+
+Visited purple applies to links in body text only. CTA links and badges use a DKFDS
+button (`button-secondary`, `button-tertiary`), `function-link`, or a scoped
+`:visited` rule so they keep their colour after a click.
 
 ## Typography and grid
 
@@ -138,8 +152,8 @@ Installed 2026-10-10, issue #64.
 
 - Package: `dkfds@11.3.0` (dependencies) and `sass` (devDependencies, compiles the
   SCSS entry).
-- CSS entry: `assets/css/dkfds.scss` uses the borger.dk theme
-  (`node_modules/dkfds/src/stylesheets/dkfds-borgerdk`) with `$font-path`,
+- CSS entry: `assets/css/dkfds.scss` uses the Virk theme
+  (`node_modules/dkfds/src/stylesheets/dkfds-virkdk`) with `$font-path`,
   `$image-path` and `$icons-folder-path` pointing at `public/dkfds/`. It is loaded
   globally from `nuxt.config.ts` `css`.
 - Vendored assets: `public/dkfds/fonts/IBMPlexSans/complete/{woff,woff2}` (plus the
@@ -170,7 +184,7 @@ our `1rem`).
 
 - `tailwind.config.ts`: `corePlugins.preflight = false` (DKFDS owns the reset and element
   styles) and `corePlugins.container = false` (DKFDS owns `.container`). The theme
-  palette is the borger.dk palette above, font is IBM Plex Sans.
+  palette is the Virk palette above (plus the borger.dk green `accent` scale), font is IBM Plex Sans.
 - Load order: `@nuxtjs/tailwindcss` injects its stylesheet first, `assets/css/dkfds.scss`
   comes after, so on a shared class name DKFDS wins.
 - No `tw-` prefix: the codebase has ~760 `class=""` attributes (thousands of utility
@@ -192,7 +206,7 @@ and new code should use the Fds components directly.
 
 | Component | DKFDS | Notes |
 |---|---|---|
-| `FdsHeader` | Header rows 1+2, mobile drawer | `solutionTitle`, `authorityName`, `authorityText`, `menuItems`, `liveBadge`; `logo` slot (defaults to the ÅbenForms wordmark), `navigation` slot for row 3. Shows the user name and "Log af" when the user store is authenticated. |
+| `FdsHeader` | Header rows 1+2, mobile drawer | `solutionTitle`, `authorityName`, `authorityText`, `menuItems`, `liveBadge`; row 1 = logo + wordmark + sprogvælger (lg and up, right side next to user/Log af), row 2 = page solution title + authority (omitted when no authority/text is given); `logo` slot (defaults to the ÅbenForms wordmark), `navigation` slot for row 3. Shows the user name and "Log af" when the user store is authenticated. |
 | `FdsFooter` | Footer | `authorityName`, `authorityText`, `email`, `phone`, `languageSwitcher`; `extra` slot is a fourth column. Links /tilgaengelighed, /cookies, /kontakt. |
 | `FdsSkipLink` | Skip-link (`a.skipnav`) | Rendered once in app.vue, targets `#main`. |
 | `FdsCookieBanner` | Cookiemeddelelse (`.cookie-container`) | First child of `#app`, client-only until consent is read; DKFDS 11 positions it fixed at the bottom. |
@@ -205,5 +219,5 @@ and new code should use the Fds components directly.
 | `FdsStepIndicator` | Trinindikator | `steps: {title, state: completed|current|upcoming|error, hint?}[]`, emits `select(index)`; desktop `ol`, mobile "Trin x af y" button + bottom-sheet modal. |
 
 Pages that render DKFDS end to end: `/` (landing, sections still Tailwind-built on the
-borger.dk palette), `/kontakt`, `/forms/[slug]` (WebformRenderer), `/tilgaengelighed` and
+Virk palette), `/kontakt`, `/forms/[slug]` (WebformRenderer), `/tilgaengelighed` and
 `/cookies` (real policy page, see `pages/cookies.vue`). The DKFDS cookiemeddelelse is `FdsCookieBanner`, mounted first in `app.vue`; consent lives in the `af_consent` cookie via `composables/useConsent.ts`.
