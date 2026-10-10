@@ -1,0 +1,40 @@
+// DKFDS 11 (Det Fælles Designsystem), borger.dk theme.
+//
+// Loaded globally from nuxt.config.ts `css`. The paths point at the vendored
+// copy in public/dkfds/ (fonts, images and the svg-icons folder used by CSS
+// background icons). Refresh that copy after a dkfds upgrade with:
+//   cp -r node_modules/dkfds/dist/img public/dkfds/img
+//   cp -r node_modules/dkfds/dist/fonts/IBMPlexSans/complete/{woff,woff2} \
+//         public/dkfds/fonts/IBMPlexSans/complete/
+//
+// Rem base: DKFDS sets html { font-size: 62.5% } and authors every rem value
+// against a 10px root. The rest of this app (Tailwind utilities and scoped
+// styles) is authored against the browser's 16px root. postcss/dkfds-rem-
+// rebase.mjs rescales every rem in THIS file's output by 0.625 and the html
+// override below restores the 16px root, so DKFDS renders pixel-identical
+// while nothing else in the app shrinks. See docs/DKFDS_REFERENCE.md.
+@use '../../node_modules/dkfds/src/stylesheets/dkfds-borgerdk' with (
+  $font-path: '/dkfds/fonts/IBMPlexSans/',
+  $image-path: '/dkfds/img/',
+  $icons-folder-path: '/dkfds/img/svg-icons/'
+);
+
+html {
+  font-size: 100%;
+}
+
+// DKFDS prints at a 48% root (4.8px of its 10px base); keep the same ratio
+// against our rescaled rem values.
+@media print {
+  html {
+    font-size: 76.8%;
+  }
+}
+
+// The inline icon sprite (app.vue) must not take up space.
+.fds-icon-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}

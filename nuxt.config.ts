@@ -1,3 +1,5 @@
+import dkfdsRemRebase from './postcss/dkfds-rem-rebase.mjs'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
@@ -9,6 +11,30 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt'
   ],
+
+  // DKFDS (borger.dk theme) is the design system. @nuxtjs/tailwindcss injects
+  // its own stylesheet first, so DKFDS loads after the Tailwind utilities and
+  // wins on any shared class name. See docs/DKFDS_REFERENCE.md.
+  css: ['~/assets/css/dkfds.scss'],
+
+  hooks: {
+    // Rescales DKFDS rem values from its 10px root to our 16px root. Pushed
+    // onto the resolved PostCSS chain here because `postcss.plugins` entries
+    // are resolved by name through jiti, which silently drops local files.
+    'vite:extendConfig'(config) {
+      config.css ??= {}
+      if (!config.css.postcss || typeof config.css.postcss === 'string') {
+        config.css.postcss = { plugins: [] }
+      }
+      ;(config.css.postcss.plugins ??= []).push(dkfdsRemRebase())
+    },
+  },
+
+  features: {
+    // Emit the (Tailwind + DKFDS, ~250 KB) global CSS as cacheable files
+    // instead of inlining it into every SSR response.
+    inlineStyles: false,
+  },
 
   app: {
     head: {
@@ -157,7 +183,7 @@ export default defineNuxtConfig({
 
     // Optimize dependencies
     optimizeDeps: {
-      include: ['vue', '@vueuse/core', 'ofetch'],
+      include: ['vue', '@vueuse/core', 'ofetch', 'dkfds'],
     },
   },
 

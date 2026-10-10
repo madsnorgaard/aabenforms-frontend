@@ -4,6 +4,10 @@
          straight past the branding to the page content (WCAG 2.4.1). -->
     <a href="#main" class="skip-link">{{ $t('a11y.skipToContent') }}</a>
 
+    <!-- DKFDS icon sprite, inlined once so every <use href="#icon"> on the
+         page resolves. Hidden via .fds-icon-sprite (assets/css/dkfds.scss). -->
+    <div class="fds-icon-sprite" aria-hidden="true" v-html="iconSprite" />
+
     <!-- Apply tenant-specific branding -->
     <TenantBranding />
 
@@ -18,11 +22,20 @@
 // This is the root component of the Nuxt app.
 // Pages own their landmarks; TenantBranding injects tenant styling (no heading
 // of its own, so each page keeps a single h1).
+import spriteSource from '~/public/dkfds/img/all-svg-icons.svg?raw'
+
+// Strip the XML prolog/doctype and mark the root so it is inert for AT.
+const iconSprite = spriteSource
+  .replace(/^[\s\S]*?<svg\b/, '<svg')
+  .replace('<svg xmlns="http://www.w3.org/2000/svg">', '<svg xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">')
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap');
-
+/* Typography, colours, focus ring and .sr-only come from DKFDS
+   (assets/css/dkfds.scss, self-hosted IBM Plex Sans). Tailwind preflight is
+   off, so this zero-margin reset keeps the Tailwind-built landing sections
+   behaving; DKFDS element selectors (p, h1, ul...) are more specific and
+   still win where the design system sets its own rhythm. */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -30,24 +43,8 @@
 }
 
 body {
-  font-family: 'Atkinson Hyperlegible Next', system-ui, -apple-system, sans-serif;
-  line-height: 1.6;
-  color: #262626;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Visually-hidden content that stays available to screen readers. */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 
 /* Skip link: off-screen until focused, then pinned top-left. */
