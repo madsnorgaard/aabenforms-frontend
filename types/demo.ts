@@ -165,6 +165,8 @@ export interface DemoPrefillMapEntry {
   editHintKey?: string
   /** display formatting of a scalar value (e.g. "150.000 kr.") */
   format?: (value: PrefillField['value']) => string
+  /** Value derived from a choice made in another row (e.g. the chosen child's current school). */
+  derive?: (chosen: (key: string) => PrefillOption | null) => string
   /**
    * Value derived from the MitID session claims when the endpoint does not
    * return the key (e.g. the mock IdP's address claims). Must label its own

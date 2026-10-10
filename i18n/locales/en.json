@@ -190,11 +190,13 @@
           "fetched": {
             "child": "Child (CPR Family+, demo)",
             "custody": "Custody (CPR Family+, demo)",
-            "parent2": "The other parent (CPR Family+, demo)"
+            "parent2": "The other parent (CPR Family+, demo)",
+            "school": "Current school (STIL pupil data, demo)"
           },
           "typed": {
             "school": "Preferred school",
-            "reason": "Reason"
+            "reason": "Reason",
+            "targetSchool": "Requested new school"
           }
         },
         "klage": {
@@ -593,6 +595,9 @@
         "heading": "The demo is not enabled",
         "body": "The school transfer demo needs the mock MitID and is only active in the demo environment.",
         "primary": "Contact us"
+      },
+      "option": {
+        "currentSchool": "Current school: {school}"
       }
     },
     "byggetilladelse": {

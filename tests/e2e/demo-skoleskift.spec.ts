@@ -78,6 +78,11 @@ test.describe('Skoleskift demo - full auth', () => {
     await expect(page.getByText(/fælles med Lars Andersen/).first()).toBeVisible()
     await page.getByRole('radio', { name: /Emil/ }).check()
     await expect(table.locator('tr[data-prefill-key="child_cpr"]')).toContainText('Emil Nielsen Andersen')
+    // Current school is fetched (STIL, demo) for the chosen child, not asked.
+    const schoolRow = table.locator('tr[data-prefill-key="current_school"]')
+    await expect(schoolRow).toContainText('Frederiksbjerg Skole')
+    await expect(schoolRow).toContainText('STIL')
+    await expect(schoolRow).toContainText('DEMO')
     await scan(page)
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-step2.png`, fullPage: true })
 
@@ -85,9 +90,9 @@ test.describe('Skoleskift demo - full auth', () => {
     await page.getByRole('button', { name: 'Fortsæt' }).click()
     await expect(currentStep(page)).toHaveText('Det kun du ved')
     await page.getByRole('button', { name: /Indsend ansøgning/i }).click()
-    await expect(page.locator('[data-module="error-summary"] a')).toHaveCount(3)
+    await expect(page.locator('[data-module="error-summary"] a')).toHaveCount(2)
     await scan(page)
-    await page.getByLabel('Nuværende skole').selectOption('751101')
+    await expect(page.getByLabel('Nuværende skole')).toHaveCount(0)
     await page.getByLabel('Ønsket skole').selectOption('751104')
     await page.locator('textarea').fill('Vi er flyttet til Risskov, og skolevejen er nu over 6 km.')
     await page.getByRole('button', { name: /Indsend ansøgning/i }).click()

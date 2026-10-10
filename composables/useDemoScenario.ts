@@ -147,6 +147,10 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
       if (chosen) return optionLabel(entry, chosen)
       if (field.value === null || field.value === undefined) return ''
     }
+    if (entry.derive) {
+      const derived = entry.derive(chosenOption)
+      if (derived) return derived
+    }
     if (field.value === null || field.value === undefined || field.value === '') return ''
     return entry.format ? entry.format(field.value) : String(field.value)
   }

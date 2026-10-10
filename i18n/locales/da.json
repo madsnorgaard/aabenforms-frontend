@@ -190,11 +190,13 @@
           "fetched": {
             "child": "Barn (CPR Familie+, demo)",
             "custody": "Forældremyndighed (CPR Familie+, demo)",
-            "parent2": "Den anden forælder (CPR Familie+, demo)"
+            "parent2": "Den anden forælder (CPR Familie+, demo)",
+            "school": "Nuværende skole (STIL elevdata, demo)"
           },
           "typed": {
             "school": "Ønsket skole",
-            "reason": "Begrundelse"
+            "reason": "Begrundelse",
+            "targetSchool": "Ønsket ny skole"
           }
         },
         "klage": {
@@ -593,6 +595,9 @@
         "heading": "Demoen er ikke slået til",
         "body": "Skoleskift-demoen kræver mock-MitID og er kun aktiv i demomiljøet.",
         "primary": "Kontakt os"
+      },
+      "option": {
+        "currentSchool": "Nuværende skole: {school}"
       }
     },
     "byggetilladelse": {

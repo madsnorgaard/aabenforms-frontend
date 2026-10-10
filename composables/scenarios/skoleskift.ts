@@ -72,9 +72,10 @@ export const skoleskiftScenario: DemoScenarioConfig = {
     'demo.hub.scenarios.skoleskift.fetched.child',
     'demo.hub.scenarios.skoleskift.fetched.custody',
     'demo.hub.scenarios.skoleskift.fetched.parent2',
+    'demo.hub.scenarios.skoleskift.fetched.school',
   ],
   typedKeys: [
-    'demo.hub.scenarios.skoleskift.typed.school',
+    'demo.hub.scenarios.skoleskift.typed.targetSchool',
     'demo.hub.scenarios.skoleskift.typed.reason',
   ],
 
@@ -90,20 +91,30 @@ export const skoleskiftScenario: DemoScenarioConfig = {
       // redundant radio pick).
       key: 'child_cpr',
       labelKey: 'demo.skoleskift.fields.child',
-      option: { valueProp: 'cpr', labelProp: 'name', hintProps: ['cpr', 'birth_date'] },
+      option: {
+        valueProp: 'cpr',
+        labelProp: 'name',
+        // The current school is fetched (STIL pupil data, demo rail) and
+        // carried on each child option, so it is shown here, never asked.
+        hintFormat: (o, t, d) => {
+          const school = (o.current_school ?? null) as { name?: string } | null
+          return [
+            String(o.cpr ?? ''),
+            o.birth_date ? d(String(o.birth_date)) : '',
+            school?.name ? t('demo.skoleskift.option.currentSchool', { school: school.name }) : '',
+          ].filter(Boolean).join(' · ')
+        },
+      },
+    },
+    // Provenance row for the school lookup (register, legal basis, audit id).
+    {
+      key: 'current_school',
+      labelKey: 'demo.skoleskift.fields.currentSchool',
+      derive: (chosen) => String(((chosen('child_cpr')?.current_school ?? null) as { name?: string } | null)?.name ?? ''),
     },
   ],
 
   form: [
-    {
-      key: 'current_school',
-      type: 'select',
-      labelKey: 'demo.skoleskift.fields.currentSchool',
-      required: true,
-      errorKey: 'demo.skoleskift.validation.currentSchool',
-      options: schoolOptions,
-      width: 'l',
-    },
     {
       key: 'target_school',
       type: 'select',
@@ -138,7 +149,7 @@ export const skoleskiftScenario: DemoScenarioConfig = {
         applicant_cpr: values.applicant_cpr ?? '',
         child_name: String(child?.name ?? ''),
         child_cpr: demoCpr(child?.cpr),
-        current_school: values.current_school ?? '',
+        current_school: String(((child?.current_school ?? null) as { institution_number?: string } | null)?.institution_number ?? ''),
         target_school: values.target_school ?? '',
         reason: (values.reason ?? '').trim(),
         custody_status: status,
