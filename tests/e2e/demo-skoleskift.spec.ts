@@ -122,7 +122,10 @@ test.describe('Skoleskift demo - full auth', () => {
     // Persona switch. Real MitID has no SSO; the mock Keycloak does, so drop
     // its cookies or it would silently log Freja in again.
     await context.clearCookies()
+    // Full logout of Freja (app + mock-MitID), then Lars' own one-click login.
     await page.getByRole('button', { name: 'Fortsæt som Lars' }).click()
+    await page.waitForURL(/\/demo\/skoleskift\?som=lars/, { timeout: 30000 })
+    await page.getByRole('button', { name: /Log ind som Lars/ }).click()
     await keycloakLogin(page, 'lars.andersen')
     await page.waitForURL(/\/demo\/skoleskift\?som=lars/, { timeout: 20000 })
     await expect(page.locator('h1')).toHaveText('Lars medunderskriver')

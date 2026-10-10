@@ -119,9 +119,10 @@ useHead({ title: t(scenario.titleKey) })
 // --- Freja: the co-sign hand-over sits in the wizard's afterOutcome slot ---
 
 async function continueAsLars() {
-  // Local logout + revoke only: login(fresh) forces prompt=login at the IdP.
-  await userStore.logout({ idpLogout: false })
-  login(LARS_RETURN, { fresh: true, loginHint: 'lars.andersen' })
+  // Full logout: revoke Freja's session AND end her IdP (mock-MitID) session,
+  // otherwise Keycloak re-authenticates Freja even with a login_hint for Lars.
+  // Lands on Lars' own one-click login card (?som=lars).
+  await userStore.logout({ returnPath: LARS_RETURN })
 }
 
 // --- Lars: his own Digital Post ---------------------------------------------
@@ -163,6 +164,18 @@ async function restart() {
 watch([larsMode, isAuthenticated], ([lars, authed]) => {
   if (lars && authed) loadLarsInbox()
 })
+
+// Someone other than Lars on Lars' page (e.g. Freja still signed in): end that
+// session fully and come back to Lars' login card instead of asking the
+// visitor to open a private window. Once per page load, so a failed logout
+// falls back to the warning instead of looping.
+let autoSwitched = false
+watch([larsMode, isAuthenticated, isLars], ([lars, authed, okLars]) => {
+  if (import.meta.client && lars && authed && !okLars && !autoSwitched) {
+    autoSwitched = true
+    userStore.logout({ returnPath: LARS_RETURN })
+  }
+}, { immediate: true })
 
 onMounted(() => {
   // Hydrate any prior MitID session from localStorage so a returning visitor
