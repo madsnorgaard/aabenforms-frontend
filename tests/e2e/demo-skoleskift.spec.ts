@@ -126,13 +126,20 @@ test.describe('Skoleskift demo - full auth', () => {
     await page.locator('a.mitid-login-button').click()
     await page.waitForURL(/(\/parent-approval\/2\/\d+\/[^/]+\/mitid\/complete|realms\/danish-gov-test)/, { timeout: 20000 })
     if (/realms\/danish-gov-test/.test(page.url())) {
-      await page.fill('#username', 'lars.andersen')
+      // Keycloak may already know the user from the previous step and show a
+      // password-only form, so fill the username only when it is offered.
+      const username = page.locator('#username')
+      if (await username.isVisible({ timeout: 3000 }).catch(() => false)) await username.fill('lars.andersen')
       await page.fill('#password', 'test1234')
       await page.click('#kc-login')
     }
     await page.locator('input[name="action"][value="approve"]').check({ timeout: 20000 })
+    // Honeypot rejects submissions faster than a human (time limit grows on
+    // repeated fast posts), so read the page like a parent would first.
+    await page.waitForTimeout(15000)
     await page.locator('form input[type="submit"], form button[type="submit"]').last().click()
     await page.waitForURL(/\/parent-approval\/complete\/approve/, { timeout: 20000 })
-    await expect(page.locator('.parent-approval-complete')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Approval Complete' })).toBeVisible()
+    await expect(page.getByText('Your approval has been recorded')).toBeVisible()
   })
 })
