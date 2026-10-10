@@ -123,7 +123,7 @@ useHead({ title: t(scenario.titleKey) })
 
 async function continueAsLars() {
   await userStore.logout()
-  login(LARS_RETURN)
+  login(LARS_RETURN, { fresh: true })
 }
 
 // --- Lars: his own Digital Post ---------------------------------------------
@@ -139,7 +139,8 @@ async function loadLarsInbox() {
       `${config.public.apiBase}/api/digital-post/recent?session=${encodeURIComponent(sessionId.value)}&limit=5`,
       { headers: { Accept: 'application/json' } },
     )
-    larsLetters.value = res.data ?? []
+    // Show only the co-sign invitation, not the rest of this person's mailbox.
+    larsLetters.value = (res.data ?? []).filter((l) => /medunderskrift/i.test(l.subject))
   }
   catch (e) {
     console.error('Inbox fetch failed:', e)
@@ -150,7 +151,7 @@ async function loadLarsInbox() {
 }
 
 function loginAsLars() {
-  login(LARS_RETURN)
+  login(LARS_RETURN, { fresh: true })
 }
 
 async function restart() {

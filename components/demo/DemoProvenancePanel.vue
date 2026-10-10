@@ -71,9 +71,10 @@
     </div>
 
     <p class="demo-provenance__legend mt-5">
-      <span class="badge badge-success">{{ $t('demo.wizard.mode.live') }}</span> {{ $t('demo.wizard.mode.liveHelp') }}
-      <span class="badge badge-info ml-3">{{ $t('demo.wizard.mode.liveCapable') }}</span> {{ $t('demo.wizard.mode.liveCapableHelp') }}
-      <span class="badge badge-warning ml-3">{{ $t('demo.wizard.mode.demo') }}</span> {{ $t('demo.wizard.mode.demoHelp') }}
+      <!-- Only explain the badges that appear in this table. -->
+      <span v-if="modesShown.has('live')" class="demo-provenance__legend-item"><span class="badge badge-success">{{ $t('demo.wizard.mode.live') }}</span> {{ $t('demo.wizard.mode.liveHelp') }}</span>
+      <span v-if="modesShown.has('live-capable')" class="demo-provenance__legend-item"><span class="badge badge-info">{{ $t('demo.wizard.mode.liveCapable') }}</span> {{ $t('demo.wizard.mode.liveCapableHelp') }}</span>
+      <span v-if="modesShown.has('demo')" class="demo-provenance__legend-item"><span class="badge badge-warning">{{ $t('demo.wizard.mode.demo') }}</span> {{ $t('demo.wizard.mode.demoHelp') }}</span>
     </p>
   </div>
 </template>
@@ -96,6 +97,9 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:choices': [value: Record<string, string>]
 }>()
+
+/** Rail modes present in this table, so the legend never explains an absent badge. */
+const modesShown = computed(() => new Set<DemoRailMode>(props.rows.map((r) => r.source.mode)))
 
 const { t } = useI18n()
 const { $dkfds } = useNuxtApp()
@@ -163,6 +167,7 @@ watch(() => props.rows.length, async () => {
   margin-top: 0.25rem;
 }
 
+.demo-provenance__legend-item { display: inline-block; margin-right: 1.5rem; }
 .demo-provenance__legend {
   font-size: 0.875rem;
   color: #454545;

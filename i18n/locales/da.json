@@ -145,7 +145,7 @@
       "comingBody": "Scenariet er på vej. Byggetilladelse kan prøves nu.",
       "offline": "Demoen kører lokalt med mock-MitID. Book en gennemgang via Kontakt.",
       "honestHeading": "Ærlig status",
-      "honestBody": "Rammer mærket DEMO (fx CPR Familie+ og eIndkomst) kører mod testdata. LIVE-PARAT betyder, at koden er klar til den rigtige serviceaftale. LIVE kører mod en rigtig kilde. Mærkerne er de samme som på parathedstavlen.",
+      "honestBody": "DEMO betyder testdata, fordi integrationen endnu ikke er færdigbygget (fx CPR Familie+ og STIL). LIVE-PARAT betyder, at koden er bygget og kun mangler certifikat og aftale (fx MitID og Digital Post). LIVE betyder ÅbenForms' egne data, fx sagsregistret. Ingen demo henter i dag data fra et eksternt register. Mærkerne er de samme som på parathedstavlen.",
       "difficulty": {
         "simple": "Simpel",
         "medium": "Mellem",
@@ -171,11 +171,11 @@
         },
         "merudgifter": {
           "title": "Merudgifter til barn",
-          "story": "Freja søger merudgifter til Emil efter serviceloven § 41. Børn og husstandsindkomst hentes, hun vælger barnet og skriver kun behovet.",
+          "story": "Freja søger merudgifter til Emil efter serviceloven § 41. Børnene hentes, hun vælger barnet og skriver kun behovet. Indkomsten hentes ikke, for § 41 afhænger ikke af den.",
           "intro": "Ansøg om dækning af merudgifter til et barn med funktionsnedsættelse.",
           "fetched": {
             "children": "Børn med forældremyndighed (CPR Familie+, demo)",
-            "income": "Husstandsindkomst (eIndkomst, demo)",
+            "noIncome": "Ikke indkomst: § 41 afhænger ikke af forældrenes indkomst (dataminimering)",
             "cpr": "Navn og CPR (MitID)"
           },
           "typed": {
@@ -210,6 +210,24 @@
           },
           "typed": {
             "reason": "Begrundelse for klagen"
+          }
+        },
+        "sygedagpenge": {
+          "title": "Sygedagpenge",
+          "story": "Mikkel er kommet til skade og kan ikke arbejde. Arbejdsgiveren har meldt ham syg. Kommunen henter beskæftigelse og løn, så han kun skriver, hvad han ikke kan, og hvor længe det forventes at vare.",
+          "intro": "Udfyld kommunens oplysningsskema om sygedagpenge.",
+          "fetched": {
+            "employer": "Arbejdsgiver og CVR (eIndkomst, demo)",
+            "hours": "Arbejdstimer de seneste 6 måneder og beskæftigelseskravet (eIndkomst, demo)",
+            "firstSickDay": "Første sygedag fra arbejdsgiverens sygemelding (NemRefusion, demo)",
+            "cpr": "Navn og CPR (MitID)"
+          },
+          "typed": {
+            "limitations": "Hvad du ikke kan på grund af sygdommen",
+            "duration": "Forventet varighed og om du er i behandling"
+          },
+          "tags": {
+            "inclusion": "Digital inklusion"
           }
         }
       }
@@ -301,11 +319,11 @@
       },
       "mode": {
         "live": "LIVE",
-        "liveHelp": "rigtig kilde",
+        "liveHelp": "ÅbenForms' egne data, fx sagsregistret",
         "liveCapable": "LIVE-PARAT",
-        "liveCapableHelp": "klar til serviceaftale",
+        "liveCapableHelp": "koden er bygget, mangler certifikat og aftale",
         "demo": "DEMO",
-        "demoHelp": "testdata"
+        "demoHelp": "testdata, integrationen er ikke færdigbygget"
       },
       "commentary": {
         "login": "Frontend sender dig til /mitid/login. Drupal laver state, nonce og PKCE-challenge og sender dig til identitetsudbyderen. Tilbage på /auth/callback bytter vi koden til en session.",
@@ -491,12 +509,11 @@
     },
     "merudgifter": {
       "title": "Merudgifter til et barn med handicap",
-      "story": "Freja søger om dækning af merudgifter for Emil. Børn og indkomst hentes, hun skriver kun om behovet.",
-      "intro": "Log ind med mock-MitID, vælg barnet fra CPR-registret, se husstandsindkomsten, beskriv behovet og følg afgørelsen til brevet i Digital Post.",
+      "story": "Freja søger om dækning af merudgifter for Emil. Børnene hentes, hun skriver kun om behovet. Indkomst hentes ikke.",
+      "intro": "Log ind med mock-MitID, vælg barnet fra CPR-registret, beskriv behovet og følg afgørelsen til brevet i Digital Post. Indkomsten hentes ikke: merudgiftsydelsen efter § 41 afhænger ikke af forældrenes indkomst.",
       "fields": {
         "applicantCpr": "Dit CPR-nummer",
         "child": "Barn",
-        "householdIncome": "Husstandsindkomst",
         "funktionsnedsaettelse": "Beskriv barnets funktionsnedsættelse",
         "funktionsnedsaettelseHint": "Fx diagnose og hvilke ekstra udgifter den giver i hverdagen.",
         "maanedligMerudgift": "Anslåede nødvendige merudgifter (kr./måned)",
@@ -522,9 +539,9 @@
       },
       "commentary": {
         "login": "MitID-login giver kommunen dit CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
-        "prefill": "GET /api/prefill/merudgifter henter dine børn fra CPR Familie+ (SF6006, demo) og husstandsindkomsten fra eIndkomst (demo). Hvert opslag logges med hjemmel: Serviceloven §41, Forvaltningsloven §7, DBF art. 6(1)(e).",
+        "prefill": "GET /api/prefill/merudgifter henter dine børn fra CPR Familie+ (SF6006, demo). Husstandsindkomsten hentes ikke, fordi § 41 ikke afhænger af forældrenes indkomst (dataminimering). Hvert opslag logges med hjemmel: Serviceloven §41, Forvaltningsloven §7, DBF art. 6(1)(e).",
         "form": "Kun det, registrene ikke ved: barnets funktionsnedsættelse og de månedlige merudgifter. Beløbet styrer afgørelsen i demoen: 1.000 kr./md. eller mere giver medhold, mindre giver partshøring og afslag.",
-        "workflow": "ECA-flowet opretter og journaliserer sagen, henter indkomsten og forgrener på beløbet: medhold lukkes via SF2900, afslag går gennem partshøring og starter en klagefrist.",
+        "workflow": "ECA-flowet opretter og journaliserer sagen og forgrener på beløbet: medhold lukkes via SF2900, afslag går gennem partshøring og starter en klagefrist. Indkomsten indgår ikke.",
         "letter": "Afgørelsesbrevet sendes til Digital Post (simuleret). Ved afslag indeholder det klagevejledning, og klagefristen er startet på sagen."
       },
       "disabled": {
@@ -709,6 +726,55 @@
         "eyebrow": "Live walkthrough",
         "heading": "Den interaktive demo kører lokalt - vi viser den gerne live",
         "body": "Det fulde flow - MitID-login, ECA-workflow og Digital Post-bekræftelse - kører i en lokal DDEV-opsætning med en mock identitetsudbyder. Book et 15-min møde, så viser vi det hele i jeres tempo og svarer på det tekniske.",
+        "primary": "Book et 15-min møde",
+        "secondary": "Læs den tekniske gennemgang på GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
+    },
+    "sygedagpenge": {
+      "title": "Sygedagpenge",
+      "story": "Mikkel er kommet til skade og kan ikke arbejde. Arbejdsgiveren har meldt ham syg. Kommunen henter beskæftigelse og løn, så han kun skriver, hvad han ikke kan, og hvor længe det forventes at vare.",
+      "intro": "Log ind med mock-MitID, se arbejdsgiver, arbejdstimer og første sygedag, som kommunen allerede kender, skriv kun hvad du ikke kan, og følg afgørelsen til brevet i Digital Post med datoen for den første opfølgningssamtale.",
+      "fields": {
+        "applicantCpr": "Dit CPR-nummer",
+        "employer": "Arbejdsgiver",
+        "employerCvr": "Arbejdsgiverens CVR-nummer",
+        "hoursRequirement": "Beskæftigelseskrav",
+        "hoursMet": "{hours} timer de seneste {months} måneder - kravet på {required} timer er opfyldt",
+        "hoursNotMet": "{hours} timer de seneste {months} måneder - kravet på {required} timer er ikke opfyldt",
+        "firstSickDay": "Første sygedag",
+        "sicknessDescription": "Hvad kan du ikke på grund af din sygdom?",
+        "sicknessDescriptionHint": "Beskriv, hvad du ikke kan i dit arbejde lige nu. Du skal ikke oplyse en diagnose.",
+        "expectedDuration": "Hvor længe forventer du at være syg?",
+        "durationUnder4": "Under 4 uger",
+        "duration4to8": "4-8 uger",
+        "durationOver8": "Over 8 uger",
+        "durationUnknown": "Ved ikke",
+        "inTreatment": "Er du i behandling?",
+        "yes": "Ja",
+        "no": "Nej",
+        "contactPhone": "Telefonnummer (valgfrit)",
+        "contactPhoneHint": "Kommunen kan ringe til dig om den første opfølgningssamtale."
+      },
+      "validation": {
+        "sicknessDescription": "Beskriv, hvad du ikke kan på grund af din sygdom",
+        "expectedDuration": "Vælg, hvor længe du forventer at være syg",
+        "inTreatment": "Vælg, om du er i behandling"
+      },
+      "commentary": {
+        "login": "MitID-login giver kommunen dit CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
+        "prefill": "GET /api/prefill/sygedagpenge henter arbejdsgiver og arbejdstimer fra eIndkomst (demo) og første sygedag fra arbejdsgiverens sygemelding i NemRefusion (demo). Lønnen bruges af kommunen til beregningen, men sendes ikke til browseren. Hvert opslag logges med hjemmel: Sygedagpengeloven §32, Forvaltningsloven §7, DBF art. 6(1)(e).",
+        "form": "Kun det, registrene ikke ved: hvad du ikke kan, hvor længe det forventes at vare, og om du er i behandling. Du skal ikke oplyse en diagnose. Er du uenig i arbejdsgiverens oplysninger, giver du kommunen besked.",
+        "workflow": "ECA-flowet bekræfter MitID, opretter og journaliserer sagen og tjekker beskæftigelseskravet: mindst 240 timer i de seneste 6 hele kalendermåneder og mindst 40 timer i 5 af dem. Opfyldt giver ret til sygedagpenge, ellers partshøring og afslag med klagevejledning.",
+        "letter": "Afgørelsesbrevet sendes til Digital Post (simuleret) i et klart sprog med datoen for den første opfølgningssamtale. Datoen er 8 uger efter første sygedag - en forenkling i demoen, borger.dk siger, at kommunen vurderer sagen inden for 8 uger."
+      },
+      "complete": {
+        "heading": "Du har ret til sygedagpenge",
+        "body": "Beskæftigelseskravet er opfyldt. Arbejdsgiveren betaler de første 30 kalenderdage, derefter udbetaler kommunen. Brevet herunder har datoen for den første opfølgningssamtale."
+      },
+      "disabled": {
+        "heading": "Den interaktive demo kører lokalt - vi viser den gerne live",
+        "body": "Det fulde flow - MitID-login, registeropslag, ECA-afgørelse og Digital Post - kører i en lokal DDEV-opsætning med en mock identitetsudbyder. Book et 15-min møde, så viser vi det hele i jeres tempo.",
         "primary": "Book et 15-min møde",
         "secondary": "Læs den tekniske gennemgang på GitHub",
         "githubUrl": "https://github.com/madsnorgaard/aabenforms"

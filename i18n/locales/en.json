@@ -145,7 +145,7 @@
       "comingBody": "This scenario is on its way. Building permit can be tried now.",
       "offline": "The demo runs locally with a mock MitID. Book a walkthrough via Contact.",
       "honestHeading": "Honest status",
-      "honestBody": "Rails marked DEMO (e.g. CPR Family+ and eIndkomst) run against test data. LIVE-READY means the code is ready for the real service agreement. LIVE runs against a real source. The badges are the same as on the readiness board.",
+      "honestBody": "DEMO means test data, because the integration is not finished yet (e.g. CPR Family+ and STIL). LIVE-READY means the code is built and only needs a certificate and agreement (e.g. MitID and Digital Post). LIVE means AabenForms' own data, e.g. the case register. No demo fetches data from an external register today. The badges are the same as on the readiness board.",
       "difficulty": {
         "simple": "Simple",
         "medium": "Medium",
@@ -171,11 +171,11 @@
         },
         "merudgifter": {
           "title": "Extra expenses for a child",
-          "story": "Freja applies for extra expenses for Emil under the Social Services Act section 41. Children and household income are fetched; she picks the child and only types the need.",
+          "story": "Freja applies for extra expenses for Emil under the Social Services Act section 41. The children are fetched; she picks the child and only types the need. Income is not fetched, as section 41 does not depend on it.",
           "intro": "Apply for coverage of extra expenses for a child with a disability.",
           "fetched": {
             "children": "Children in your custody (CPR Family+, demo)",
-            "income": "Household income (eIndkomst, demo)",
+            "noIncome": "Not income: section 41 does not depend on the parents' income (data minimisation)",
             "cpr": "Name and CPR (MitID)"
           },
           "typed": {
@@ -210,6 +210,24 @@
           },
           "typed": {
             "reason": "Reason for the appeal"
+          }
+        },
+        "sygedagpenge": {
+          "title": "Sickness benefit",
+          "story": "Mikkel has been injured and cannot work. His employer has reported him sick. The municipality fetches employment and pay, so he only writes what he cannot do and how long it is expected to last.",
+          "intro": "Fill in the municipality's sickness benefit information form.",
+          "fetched": {
+            "employer": "Employer and CVR (eIndkomst, demo)",
+            "hours": "Working hours in the last 6 months and the employment requirement (eIndkomst, demo)",
+            "firstSickDay": "First day of sickness from the employer's report (NemRefusion, demo)",
+            "cpr": "Name and CPR (MitID)"
+          },
+          "typed": {
+            "limitations": "What you cannot do because of the illness",
+            "duration": "Expected duration and whether you are in treatment"
+          },
+          "tags": {
+            "inclusion": "Digital inclusion"
           }
         }
       }
@@ -301,11 +319,11 @@
       },
       "mode": {
         "live": "LIVE",
-        "liveHelp": "real source",
+        "liveHelp": "AabenForms' own data, e.g. the case register",
         "liveCapable": "LIVE-READY",
-        "liveCapableHelp": "ready for a service agreement",
+        "liveCapableHelp": "code is built, needs certificate and agreement",
         "demo": "DEMO",
-        "demoHelp": "test data"
+        "demoHelp": "test data, integration not finished"
       },
       "commentary": {
         "login": "The frontend sends you to /mitid/login. Drupal creates state, nonce and a PKCE challenge and sends you to the identity provider. Back on /auth/callback we exchange the code for a session.",
@@ -491,12 +509,11 @@
     },
     "merudgifter": {
       "title": "Extra expenses for a child with a disability",
-      "story": "Freja applies for coverage of extra expenses for Emil. Children and income are fetched; she only writes about the need.",
-      "intro": "Log in with the mock MitID, pick the child from the CPR register, see the household income, describe the need and follow the decision to the letter in Digital Post.",
+      "story": "Freja applies for coverage of extra expenses for Emil. The children are fetched; she only writes about the need. Income is not fetched.",
+      "intro": "Log in with the mock MitID, pick the child from the CPR register, describe the need and follow the decision to the letter in Digital Post. Income is not fetched: the section 41 benefit does not depend on the parents' income.",
       "fields": {
         "applicantCpr": "Your CPR number",
         "child": "Child",
-        "householdIncome": "Household income",
         "funktionsnedsaettelse": "Describe the child's disability",
         "funktionsnedsaettelseHint": "For example the diagnosis and which extra expenses it causes day to day.",
         "maanedligMerudgift": "Estimated necessary extra expenses (DKK/month)",
@@ -522,9 +539,9 @@
       },
       "commentary": {
         "login": "The MitID login gives the municipality your CPR number. It only reaches the browser masked and is filled in on the server at submission.",
-        "prefill": "GET /api/prefill/merudgifter fetches your children from CPR Family+ (SF6006, demo) and the household income from eIndkomst (demo). Every lookup is logged with its legal basis: Social Services Act section 41, Public Administration Act section 7, GDPR art. 6(1)(e).",
+        "prefill": "GET /api/prefill/merudgifter fetches your children from CPR Family+ (SF6006, demo). Household income is not fetched, because section 41 does not depend on the parents' income (data minimisation). Every lookup is logged with its legal basis: Social Services Act section 41, Public Administration Act section 7, GDPR art. 6(1)(e).",
         "form": "Only what the registers do not know: the child's disability and the monthly extra expenses. The amount drives the decision in the demo: 1,000 DKK/month or more is granted, less gives consultation and a refusal.",
-        "workflow": "The ECA flow opens and journals the case, fetches the income and branches on the amount: a grant is closed via SF2900, a refusal goes through consultation of the party and starts an appeal deadline.",
+        "workflow": "The ECA flow opens and journals the case and branches on the amount: a grant is closed via SF2900, a refusal goes through consultation of the party and starts an appeal deadline. Income plays no part.",
         "letter": "The decision letter is sent to Digital Post (simulated). On a refusal it carries appeal guidance, and the appeal deadline has started on the case."
       },
       "disabled": {
@@ -709,6 +726,55 @@
         "eyebrow": "Live walkthrough",
         "heading": "The interactive demo runs locally - we'll happily walk you through it",
         "body": "The full flow - MitID login, ECA workflow and Digital Post receipt - runs in a local DDEV setup with a mock identity provider. Book a 15-min meeting and we'll walk it end-to-end at your pace and answer the technical questions.",
+        "primary": "Book a 15-min meeting",
+        "secondary": "Read the technical walkthrough on GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
+    },
+    "sygedagpenge": {
+      "title": "Sickness benefit",
+      "story": "Mikkel has been injured and cannot work. His employer has reported him sick. The municipality fetches employment and pay, so he only writes what he cannot do and how long it is expected to last.",
+      "intro": "Log in with the mock MitID, see the employer, working hours and first day of sickness the municipality already knows, write only what you cannot do, and follow the decision to the letter in Digital Post with the date of the first follow-up meeting.",
+      "fields": {
+        "applicantCpr": "Your CPR number",
+        "employer": "Employer",
+        "employerCvr": "Employer's CVR number",
+        "hoursRequirement": "Employment requirement",
+        "hoursMet": "{hours} hours in the last {months} months - the {required}-hour requirement is met",
+        "hoursNotMet": "{hours} hours in the last {months} months - the {required}-hour requirement is not met",
+        "firstSickDay": "First day of sickness",
+        "sicknessDescription": "What can you not do because of your illness?",
+        "sicknessDescriptionHint": "Describe what you cannot do in your job right now. You do not have to give a diagnosis.",
+        "expectedDuration": "How long do you expect to be ill?",
+        "durationUnder4": "Less than 4 weeks",
+        "duration4to8": "4-8 weeks",
+        "durationOver8": "More than 8 weeks",
+        "durationUnknown": "Don't know",
+        "inTreatment": "Are you in treatment?",
+        "yes": "Yes",
+        "no": "No",
+        "contactPhone": "Phone number (optional)",
+        "contactPhoneHint": "The municipality may call you about the first follow-up meeting."
+      },
+      "validation": {
+        "sicknessDescription": "Describe what you cannot do because of your illness",
+        "expectedDuration": "Choose how long you expect to be ill",
+        "inTreatment": "Choose whether you are in treatment"
+      },
+      "commentary": {
+        "login": "The MitID login gives the municipality your CPR number. It only reaches the browser masked and is filled in on the server at submission.",
+        "prefill": "GET /api/prefill/sygedagpenge fetches the employer and working hours from eIndkomst (demo) and the first day of sickness from the employer's report in NemRefusion (demo). The municipality uses the pay to calculate the benefit, but it is not sent to the browser. Every lookup is logged with its legal basis: Sickness Benefit Act section 32, Public Administration Act section 7, GDPR art. 6(1)(e).",
+        "form": "Only what the registers do not know: what you cannot do, how long it is expected to last and whether you are in treatment. You do not have to give a diagnosis. If you disagree with the employer's information, you tell the municipality.",
+        "workflow": "The ECA flow confirms MitID, opens and journals the case and checks the employment requirement: at least 240 hours in the last 6 full calendar months and at least 40 hours in 5 of them. Met gives the right to sickness benefit; otherwise consultation of the party and a refusal with appeal guidance.",
+        "letter": "The decision letter is sent to Digital Post (simulated) in plain language with the date of the first follow-up meeting. The date is 8 weeks after the first day of sickness - a demo simplification; borger.dk says the municipality assesses the case within 8 weeks."
+      },
+      "complete": {
+        "heading": "You are entitled to sickness benefit",
+        "body": "The employment requirement is met. The employer pays for the first 30 calendar days, then the municipality pays. The letter below has the date of the first follow-up meeting."
+      },
+      "disabled": {
+        "heading": "The interactive demo runs locally - we'll happily walk you through it",
+        "body": "The full flow - MitID login, register lookups, ECA decision and Digital Post - runs in a local DDEV setup with a mock identity provider. Book a 15-min meeting and we'll walk it end-to-end at your pace.",
         "primary": "Book a 15-min meeting",
         "secondary": "Read the technical walkthrough on GitHub",
         "githubUrl": "https://github.com/madsnorgaard/aabenforms"
