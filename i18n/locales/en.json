@@ -452,7 +452,11 @@
       "attribution": "Address data from Denmark's Address Register (Dataforsyningen)"
     },
     "mitidRequired": "This application requires you to confirm your identity with MitID before you can fill it in.",
-    "mitidLoggedInAs": "Logged in with MitID as"
+    "mitidLoggedInAs": "Logged in with MitID as",
+    "selectPlaceholder": "Select",
+    "cprHint": "E.g. 010190-1234",
+    "cvrHint": "E.g. 12 34 56 78",
+    "successHeading": "Your submission has been received"
   },
   "a11y": {
     "skipToContent": "Skip to main content"
@@ -668,5 +672,82 @@
     "newWindow": "Opens in new window",
     "externalLink": "External link",
     "currentPage": "Current page"
+  },
+  "fds": {
+    "header": {
+      "menu": "Menu",
+      "closeMenu": "Close menu",
+      "close": "Close",
+      "logOff": "Log out",
+      "userHeading": "User",
+      "authorityHeading": "Authority",
+      "mainMenu": "Main menu",
+      "solutionTitle": "ÅbenForms",
+      "authorityName": "ÅbenForms",
+      "logoLabel": "ÅbenForms - go to the front page",
+      "liveDemo": "Live demo"
+    },
+    "nav": {
+      "home": "Home",
+      "contact": "Contact"
+    },
+    "language": {
+      "label": "Select language"
+    },
+    "footer": {
+      "authority": "Authority",
+      "contact": "Contact",
+      "about": "About the solution",
+      "accessibility": "Accessibility statement",
+      "cookies": "Cookie policy",
+      "contactPage": "Write to us",
+      "status": "Service status"
+    },
+    "form": {
+      "optional": "(optional)",
+      "required": "(*required)",
+      "errorPrefix": "Error: "
+    },
+    "errorSummary": {
+      "heading": "There are problems"
+    },
+    "alert": {
+      "info": "Information",
+      "success": "Success",
+      "warning": "Warning",
+      "error": "Error",
+      "close": "Close"
+    },
+    "steps": {
+      "label": "Step indicator",
+      "step": "Step",
+      "of": "of",
+      "heading": "Steps",
+      "close": "Close",
+      "completed": "Step {n} completed",
+      "errorIn": "Error in step {n}"
+    },
+    "validation": {
+      "nameRequired": "Enter your name",
+      "emailRequired": "Enter your email address",
+      "emailInvalid": "Enter a valid email address, e.g. name{'@'}example.com",
+      "subjectRequired": "Select a subject",
+      "messageRequired": "Enter your message"
+    },
+    "pages": {
+      "placeholderHeading": "This page is being prepared",
+      "accessibility": {
+        "title": "Accessibility statement",
+        "lead": "ÅbenForms must be usable by everyone. This page holds the web accessibility status for the solution.",
+        "placeholder": "The final statement is produced on was.digst.dk and inserted here when the solution goes live with an authority.",
+        "body": "If you run into accessibility problems, write to us via the contact page. Please describe what you tried and which assistive technology you used."
+      },
+      "cookies": {
+        "title": "Cookie policy",
+        "lead": "Read which cookies the solution uses and what they are for.",
+        "placeholder": "Today the solution only sets one necessary cookie that remembers your language choice. No statistics are collected.",
+        "body": "Necessary cookies do not require consent. If we add statistics later, you will be asked first."
+      }
+    }
   }
 }

@@ -452,7 +452,11 @@
       "attribution": "Adressedata leveres af Danmarks Adresseregister (Dataforsyningen)"
     },
     "mitidRequired": "Denne ansøgning kræver, at du bekræfter din identitet med MitID, før du kan udfylde den.",
-    "mitidLoggedInAs": "Logget ind med MitID som"
+    "mitidLoggedInAs": "Logget ind med MitID som",
+    "selectPlaceholder": "Vælg",
+    "cprHint": "Fx 010190-1234",
+    "cvrHint": "Fx 12 34 56 78",
+    "successHeading": "Din indsendelse er modtaget"
   },
   "a11y": {
     "skipToContent": "Spring til hovedindhold"
@@ -668,5 +672,82 @@
     "newWindow": "Åbner i nyt vindue",
     "externalLink": "Eksternt link",
     "currentPage": "Aktuel side"
+  },
+  "fds": {
+    "header": {
+      "menu": "Menu",
+      "closeMenu": "Luk menu",
+      "close": "Luk",
+      "logOff": "Log af",
+      "userHeading": "Bruger",
+      "authorityHeading": "Myndighed",
+      "mainMenu": "Hovedmenu",
+      "solutionTitle": "ÅbenForms",
+      "authorityName": "ÅbenForms",
+      "logoLabel": "ÅbenForms - gå til forsiden",
+      "liveDemo": "Live demo"
+    },
+    "nav": {
+      "home": "Forside",
+      "contact": "Kontakt"
+    },
+    "language": {
+      "label": "Vælg sprog"
+    },
+    "footer": {
+      "authority": "Myndighed",
+      "contact": "Kontakt",
+      "about": "Om løsningen",
+      "accessibility": "Tilgængelighedserklæring",
+      "cookies": "Cookiepolitik",
+      "contactPage": "Skriv til os",
+      "status": "Driftsstatus"
+    },
+    "form": {
+      "optional": "(frivilligt)",
+      "required": "(*skal udfyldes)",
+      "errorPrefix": "Fejl: "
+    },
+    "errorSummary": {
+      "heading": "Der er problemer"
+    },
+    "alert": {
+      "info": "Information",
+      "success": "Succes",
+      "warning": "Advarsel",
+      "error": "Fejl",
+      "close": "Luk"
+    },
+    "steps": {
+      "label": "Trinindikator",
+      "step": "Trin",
+      "of": "af",
+      "heading": "Trin",
+      "close": "Luk",
+      "completed": "Trin {n} gennemført",
+      "errorIn": "Fejl i trin {n}"
+    },
+    "validation": {
+      "nameRequired": "Skriv dit navn",
+      "emailRequired": "Skriv din e-mailadresse",
+      "emailInvalid": "Skriv en gyldig e-mailadresse, fx navn{'@'}eksempel.dk",
+      "subjectRequired": "Vælg et emne",
+      "messageRequired": "Skriv din besked"
+    },
+    "pages": {
+      "placeholderHeading": "Siden er under udarbejdelse",
+      "accessibility": {
+        "title": "Tilgængelighedserklæring",
+        "lead": "ÅbenForms skal kunne bruges af alle. Her finder du status på webtilgængeligheden for løsningen.",
+        "placeholder": "Den endelige erklæring udarbejdes på was.digst.dk og indsættes her, når løsningen tages i drift hos en myndighed.",
+        "body": "Oplever du problemer med tilgængeligheden, så skriv til os via kontaktsiden. Beskriv gerne, hvad du forsøgte, og hvilket hjælpemiddel du brugte."
+      },
+      "cookies": {
+        "title": "Cookiepolitik",
+        "lead": "Her kan du læse, hvilke cookies løsningen bruger, og hvad de bruges til.",
+        "placeholder": "Løsningen sætter i dag kun en nødvendig cookie, der husker dit sprogvalg. Der indsamles ikke statistik.",
+        "body": "Nødvendige cookies kræver ikke samtykke. Hvis vi senere tilføjer statistik, bliver du spurgt først."
+      }
+    }
   }
 }
