@@ -40,7 +40,7 @@
                  the capture-phase click persists the phase before the redirect. -->
             <ClientOnly>
               <div class="demo-wizard__login" @click.capture="onLoginClick">
-                <AuthLoginButton />
+                <AuthLoginButton fresh />
               </div>
             </ClientOnly>
             <p class="demo-wizard__runtime mt-3">{{ $t('demo.byggetilladelse.kickoff.runtime') }}</p>
@@ -70,6 +70,18 @@
             class="mb-5"
             data-testid="demo-prefill-alert"
           />
+          <FdsAlert
+            v-if="personaMismatch"
+            type="warning"
+            :heading="$t('demo.wizard.persona.mismatchHeading', { name: user?.name })"
+            heading-level="h3"
+            class="mb-5"
+            data-testid="demo-persona-mismatch"
+          >
+            <p class="mb-3">{{ $t('demo.wizard.persona.mismatchBody', { persona: config.persona.name, username: config.persona.username }) }}</p>
+            <!-- Back to step 1, whose login button forces a fresh MitID sign-in. -->
+            <FdsButton variant="secondary" @click="logoutAndReset">{{ $t('demo.wizard.persona.switch', { persona: config.persona.name }) }}</FdsButton>
+          </FdsAlert>
           <p>{{ $t('demo.wizard.prefill.body') }}</p>
 
           <DemoProvenancePanel
@@ -488,6 +500,11 @@ onMounted(() => {
 })
 
 watch(isAuthenticated, () => syncFromAuth())
+
+/** The data on step 2 always belongs to the logged-in person; warn when that is not the scenario's persona. */
+const personaMismatch = computed(() =>
+  Boolean(isAuthenticated.value && user.value?.name && user.value.name !== props.config.persona.name),
+)
 watch(authLoading, (loading) => { if (!loading) settleAuth() })
 
 // Move focus to the step heading on each step change so keyboard and screen

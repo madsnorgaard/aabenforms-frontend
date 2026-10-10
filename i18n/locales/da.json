@@ -331,6 +331,11 @@
         "form": "Kun det, registrene ikke kender, bliver spurgt om. Valg fra listekilder (barn, sag) følger med i ansøgningen.",
         "workflow": "POST til /api/webform/[formular]/submit kører ECA-flowet synkront og returnerer alle trin. Identitetsporten tjekker sessionen på serveren.",
         "letter": "GET /api/digital-post/recent slår op i Digital Post-loggen for din session. I produktion er det et SF1601-kald til NgDP."
+      },
+      "persona": {
+        "mismatchHeading": "Du er logget ind som {name}",
+        "mismatchBody": "Oplysningerne nedenfor er dine egne. Denne demo er bygget til {persona}. Log ind igen som {username} for at se scenariet som tænkt.",
+        "switch": "Log af og log ind som {persona}"
       }
     },
     "interactive": "Interaktiv",

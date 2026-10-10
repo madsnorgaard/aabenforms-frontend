@@ -58,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps<{ fresh?: boolean }>()
 const { isAuthenticated, user, loading, login, logout, maskedCpr } = useAuth()
 const route = useRoute()
 
@@ -65,7 +66,8 @@ const menuOpen = ref(false)
 
 function handleLogin() {
   // Pass current URL as return URL
-  login(route.fullPath)
+  // fresh: force a new MitID sign-in so a previous person's IdP session is not reused.
+  login(route.fullPath, { fresh: props.fresh })
 }
 
 async function handleLogout() {

@@ -331,6 +331,11 @@
         "form": "Only what the registers do not know is asked for. Choices from list sources (child, case) travel with the application.",
         "workflow": "POST to /api/webform/[form]/submit runs the ECA flow synchronously and returns every step. The identity gate checks the session on the server.",
         "letter": "GET /api/digital-post/recent looks up the Digital Post log for your session. In production this is an SF1601 call to NgDP."
+      },
+      "persona": {
+        "mismatchHeading": "You are signed in as {name}",
+        "mismatchBody": "The data below is your own. This demo is written for {persona}. Sign in again as {username} to see the scenario as intended.",
+        "switch": "Sign out and sign in as {persona}"
       }
     },
     "interactive": "Interactive",
