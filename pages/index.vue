@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-screen">
+    <SiteHeader />
     <main id="main" tabindex="-1">
       <LandingHeroSection />
       <!-- Order is conversion-tuned: demo CTA is the punchline so it goes

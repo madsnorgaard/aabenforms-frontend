@@ -3,14 +3,6 @@
     <!-- Subtle grid background -->
     <div class="absolute inset-0 grid-bg" aria-hidden="true" />
 
-    <!-- Top bar: accent gradient + language switcher -->
-    <div class="relative">
-      <div class="h-1 bg-gradient-to-r from-secondary-500 via-secondary-400 to-warning-400" />
-      <div class="absolute right-6 lg:right-8 top-3">
-        <LanguageSwitcher />
-      </div>
-    </div>
-
     <div class="relative max-w-6xl mx-auto px-6 lg:px-8 pt-20 pb-24 lg:pt-28 lg:pb-32">
       <div class="max-w-3xl">
         <!-- Badge -->
@@ -36,7 +28,7 @@
         </p>
 
         <!-- Sub-note: understated technical credibility -->
-        <p class="text-sm text-neutral-400 font-medium mb-10 reveal-up delay-2">
+        <p class="text-sm text-neutral-600 font-medium mb-10 reveal-up delay-2">
           Drupal 11 &middot; Nuxt 3 &middot; ECA Workflows &middot; JSON:API
         </p>
 
@@ -48,17 +40,14 @@
         <div class="flex flex-col sm:flex-row sm:items-center gap-4 reveal-up delay-3">
           <NuxtLink
             :to="demoEnabled ? '/demo/byggetilladelse' : '/kontakt'"
-            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-base font-bold bg-neutral-900 text-white hover:bg-neutral-800 transition-all shadow-sm"
+            class="button button-primary"
           >
-            {{ demoEnabled ? $t('hero.cta.demo') : $t('hero.cta.demoOffline') }}
-            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-              <path d="M3 8h10m-4-4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+            {{ demoEnabled ? $t('hero.cta.demo') : $t('hero.cta.demoOffline') }}<svg class="icon-svg" focusable="false" aria-hidden="true"><use href="#arrow-forward" /></svg>
           </NuxtLink>
           <NuxtLink
             v-if="demoEnabled"
             to="/kontakt"
-            class="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-semibold text-neutral-600 hover:text-neutral-900 transition-colors"
+            class="inline-flex items-center px-3 py-2 font-semibold"
           >
             {{ $t('hero.cta.book') }}
           </NuxtLink>
@@ -90,13 +79,14 @@ const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilla
 
 <style scoped>
 .hero-section {
-  background: linear-gradient(170deg, #fafafa 0%, #f0f7ff 50%, #fafafa 100%);
+  background: linear-gradient(170deg, #ffffff 0%, #f5f5f5 100%);
+  border-bottom: 1px solid #dcdcdc;
 }
 
 .grid-bg {
   background-image:
-    linear-gradient(rgba(0, 113, 201, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 113, 201, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(68, 131, 30, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(68, 131, 30, 0.05) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 

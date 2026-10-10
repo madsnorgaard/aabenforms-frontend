@@ -2,7 +2,7 @@
   <div id="app">
     <!-- Skip link: the first focusable element, jumps a keyboard/AT user
          straight past the branding to the page content (WCAG 2.4.1). -->
-    <a href="#main" class="skip-link">{{ $t('a11y.skipToContent') }}</a>
+    <FdsSkipLink target="main" />
 
     <!-- DKFDS icon sprite, inlined once so every <use href="#icon"> on the
          page resolves. Hidden via .fds-icon-sprite (assets/css/dkfds.scss). -->
@@ -45,30 +45,6 @@ const iconSprite = spriteSource
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Skip link: off-screen until focused, then pinned top-left. */
-.skip-link {
-  position: absolute;
-  left: 0.5rem;
-  top: -3rem;
-  z-index: 1000;
-  padding: 0.75rem 1rem;
-  background: #0071c9;
-  color: #ffffff;
-  border-radius: 0 0 6px 6px;
-  text-decoration: none;
-  transition: top 0.15s ease-in-out;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-
-/* A consistent, visible keyboard focus indicator (WCAG 2.4.7). */
-:focus-visible {
-  outline: 3px solid #0071c9;
-  outline-offset: 2px;
 }
 
 /* Honour a reduced-motion preference (WCAG 2.3.3). */

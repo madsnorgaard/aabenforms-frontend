@@ -1,15 +1,19 @@
 <template>
-  <button
+  <FdsButton
     :type="type"
-    :class="buttonClasses"
+    :variant="fdsVariant"
     :disabled="disabled"
+    :class="{ 'w-percent-100': fullWidth }"
     @click="$emit('click', $event)"
   >
     <slot />
-  </button>
+  </FdsButton>
 </template>
 
 <script setup lang="ts">
+// Compatibility wrapper: existing call sites keep <UiButton>, the markup is
+// DKFDS (components/fds/FdsButton). `size` is accepted and ignored (DKFDS
+// buttons have one size); outline maps to secondary, ghost to tertiary.
 const props = withDefaults(defineProps<{
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
@@ -21,33 +25,21 @@ const props = withDefaults(defineProps<{
   size: 'md',
   type: 'button',
   disabled: false,
-  fullWidth: false
+  fullWidth: false,
 })
 
 defineEmits<{
   click: [event: MouseEvent]
 }>()
 
-const buttonClasses = computed(() => {
-  const base = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
-
-  const variants = {
-    primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
-    secondary: 'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500',
-    outline: 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500',
-    ghost: 'text-primary-600 hover:bg-primary-50 focus:ring-primary-500'
+const fdsVariant = computed(() => {
+  switch (props.variant) {
+    case 'outline':
+      return 'secondary'
+    case 'ghost':
+      return 'tertiary'
+    default:
+      return props.variant
   }
-
-  // All sizes keep a 44px minimum tap target (WCAG 2.5.5 / AAA-aligned, and a
-  // strong AA baseline for touch), even the small variant.
-  const sizes = {
-    sm: 'min-h-[44px] px-3 py-1.5 text-sm',
-    md: 'min-h-[44px] px-4 py-2 text-base',
-    lg: 'min-h-[44px] px-6 py-3 text-lg'
-  }
-
-  const width = props.fullWidth ? 'w-full' : ''
-
-  return `${base} ${variants[props.variant]} ${sizes[props.size]} ${width}`
 })
 </script>

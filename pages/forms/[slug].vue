@@ -1,8 +1,10 @@
 <template>
-  <div class="form-page">
-    <main id="main" tabindex="-1" class="container">
+  <div>
+    <SiteHeader />
+    <main id="main" tabindex="-1" class="container py-8">
       <WebformRenderer :webform-id="slug" />
     </main>
+    <FdsFooter />
   </div>
 </template>
 
@@ -17,17 +19,3 @@ useHead({
   title: t('form.pageTitle'),
 })
 </script>
-
-<style scoped>
-.form-page {
-  min-height: 100vh;
-  padding: 4rem 0;
-  background: #f5f5f5;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-</style>

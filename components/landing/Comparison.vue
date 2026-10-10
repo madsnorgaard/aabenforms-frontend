@@ -37,7 +37,7 @@
             <div class="px-4 md:px-5 py-4 border-b border-neutral-100 bg-white">
               <div class="md:hidden mb-2 flex items-center gap-1.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-secondary-500"></span>
-                <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-900">ÅbenForms</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-neutral-900">ÅbenForms</span>
               </div>
               <div class="flex items-start gap-2">
                 <span class="mt-0.5 inline-flex w-4 h-4 rounded-full bg-success-50 border border-success-200 items-center justify-center flex-shrink-0">
@@ -49,7 +49,7 @@
               </div>
             </div>
             <div class="px-4 md:px-5 py-4 border-b border-neutral-100 bg-neutral-50/40 text-neutral-500">
-              <div class="md:hidden mb-2 text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+              <div class="md:hidden mb-2 text-xs font-semibold uppercase tracking-widest text-neutral-600">
                 {{ $t('comparison.themLabel') }}
               </div>
               {{ row.them }}

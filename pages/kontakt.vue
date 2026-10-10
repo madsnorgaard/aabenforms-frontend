@@ -1,79 +1,101 @@
 <template>
-  <div class="min-h-screen bg-neutral-50">
+  <div>
     <SiteHeader />
 
-    <main id="main" tabindex="-1" class="max-w-2xl mx-auto px-6 lg:px-8 py-16">
-      <p class="text-xs font-semibold tracking-widest uppercase text-primary-700 mb-3">
-        {{ $t('kontakt.title') }}
-      </p>
-      <h1 class="text-3xl font-bold text-neutral-900 tracking-tight mb-3">
-        {{ $t('kontakt.heading') }}
-      </h1>
-      <p class="text-neutral-600 leading-relaxed mb-8">
-        {{ $t('kontakt.lead') }}
-      </p>
+    <main id="main" tabindex="-1" class="container py-8">
+      <div class="row">
+        <div class="col-12 col-lg-8">
+          <FdsErrorSummary :errors="summaryErrors" />
 
-      <div class="rounded-2xl border border-neutral-200 bg-white p-6 lg:p-8">
-        <form v-if="!submitted" @submit.prevent="handleSubmit" class="space-y-4">
-          <UiInput
-            v-model="contactForm.name"
-            :label="$t('demo.forms.contact.name')"
-            :placeholder="$t('demo.forms.contact.namePlaceholder')"
-            required
-          />
-          <UiInput
-            v-model="contactForm.email"
-            type="email"
-            :label="$t('demo.forms.contact.email')"
-            :placeholder="$t('demo.forms.contact.emailPlaceholder')"
-            required
-          />
-          <UiSelect
-            v-model="contactForm.subject"
-            :label="$t('demo.forms.contact.subject')"
-            :placeholder="$t('demo.forms.contact.selectSubject')"
-            :options="subjectOptions"
-            required
-          />
-          <UiTextarea
-            v-model="contactForm.message"
-            :label="$t('demo.forms.contact.message')"
-            :placeholder="$t('demo.forms.contact.messagePlaceholder')"
-            required
-            :rows="5"
-          />
-          <UiButton type="submit" variant="primary" full-width :disabled="submitting">
-            {{ submitting ? '...' : $t('demo.forms.contact.submit') }}
-          </UiButton>
-          <p v-if="errorMessage" class="text-sm text-error-700">{{ errorMessage }}</p>
-        </form>
+          <h1>{{ $t('kontakt.heading') }}</h1>
+          <p class="font-lead">{{ $t('kontakt.lead') }}</p>
 
-        <div v-else class="text-center py-8">
-          <div class="inline-flex w-12 h-12 items-center justify-center rounded-full bg-success-100 mb-4">
-            <svg class="w-6 h-6 text-success-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </div>
-          <h2 class="text-lg font-bold text-neutral-900 mb-2">{{ $t('kontakt.successTitle') }}</h2>
-          <p class="text-sm text-neutral-500">{{ $t('kontakt.successMessage') }}</p>
+          <form v-if="!submitted" novalidate @submit.prevent="handleSubmit">
+            <FdsInput
+              id="kontakt-name"
+              v-model="contactForm.name"
+              :label="$t('demo.forms.contact.name')"
+              :error="fieldErrors.name"
+              autocomplete="name"
+              width="l"
+              required
+            />
+            <FdsInput
+              id="kontakt-email"
+              v-model="contactForm.email"
+              type="email"
+              :label="$t('demo.forms.contact.email')"
+              :error="fieldErrors.email"
+              autocomplete="email"
+              inputmode="email"
+              width="l"
+              required
+            />
+            <FdsSelect
+              id="kontakt-subject"
+              v-model="contactForm.subject"
+              :label="$t('demo.forms.contact.subject')"
+              :placeholder="$t('demo.forms.contact.selectSubject')"
+              :options="subjectOptions"
+              :error="fieldErrors.subject"
+              width="l"
+              required
+            />
+            <FdsTextarea
+              id="kontakt-message"
+              v-model="contactForm.message"
+              :label="$t('demo.forms.contact.message')"
+              :error="fieldErrors.message"
+              :rows="6"
+              width="xl"
+              required
+            />
+
+            <FdsAlert
+              v-if="errorMessage"
+              type="error"
+              :heading="$t('form.submitError')"
+              :text="errorMessage"
+              class="mb-5"
+            />
+
+            <FdsButton type="submit" variant="primary" :disabled="submitting">
+              {{ submitting ? $t('form.submitting') : $t('demo.forms.contact.submit') }}
+            </FdsButton>
+          </form>
+
+          <FdsAlert
+            v-else
+            type="success"
+            role="status"
+            :heading="$t('kontakt.successTitle')"
+            :text="$t('kontakt.successMessage')"
+          />
         </div>
       </div>
     </main>
+
+    <FdsFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import type { FdsErrorSummaryItem } from '~/components/fds/FdsErrorSummary.vue'
 
 const { t } = useI18n()
 const { apiBase } = useRuntimeConfig().public
 
 useHead({ title: t('kontakt.title') })
 
-const contactForm = ref({ name: '', email: '', subject: '', message: '' })
+type ContactField = 'name' | 'email' | 'subject' | 'message'
+
+const contactForm = ref<Record<ContactField, string>>({ name: '', email: '', subject: '', message: '' })
 const submitting = ref(false)
 const submitted = ref(false)
 const errorMessage = ref('')
+const fieldErrors = ref<Partial<Record<ContactField, string>>>({})
+const summaryErrors = ref<FdsErrorSummaryItem[]>([])
 
 const subjectOptions = computed(() => [
   { label: t('demo.forms.contact.subjects.general'), value: 'general' },
@@ -82,9 +104,46 @@ const subjectOptions = computed(() => [
   { label: t('demo.forms.contact.subjects.other'), value: 'other' },
 ])
 
+const FIELD_IDS: Record<ContactField, string> = {
+  name: 'kontakt-name',
+  email: 'kontakt-email',
+  subject: 'kontakt-subject',
+  message: 'kontakt-message',
+}
+
+// A field's own error clears as soon as the citizen edits it; the summary
+// stays until the next submit (DKFDS Fejlopsummering pattern).
+for (const key of Object.keys(FIELD_IDS) as ContactField[]) {
+  watch(() => contactForm.value[key], () => {
+    if (fieldErrors.value[key]) {
+      delete fieldErrors.value[key]
+    }
+  })
+}
+
+function validate(): boolean {
+  const errors: Partial<Record<ContactField, string>> = {}
+  const form = contactForm.value
+  if (!form.name.trim()) errors.name = t('fds.validation.nameRequired')
+  if (!form.email.trim()) errors.email = t('fds.validation.emailRequired')
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) errors.email = t('fds.validation.emailInvalid')
+  if (!form.subject) errors.subject = t('fds.validation.subjectRequired')
+  if (!form.message.trim()) errors.message = t('fds.validation.messageRequired')
+
+  fieldErrors.value = errors
+  summaryErrors.value = (Object.keys(errors) as ContactField[]).map((key) => ({
+    id: FIELD_IDS[key],
+    message: errors[key] as string,
+  }))
+  return summaryErrors.value.length === 0
+}
+
 async function handleSubmit() {
-  submitting.value = true
   errorMessage.value = ''
+  if (!validate()) {
+    return
+  }
+  submitting.value = true
   try {
     await $fetch(`${apiBase}/api/webform/contact/submit`, {
       method: 'POST',
@@ -94,7 +153,7 @@ async function handleSubmit() {
     submitted.value = true
   }
   catch (e: any) {
-    errorMessage.value = e?.data?.message || 'Submission failed - backend may be offline'
+    errorMessage.value = e?.data?.message || t('form.submitError')
   }
   finally {
     submitting.value = false

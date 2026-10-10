@@ -183,3 +183,26 @@ our `1rem`).
   classes. In DKFDS markup use DKFDS classes only; in the remaining Tailwind sections
   treat those spacing names as DKFDS values (or use arbitrary values like `p-[24px]`
   when the exact Tailwind pixel matters).
+
+### Components (components/fds/)
+
+Auto-imported as `<FdsX>`; every one is SSR-safe. The old `components/ui/Button|Input|
+Textarea|Select|Alert` are thin wrappers over these so existing call sites keep working,
+and new code should use the Fds components directly.
+
+| Component | DKFDS | Notes |
+|---|---|---|
+| `FdsHeader` | Header rows 1+2, mobile drawer | `solutionTitle`, `authorityName`, `authorityText`, `menuItems`, `liveBadge`; `logo` slot (defaults to the ÅbenForms wordmark), `navigation` slot for row 3. Shows the user name and "Log af" when the user store is authenticated. |
+| `FdsFooter` | Footer | `authorityName`, `authorityText`, `email`, `phone`, `languageSwitcher`; `extra` slot is a fourth column. Links /tilgaengelighed, /cookies, /kontakt. |
+| `FdsSkipLink` | Skip-link (`a.skipnav`) | Rendered once in app.vue, targets `#main`. |
+| `FdsLanguageSwitcher` | Sprogvælger | `variant="header|mobile|footer"`, built on `switchLocalePath`. |
+| `FdsButton` | Knapper | `variant="primary|secondary|tertiary|warning"`, `type`, `disabled`, `fullWidthXs`, `iconOnly`. |
+| `FdsInput`, `FdsTextarea`, `FdsSelect` | Inputfelt, Tekstområde, Dropdown | `label`, `hint`, `error`, `required`, `optional` / `requiredLabel` (minority rule), `width="xxs..xl"`, `charWidth`, explicit `id` for error-summary links. |
+| `FdsRadioGroup`, `FdsCheckbox` | Radioknapper, Tjekboks | fieldset/legend group with hint and error; single boolean checkbox. |
+| `FdsAlert` | Beskeder | `type`, `heading`, `headingLevel`, `text` or default slot, `paragraph`, `dismissible`; `role="alert"` only on warning/error (pass `role="status"` for announced success). |
+| `FdsErrorSummary` | Fejlopsummering | `errors: {id, message}[]`; focuses itself whenever the list is (re)filled, links jump to the field. Place above the h1. |
+| `FdsStepIndicator` | Trinindikator | `steps: {title, state: completed|current|upcoming|error, hint?}[]`, emits `select(index)`; desktop `ol`, mobile "Trin x af y" button + bottom-sheet modal. |
+
+Pages that render DKFDS end to end: `/` (landing, sections still Tailwind-built on the
+borger.dk palette), `/kontakt`, `/forms/[slug]` (WebformRenderer), `/tilgaengelighed` and
+`/cookies` (placeholders). The DKFDS cookiemeddelelse is a separate issue.
