@@ -420,6 +420,52 @@
         "Audit log entry created for regulatory compliance": "Revisionslog-post oprettet for lovmæssig overholdelse"
       }
     },
+    "merudgifter": {
+      "title": "Merudgifter til et barn med handicap",
+      "story": "Freja søger om dækning af merudgifter for Emil. Børn og indkomst hentes, hun skriver kun om behovet.",
+      "intro": "Log ind med mock-MitID, vælg barnet fra CPR-registret, se husstandsindkomsten, beskriv behovet og følg afgørelsen til brevet i Digital Post.",
+      "fields": {
+        "applicantCpr": "Dit CPR-nummer",
+        "child": "Barn",
+        "householdIncome": "Husstandsindkomst",
+        "funktionsnedsaettelse": "Beskriv barnets funktionsnedsættelse",
+        "funktionsnedsaettelseHint": "Fx diagnose og hvilke ekstra udgifter den giver i hverdagen.",
+        "maanedligMerudgift": "Anslåede nødvendige merudgifter (kr./måned)",
+        "maanedligMerudgiftHint": "I demoen er grænsen 1.000 kr./md.: fra 1.000 kr. gives medhold, under 1.000 kr. ender sagen med afslag og klagevejledning."
+      },
+      "validation": {
+        "funktionsnedsaettelse": "Beskriv barnets funktionsnedsættelse",
+        "maanedligMerudgift": "Angiv de månedlige merudgifter i kroner"
+      },
+      "complete": {
+        "medhold": {
+          "heading": "Medhold: merudgifterne dækkes",
+          "body": "Beløbet er mindst 1.000 kr./md., så flowet traf afgørelse om medhold, sendte afgørelsesbrevet og lukkede sagen via SF2900."
+        },
+        "afslag": {
+          "heading": "Afslag med klagevejledning",
+          "body": "Beløbet er under 1.000 kr./md. Flowet gennemførte partshøring, traf afgørelse om afslag, sendte brevet med klagevejledning og startede en klagefrist på 4 uger."
+        },
+        "neutral": {
+          "heading": "Afgørelsen er sendt",
+          "body": "Afgørelsesbrevet ligger i Digital Post herunder."
+        }
+      },
+      "commentary": {
+        "login": "MitID-login giver kommunen dit CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
+        "prefill": "GET /api/prefill/merudgifter henter dine børn fra CPR Familie+ (SF6006, demo) og husstandsindkomsten fra eIndkomst (demo). Hvert opslag logges med hjemmel: Serviceloven §41, Forvaltningsloven §7, DBF art. 6(1)(e).",
+        "form": "Kun det, registrene ikke ved: barnets funktionsnedsættelse og de månedlige merudgifter. Beløbet styrer afgørelsen i demoen: 1.000 kr./md. eller mere giver medhold, mindre giver partshøring og afslag.",
+        "workflow": "ECA-flowet opretter og journaliserer sagen, henter indkomsten og forgrener på beløbet: medhold lukkes via SF2900, afslag går gennem partshøring og starter en klagefrist.",
+        "letter": "Afgørelsesbrevet sendes til Digital Post (simuleret). Ved afslag indeholder det klagevejledning, og klagefristen er startet på sagen."
+      },
+      "disabled": {
+        "heading": "Den interaktive demo kører lokalt - vi viser den gerne live",
+        "body": "Det fulde flow - MitID-login, registeropslag, ECA-afgørelse og Digital Post - kører i en lokal DDEV-opsætning med en mock identitetsudbyder. Book et 15-min møde, så viser vi det hele i jeres tempo.",
+        "primary": "Book et 15-min møde",
+        "secondary": "Læs den tekniske gennemgang på GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
+    },
     "byggetilladelse": {
       "kickoff": {
         "eyebrow": "Live demo · Byggetilladelse",

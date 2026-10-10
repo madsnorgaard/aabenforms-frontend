@@ -420,6 +420,52 @@
         "Audit log entry created for regulatory compliance": "Audit log entry created for regulatory compliance"
       }
     },
+    "merudgifter": {
+      "title": "Extra expenses for a child with a disability",
+      "story": "Freja applies for coverage of extra expenses for Emil. Children and income are fetched; she only writes about the need.",
+      "intro": "Log in with the mock MitID, pick the child from the CPR register, see the household income, describe the need and follow the decision to the letter in Digital Post.",
+      "fields": {
+        "applicantCpr": "Your CPR number",
+        "child": "Child",
+        "householdIncome": "Household income",
+        "funktionsnedsaettelse": "Describe the child's disability",
+        "funktionsnedsaettelseHint": "For example the diagnosis and which extra expenses it causes day to day.",
+        "maanedligMerudgift": "Estimated necessary extra expenses (DKK/month)",
+        "maanedligMerudgiftHint": "In the demo the threshold is 1,000 DKK/month: from 1,000 DKK the application is granted, below 1,000 DKK it ends in a refusal with appeal guidance."
+      },
+      "validation": {
+        "funktionsnedsaettelse": "Describe the child's disability",
+        "maanedligMerudgift": "Enter the monthly extra expenses in DKK"
+      },
+      "complete": {
+        "medhold": {
+          "heading": "Granted: the extra expenses are covered",
+          "body": "The amount is at least 1,000 DKK/month, so the flow granted the application, sent the decision letter and closed the case via SF2900."
+        },
+        "afslag": {
+          "heading": "Refusal with appeal guidance",
+          "body": "The amount is below 1,000 DKK/month. The flow ran the consultation of the party, refused the application, sent the letter with appeal guidance and started a 4-week appeal deadline."
+        },
+        "neutral": {
+          "heading": "The decision has been sent",
+          "body": "The decision letter is in Digital Post below."
+        }
+      },
+      "commentary": {
+        "login": "The MitID login gives the municipality your CPR number. It only reaches the browser masked and is filled in on the server at submission.",
+        "prefill": "GET /api/prefill/merudgifter fetches your children from CPR Family+ (SF6006, demo) and the household income from eIndkomst (demo). Every lookup is logged with its legal basis: Social Services Act section 41, Public Administration Act section 7, GDPR art. 6(1)(e).",
+        "form": "Only what the registers do not know: the child's disability and the monthly extra expenses. The amount drives the decision in the demo: 1,000 DKK/month or more is granted, less gives consultation and a refusal.",
+        "workflow": "The ECA flow opens and journals the case, fetches the income and branches on the amount: a grant is closed via SF2900, a refusal goes through consultation of the party and starts an appeal deadline.",
+        "letter": "The decision letter is sent to Digital Post (simulated). On a refusal it carries appeal guidance, and the appeal deadline has started on the case."
+      },
+      "disabled": {
+        "heading": "The interactive demo runs locally - we'll happily walk you through it",
+        "body": "The full flow - MitID login, register lookups, ECA decision and Digital Post - runs in a local DDEV setup with a mock identity provider. Book a 15-min meeting and we'll walk it end-to-end at your pace.",
+        "primary": "Book a 15-min meeting",
+        "secondary": "Read the technical walkthrough on GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
+    },
     "byggetilladelse": {
       "kickoff": {
         "eyebrow": "Live demo · Building permit",
