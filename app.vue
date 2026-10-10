@@ -1,7 +1,13 @@
 <template>
   <div id="app">
-    <!-- Skip link: the first focusable element, jumps a keyboard/AT user
-         straight past the branding to the page content (WCAG 2.4.1). -->
+    <!-- DKFDS cookiemeddelelse: first in the document, before the skip link
+         and every page's header. Renders only when no af_consent choice is
+         stored (client-side, after reading the cookie), never as a modal. -->
+    <FdsCookieBanner />
+
+    <!-- Skip link: the first focusable element after the cookie prompt, jumps
+         a keyboard/AT user straight past the branding to the page content
+         (WCAG 2.4.1). -->
     <FdsSkipLink target="main" />
 
     <!-- DKFDS icon sprite, inlined once so every <use href="#icon"> on the

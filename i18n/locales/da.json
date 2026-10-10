@@ -749,5 +749,43 @@
         "body": "Nødvendige cookies kræver ikke samtykke. Hvis vi senere tilføjer statistik, bliver du spurgt først."
       }
     }
+  },
+  "cookies": {
+    "banner": {
+      "heading": "Fortæl os om du accepterer cookies",
+      "text": "Vi indsamler statistik ved hjælp af tredjepartscookies til at forbedre brugeroplevelsen. Alle indsamlede data anonymiseres.",
+      "link": "Læs mere om vores brug af cookies",
+      "accept": "Accepter cookies",
+      "reject": "Nej tak til cookies"
+    },
+    "page": {
+      "title": "Cookies på ÅbenForms",
+      "lead": "Her kan du se, hvilke cookies ÅbenForms sætter i din browser, hvad de bruges til, og hvordan du ændrer dit valg.",
+      "whatHeading": "Hvad er en cookie?",
+      "whatBody": "En cookie er en lille tekstfil, som gemmes i din browser, så løsningen kan huske noget fra én sidevisning til den næste, fx dit sprogvalg. En cookie kan ikke sprede virus eller læse andre filer på din computer.",
+      "listHeading": "Cookies, vi sætter",
+      "listIntro": "ÅbenForms sætter i dag kun to cookies. Begge er nødvendige for, at løsningen virker, og ingen af dem deles med andre.",
+      "colName": "Navn",
+      "colPurpose": "Formål",
+      "colType": "Type",
+      "colExpiry": "Levetid",
+      "necessary": "Nødvendig",
+      "oneYear": "1 år",
+      "i18nPurpose": "Husker, om du har valgt dansk eller engelsk, så du får samme sprog næste gang.",
+      "consentPurpose": "Husker dit svar på cookiebanneret (accepteret eller afvist), så du ikke bliver spurgt igen.",
+      "necessaryHeading": "Nødvendige cookies kræver ikke samtykke",
+      "necessaryBody": "Nødvendige cookies er dem, der skal til, for at løsningen kan huske dine egne valg. Dem må vi sætte uden at spørge først, og de bruges ikke til at følge dig på tværs af websteder.",
+      "mitidHeading": "Dit MitID-login er ikke en cookie",
+      "mitidBody": "Når du logger ind med MitID, er det serveren, der holder styr på din session. Din browser gemmer kun et sessions-id i sit lokale lager (ikke i en cookie), og det slettes, når du logger af, eller når sessionen udløber.",
+      "statsHeading": "Statistik",
+      "statsBody": "Vi sætter i dag ingen statistikcookies og indlæser ingen scripts fra tredjeparter. Hvis vi senere tilføjer statistik, bliver den kun slået til, hvis du har accepteret cookies i banneret, og vi opdaterer denne side først.",
+      "choiceHeading": "Ændr dit valg",
+      "choiceCurrent": "Dit nuværende valg:",
+      "choiceAccepted": "Du har accepteret cookies.",
+      "choiceRejected": "Du har sagt nej tak til cookies.",
+      "choiceNone": "Du har ikke taget stilling endnu. Banneret vises nederst på siden.",
+      "changeChoice": "Ændr dit valg",
+      "resetDone": "Dit valg er nulstillet. Banneret vises igen nederst på siden, så du kan vælge på ny."
+    }
   }
 }

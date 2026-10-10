@@ -749,5 +749,43 @@
         "body": "Necessary cookies do not require consent. If we add statistics later, you will be asked first."
       }
     }
+  },
+  "cookies": {
+    "banner": {
+      "heading": "Tell us whether you accept cookies",
+      "text": "We collect statistics using third-party cookies to improve the user experience. All collected data is anonymised.",
+      "link": "Read more about our use of cookies",
+      "accept": "Accept cookies",
+      "reject": "No thanks to cookies"
+    },
+    "page": {
+      "title": "Cookies on ÅbenForms",
+      "lead": "See which cookies ÅbenForms sets in your browser, what they are for, and how to change your choice.",
+      "whatHeading": "What is a cookie?",
+      "whatBody": "A cookie is a small text file stored in your browser so the solution can remember something from one page view to the next, such as your language choice. A cookie cannot spread viruses or read other files on your computer.",
+      "listHeading": "Cookies we set",
+      "listIntro": "ÅbenForms currently sets only two cookies. Both are necessary for the solution to work, and neither is shared with anyone.",
+      "colName": "Name",
+      "colPurpose": "Purpose",
+      "colType": "Type",
+      "colExpiry": "Lifetime",
+      "necessary": "Necessary",
+      "oneYear": "1 year",
+      "i18nPurpose": "Remembers whether you chose Danish or English, so you get the same language next time.",
+      "consentPurpose": "Remembers your answer to the cookie banner (accepted or rejected), so you are not asked again.",
+      "necessaryHeading": "Necessary cookies do not require consent",
+      "necessaryBody": "Necessary cookies are the ones the solution needs to remember your own choices. We may set them without asking first, and they are not used to follow you across websites.",
+      "mitidHeading": "Your MitID login is not a cookie",
+      "mitidBody": "When you log in with MitID, the server keeps track of your session. Your browser only stores a session id in its local storage (not in a cookie), and it is deleted when you log off or the session expires.",
+      "statsHeading": "Statistics",
+      "statsBody": "We currently set no statistics cookies and load no third-party scripts. If we add statistics later, they are only enabled if you accepted cookies in the banner, and we update this page first.",
+      "choiceHeading": "Change your choice",
+      "choiceCurrent": "Your current choice:",
+      "choiceAccepted": "You have accepted cookies.",
+      "choiceRejected": "You have said no thanks to cookies.",
+      "choiceNone": "You have not made a choice yet. The banner is shown at the bottom of the page.",
+      "changeChoice": "Change your choice",
+      "resetDone": "Your choice has been cleared. The banner is shown again at the bottom of the page so you can choose anew."
+    }
   }
 }
