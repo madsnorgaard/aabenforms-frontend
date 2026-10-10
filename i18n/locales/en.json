@@ -243,11 +243,11 @@
       "continue": "Continue",
       "back": "Back",
       "login": {
-        "body": "You are sent to the mock MitID. Log in as the demo person below; no real CPR number is involved.",
-        "personaHeading": "Demo person",
-        "personaBody": "Log in as {name} with these details:",
-        "username": "Username",
-        "password": "Password",
+        "body": "You are sent to the mock MitID. No real CPR number is involved.",
+        "cardHeading": "You are {name} in this demo",
+        "button": "Log in as {name}",
+        "passwordNote": "Mock MitID password: {password}",
+        "switchingPersona": "Signing out the previous demo person so you can log in as {name} ...",
         "loggedInAs": "You are logged in as {name}."
       },
       "inboxStatus": {
@@ -600,6 +600,7 @@
         "heading": "Lars co-signs",
         "intro": "Lars shares custody of Emil. He logs in with his own MitID, opens the invitation in Digital Post and follows the link to the municipality's signing page.",
         "login": "Log in with MitID as Lars",
+        "loginStory": "Lars has received an invitation in Digital Post and must co-sign the application for Emil's school transfer.",
         "waitingHeading": "The case is waiting for your signature",
         "waitingBody": "Open the letter \"Medunderskrift: ansøgning om skoleskift\" (co-signature: school transfer application) and follow the link. The signing page is hosted by the municipality and asks for MitID again.",
         "wrongPersonaHeading": "You are not logged in as Lars",

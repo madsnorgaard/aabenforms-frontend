@@ -20,29 +20,28 @@
           <h2 id="demo-step-login">{{ stepTitle('login') }}</h2>
           <p>{{ $t(config.loginBodyKey || 'demo.wizard.login.body') }}</p>
 
-          <FdsAlert type="info" :heading="$t('demo.wizard.login.personaHeading')" heading-level="h3" class="mb-5">
-            <p class="mb-2">{{ $t('demo.wizard.login.personaBody', { name: config.persona.name }) }}</p>
-            <dl class="demo-wizard__persona">
-              <dt>{{ $t('demo.wizard.login.username') }}</dt>
-              <dd><code>{{ config.persona.username }}</code></dd>
-              <dt>{{ $t('demo.wizard.login.password') }}</dt>
-              <dd><code>{{ config.persona.password }}</code></dd>
-            </dl>
-          </FdsAlert>
 
-          <div v-if="authLoading || (pendingLogin && !isAuthenticated && !authSettled && !redirecting)" class="demo-wizard__loading" role="status">
+          <div v-if="autoLoggingOut" class="demo-wizard__loading" role="status" data-testid="demo-auto-logout">
+            <span class="spinner spinner-small" aria-hidden="true" />
+            {{ $t('demo.wizard.login.switchingPersona', { name: config.persona.name }) }}
+          </div>
+
+          <div v-else-if="authLoading || (pendingLogin && !isAuthenticated && !authSettled && !redirecting)" class="demo-wizard__loading" role="status">
             <span class="spinner spinner-small" aria-hidden="true" />
             {{ $t('demo.byggetilladelse.auth.callbackProcessing') }}
           </div>
 
           <template v-else-if="!isAuthenticated">
-            <!-- The MitID button keeps its own look (MitID brand rules);
-                 the capture-phase click persists the phase before the redirect. -->
-            <ClientOnly>
-              <div class="demo-wizard__login" @click.capture="onLoginClick">
-                <AuthLoginButton fresh />
-              </div>
-            </ClientOnly>
+            <!-- One click per scenario: the button suggests the persona's
+                 username to the mock MitID (login_hint); the password is
+                 still typed there. -->
+            <DemoPersonaLogin
+              :name="config.persona.name"
+              :story="$t(config.storyKey)"
+              :password="config.persona.password"
+              :disabled="redirecting"
+              @login="onLoginClick"
+            />
             <p class="demo-wizard__runtime mt-3">{{ $t('demo.byggetilladelse.kickoff.runtime') }}</p>
           </template>
 
@@ -330,6 +329,7 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const localePath = useLocalePath()
+const { login } = useAuth()
 
 const {
   config,
@@ -481,6 +481,7 @@ const redirecting = ref(false)
 function onLoginClick() {
   redirecting.value = true
   startLogin()
+  login(window.location.pathname, { fresh: true, loginHint: props.config.persona.username })
 }
 
 const contactCtaRef = ref<HTMLElement | null>(null)
@@ -507,6 +508,27 @@ const personaMismatch = computed(() =>
 )
 watch(authLoading, (loading) => { if (!loading) settleAuth() })
 
+// Someone else is already signed in when the page loads (e.g. the previous
+// demo's persona): end that session fully (revoke + IdP logout, back to this
+// page) so the scenario starts from its own persona. Not when the person just
+// came back from a login they chose here - then the step 2 warning explains
+// the mismatch. The warning is also the fallback if the logout fails.
+const cameFromLogin = ref(false)
+watch(pendingLogin, (v) => { if (v) cameFromLogin.value = true }, { immediate: true, flush: 'sync' })
+const autoLogoutTried = ref(false)
+const autoLoggingOut = ref(false)
+watch([personaMismatch, authSettled], async ([mismatch, settled]) => {
+  if (!mismatch || !settled || autoLogoutTried.value || cameFromLogin.value || redirecting.value) return
+  autoLogoutTried.value = true
+  autoLoggingOut.value = true
+  try {
+    await logoutAndReset()
+  }
+  catch {
+    autoLoggingOut.value = false
+  }
+})
+
 // Move focus to the step heading on each step change so keyboard and screen
 // reader users land on the new content; scroll the contact CTA in on complete.
 watch(stepIndex, async () => {
@@ -528,30 +550,6 @@ watch(phase, async (next) => {
 
 <style scoped>
 /* Our own CSS is authored against the 16px root (DKFDS rem values are rebased). */
-.demo-wizard__persona {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 0.25rem 1rem;
-  margin: 0;
-}
-
-.demo-wizard__persona dt {
-  font-weight: 600;
-}
-
-.demo-wizard__persona dd {
-  margin: 0;
-}
-
-.demo-wizard__persona code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.9375rem;
-}
-
-.demo-wizard__login {
-  display: inline-block;
-}
-
 .demo-wizard__runtime,
 .demo-wizard__hint {
   color: #5c5c5c;
@@ -594,7 +592,6 @@ watch(phase, async (next) => {
 }
 
 @media (max-width: 575px) {
-  .demo-wizard__persona,
   .demo-wizard__summary {
     grid-template-columns: 1fr;
   }

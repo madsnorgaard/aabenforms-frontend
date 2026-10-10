@@ -243,11 +243,11 @@
       "continue": "Fortsæt",
       "back": "Tilbage",
       "login": {
-        "body": "Du sendes til mock-MitID. Log ind som demo-personen herunder; intet rigtigt CPR-nummer er i spil.",
-        "personaHeading": "Demo-person",
-        "personaBody": "Log ind som {name} med disse oplysninger:",
-        "username": "Brugernavn",
-        "password": "Adgangskode",
+        "body": "Du sendes til mock-MitID. Intet rigtigt CPR-nummer er i spil.",
+        "cardHeading": "Du er {name} i denne demo",
+        "button": "Log ind som {name}",
+        "passwordNote": "Mock-MitID-kodeord: {password}",
+        "switchingPersona": "Logger den forrige demo-person ud, så du kan logge ind som {name} ...",
         "loggedInAs": "Du er logget ind som {name}."
       },
       "inboxStatus": {
@@ -600,6 +600,7 @@
         "heading": "Lars medunderskriver",
         "intro": "Lars har fælles forældremyndighed over Emil. Han logger ind med sit eget MitID, åbner invitationen i Digital Post og følger linket til kommunens underskriftsside.",
         "login": "Log ind med MitID som Lars",
+        "loginStory": "Lars har fået en invitation i Digital Post og skal medunderskrive ansøgningen om Emils skoleskift.",
         "waitingHeading": "Sagen venter på din underskrift",
         "waitingBody": "Åbn brevet \"Medunderskrift: ansøgning om skoleskift\" og følg linket. Underskriftssiden ligger hos kommunen og kræver MitID igen.",
         "wrongPersonaHeading": "Du er ikke logget ind som Lars",

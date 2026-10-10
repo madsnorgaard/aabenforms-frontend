@@ -27,16 +27,13 @@
             <p class="font-lead">{{ $t('demo.skoleskift.lars.intro') }}</p>
 
             <template v-if="!isAuthenticated">
-              <FdsAlert type="info" :heading="$t('demo.wizard.login.personaHeading')" heading-level="h2" class="mb-5">
-                <p class="mb-2">{{ $t('demo.wizard.login.personaBody', { name: 'Lars Andersen' }) }}</p>
-                <dl class="demo-skoleskift__creds">
-                  <dt>{{ $t('demo.wizard.login.username') }}</dt>
-                  <dd><code>lars.andersen</code></dd>
-                  <dt>{{ $t('demo.wizard.login.password') }}</dt>
-                  <dd><code>test1234</code></dd>
-                </dl>
-              </FdsAlert>
-              <FdsButton variant="primary" @click="loginAsLars">{{ $t('demo.skoleskift.lars.login') }}</FdsButton>
+              <DemoPersonaLogin
+                name="Lars Andersen"
+                :story="$t('demo.skoleskift.lars.loginStory')"
+                password="test1234"
+                heading-level="h2"
+                @login="loginAsLars"
+              />
             </template>
 
             <template v-else>
@@ -124,7 +121,7 @@ useHead({ title: t(scenario.titleKey) })
 async function continueAsLars() {
   // Local logout + revoke only: login(fresh) forces prompt=login at the IdP.
   await userStore.logout({ idpLogout: false })
-  login(LARS_RETURN, { fresh: true })
+  login(LARS_RETURN, { fresh: true, loginHint: 'lars.andersen' })
 }
 
 // --- Lars: his own Digital Post ---------------------------------------------
@@ -152,7 +149,7 @@ async function loadLarsInbox() {
 }
 
 function loginAsLars() {
-  login(LARS_RETURN, { fresh: true })
+  login(LARS_RETURN, { fresh: true, loginHint: 'lars.andersen' })
 }
 
 async function restart() {
@@ -184,14 +181,4 @@ onMounted(() => {
   margin-bottom: 0.4rem;
 }
 
-.demo-skoleskift__creds {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.2rem 1.2rem;
-  margin: 0;
-}
-
-.demo-skoleskift__creds dd {
-  margin: 0;
-}
 </style>
