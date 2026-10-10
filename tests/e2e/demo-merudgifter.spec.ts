@@ -69,7 +69,9 @@ test.describe('Merudgifter demo - smoke', () => {
     await page.waitForURL(/\/demo\/merudgifter/)
     await expect(page.locator('h1')).toHaveText(TITLE)
     await expect(page.locator('nav[aria-label="Trinindikator"] ol.step-indicator > li')).toHaveCount(5)
-    await expect(page.getByText('freja.nielsen')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Du er Freja Nielsen i denne demo' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Log ind som Freja Nielsen' })).toBeVisible()
+    await expect(page.getByText('Mock-MitID-kodeord: test1234')).toBeVisible()
   })
 })
 
@@ -83,7 +85,7 @@ test.describe('Merudgifter demo - full auth', () => {
     await page.goto('/demo/merudgifter', { waitUntil: 'networkidle' })
     await expect(page.locator('h1')).toHaveText(TITLE)
 
-    await page.getByRole('button', { name: /Log ind med MitID/i }).click()
+    await page.getByRole('button', { name: 'Log ind som Freja Nielsen' }).click()
     await page.waitForURL(/realms\/danish-gov-test\/protocol\/openid-connect\/auth/, { timeout: 15000 })
     if (await page.locator('#username').isVisible()) await page.fill('#username', 'freja.nielsen')
     await page.fill('#password', 'test1234')

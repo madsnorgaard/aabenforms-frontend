@@ -53,7 +53,9 @@ test.describe('Byggetilladelse demo - smoke', () => {
     await expect(steps.nth(4).locator('.step-title')).toHaveText('Digital Post')
 
     // Persona hint and the mock-IdP notice.
-    await expect(page.getByText('freja.nielsen')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Du er Freja Nielsen i denne demo' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Log ind som Freja Nielsen' })).toBeVisible()
+    await expect(page.getByText('Mock-MitID-kodeord: test1234')).toBeVisible()
     await expect(page.getByText(/Mock.IdP/i).first()).toBeVisible()
 
     // Capability tags (DKFDS tags as toggle buttons).
@@ -63,7 +65,7 @@ test.describe('Byggetilladelse demo - smoke', () => {
   })
 
   test('step 1 has no WCAG 2.1 AA violations', async ({ page }) => {
-    await page.waitForSelector('button:has-text("MitID")', { timeout: 15000 })
+    await page.waitForSelector('button:has-text("Log ind som")', { timeout: 15000 })
     await scan(page)
   })
 
@@ -80,11 +82,14 @@ test.describe('Byggetilladelse demo - smoke', () => {
       { timeout: 5000 },
     ).catch(() => null)
 
-    await page.getByRole('button', { name: /Log ind med MitID/i }).click()
+    await page.getByRole('button', { name: 'Log ind som Freja Nielsen' }).click()
 
     const req = await navigationPromise
     expect(req, 'expected a request to /mitid/login').not.toBeNull()
     expect(req!.url()).toContain('/mitid/login')
+    // One click: the persona's username travels as a login_hint suggestion.
+    expect(req!.url()).toContain('login_hint=freja.nielsen')
+    expect(req!.url()).toContain('fresh=1')
   })
 })
 
@@ -96,9 +101,10 @@ test.describe('Byggetilladelse demo - full auth', () => {
     await expect(page.locator('h1')).toHaveText('Byggetilladelse')
 
     // Step 1 -> themed Keycloak login.
-    await page.getByRole('button', { name: /Log ind med MitID/i }).click()
+    await page.getByRole('button', { name: 'Log ind som Freja Nielsen' }).click()
     await page.waitForURL(/realms\/danish-gov-test\/protocol\/openid-connect\/auth/, { timeout: 15000 })
-    await page.fill('#username', 'freja.nielsen')
+    // login_hint prefills the username; only the password is typed.
+    await expect(page.locator('#kc-hinted-username')).toHaveText('freja.nielsen')
     await page.fill('#password', 'test1234')
     await page.click('#kc-login')
 

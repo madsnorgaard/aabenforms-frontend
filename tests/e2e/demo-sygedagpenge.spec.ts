@@ -43,7 +43,9 @@ test.describe('Sygedagpenge demo - smoke', () => {
     await page.waitForURL(/\/demo\/sygedagpenge/)
     await expect(page.locator('h1')).toHaveText(TITLE)
     await expect(page.locator('nav[aria-label="Trinindikator"] ol.step-indicator > li')).toHaveCount(5)
-    await expect(page.getByText('mikkel.jensen')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Du er Mikkel Jensen i denne demo' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Log ind som Mikkel Jensen' })).toBeVisible()
+    await expect(page.getByText('Mock-MitID-kodeord: test1234')).toBeVisible()
   })
 })
 
@@ -57,7 +59,7 @@ test.describe('Sygedagpenge demo - full auth', () => {
     await page.goto('/demo/sygedagpenge', { waitUntil: 'networkidle' })
     await expect(page.locator('h1')).toHaveText(TITLE)
 
-    await page.getByRole('button', { name: /Log ind med MitID/i }).click()
+    await page.getByRole('button', { name: 'Log ind som Mikkel Jensen' }).click()
     await page.waitForURL(/realms\/danish-gov-test\/protocol\/openid-connect\/auth/, { timeout: 15000 })
     if (await page.locator('#username').isVisible()) await page.fill('#username', 'mikkel.jensen')
     await page.fill('#password', 'test1234')

@@ -36,7 +36,10 @@ async function scan(page: any) {
 
 async function keycloakLogin(page: any, username: string) {
   await page.waitForURL(/realms\/danish-gov-test\/protocol\/openid-connect\/auth/, { timeout: 15000 })
-  await page.fill('#username', username)
+  // login_hint prefills the username; type it only when it is not.
+  const field = page.locator('#username')
+  if (await field.isVisible()) await field.fill(username)
+  else await expect(page.locator('#kc-hinted-username')).toHaveText(username)
   await page.fill('#password', 'test1234')
   await page.click('#kc-login')
 }
@@ -52,7 +55,9 @@ test.describe('Skoleskift demo - smoke', () => {
     await page.waitForURL(/\/demo\/skoleskift/)
     await expect(page.locator('h1')).toHaveText(TITLE)
     await expect(page.locator('nav[aria-label="Trinindikator"] ol.step-indicator > li')).toHaveCount(5)
-    await expect(page.getByText('freja.nielsen')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Du er Freja Nielsen i denne demo' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Log ind som Freja Nielsen' })).toBeVisible()
+    await expect(page.getByText('Mock-MitID-kodeord: test1234')).toBeVisible()
   })
 })
 
@@ -65,7 +70,7 @@ test.describe('Skoleskift demo - full auth', () => {
     await page.goto('/demo/skoleskift', { waitUntil: 'networkidle' })
     await expect(page.locator('h1')).toHaveText(TITLE)
 
-    await page.getByRole('button', { name: /Log ind med MitID/i }).click()
+    await page.getByRole('button', { name: 'Log ind som Freja Nielsen' }).click()
     await keycloakLogin(page, 'freja.nielsen')
     await page.waitForURL(/\/demo\/skoleskift/, { timeout: 20000 })
 
