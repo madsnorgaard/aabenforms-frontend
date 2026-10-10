@@ -1,7 +1,12 @@
 import type { Config } from 'tailwindcss'
 
-// Danish government design system inspired colors
-// Based on DKFDS (Det Fælles Designsystem) color palette
+// Tailwind is kept for layout utilities during the DKFDS migration only.
+// DKFDS (Det Fælles Designsystem, borger.dk theme) owns base styles,
+// typography, components and the palette; see docs/DKFDS_REFERENCE.md for
+// the load order and the shared-class-name rules.
+//
+// Palette below is the borger.dk theme so any remaining Tailwind colour
+// utility stays on-brand (primary #44831E, link #004D99, etc.).
 const config: Config = {
   content: [
     './components/**/*.{js,vue,ts}',
@@ -10,91 +15,97 @@ const config: Config = {
     './plugins/**/*.{js,ts}',
     './app.vue',
   ],
+  corePlugins: {
+    // DKFDS ships its own reset and element styles; Tailwind's preflight
+    // would override them (and the dkfds.scss load order would not help,
+    // since preflight is injected first).
+    preflight: false,
+    // DKFDS defines .container (1200px, 16px gutter); Tailwind's version
+    // would fight it at every breakpoint.
+    container: false,
+  },
   theme: {
     extend: {
       colors: {
-        // Primary Danish government colors
+        // borger.dk primary green
         primary: {
-          50: '#f0f7ff',
-          100: '#e0effe',
-          200: '#b9ddfe',
-          300: '#7cc4fd',
-          400: '#36a9fa',
-          500: '#0c8feb',
-          600: '#0071c9',  // Main Danish blue
-          700: '#005ba3',
-          800: '#004d86',
-          900: '#00406f',
+          50: '#F3F8EE',
+          100: '#E3F0D8',
+          200: '#C6E0B1',
+          300: '#9CC77F',
+          400: '#6FA64C',
+          500: '#44831E',
+          600: '#44831E',
+          700: '#3C5C22',
+          800: '#2E4A1A',
+          900: '#233614',
         },
-        // Secondary/accent colors
+        // DKFDS link blue / info blue as the accent family
         secondary: {
-          50: '#fdf4f3',
-          100: '#fce8e5',
-          200: '#fad4cf',
-          300: '#f5b4ab',
-          400: '#ed8678',
-          500: '#e1604e',
-          600: '#cd4433',
-          700: '#ac3728',
-          800: '#8f3124',
-          900: '#782d24',
+          50: '#E2F2FB',
+          100: '#C7E4F6',
+          200: '#9CCDED',
+          300: '#5FADDC',
+          400: '#1B86C3',
+          500: '#1B86C3',
+          600: '#004D99',
+          700: '#003D7A',
+          800: '#002E5C',
+          900: '#001F3D',
         },
-        // Success green (Danish style)
         success: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#22c55e',
-          600: '#16a34a',
-          700: '#158140',
-          800: '#166534',
-          900: '#14532d',
+          50: '#DDF7CE',
+          100: '#DDF7CE',
+          200: '#BDEBA0',
+          300: '#8FD66A',
+          400: '#5EB532',
+          500: '#358000',
+          600: '#358000',
+          700: '#2A6600',
+          800: '#204D00',
+          900: '#163300',
         },
-        // Warning/info
         warning: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
+          50: '#FFEECC',
+          100: '#FFEECC',
+          200: '#FFDF99',
+          300: '#FECF66',
+          400: '#FEBB30',
+          500: '#FEBB30',
+          600: '#E0A020',
+          700: '#B5801A',
+          800: '#8A6014',
+          900: '#5F400D',
         },
-        // Error red
         error: {
-          50: '#fef2f2',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#ef4444',
-          600: '#dc2626',
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d',
+          50: '#FFE0E0',
+          100: '#FFE0E0',
+          200: '#FFB3B3',
+          300: '#FF8080',
+          400: '#E63333',
+          500: '#CC0000',
+          600: '#CC0000',
+          700: '#A30000',
+          800: '#7A0000',
+          900: '#520000',
         },
-        // Neutral grays
+        // DKFDS gray 100..600 plus black
         neutral: {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a3a3a3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
+          50: '#F5F5F5',
+          100: '#F5F5F5',
+          200: '#DCDCDC',
+          300: '#BFBFBF',
+          400: '#8E8E8E',
+          500: '#707070',
+          600: '#454545',
+          700: '#454545',
+          800: '#2A2A2A',
+          900: '#1A1A1A',
         },
       },
       fontFamily: {
-        sans: ['Atkinson Hyperlegible Next', 'system-ui', '-apple-system', 'sans-serif'],
-        heading: ['Atkinson Hyperlegible Next', 'system-ui', 'sans-serif'],
+        sans: ['IBM Plex Sans', 'system-ui', '-apple-system', 'sans-serif'],
+        heading: ['IBM Plex Sans', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],
