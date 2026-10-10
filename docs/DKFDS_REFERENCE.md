@@ -195,6 +195,7 @@ and new code should use the Fds components directly.
 | `FdsHeader` | Header rows 1+2, mobile drawer | `solutionTitle`, `authorityName`, `authorityText`, `menuItems`, `liveBadge`; `logo` slot (defaults to the ÅbenForms wordmark), `navigation` slot for row 3. Shows the user name and "Log af" when the user store is authenticated. |
 | `FdsFooter` | Footer | `authorityName`, `authorityText`, `email`, `phone`, `languageSwitcher`; `extra` slot is a fourth column. Links /tilgaengelighed, /cookies, /kontakt. |
 | `FdsSkipLink` | Skip-link (`a.skipnav`) | Rendered once in app.vue, targets `#main`. |
+| `FdsCookieBanner` | Cookiemeddelelse (`.cookie-container`) | First child of `#app`, client-only until consent is read; DKFDS 11 positions it fixed at the bottom. |
 | `FdsLanguageSwitcher` | Sprogvælger | `variant="header|mobile|footer"`, built on `switchLocalePath`. |
 | `FdsButton` | Knapper | `variant="primary|secondary|tertiary|warning"`, `type`, `disabled`, `fullWidthXs`, `iconOnly`. |
 | `FdsInput`, `FdsTextarea`, `FdsSelect` | Inputfelt, Tekstområde, Dropdown | `label`, `hint`, `error`, `required`, `optional` / `requiredLabel` (minority rule), `width="xxs..xl"`, `charWidth`, explicit `id` for error-summary links. |
@@ -205,4 +206,4 @@ and new code should use the Fds components directly.
 
 Pages that render DKFDS end to end: `/` (landing, sections still Tailwind-built on the
 borger.dk palette), `/kontakt`, `/forms/[slug]` (WebformRenderer), `/tilgaengelighed` and
-`/cookies` (placeholders). The DKFDS cookiemeddelelse is a separate issue.
+`/cookies` (real policy page, see `pages/cookies.vue`). The DKFDS cookiemeddelelse is `FdsCookieBanner`, mounted first in `app.vue`; consent lives in the `af_consent` cookie via `composables/useConsent.ts`.
