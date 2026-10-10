@@ -621,6 +621,52 @@
       },
       "option": {
         "currentSchool": "Current school: {school}"
+      },
+      "receipt": {
+        "successHeading": "Co-signature received",
+        "successBody": "Thank you, Lars. Your signature is recorded and the application now goes to the school leader.",
+        "heading": "Receipt",
+        "caseNumber": "Case number",
+        "status": "Status",
+        "child": "Child",
+        "schools": "School transfer",
+        "schoolsValue": "{from} to {to}",
+        "signedBy": "Signed by",
+        "and": "and",
+        "stage": {
+          "awaiting_decision": "Ready for the school leader's decision",
+          "decided": "Decided",
+          "in_progress": "In progress"
+        },
+        "decision": {
+          "medhold": "School transfer approved",
+          "afslag": "School transfer rejected"
+        },
+        "loadError": "The receipt could not be loaded. Try again shortly."
+      },
+      "leaderNext": {
+        "heading": "Next: the school leader decides",
+        "body": "The school leader is a municipal employee. The decision is made in the municipality's case handling with a staff account, not with the citizen's MitID.",
+        "continue": "Continue as school leader"
+      },
+      "leader": {
+        "eyebrow": "School transfer with two parents - decision",
+        "heading": "The school leader decides",
+        "intro": "The school leader logs in to the municipality's case handling with a staff account. Only an employee registered in the organisation's directory can make the decision - otherwise the flow rejects it.",
+        "cardHeading": "You are the school leader in this demo",
+        "story": "Both parents have signed the application for Emil's school transfer. You see the case with masked CPR numbers and choose \"Godkend skoleskift\" (approve) or \"Afvis\" (reject).",
+        "username": "Username: {username}",
+        "login": "Log in as school leader",
+        "back": "Back to Lars"
+      },
+      "ending": {
+        "heading": "The decision has been sent to both parents",
+        "body": "The school leader's decision is registered on the case, and the decision letter was sent through Digital Post to {names}.",
+        "klagefrist": "Appeal deadline",
+        "klagefristBody": "The parents can appeal the decision until {date}.",
+        "inboxHeading": "Lars' Digital Post",
+        "pending": "The decision letters are not registered yet.",
+        "restart": "Run the whole demo again"
       }
     },
     "byggetilladelse": {

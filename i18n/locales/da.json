@@ -621,6 +621,52 @@
       },
       "option": {
         "currentSchool": "Nuværende skole: {school}"
+      },
+      "receipt": {
+        "successHeading": "Medunderskrift modtaget",
+        "successBody": "Tak, Lars. Din underskrift er registreret, og ansøgningen går nu videre til skolelederen.",
+        "heading": "Kvittering",
+        "caseNumber": "Sagsnummer",
+        "status": "Status",
+        "child": "Barn",
+        "schools": "Skoleskift",
+        "schoolsValue": "{from} til {to}",
+        "signedBy": "Underskrevet af",
+        "and": "og",
+        "stage": {
+          "awaiting_decision": "Klar til skoleleders afgørelse",
+          "decided": "Afgjort",
+          "in_progress": "Under behandling"
+        },
+        "decision": {
+          "medhold": "Skoleskift godkendt",
+          "afslag": "Skoleskift afvist"
+        },
+        "loadError": "Kvitteringen kunne ikke hentes. Prøv igen om lidt."
+      },
+      "leaderNext": {
+        "heading": "Næste skridt: skolelederen træffer afgørelse",
+        "body": "Skolelederen er medarbejder i kommunen. Afgørelsen træffes i kommunens sagsbehandling med en medarbejderkonto, ikke med borgerens MitID.",
+        "continue": "Fortsæt som skoleleder"
+      },
+      "leader": {
+        "eyebrow": "Skoleskift med to forældre - afgørelse",
+        "heading": "Skolelederen træffer afgørelse",
+        "intro": "Skolelederen logger ind i kommunens sagsbehandling med sin medarbejderkonto. Kun en medarbejder, der står i organisationens medarbejderregister, kan træffe afgørelsen - ellers afviser flowet den.",
+        "cardHeading": "Du er skoleleder i denne demo",
+        "story": "Ansøgningen om Emils skoleskift er underskrevet af begge forældre. Du ser sagen med maskerede CPR-numre og vælger \"Godkend skoleskift\" eller \"Afvis\".",
+        "username": "Brugernavn: {username}",
+        "login": "Log ind som skoleleder",
+        "back": "Tilbage til Lars"
+      },
+      "ending": {
+        "heading": "Afgørelsen er sendt til begge forældre",
+        "body": "Skolelederens afgørelse er registreret på sagen, og afgørelsesbrevet er sendt med Digital Post til {names}.",
+        "klagefrist": "Klagefrist",
+        "klagefristBody": "Forældrene kan klage over afgørelsen senest {date}.",
+        "inboxHeading": "Lars' Digital Post",
+        "pending": "Afgørelsesbrevene er ikke registreret endnu.",
+        "restart": "Kør hele demoen igen"
       }
     },
     "byggetilladelse": {
