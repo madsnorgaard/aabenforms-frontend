@@ -1,6 +1,7 @@
 import type { DemoScenarioConfig } from '~/types/demo'
 import { byggetilladelseScenario } from './byggetilladelse'
 import { merudgifterScenario } from './merudgifter'
+import { skoleskiftScenario } from './skoleskift'
 
 /**
  * Registry of guided demo scenarios. The hub (/demo) renders one DKFDS card
@@ -37,9 +38,7 @@ const placeholder = (
 export const demoScenarios: DemoScenarioConfig[] = [
   byggetilladelseScenario,
   merudgifterScenario,
-  placeholder('skoleskift', 'school_transfer', 'medium',
-    { username: 'freja.nielsen', password: 'test1234', name: 'Freja Nielsen' },
-    ['child', 'custody', 'parent2'], ['school', 'reason']),
+  skoleskiftScenario,
   placeholder('klage', 'klage', 'advanced',
     { username: 'birthe.jensen', password: 'test1234', name: 'Birthe Jensen' },
     ['cases', 'deadline', 'cpr'], ['reason']),

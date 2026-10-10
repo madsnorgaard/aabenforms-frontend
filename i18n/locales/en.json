@@ -466,6 +466,66 @@
         "githubUrl": "https://github.com/madsnorgaard/aabenforms"
       }
     },
+    "skoleskift": {
+      "title": "School transfer with two parents",
+      "story": "Freja applies for a school transfer for Emil. Custody is fetched from the register, so Lars gets an invitation in Digital Post and co-signs with his own MitID.",
+      "intro": "Log in as Freja, choose the child from the CPR register, choose the school and write the reason. Custody is fetched from the register, so Lars is invited to co-sign. Afterwards you switch to Lars and sign with his MitID.",
+      "formBody": "Custody and the other holder come from the CPR register. You only choose the school and write why the child should transfer.",
+      "fields": {
+        "applicantCpr": "Your CPR number",
+        "child": "Child and custody",
+        "currentSchool": "Current school",
+        "targetSchool": "Wished school",
+        "reason": "Reason for the transfer",
+        "reasonHint": "E.g. moving house, wellbeing or the route to school."
+      },
+      "validation": {
+        "currentSchool": "Choose the child's current school",
+        "targetSchool": "Choose the school the child should transfer to",
+        "reason": "Write a reason for the transfer"
+      },
+      "schools": {
+        "751101": "Frederiksbjerg Skole",
+        "751102": "Katrinebjergskolen",
+        "751103": "Møllevangskolen",
+        "751104": "Risskov Skole",
+        "751105": "Skåde Skole"
+      },
+      "complete": {
+        "heading": "The case is waiting for Lars",
+        "body": "The co-sign invitation has been sent to Lars in Digital Post."
+      },
+      "cosign": {
+        "heading": "Lars co-signs",
+        "waitingHeading": "The case is now waiting for Lars",
+        "waitingBody": "With joint custody a school transfer is a major decision both parents must approve. The flow has sent Lars an invitation in his Digital Post. It is not in Freja's inbox above, and the case is only processed once Lars has signed.",
+        "body": "Lars receives the link in his own Digital Post. Continue as Lars: Freja is logged out, and you log in with Lars' MitID to read the invitation and sign.",
+        "continue": "Continue as Lars"
+      },
+      "lars": {
+        "eyebrow": "School transfer with two parents - part 2 of 2",
+        "heading": "Lars co-signs",
+        "intro": "Lars shares custody of Emil. He logs in with his own MitID, opens the invitation in Digital Post and follows the link to the municipality's signing page.",
+        "login": "Log in with MitID as Lars",
+        "waitingHeading": "The case is waiting for your signature",
+        "waitingBody": "Open the letter \"Medunderskrift: ansøgning om skoleskift\" (co-signature: school transfer application) and follow the link. The signing page is hosted by the municipality and asks for MitID again.",
+        "wrongPersonaHeading": "You are not logged in as Lars",
+        "wrongPersonaBody": "The mock MitID remembered {name}. Start over, or open the page in a private window and log in as lars.andersen.",
+        "restart": "Start over as Freja"
+      },
+      "commentary": {
+        "login": "Freja logs in with mock MitID. The session carries her CPR on the server, so the CPR field never comes from the browser.",
+        "prefill": "CPR Familie+ (SF6006) returns the children in Freja's custody and, for each child, who holds custody. For Emil it is joint with Lars Andersen, so custody and the other parent are not asked.",
+        "form": "The register says who holds custody. The application therefore sends \"joint, the other agrees\", and Lars' own signature is what confirms it.",
+        "workflow": "The flow checks custody against the register, opens and journals the case, looks up the school and sends Lars a co-sign invitation with a signed link valid for 14 days.",
+        "letter": "The invitation goes to Lars' CPR, not Freja's. That is why it is not in Freja's inbox here (it only shows her own letters), and the demo switches persona to Lars."
+      },
+      "disabled": {
+        "heading": "The demo is not enabled",
+        "body": "The school transfer demo needs the mock MitID and is only active in the demo environment.",
+        "primary": "Contact us"
+      }
+    },
     "byggetilladelse": {
       "kickoff": {
         "eyebrow": "Live demo · Building permit",

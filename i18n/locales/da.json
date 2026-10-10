@@ -466,6 +466,66 @@
         "githubUrl": "https://github.com/madsnorgaard/aabenforms"
       }
     },
+    "skoleskift": {
+      "title": "Skoleskift med to forældre",
+      "story": "Freja søger om skoleskift for Emil. Forældremyndigheden hentes fra registret, så Lars får en invitation i Digital Post og medunderskriver med sit eget MitID.",
+      "intro": "Log ind som Freja, vælg barnet fra CPR-registret, vælg skole og skriv begrundelsen. Forældremyndigheden hentes fra registret, så Lars bliver inviteret til at medunderskrive. Bagefter skifter du til Lars og underskriver med hans MitID.",
+      "formBody": "Forældremyndigheden og den anden indehaver kommer fra CPR-registret. Du skal kun vælge skole og skrive, hvorfor barnet skal skifte.",
+      "fields": {
+        "applicantCpr": "Dit CPR-nummer",
+        "child": "Barn og forældremyndighed",
+        "currentSchool": "Nuværende skole",
+        "targetSchool": "Ønsket skole",
+        "reason": "Begrundelse for skoleskiftet",
+        "reasonHint": "Fx flytning, trivsel eller skolevej."
+      },
+      "validation": {
+        "currentSchool": "Vælg barnets nuværende skole",
+        "targetSchool": "Vælg den skole, barnet skal skifte til",
+        "reason": "Skriv en begrundelse for skoleskiftet"
+      },
+      "schools": {
+        "751101": "Frederiksbjerg Skole",
+        "751102": "Katrinebjergskolen",
+        "751103": "Møllevangskolen",
+        "751104": "Risskov Skole",
+        "751105": "Skåde Skole"
+      },
+      "complete": {
+        "heading": "Sagen venter på Lars",
+        "body": "Invitationen til medunderskrift er sendt til Lars i Digital Post."
+      },
+      "cosign": {
+        "heading": "Lars medunderskriver",
+        "waitingHeading": "Sagen venter nu på Lars",
+        "waitingBody": "Ved fælles forældremyndighed er skoleskift en væsentlig beslutning, som begge forældre skal godkende. Flowet har sendt Lars en invitation i hans Digital Post. Den ligger ikke i Frejas indbakke herover, og sagen behandles først, når Lars har underskrevet.",
+        "body": "Lars modtager linket i sin egen Digital Post. Fortsæt som Lars: Freja bliver logget ud, og du logger ind med Lars' MitID for at læse invitationen og underskrive.",
+        "continue": "Fortsæt som Lars"
+      },
+      "lars": {
+        "eyebrow": "Skoleskift med to forældre - trin 2 af 2",
+        "heading": "Lars medunderskriver",
+        "intro": "Lars har fælles forældremyndighed over Emil. Han logger ind med sit eget MitID, åbner invitationen i Digital Post og følger linket til kommunens underskriftsside.",
+        "login": "Log ind med MitID som Lars",
+        "waitingHeading": "Sagen venter på din underskrift",
+        "waitingBody": "Åbn brevet \"Medunderskrift: ansøgning om skoleskift\" og følg linket. Underskriftssiden ligger hos kommunen og kræver MitID igen.",
+        "wrongPersonaHeading": "Du er ikke logget ind som Lars",
+        "wrongPersonaBody": "Mock-MitID huskede {name}. Start forfra, eller åbn siden i et privat vindue og log ind som lars.andersen.",
+        "restart": "Start forfra som Freja"
+      },
+      "commentary": {
+        "login": "Freja logger ind med mock-MitID. Sessionen bærer hendes CPR på serveren, så CPR-feltet aldrig kommer fra browseren.",
+        "prefill": "CPR Familie+ (SF6006) returnerer børnene i Frejas varetægt og for hvert barn, hvem der har forældremyndigheden. For Emil er den fælles med Lars Andersen, så forældremyndighed og den anden forælder spørges der ikke om.",
+        "form": "Registret siger, hvem der har forældremyndigheden. Ansøgningen sender derfor \"fælles, den anden er enig\", og det er Lars' egen underskrift, der bekræfter det.",
+        "workflow": "Flowet kontrollerer forældremyndigheden mod registret, opretter og journaliserer sagen, slår skolen op og sender Lars en invitation til medunderskrift med et signeret link, der gælder i 14 dage.",
+        "letter": "Invitationen går til Lars' CPR, ikke til Frejas. Derfor ligger den ikke i Frejas indbakke her (den viser kun hendes egne breve), og demoen skifter persona til Lars."
+      },
+      "disabled": {
+        "heading": "Demoen er ikke slået til",
+        "body": "Skoleskift-demoen kræver mock-MitID og er kun aktiv i demomiljøet.",
+        "primary": "Kontakt os"
+      }
+    },
     "byggetilladelse": {
       "kickoff": {
         "eyebrow": "Live demo · Byggetilladelse",
