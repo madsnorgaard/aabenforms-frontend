@@ -87,7 +87,10 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.API_BASE_URL || 'https://aabenforms.ddev.site',
       mitidEnabled: process.env.NUXT_PUBLIC_MITID_ENABLED !== 'false',
-      demoByggetilladelseEnabled: process.env.NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED === 'true'
+      demoByggetilladelseEnabled: process.env.NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED === 'true',
+      // URL of a statistics script. Empty (default) = none. When set it is
+      // injected by plugins/consent.client.ts only after cookie acceptance.
+      analyticsScript: process.env.NUXT_PUBLIC_ANALYTICS_SCRIPT || ''
     }
   },
 
