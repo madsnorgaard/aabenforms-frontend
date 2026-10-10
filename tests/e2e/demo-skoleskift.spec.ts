@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process'
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
@@ -10,9 +11,16 @@ import AxeBuilder from '@axe-core/playwright'
  *    submits; the flow sends Lars a co-sign invitation. Then "Fortsæt som
  *    Lars": Lars logs in, opens the invitation in his own Digital Post and
  *    follows its link to the backend's /parent-approval route, logs in with
- *    MitID there and approves. Run on the host network so the browser
- *    reaches localhost:8080. SCREENSHOT_DIR stores step 2 and step 5 at
- *    1400x900.
+ *    MitID there and approves. The backend returns him to his receipt on the
+ *    frontend (loaded with his own MitID session). "Fortsæt som skoleleder":
+ *    the school leader logs in to the backend case handling with a Drupal
+ *    staff account (skoleleder, created by drush
+ *    aabenforms:demo:ensure-skoleleder) and approves; the decision flow's
+ *    employee gate passes for that user and the decision letter goes to both
+ *    parents. Back on Lars' page the ending shows the klagefrist, and both
+ *    parents' Digital Post holds the letter (Freja's checked through a
+ *    drush-seeded session, DDEV only). Run on the host network so the browser
+ *    reaches localhost:8080. SCREENSHOT_DIR stores the steps at 1400x900.
  *
  * Requires NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true at build time (the
  * shared demo flag).
@@ -22,6 +30,19 @@ const FULL_AUTH = process.env.E2E_FULL_AUTH === '1'
 const SCREENSHOT_DIR = process.env.SCREENSHOT_DIR
 const WCAG_AA_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
 const TITLE = 'Skoleskift med to forældre'
+const API_BASE = process.env.API_BASE || 'https://aabenforms.ddev.site'
+const BACKEND_DIR = process.env.BACKEND_DIR || '../backend'
+const LEADER_PASSWORD = process.env.E2E_SKOLELEDER_PASSWORD || 'test1234'
+
+/** Recent Digital Post subjects for a persona, via a drush-seeded session (DDEV only). */
+async function recentSubjects(request: any, persona: string): Promise<{ subject: string, created: number }[]> {
+  const out = execSync(`ddev drush aabenforms:seed-mitid-session ${persona} 2>&1`, { cwd: BACKEND_DIR }).toString()
+  const sid = /Workflow id:\s*(\S+)/.exec(out)?.[1]
+  expect(sid, out).toBeTruthy()
+  const res = await request.get(`${API_BASE}/api/digital-post/recent?session=${encodeURIComponent(sid!)}&limit=5`, { ignoreHTTPSErrors: true })
+  expect(res.ok()).toBeTruthy()
+  return ((await res.json()).data ?? []).map((l: any) => ({ subject: l.subject, created: l.created }))
+}
 
 function formatViolations(violations: any[]): string {
   return violations
@@ -63,12 +84,15 @@ test.describe('Skoleskift demo - smoke', () => {
 
 test.describe('Skoleskift demo - full auth', () => {
   test.skip(!FULL_AUTH, 'set E2E_FULL_AUTH=1 to run; requires host-network access to localhost:8080')
-  test.setTimeout(180000)
+  test.setTimeout(300000)
 
-  test('freja applies for Emil, lars co-signs from his Digital Post', async ({ page, context }) => {
+  test('freja applies, lars co-signs, the school leader decides, both parents get the letter', async ({ page, context }) => {
     await page.setViewportSize({ width: 1400, height: 900 })
     await page.goto('/demo/skoleskift', { waitUntil: 'networkidle' })
     await expect(page.locator('h1')).toHaveText(TITLE)
+    // Answer the cookie banner once so it does not cover the screenshots.
+    const noCookies = page.getByRole('button', { name: 'Nej tak til cookies' })
+    if (await noCookies.isVisible().catch(() => false)) await noCookies.click()
 
     await page.getByRole('button', { name: 'Log ind som Freja Nielsen' }).click()
     await keycloakLogin(page, 'freja.nielsen')
@@ -156,8 +180,90 @@ test.describe('Skoleskift demo - full auth', () => {
     // repeated fast posts), so read the page like a parent would first.
     await page.waitForTimeout(15000)
     await page.locator('form input[type="submit"], form button[type="submit"]').last().click()
-    await page.waitForURL(/\/parent-approval\/complete\/approve/, { timeout: 20000 })
-    await expect(page.getByRole('heading', { name: 'Approval Complete' })).toBeVisible()
-    await expect(page.getByText('Your approval has been recorded')).toBeVisible()
+    // Back on the frontend: Lars' receipt, from his own MitID session.
+    await page.waitForURL(/\/demo\/skoleskift\?som=lars&medunderskrevet=1/, { timeout: 20000 })
+    await expect(page.getByRole('heading', { name: 'Medunderskrift modtaget' })).toBeVisible({ timeout: 15000 })
+    const receipt = page.locator('[data-testid="skoleskift-receipt"]')
+    await expect(receipt.getByTestId('skoleskift-receipt-status')).toHaveText('Klar til skoleleders afgørelse')
+    await expect(receipt.getByTestId('skoleskift-receipt-signed')).toHaveText('Freja Nielsen og Lars Andersen')
+    const caseNumber = (await receipt.getByTestId('skoleskift-receipt-case').innerText()).trim()
+    expect(caseNumber).toMatch(/^#\d+$/)
+    await expect(page.locator('body')).not.toContainText(/\d{6}-?\d{4}/)
+    await scan(page)
+    if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-lars-receipt.png`, fullPage: true })
+
+    // The school leader: a Drupal staff login on the backend, not MitID.
+    await page.getByTestId('skoleskift-continue-leader').click()
+    await page.waitForURL(/\/demo\/skoleskift\?som=skoleleder/)
+    await expect(page.locator('h1')).toHaveText('Skolelederen træffer afgørelse')
+    await scan(page)
+    if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-leader-intro.png`, fullPage: true })
+    await page.getByRole('link', { name: 'Log ind som skoleleder' }).click()
+    await page.waitForURL(/\/user\/login/, { timeout: 15000, waitUntil: 'domcontentloaded' })
+    await page.fill('#edit-name', 'skoleleder')
+    await page.fill('#edit-pass', LEADER_PASSWORD)
+    await page.locator('#edit-submit').click()
+    await page.waitForURL(/\/sagsbehandling\/skoleskift(\?|$)/, { timeout: 15000, waitUntil: 'domcontentloaded' })
+    const row = page.locator('[data-testid="skoleskift-inbox"] tr', { hasText: caseNumber })
+    await expect(row).toContainText('Emil Nielsen Andersen')
+    await expect(row).toContainText('Freja Nielsen')
+    await expect(row).toContainText('Lars Andersen')
+    await row.getByRole('link', { name: 'Åbn sag' }).click()
+    await page.waitForURL(/\/sagsbehandling\/skoleskift\/\d+$/, { waitUntil: 'domcontentloaded' })
+    const decision = page.locator('[data-testid="skoleskift-decision"]')
+    await expect(decision).toContainText(`Sag ${caseNumber}`)
+    await expect(decision).toContainText(/\d{6}-XXXX/)
+    await expect(decision).not.toContainText(/\d{6}-?\d{4}(?!X)/)
+    await expect(decision).toContainText('Risskov Skole')
+    // Afvis requires a begrundelse (the browser blocks the empty field; the
+    // server-side check is covered by SchoolTransferReceiptTest).
+    await page.getByLabel('Afvis').check()
+    const reason = page.locator('textarea[name="rejection_reason"]')
+    await expect(reason).toBeVisible()
+    await page.getByRole('button', { name: 'Send afgørelse' }).click()
+    expect(await reason.evaluate((el: HTMLTextAreaElement) => el.validity.valueMissing)).toBe(true)
+    await expect(page).toHaveURL(/\/sagsbehandling\/skoleskift\/\d+$/)
+    await page.getByLabel('Godkend skoleskift').check()
+    if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-leader-decision.png`, fullPage: true })
+    // Honeypot covers every Drupal form (time limit), staff forms included.
+    await page.waitForTimeout(15000)
+    const decidedAt = Math.floor(Date.now() / 1000) - 5
+    await page.getByRole('button', { name: 'Send afgørelse' }).click()
+    await page.waitForURL(/\/sagsbehandling\/skoleskift\/\d+\/afgjort/, { waitUntil: 'domcontentloaded' })
+    const decided = page.locator('[data-testid="skoleskift-decided"]')
+    await expect(decided).toContainText('Afgørelsen er registreret på sagen')
+    await expect(decided).toContainText('Skoleskift godkendt')
+    await expect(decided).toContainText('Freja Nielsen, Lars Andersen')
+
+    // Sign the leader out; back to Lars' page for the ending.
+    await page.waitForTimeout(15000)
+    await page.getByRole('button', { name: 'Log ud og vend tilbage til demoen' }).click()
+    await page.waitForURL(/\/demo\/skoleskift\?som=lars&afgjort=1/, { timeout: 20000 })
+    const ending = page.locator('[data-testid="skoleskift-ending"]')
+    await expect(ending.getByRole('heading', { name: 'Afgørelsen er sendt til begge forældre' })).toBeVisible({ timeout: 15000 })
+    await expect(ending).toContainText('Freja Nielsen og Lars Andersen')
+    await expect(page.getByTestId('skoleskift-klagefrist')).toContainText(/senest \d{1,2}\. \w+ \d{4}/)
+    await expect(page.getByTestId('skoleskift-receipt-status')).toHaveText('Skoleskift godkendt')
+    await expect(page.locator('.demo-inbox__item', { hasText: 'Afgørelse: skoleskift' }).first()).toBeVisible({ timeout: 15000 })
+    await scan(page)
+    if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-ending.png`, fullPage: true })
+
+    // Both parents' Digital Post holds the decision letter.
+    for (const persona of ['freja', 'lars']) {
+      const letters = await recentSubjects(page.request, persona)
+      expect(letters.some((l) => l.subject === 'Afgørelse: skoleskift' && l.created >= decidedAt), `${persona}: ${JSON.stringify(letters)}`).toBeTruthy()
+    }
+
+    // Run the whole demo again: full logout, back to Freja's start.
+    await page.getByRole('button', { name: 'Kør hele demoen igen' }).click()
+    // The parent-approval MitID handoff consumed the browser's server-side
+    // logout hint, so Keycloak may ask to confirm the IdP logout (no
+    // id_token_hint). Confirm it; the IdP session still ends.
+    await page.waitForURL(/(\/demo\/skoleskift\/?$|openid-connect\/logout)/, { timeout: 30000 })
+    if (/openid-connect\/logout/.test(page.url())) {
+      await page.getByRole('button', { name: /Logout|Log ud/ }).click()
+    }
+    await page.waitForURL(/\/demo\/skoleskift\/?$/, { timeout: 30000 })
+    await expect(page.getByRole('button', { name: 'Log ind som Freja Nielsen' })).toBeVisible({ timeout: 15000 })
   })
 })
