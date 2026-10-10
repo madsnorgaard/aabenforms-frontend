@@ -1,13 +1,15 @@
 import { ref } from 'vue'
-import type { DemoScenarioConfig, PrefillField } from '~/types/demo'
+import type { DemoScenarioConfig } from '~/types/demo'
 
 /**
  * Merudgifter (merudgifter, SEL §41): the medium scenario.
  *
  * Fetched: the applicant CPR from the MitID login (live-capable rail), the
  * children in Freja's custody from CPR Familie+ (SF6006, demo rail) as a
- * radio choice, and the household income from eIndkomst (demo rail). Typed:
- * the child's disability and the monthly extra expense.
+ * radio choice. Household income is deliberately NOT fetched: the SEL §41
+ * merudgiftsydelse for a child does not depend on the parents' income, so
+ * looking it up would breach data minimisation. Typed: the child's
+ * disability and the monthly extra expense.
  *
  * The ECA flow (merudgifter_flow) decides on the amount: 1.000 kr/md or more
  * gives medhold and SF2900 close; under that it runs partshøring, afslag and
@@ -31,13 +33,6 @@ function outcomeVariant(): 'medhold' | 'afslag' | 'neutral' {
   return lastAmount.value >= MERUDGIFTER_THRESHOLD ? 'medhold' : 'afslag'
 }
 
-function formatKroner(value: PrefillField['value']): string {
-  const n = Number(value)
-  if (value === null || value === '' || Number.isNaN(n)) return ''
-  const digits = Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-  return `${digits} kr.`
-}
-
 export const merudgifterScenario: DemoScenarioConfig = {
   id: 'merudgifter',
   webformId: 'merudgifter',
@@ -51,7 +46,7 @@ export const merudgifterScenario: DemoScenarioConfig = {
   introKey: 'demo.merudgifter.intro',
   fetchedKeys: [
     'demo.hub.scenarios.merudgifter.fetched.children',
-    'demo.hub.scenarios.merudgifter.fetched.income',
+    'demo.hub.scenarios.merudgifter.fetched.noIncome',
     'demo.hub.scenarios.merudgifter.fetched.cpr',
   ],
   typedKeys: [
@@ -67,11 +62,6 @@ export const merudgifterScenario: DemoScenarioConfig = {
       key: 'child_cpr',
       labelKey: 'demo.merudgifter.fields.child',
       option: { valueProp: 'cpr', labelProp: 'name', hintProps: ['cpr', 'birth_date'] },
-    },
-    {
-      key: 'household_income',
-      labelKey: 'demo.merudgifter.fields.householdIncome',
-      format: formatKroner,
     },
   ],
 

@@ -6,7 +6,8 @@ import AxeBuilder from '@axe-core/playwright'
  *
  *  - Smoke (default): the hub card links to the wizard, which renders step 1.
  *  - Full (E2E_FULL_AUTH=1): logs in as freja.nielsen through the themed
- *    Keycloak, picks Emil from the CPR Familie+ options, types the need and
+ *    Keycloak, picks Emil from the CPR Familie+ options (no income row:
+ *    SEL §41 does not depend on income), types the need and
  *    2.500 kr/md (medhold), then runs again with 800 kr/md (partshøring,
  *    afslag, klagefrist). Run on the host network so the browser reaches
  *    localhost:8080. SCREENSHOT_DIR stores step 2 and step 5 at 1400x900.
@@ -40,8 +41,8 @@ async function step2ChooseEmil(page: any) {
   await expect(table.locator('tr[data-prefill-key="applicant_cpr"]')).toContainText(/\d{6}-XXXX/)
   await expect(table.locator('tr[data-prefill-key="applicant_cpr"] .badge')).toHaveText('LIVE-PARAT')
   await expect(table.locator('tr[data-prefill-key="child_cpr"] .badge')).toHaveText('DEMO')
-  await expect(table.locator('tr[data-prefill-key="household_income"]')).toContainText(/\d{1,3}(\.\d{3})* kr\./)
-  await expect(table.locator('tr[data-prefill-key="household_income"] .badge')).toHaveText('DEMO')
+  // SEL §41 does not depend on the parents' income: it is never fetched.
+  await expect(table.locator('tr[data-prefill-key="household_income"]')).toHaveCount(0)
   await page.getByRole('radio', { name: /Emil/ }).check()
 }
 
@@ -77,18 +78,19 @@ test.describe('Merudgifter demo - full auth', () => {
   test.setTimeout(150000)
 
   test('freja chooses Emil: 2.500 kr gives medhold, 800 kr gives afslag', async ({ page }) => {
+    await page.context().clearCookies()
     await page.setViewportSize({ width: 1400, height: 900 })
     await page.goto('/demo/merudgifter', { waitUntil: 'networkidle' })
     await expect(page.locator('h1')).toHaveText(TITLE)
 
     await page.getByRole('button', { name: /Log ind med MitID/i }).click()
     await page.waitForURL(/realms\/danish-gov-test\/protocol\/openid-connect\/auth/, { timeout: 15000 })
-    await page.fill('#username', 'freja.nielsen')
+    if (await page.locator('#username').isVisible()) await page.fill('#username', 'freja.nielsen')
     await page.fill('#password', 'test1234')
     await page.click('#kc-login')
     await page.waitForURL(/\/demo\/merudgifter/, { timeout: 20000 })
 
-    // Step 2: children as a radio choice, income row.
+    // Step 2: children as a radio choice, no income row.
     await step2ChooseEmil(page)
     await scan(page)
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/merudgifter-step2.png`, fullPage: true })
