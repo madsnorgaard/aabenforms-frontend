@@ -1,5 +1,5 @@
 <template>
-  <FdsHeader :live-badge="liveBadge">
+  <FdsHeader :live-badge="liveBadge" :solution-title="solutionTitle" :authority-name="authorityName" :authority-text="authorityText">
     <template v-if="$slots['nav-extra']" #navigation>
       <div class="container py-3">
         <slot name="nav-extra" />
@@ -18,6 +18,9 @@ withDefaults(defineProps<{
   sticky?: boolean
   liveBadge?: boolean
   backLink?: boolean
+  solutionTitle?: string
+  authorityName?: string
+  authorityText?: string
 }>(), {
   maxWidthClass: '',
   sticky: false,

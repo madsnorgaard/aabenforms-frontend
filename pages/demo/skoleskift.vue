@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FdsHeader :authority-name="$t('demo.hub.authority')" live-badge />
+    <FdsHeader :solution-title="$t('fds.header.demoSolutionTitle')" :authority-name="$t('demo.hub.authority')" live-badge />
 
     <main id="main" tabindex="-1" class="container py-8">
       <template v-if="!enabled">

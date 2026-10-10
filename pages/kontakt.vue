@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader />
+    <SiteHeader :solution-title="$t('fds.nav.contact')" />
 
     <main id="main" tabindex="-1" class="container py-8">
       <div class="row">

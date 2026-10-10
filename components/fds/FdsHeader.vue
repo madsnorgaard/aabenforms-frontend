@@ -1,7 +1,5 @@
 <template>
   <header class="header">
-    <FdsLanguageSwitcher v-if="languageSwitcher" variant="header" />
-
     <!-- Row 1: portal/logo row with the signed-in user and "Log af". -->
     <div class="portal-info">
       <div class="portal-info-inner container">
@@ -14,6 +12,7 @@
         <button type="button" class="function-link button-menu-open js-menu-open ml-auto d-print-none" aria-haspopup="dialog">
           <svg class="icon-svg" focusable="false" aria-hidden="true"><use href="#menu" /></svg>{{ $t('fds.header.menu') }}
         </button>
+        <FdsLanguageSwitcher v-if="languageSwitcher" variant="portal" class="fds-portal-language" />
         <div v-if="authenticated" class="portal-user">
           <p class="user">{{ userName }}</p>
           <button type="button" class="function-link d-print-none log-off" @click="logOff">
@@ -28,10 +27,10 @@
       <div class="solution-info-inner container">
         <div class="solution-heading">
           <NuxtLink :to="localePath(logoHref)">{{ solutionTitle || $t('fds.header.solutionTitle') }}</NuxtLink>
-          <span v-if="liveBadge" class="badge ml-3">{{ $t('fds.header.liveDemo') }}</span>
+          <span v-if="liveBadge" class="badge badge-success ml-3">{{ $t('fds.header.liveDemo') }}</span>
         </div>
-        <div class="additional-info">
-          <p><strong class="authority-name">{{ authorityName || $t('fds.header.authorityName') }}</strong></p>
+        <div v-if="authorityName || authorityText" class="additional-info">
+          <p v-if="authorityName"><strong class="authority-name">{{ authorityName }}</strong></p>
           <p v-if="authorityText">{{ authorityText }}</p>
         </div>
       </div>
@@ -68,9 +67,9 @@
         </ul>
       </nav>
       <FdsLanguageSwitcher v-if="languageSwitcher" variant="mobile" />
-      <div class="solution-info-mobile">
+      <div v-if="authorityName || authorityText" class="solution-info-mobile">
         <h3 class="sr-only">{{ $t('fds.header.authorityHeading') }}</h3>
-        <p class="mb-2"><strong class="authority-name">{{ authorityName || $t('fds.header.authorityName') }}</strong></p>
+        <p v-if="authorityName" class="mb-2"><strong class="authority-name">{{ authorityName }}</strong></p>
         <p v-if="authorityText">{{ authorityText }}</p>
       </div>
     </div>
@@ -81,7 +80,11 @@
 // DKFDS Header, rows 1 and 2 (mandatory) plus the mobile drawer. Row 3
 // (desktop navigation) can be provided through the `navigation` slot with
 // DKFDS navigation-menu markup. The logo slot defaults to the ÅbenForms
-// wordmark; a kommune drops its own <img> in.
+// wordmark; a kommune drops its own <img> in. Each row says something
+// different: row 1 is the platform (logo + wordmark), row 2 is the page's
+// solution title on the left and the authority (kommune) on the right; the
+// authority block is omitted when no authority is given. The language
+// switcher sits in row 1 on the right, next to the user and "Log af".
 export interface FdsMenuItem {
   to: string
   label: string
@@ -155,6 +158,24 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   flex-shrink: 0;
+}
+
+/* Sprogvælger in the portal row: right-aligned, vertically centred with the
+   logo, before the user block. Hidden below lg like DKFDS's own header
+   variant; the mobile drawer carries the list variant. */
+.fds-portal-language {
+  margin-left: auto;
+  display: none;
+  align-items: center;
+}
+
+@media (min-width: 992px) {
+  .fds-portal-language {
+    display: flex;
+  }
+  .fds-portal-language + .portal-user {
+    margin-left: 24px;
+  }
 }
 
 .fds-logo-text {

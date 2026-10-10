@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SiteHeader />
+    <SiteHeader :solution-title="$t('fds.footer.accessibility')" />
     <main id="main" tabindex="-1" class="container py-8">
       <div class="row">
         <div class="col-12 col-lg-8">

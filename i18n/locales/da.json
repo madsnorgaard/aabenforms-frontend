@@ -1004,8 +1004,9 @@
       "userHeading": "Bruger",
       "authorityHeading": "Myndighed",
       "mainMenu": "Hovedmenu",
-      "solutionTitle": "ÅbenForms",
-      "authorityName": "ÅbenForms",
+      "solutionTitle": "Selvbetjening for kommuner",
+      "authorityName": "Open source-platform",
+      "demoSolutionTitle": "Selvbetjening",
       "logoLabel": "ÅbenForms - gå til forsiden",
       "liveDemo": "Live demo"
     },
