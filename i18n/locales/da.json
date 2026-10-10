@@ -230,6 +230,10 @@
         "password": "Adgangskode",
         "loggedInAs": "Du er logget ind som {name}."
       },
+      "inboxStatus": {
+        "success": "Leveret",
+        "failure": "Fejlet"
+      },
       "prefill": {
         "heading": "Det spurgte vi ikke om",
         "body": "Kommunen har allerede disse oplysninger. Her kan du se, hvad vi hentede, hvor det kommer fra, og med hvilken hjemmel. Hver linje har sit eget revisionsnummer.",

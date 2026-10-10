@@ -132,7 +132,7 @@ test.describe('Byggetilladelse demo - full auth', () => {
 
     // Step 4: workflow steps reveal, then step 5 with the letter.
     await expect(page.getByRole('heading', { name: 'Sagsbehandling' })).toBeVisible({ timeout: 15000 })
-    await expect(page.getByRole('heading', { name: 'Digital Post' })).toBeVisible({ timeout: 20000 })
+    await expect(page.locator('#demo-step-letter')).toBeVisible({ timeout: 20000 })
     await expect(page.getByText(/Modtaget: ansøgning om byggetilladelse/i).first()).toBeVisible({ timeout: 20000 })
     await expect(page.getByRole('button', { name: 'Kør igen' })).toBeVisible({ timeout: 15000 })
     await expect(page.locator('ol.step-indicator li.current .step-title').first()).toHaveText('Digital Post')

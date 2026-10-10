@@ -230,6 +230,10 @@
         "password": "Password",
         "loggedInAs": "You are logged in as {name}."
       },
+      "inboxStatus": {
+        "success": "Delivered",
+        "failure": "Failed"
+      },
       "prefill": {
         "heading": "What we did not ask for",
         "body": "The municipality already holds this information. Here you can see what we fetched, where it comes from, and on which legal basis. Every row has its own audit number.",
