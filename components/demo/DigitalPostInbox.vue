@@ -95,7 +95,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { DigitalPostLetter } from '~/composables/useByggetilladelseDemo'
+import type { DigitalPostLetter } from '~/types/demo'
 
 defineProps<{
   letters: DigitalPostLetter[]

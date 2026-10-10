@@ -51,6 +51,12 @@
           >
             {{ $t('hero.cta.book') }}
           </NuxtLink>
+          <NuxtLink
+            to="/demo"
+            class="inline-flex items-center px-3 py-2 font-semibold"
+          >
+            {{ $t('demo.hub.allDemos') }}
+          </NuxtLink>
         </div>
       </div>
 
