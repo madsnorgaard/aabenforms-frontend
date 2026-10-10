@@ -18,24 +18,6 @@ import type { DemoScenarioConfig, PrefillOption } from '~/types/demo'
  */
 
 /**
- * Demo fallback: the CPR Familie+ options are masked (DDMMYY-XXXX) and the
- * custody check in the flow (aabenforms_custody_verify) and the co-sign
- * recipient check do not resolve masked CPRs. Until the backend resolves a
- * masked option against the session's own register lookup, the demo sends
- * the fictitious test CPRs of DemoFamilyRepository. Never real persons.
- */
-const DEMO_CPR: Record<string, string> = {
-  '010918-XXXX': '0109182345', // Emil Nielsen Andersen
-  '200510-XXXX': '2005102345', // Oliver Nielsen Andersen
-  '080375-XXXX': '0803755210', // Lars Andersen
-}
-
-function demoCpr(masked: unknown): string {
-  const value = String(masked ?? '')
-  return DEMO_CPR[value] ?? value
-}
-
-/**
  * The register says who holds custody; the applicant only confirms that
  * the other holder agrees. Registry 'joint' therefore maps to the webform's
  * 'joint_agreed', which is the branch that sends the co-sign invitation.
@@ -45,11 +27,6 @@ function custodyStatus(child: PrefillOption | null): string {
   if (custody === 'sole') return 'sole'
   if (custody === 'joint') return 'joint_agreed'
   return ''
-}
-
-function otherGuardian(child: PrefillOption | null): { name?: string; cpr?: string } {
-  const g = child?.other_guardian
-  return g && typeof g === 'object' ? (g as { name?: string; cpr?: string }) : {}
 }
 
 const schoolOptions = ['751101', '751102', '751103', '751104', '751105'].map((value) => ({
@@ -136,24 +113,27 @@ export const skoleskiftScenario: DemoScenarioConfig = {
     },
   ],
 
-  // applicant_cpr travels masked: the backend swaps in the CPR from the real
-  // MitID session (fillCprFromMitIdSession). child_cpr and parent2_cpr use
-  // the demo fallback above (the flow cannot verify masked CPRs).
+  // No real CPR leaves the browser. applicant_cpr travels masked and the
+  // backend swaps in the CPR from the real MitID session
+  // (fillCprFromMitIdSession). child_cpr is the masked option value and,
+  // with child_name exactly as the registry has it, the backend resolves the
+  // child among the applicant's own custody children
+  // (WebformApiController::resolveFamilyCprs). parent2_cpr is always taken
+  // from the registry server-side, so the client sends ''.
   submitBody: ({ values, choices, sessionId }) => {
     const child = choices.child_cpr ?? null
     const status = custodyStatus(child)
-    const parent2 = otherGuardian(child)
     return {
       data: {
         workflow_id: sessionId,
         applicant_cpr: values.applicant_cpr ?? '',
         child_name: String(child?.name ?? ''),
-        child_cpr: demoCpr(child?.cpr),
+        child_cpr: String(child?.cpr ?? ''),
         current_school: String(((child?.current_school ?? null) as { institution_number?: string } | null)?.institution_number ?? ''),
         target_school: values.target_school ?? '',
         reason: (values.reason ?? '').trim(),
         custody_status: status,
-        parent2_cpr: status === 'joint_agreed' ? demoCpr(parent2.cpr) : '',
+        parent2_cpr: '',
         parent2_email: '',
       },
     }
