@@ -420,6 +420,47 @@
         "Audit log entry created for regulatory compliance": "Revisionslog-post oprettet for lovmæssig overholdelse"
       }
     },
+    "klage": {
+      "title": "Klage over en afgørelse",
+      "story": "Mikkel hjælper sin mor Birthe. Hun logger ind med sit eget MitID. Sagen, afgørelsen og klagefristen hentes, hun skriver kun hvorfor hun klager.",
+      "intro": "Digital inklusion ved køkkenbordet: Mikkel sidder ved siden af, men Birthe logger selv ind med MitID. Hendes sager, afgørelsen og klagefristen hentes fra sagsregistret, så hun kun skal skrive, hvorfor hun klager.",
+      "hub": {
+        "fetched": {
+          "cases": "Dine sager med afgørelse (sagsregister)",
+          "deadline": "Klagefrist, beregnet med helligdage (sagsregister)",
+          "cpr": "Navn og CPR (MitID)"
+        },
+        "typed": {
+          "reason": "Hvorfor du klager"
+        }
+      },
+      "login": {
+        "body": "Birthe logger ind med sit eget MitID. Mikkel hjælper ved køkkenbordet, men logger aldrig ind som sin mor. At handle på hendes vegne med fuldmagt er på vores køreplan (backend #241)."
+      },
+      "form": {
+        "body": "Sagen, afgørelsen og klagefristen er hentet. Birthe skriver kun, hvorfor hun klager."
+      },
+      "fields": {
+        "applicantCpr": "Dit CPR-nummer",
+        "case": "Afgørelse du kan klage over",
+        "begrundelse": "Hvorfor klager du?",
+        "begrundelseHint": "Skriv hvad der er forkert i afgørelsen, og hvad afgørelsen efter din mening bør være."
+      },
+      "validation": {
+        "begrundelse": "Skriv hvorfor du klager over afgørelsen"
+      },
+      "complete": {
+        "heading": "Klagen er registreret",
+        "body": "Sagen har nu status Påklaget. Kvitteringen sendes ikke som brev i denne demo."
+      },
+      "commentary": {
+        "login": "MitID-login giver kommunen Birthes CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse. Fuldmagt, så Mikkel kan handle for hende, er køreplan (backend #241).",
+        "prefill": "GET /api/prefill/klage slår Birthes sager op i AabenForms sagsregister (live) med afgørelse, afgørelsesdato og klagefrist. Birthe er fritaget fra Digital Post. Afgørelser skal derfor sendes som fysisk brev. Det register-tjek er på vej (backend #242).",
+        "form": "Kun det, registret ikke ved: hvorfor Birthe klager. Sagsnummeret følger med fra valget i trin 2.",
+        "workflow": "ECA-flowet (klage_flow) validerer MitID-sessionen, tjekker at sagen tilhører den indloggede borger, og registrerer klagen. Sagen får status Påklaget.",
+        "letter": "Her forventes intet brev: Birthe er fritaget fra Digital Post, og fysisk post er endnu ikke koblet på (backend #242). Kvitteringen sendes derfor ikke som brev i denne demo, og den tomme indbakke er forventet."
+      }
+    },
     "merudgifter": {
       "title": "Merudgifter til et barn med handicap",
       "story": "Freja søger om dækning af merudgifter for Emil. Børn og indkomst hentes, hun skriver kun om behovet.",

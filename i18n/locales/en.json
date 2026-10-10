@@ -420,6 +420,47 @@
         "Audit log entry created for regulatory compliance": "Audit log entry created for regulatory compliance"
       }
     },
+    "klage": {
+      "title": "Appeal a decision",
+      "story": "Mikkel helps his mother Birthe. She logs in with her own MitID. The case, the decision and the appeal deadline are fetched, she only writes why she appeals.",
+      "intro": "Digital inclusion at the kitchen table: Mikkel sits beside her, but Birthe logs in with MitID herself. Her cases, the decision and the appeal deadline come from the case register, so she only writes why she appeals.",
+      "hub": {
+        "fetched": {
+          "cases": "Your cases with a decision (case register)",
+          "deadline": "Appeal deadline, holiday-aware (case register)",
+          "cpr": "Name and CPR (MitID)"
+        },
+        "typed": {
+          "reason": "Why you appeal"
+        }
+      },
+      "login": {
+        "body": "Birthe logs in with her own MitID. Mikkel helps at the kitchen table but never logs in as his mother. Acting on her behalf with a power of attorney (fuldmagt) is on our roadmap (backend #241)."
+      },
+      "form": {
+        "body": "The case, the decision and the appeal deadline are fetched. Birthe only writes why she appeals."
+      },
+      "fields": {
+        "applicantCpr": "Your CPR number",
+        "case": "Decision you can appeal",
+        "begrundelse": "Why do you appeal?",
+        "begrundelseHint": "Write what is wrong in the decision, and what you think the decision should be."
+      },
+      "validation": {
+        "begrundelse": "Write why you appeal the decision"
+      },
+      "complete": {
+        "heading": "The appeal is registered",
+        "body": "The case now has the status Appealed (Påklaget). The receipt is not sent as a letter in this demo."
+      },
+      "commentary": {
+        "login": "MitID login gives the municipality Birthe's CPR number. It reaches the browser masked only and is filled in on the server on submit. A power of attorney so Mikkel can act for her is roadmap (backend #241).",
+        "prefill": "GET /api/prefill/klage looks up Birthe's cases in the AabenForms case register (live) with decision, decision date and appeal deadline. Birthe is exempt from Digital Post, so decisions must be sent as a physical letter. That register check is on its way (backend #242).",
+        "form": "Only what the register does not know: why Birthe appeals. The case number carries over from the choice in step 2.",
+        "workflow": "The ECA flow (klage_flow) validates the MitID session, checks that the case belongs to the logged-in citizen and registers the appeal. The case gets the status Appealed (Påklaget).",
+        "letter": "No letter is expected here: Birthe is exempt from Digital Post and physical mail is not connected yet (backend #242). The receipt is therefore not sent as a letter in this demo, and the empty inbox is expected."
+      }
+    },
     "merudgifter": {
       "title": "Extra expenses for a child with a disability",
       "story": "Freja applies for coverage of extra expenses for Emil. Children and income are fetched; she only writes about the need.",

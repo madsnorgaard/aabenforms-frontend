@@ -1,5 +1,6 @@
 import type { DemoScenarioConfig } from '~/types/demo'
 import { byggetilladelseScenario } from './byggetilladelse'
+import { klageScenario } from './klage'
 import { merudgifterScenario } from './merudgifter'
 import { skoleskiftScenario } from './skoleskift'
 
@@ -39,9 +40,7 @@ export const demoScenarios: DemoScenarioConfig[] = [
   byggetilladelseScenario,
   merudgifterScenario,
   skoleskiftScenario,
-  placeholder('klage', 'klage', 'advanced',
-    { username: 'birthe.jensen', password: 'test1234', name: 'Birthe Jensen' },
-    ['cases', 'deadline', 'cpr'], ['reason']),
+  klageScenario,
 ]
 
 export function findDemoScenario(id: string): DemoScenarioConfig | undefined {
