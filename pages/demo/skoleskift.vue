@@ -78,25 +78,15 @@
           </div>
         </div>
 
-        <DemoScenarioWizard :config="scenario" class="mt-5" />
-
-        <section
-          v-if="wizardComplete"
-          class="row mt-8"
-          aria-labelledby="demo-skoleskift-cosign"
-        >
-          <div class="col-12 col-lg-8">
-            <h2 id="demo-skoleskift-cosign">{{ $t('demo.skoleskift.cosign.heading') }}</h2>
-            <FdsAlert
-              type="info"
-              :heading="$t('demo.skoleskift.cosign.waitingHeading')"
-              :text="$t('demo.skoleskift.cosign.waitingBody')"
-              class="mb-5"
-            />
-            <p>{{ $t('demo.skoleskift.cosign.body') }}</p>
-            <FdsButton variant="primary" @click="continueAsLars">{{ $t('demo.skoleskift.cosign.continue') }}</FdsButton>
-          </div>
-        </section>
+        <DemoScenarioWizard :config="scenario" class="mt-5">
+          <template #afterOutcome>
+            <section aria-labelledby="demo-skoleskift-cosign" data-testid="demo-skoleskift-cosign">
+              <h3 id="demo-skoleskift-cosign">{{ $t('demo.skoleskift.cosign.heading') }}</h3>
+              <p>{{ $t('demo.skoleskift.cosign.body') }}</p>
+              <FdsButton variant="primary" @click="continueAsLars">{{ $t('demo.skoleskift.cosign.continue') }}</FdsButton>
+            </section>
+          </template>
+        </DemoScenarioWizard>
       </template>
     </main>
 
@@ -129,22 +119,7 @@ const WIZARD_STORAGE_KEY = `aabenforms-demo:${scenario.id}`
 
 useHead({ title: t(scenario.titleKey) })
 
-// --- Freja: show the co-sign hand-over once the wizard reached step 5 -----
-
-// The wizard keeps its state to itself; it persists the phase to
-// sessionStorage, which is the only signal the page can read.
-const wizardComplete = ref(false)
-let pollTimer: ReturnType<typeof setInterval> | null = null
-
-function readWizardPhase() {
-  try {
-    const raw = sessionStorage.getItem(WIZARD_STORAGE_KEY)
-    wizardComplete.value = raw ? JSON.parse(raw)?.phase === 'complete' : false
-  }
-  catch {
-    wizardComplete.value = false
-  }
-}
+// --- Freja: the co-sign hand-over sits in the wizard's afterOutcome slot ---
 
 async function continueAsLars() {
   await userStore.logout()
@@ -196,12 +171,6 @@ onMounted(() => {
   // (and the callback round-trip) resumes at the right step.
   restoreSession()
   if (larsMode.value && isAuthenticated.value) loadLarsInbox()
-  readWizardPhase()
-  pollTimer = setInterval(readWizardPhase, 800)
-})
-
-onBeforeUnmount(() => {
-  if (pollTimer) clearInterval(pollTimer)
 })
 </script>
 

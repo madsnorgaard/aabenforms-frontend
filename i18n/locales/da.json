@@ -271,7 +271,14 @@
       "letter": {
         "heading": "Digital Post",
         "noLetterHeading": "Brevet er ikke nået frem endnu",
-        "noLetterBody": "Sagsbehandlingen kørte, men Digital Post-loggen har endnu ikke et brev til denne session. Tryk Opdater om lidt."
+        "noLetterBody": "Sagsbehandlingen kørte, men Digital Post-loggen har endnu ikke et brev til denne session. Tryk Opdater om lidt.",
+        "failedHeading": "Sagsbehandlingen stoppede",
+        "failedBody": "Et trin i sagsbehandlingen fejlede. Se trinnet med fejl under Sagsbehandling, og prøv igen."
+      },
+      "inbox": {
+        "new": "Nyt",
+        "noneNew": "Ingen nye breve fra denne ansøgning.",
+        "older": "Tidligere breve ({n})"
       },
       "complete": {
         "heading": "Sagen er afgjort",
@@ -432,7 +439,26 @@
         },
         "typed": {
           "reason": "Hvorfor du klager"
+        },
+        "tags": {
+          "inclusion": "Digital inklusion"
         }
+      },
+      "prefill": {
+        "exempt": "Birthe er fritaget fra Digital Post. Afgørelser skal derfor sendes som fysisk brev. Det register-tjek er på vej (backend #242)."
+      },
+      "option": {
+        "decision": "Afgørelse: {type}",
+        "decided": "Afgjort {date}",
+        "deadline": "Klagefrist {date}",
+        "status": "Status: {status}",
+        "chooseHint": "Hentet fra {register}. Vælg den afgørelse, du vil klage over."
+      },
+      "receipt": {
+        "caseNumber": "Sagsnummer",
+        "status": "Ny status",
+        "statusValue": "Påklaget",
+        "deadline": "Klagefrist"
       },
       "login": {
         "body": "Birthe logger ind med sit eget MitID. Mikkel hjælper ved køkkenbordet, men logger aldrig ind som sin mor. At handle på hendes vegne med fuldmagt er på vores køreplan (backend #241)."
@@ -455,7 +481,7 @@
       },
       "commentary": {
         "login": "MitID-login giver kommunen Birthes CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse. Fuldmagt, så Mikkel kan handle for hende, er køreplan (backend #241).",
-        "prefill": "GET /api/prefill/klage slår Birthes sager op i AabenForms sagsregister (live) med afgørelse, afgørelsesdato og klagefrist. Birthe er fritaget fra Digital Post. Afgørelser skal derfor sendes som fysisk brev. Det register-tjek er på vej (backend #242).",
+        "prefill": "GET /api/prefill/klage slår Birthes sager op i AabenForms sagsregister (live) med afgørelse, afgørelsesdato og klagefrist. En sag, der allerede er påklaget, eller hvor klagefristen er udløbet, vises men kan ikke vælges.",
         "form": "Kun det, registret ikke ved: hvorfor Birthe klager. Sagsnummeret følger med fra valget i trin 2.",
         "workflow": "ECA-flowet (klage_flow) validerer MitID-sessionen, tjekker at sagen tilhører den indloggede borger, og registrerer klagen. Sagen får status Påklaget.",
         "letter": "Her forventes intet brev: Birthe er fritaget fra Digital Post, og fysisk post er endnu ikke koblet på (backend #242). Kvitteringen sendes derfor ikke som brev i denne demo, og den tomme indbakke er forventet."
@@ -536,10 +562,12 @@
         "heading": "Sagen venter på Lars",
         "body": "Invitationen til medunderskrift er sendt til Lars i Digital Post."
       },
+      "recipient": {
+        "heading": "Invitationen går til Lars",
+        "body": "Ved fælles forældremyndighed er skoleskift en væsentlig beslutning, som begge forældre skal godkende. Flowet har sendt invitationen til Lars' egen Digital Post. Frejas indbakke herunder får derfor ikke et nyt brev, og sagen behandles først, når Lars har underskrevet."
+      },
       "cosign": {
         "heading": "Lars medunderskriver",
-        "waitingHeading": "Sagen venter nu på Lars",
-        "waitingBody": "Ved fælles forældremyndighed er skoleskift en væsentlig beslutning, som begge forældre skal godkende. Flowet har sendt Lars en invitation i hans Digital Post. Den ligger ikke i Frejas indbakke herover, og sagen behandles først, når Lars har underskrevet.",
         "body": "Lars modtager linket i sin egen Digital Post. Fortsæt som Lars: Freja bliver logget ud, og du logger ind med Lars' MitID for at læse invitationen og underskrive.",
         "continue": "Fortsæt som Lars"
       },

@@ -26,6 +26,9 @@
                 <span class="demo-hub__persona ml-2">{{ $t('demo.hub.persona', { name: scenario.persona.name }) }}</span>
               </span>
               <h2 class="card-heading">{{ $t(scenario.titleKey) }}</h2>
+              <p v-if="scenario.tags?.length" class="demo-hub__tags">
+                <span v-for="tag in scenario.tags" :key="tag" class="tag demo-hub__tag">{{ $t(tag) }}</span>
+              </p>
               <p>{{ $t(scenario.storyKey) }}</p>
 
               <p class="demo-hub__list-heading">{{ $t('demo.hub.fetched') }}</p>
@@ -112,6 +115,16 @@ function difficultyBadge(d: DemoDifficulty): string {
 
 .demo-hub__list li {
   margin-top: 0;
+}
+
+.demo-hub__tags {
+  margin: 0 0 0.75rem;
+}
+
+/* A label, not a filter button: no pointer or hover change. */
+.demo-hub__tag,
+.demo-hub__tag:hover {
+  cursor: default;
 }
 
 .demo-hub__offline {

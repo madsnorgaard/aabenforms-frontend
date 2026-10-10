@@ -14,8 +14,11 @@ import type { DemoScenarioConfig } from '~/types/demo'
  * The ECA flow (klage_flow) runs mitid_validate -> verify_ownership ->
  * case_appeal; the case status becomes "paaklaget". No Digital Post letter
  * is sent: Birthe is exempt from Digital Post and the physical-letter rail is
- * not built yet (backend #242).
+ * not built yet (backend #242). Step 5 therefore shows a receipt (case
+ * number, new status, klagefrist) instead of waiting for a letter.
  */
+
+const str = (v: unknown): string => (v === null || v === undefined ? '' : String(v))
 
 export const klageScenario: DemoScenarioConfig = {
   id: 'klage',
@@ -34,6 +37,7 @@ export const klageScenario: DemoScenarioConfig = {
     'demo.klage.hub.fetched.cpr',
   ],
   typedKeys: ['demo.klage.hub.typed.reason'],
+  tags: ['demo.klage.hub.tags.inclusion'],
 
   loginBodyKey: 'demo.klage.login.body',
   formBodyKey: 'demo.klage.form.body',
@@ -46,7 +50,18 @@ export const klageScenario: DemoScenarioConfig = {
       option: {
         valueProp: 'case_id',
         labelProp: 'title',
-        hintProps: ['case_id', 'afgoerelse_type', 'afgoerelse_date', 'klagefrist', 'status_label'],
+        // A case past its klagefrist or already appealed stays visible but disabled.
+        disabledWhen: (o) => !o.appealable,
+        hintFormat: (o, t, d) => {
+          const parts = [
+            o.afgoerelse_type ? t('demo.klage.option.decision', { type: str(o.afgoerelse_type) }) : '',
+            o.afgoerelse_date ? t('demo.klage.option.decided', { date: d(o.afgoerelse_date) }) : '',
+            o.klagefrist ? t('demo.klage.option.deadline', { date: d(o.klagefrist) }) : '',
+            !o.appealable && o.status_label ? t('demo.klage.option.status', { status: str(o.status_label) }) : '',
+          ]
+          return parts.filter(Boolean).join(' · ')
+        },
+        choiceHintKey: 'demo.klage.option.chooseHint',
       },
     },
   ],
@@ -76,14 +91,22 @@ export const klageScenario: DemoScenarioConfig = {
     },
   }),
 
+  // Birthe is exempt from Digital Post; the physical-letter rail is #242.
+  prefillAlert: (prefill) =>
+    prefill.session.digital_post_exempt ? { type: 'info', textKey: 'demo.klage.prefill.exempt' } : null,
+
   outcome: {
-    // The klage flow sends no letter (Digital Post exempt, see #242); the
-    // wizard has no "no letter expected" mode yet, so this never matches a
-    // stray letter from another scenario.
-    letterMatches: (letter) => /klage/i.test(letter.subject),
+    // No letter: Digital Post exempt and no physical-letter rail yet (#242).
+    expectLetter: false,
     headingKey: 'demo.klage.complete.heading',
     bodyKey: 'demo.klage.complete.body',
     type: 'success',
+    // Only shown when every workflow step completed (case_appeal included).
+    receipt: ({ choices, t, d }) => [
+      { labelKey: 'demo.klage.receipt.caseNumber', value: str(choices.case_id?.case_id) },
+      { labelKey: 'demo.klage.receipt.status', value: t('demo.klage.receipt.statusValue') },
+      { labelKey: 'demo.klage.receipt.deadline', value: d(choices.case_id?.klagefrist) },
+    ],
   },
 
   commentaryKeys: {

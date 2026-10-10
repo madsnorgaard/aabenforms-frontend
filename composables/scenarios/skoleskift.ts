@@ -149,9 +149,13 @@ export const skoleskiftScenario: DemoScenarioConfig = {
   },
 
   outcome: {
-    // The invitation goes to Lars, so Freja's inbox has no outcome letter;
-    // the page's "Lars medunderskriver" section shows his inbox instead.
-    letterMatches: (letter) => /medunderskrift/i.test(letter.subject),
+    // The invitation goes to Lars, so Freja's inbox is not polled; the page
+    // fills the wizard's afterOutcome slot with the hand-over to Lars.
+    letterRecipient: 'other',
+    recipientAlert: {
+      headingKey: 'demo.skoleskift.recipient.heading',
+      bodyKey: 'demo.skoleskift.recipient.body',
+    },
     headingKey: 'demo.skoleskift.complete.heading',
     bodyKey: 'demo.skoleskift.complete.body',
     type: 'info',
