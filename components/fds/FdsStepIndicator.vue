@@ -37,7 +37,7 @@
       data-module="modal"
       :data-target="modalId"
     >
-      <span>{{ $t('fds.steps.step') }}<strong> {{ currentNumber }} </strong>{{ $t('fds.steps.of') }} {{ steps.length }}</span>
+      <span>{{ $t('fds.steps.step') }}{{ ' ' }}<strong>{{ currentNumber }}</strong>{{ ' ' }}{{ $t('fds.steps.of') }}{{ ' ' }}{{ steps.length }}</span>
     </button>
 
     <div
