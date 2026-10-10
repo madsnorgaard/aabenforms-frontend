@@ -63,6 +63,13 @@
         <!-- Step 2: Hentede oplysninger -->
         <section v-else-if="stepIndex === 1" key="prefill" aria-labelledby="demo-step-prefill">
           <h2 id="demo-step-prefill">{{ $t('demo.wizard.prefill.heading') }}</h2>
+          <FdsAlert
+            v-if="prefillAlert"
+            :type="prefillAlert.type"
+            :text="$t(prefillAlert.textKey)"
+            class="mb-5"
+            data-testid="demo-prefill-alert"
+          />
           <p>{{ $t('demo.wizard.prefill.body') }}</p>
 
           <DemoProvenancePanel
@@ -212,12 +219,33 @@
         <section v-else key="letter" aria-labelledby="demo-step-letter">
           <h2 id="demo-step-letter">{{ $t('demo.wizard.letter.heading') }}</h2>
 
+          <template v-if="phase === 'complete' && outcomeReady">
+            <FdsAlert
+              :type="config.outcome.type ?? 'success'"
+              role="status"
+              :heading="$t(config.outcome.headingKey)"
+              :text="$t(config.outcome.bodyKey)"
+              class="mb-5"
+            />
+            <dl v-if="receiptRows.length" class="demo-wizard__summary demo-wizard__receipt" data-testid="demo-receipt">
+              <template v-for="row in receiptRows" :key="row.labelKey">
+                <dt>{{ $t(row.labelKey) }}</dt>
+                <dd>{{ row.value }}</dd>
+              </template>
+            </dl>
+            <FdsAlert
+              v-if="config.outcome.letterRecipient === 'other' && config.outcome.recipientAlert"
+              type="info"
+              :heading="$t(config.outcome.recipientAlert.headingKey)"
+              :text="$t(config.outcome.recipientAlert.bodyKey)"
+              class="mb-5"
+            />
+          </template>
           <FdsAlert
-            v-if="phase === 'complete' && outcomeLetter"
-            :type="config.outcome.type ?? 'success'"
-            role="status"
-            :heading="$t(config.outcome.headingKey)"
-            :text="$t(config.outcome.bodyKey)"
+            v-else-if="phase === 'complete' && workflowFailed"
+            type="warning"
+            :heading="$t('demo.wizard.letter.failedHeading')"
+            :text="$t('demo.wizard.letter.failedBody')"
             class="mb-5"
           />
           <FdsAlert
@@ -235,8 +263,14 @@
           <DemoDigitalPostInbox
             :letters="inboxLetters"
             :loading="inboxLoading"
+            :since="submittedAt || undefined"
             @refresh="refreshInbox"
           />
+
+          <!-- Page-specific follow-up (e.g. the co-signer hand-over), inside the main column. -->
+          <div v-if="phase === 'complete' && $slots.afterOutcome" class="demo-wizard__after mt-8">
+            <slot name="afterOutcome" />
+          </div>
 
           <template v-if="phase === 'complete'">
             <div class="button-group mt-6">
@@ -299,9 +333,14 @@ const {
   inboxLetters,
   inboxLoading,
   outcomeLetter,
+  outcomeReady,
+  workflowFailed,
+  receiptRows,
+  submittedAt,
   error,
   prefillData,
   prefillLoading,
+  prefillAlert,
   rows,
   notAsked,
   missingChoices,
@@ -525,6 +564,10 @@ watch(phase, async (next) => {
 
 .demo-wizard__summary dd {
   margin: 0;
+}
+
+.demo-wizard__receipt {
+  background: #fff;
 }
 
 .demo-wizard__summary-source {

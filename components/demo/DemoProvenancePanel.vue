@@ -50,8 +50,8 @@
     <template v-for="row in optionRows" :key="`choice-${row.key}`">
       <FdsRadioGroup
         :id="`demo-choice-${row.key}`"
-        :legend="$t('demo.wizard.prefill.choose', { field: row.label })"
-        :hint="$t('demo.wizard.prefill.chooseHint', { register: row.source.register })"
+        :legend="$t('demo.wizard.prefill.choose', { field: lowerFirst(row.label) })"
+        :hint="$t(row.choiceHintKey || 'demo.wizard.prefill.chooseHint', { register: row.source.register })"
         :options="row.options || []"
         :model-value="choices[row.key] ?? null"
         class="mt-6"
@@ -101,6 +101,12 @@ const { t } = useI18n()
 const { $dkfds } = useNuxtApp()
 
 const optionRows = computed(() => props.rows.filter((r) => r.options && r.options.length > 0))
+
+/** "Barn" -> "barn" inside "Vælg {field}"; acronyms ("CPR-nummer") stay. */
+function lowerFirst(label: string): string {
+  if (label.length > 1 && label[1] === label[1]!.toUpperCase() && label[1] !== label[1]!.toLowerCase()) return label
+  return label.charAt(0).toLocaleLowerCase('da-DK') + label.slice(1)
+}
 
 function setChoice(key: string, value: string) {
   emit('update:choices', { ...props.choices, [key]: value })

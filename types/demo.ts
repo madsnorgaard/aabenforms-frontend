@@ -128,7 +128,26 @@ export interface DemoOptionShape {
   labelProp: string
   /** properties joined as the radio hint, e.g. ['cpr', 'birth_date'] */
   hintProps?: string[]
+  /**
+   * Labelled hint instead of `hintProps`, e.g. "Afgørelse: afslag · Afgjort
+   * 30. september 2026". `d` formats an ISO date as "30. september 2026".
+   */
+  hintFormat?: (o: PrefillOption, t: DemoTranslate, d: DemoDateFormat) => string
+  /**
+   * Options for which this returns true render disabled (e.g. a case that
+   * can no longer be appealed). When set, the first enabled option is
+   * preselected.
+   */
+  disabledWhen?: (o: PrefillOption) => boolean
+  /** i18n key for the radio hint (gets {register}); defaults to demo.wizard.prefill.chooseHint */
+  choiceHintKey?: string
 }
+
+/** vue-i18n `t`, narrowed to what scenario configs need. */
+export type DemoTranslate = (key: string, params?: Record<string, unknown>) => string
+
+/** ISO date (or timestamp) to a long date in the current locale, e.g. "30. september 2026". */
+export type DemoDateFormat = (value: unknown) => string
 
 /** One row of the provenance table ("Det spurgte vi ikke om"). */
 export interface DemoPrefillMapEntry {
@@ -190,6 +209,20 @@ export interface DemoSubmitContext {
   sessionId: string
 }
 
+/** What `outcome.receipt` gets after the workflow ran. */
+export interface DemoOutcomeContext {
+  values: Record<string, string>
+  choices: Record<string, PrefillOption | null>
+  submissionId: string
+  t: DemoTranslate
+  d: DemoDateFormat
+}
+
+export interface DemoReceiptRow {
+  labelKey: string
+  value: string
+}
+
 export interface DemoOutcome {
   /**
    * Which letter counts as this scenario's outcome. Defaults to any letter
@@ -201,6 +234,22 @@ export interface DemoOutcome {
   bodyKey: string
   /** Alert variant for the completion message; defaults to 'success'. Use 'info' for an adverse decision. */
   type?: 'success' | 'info' | 'warning'
+  /**
+   * false: the flow sends no letter (e.g. the citizen is exempt from Digital
+   * Post). The inbox is not polled, the "not arrived yet" warning never
+   * shows and the outcome alert renders right after the workflow. Default true.
+   */
+  expectLetter?: boolean
+  /**
+   * 'other': the letter goes to someone else (a co-signer), so the
+   * applicant's inbox is not polled or warned about; `recipientAlert` is
+   * shown instead. Default 'applicant'.
+   */
+  letterRecipient?: 'applicant' | 'other'
+  /** info alert for `letterRecipient: 'other'` */
+  recipientAlert?: { headingKey: string; bodyKey: string }
+  /** rows of a DKFDS summary list rendered under the outcome alert; empty values are skipped */
+  receipt?: (ctx: DemoOutcomeContext) => DemoReceiptRow[]
 }
 
 export interface DemoStepOverride {
@@ -241,6 +290,10 @@ export interface DemoScenarioConfig {
   loginBodyKey?: string
   /** i18n key for the step 3 intro; defaults to demo.wizard.form.body */
   formBodyKey?: string
+  /** alert at the top of step 2, derived from the prefill response (e.g. Digital Post exemption) */
+  prefillAlert?: (prefill: PrefillResponse) => { type: 'info' | 'warning'; textKey: string } | null
+  /** hub card tags (DKFDS tags), i18n keys */
+  tags?: string[]
 }
 
 /** A row ready for DemoProvenancePanel (derived from the config + response). */
@@ -256,7 +309,9 @@ export interface DemoProvenanceRow {
   fetchedAt: string
   auditId: number | null
   /** radio options when the field is a list source */
-  options?: Array<{ value: string; label: string; hint?: string }>
+  options?: Array<{ value: string; label: string; hint?: string; disabled?: boolean }>
+  /** i18n key for the radio hint (see DemoOptionShape.choiceHintKey) */
+  choiceHintKey?: string
   editable: boolean
 }
 

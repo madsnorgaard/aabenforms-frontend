@@ -1,8 +1,10 @@
 import type { User } from '~/types/user'
 import type {
   DemoPersistedState,
+  DemoDateFormat,
   DemoPhase,
   DemoProvenanceRow,
+  DemoReceiptRow,
   DemoScenarioConfig,
   DigitalPostLetter,
   PrefillField,
@@ -36,7 +38,7 @@ type Choices = Record<string, string>
 
 export const useDemoScenario = (config: DemoScenarioConfig) => {
   const { apiBase } = useRuntimeConfig().public
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const { user, sessionId, isAuthenticated } = useAuth()
   const userStore = useUserStore()
   const prefill = usePrefill()
@@ -112,6 +114,22 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
 
   watch([phase, pendingLogin, values, choices, submissionId], persist, { deep: true })
 
+  // --- formatting ---------------------------------------------------------
+
+  /** "30. september 2026" (da) / "30 September 2026" (en); '' for no value. */
+  const formatDate: DemoDateFormat = (value) => {
+    if (value === null || value === undefined || value === '') return ''
+    const d = new Date(typeof value === 'number' ? value : String(value))
+    if (Number.isNaN(d.getTime())) return String(value)
+    return new Intl.DateTimeFormat(locale.value === 'en' ? 'en-GB' : 'da-DK', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(d)
+  }
+
+  const translate = (key: string, params?: Record<string, unknown>) => t(key, params ?? {})
+
   // --- provenance rows ----------------------------------------------------
 
   function optionValue(opt: PrefillOption, prop: string): string {
@@ -142,6 +160,11 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     return field.options.find((o) => optionValue(o, entry.option!.valueProp) === value) ?? null
   }
 
+  function optionHint(shape: NonNullable<DemoScenarioConfig['prefillMap'][number]['option']>, o: PrefillOption): string | undefined {
+    if (shape.hintFormat) return shape.hintFormat(o, translate, formatDate) || undefined
+    return shape.hintProps?.map((p) => optionValue(o, p)).filter(Boolean).join(' - ') || undefined
+  }
+
   const rows = computed<DemoProvenanceRow[]>(() => {
     const data = prefill.data.value
     const out: DemoProvenanceRow[] = []
@@ -161,11 +184,13 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
           fetchedAt: field.fetched_at,
           auditId: field.audit_id,
           editable: Boolean(entry.editable),
+          choiceHintKey: entry.option?.choiceHintKey,
           options: field.options && entry.option
             ? field.options.map((o) => ({
                 value: optionValue(o, entry.option!.valueProp),
                 label: optionLabel(entry, o),
-                hint: entry.option!.hintProps?.map((p) => optionValue(o, p)).filter(Boolean).join(' - ') || undefined,
+                hint: optionHint(entry.option!, o),
+                disabled: entry.option!.disabledWhen ? entry.option!.disabledWhen(o) : undefined,
               }))
             : undefined,
         })
@@ -230,11 +255,24 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
       }
       return
     }
-    // Default choice: a single option, or the option matching the delivered value.
+    // Default choice: a single option, the first enabled one when the shape
+    // disables some, or the option matching the delivered value.
     for (const entry of config.prefillMap) {
       const field = res.fields[entry.key]
-      if (!field?.options || !entry.option || choices.value[entry.key]) continue
-      if (field.options.length === 1) {
+      if (!field?.options || !entry.option) continue
+      const disabledWhen = entry.option.disabledWhen
+      const current = choices.value[entry.key]
+      if (current) {
+        // A persisted choice that is no longer allowed (already appealed) is dropped.
+        const opt = field.options.find((o) => optionValue(o, entry.option!.valueProp) === current)
+        if (opt && !(disabledWhen && disabledWhen(opt))) continue
+        delete choices.value[entry.key]
+      }
+      if (disabledWhen) {
+        const first = field.options.find((o) => !disabledWhen(o))
+        if (first) choices.value[entry.key] = optionValue(first, entry.option.valueProp)
+      }
+      else if (field.options.length === 1) {
         choices.value[entry.key] = optionValue(field.options[0]!, entry.option.valueProp)
       }
       else if (field.value !== null && field.value !== undefined) {
@@ -395,7 +433,13 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
       await animateSteps()
 
       phase.value = 'letter'
-      await pollInbox()
+      if (pollsInbox.value) {
+        await pollInbox()
+      }
+      else {
+        // No letter for the applicant: show the inbox as it is, once.
+        void refreshInbox()
+      }
       phase.value = 'complete'
     }
     catch (e: any) {
@@ -422,6 +466,35 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
   const outcomeLetter = computed<DigitalPostLetter | null>(
     () => inboxLetters.value.find(isOutcome) ?? null,
   )
+
+  /** Poll the applicant's inbox for the outcome letter (default). */
+  const pollsInbox = computed(() =>
+    config.outcome.expectLetter !== false && config.outcome.letterRecipient !== 'other',
+  )
+
+  /** A workflow step failed: the outcome alert and receipt must not claim success. */
+  const workflowFailed = computed(() => workflowSteps.value.some((s) => s.status === 'failed'))
+
+  /** The outcome alert may show: the letter arrived, or none is expected for the applicant. */
+  const outcomeReady = computed(() => !workflowFailed.value && (!pollsInbox.value || Boolean(outcomeLetter.value)))
+
+  /** Receipt rows for the summary list under the outcome alert (empty values skipped). */
+  const receiptRows = computed<DemoReceiptRow[]>(() => {
+    if (!config.outcome.receipt || workflowFailed.value) return []
+    return config.outcome.receipt({
+      values: values.value,
+      choices: chosenOptions.value,
+      submissionId: submissionId.value,
+      t: translate,
+      d: formatDate,
+    }).filter((r) => r.value)
+  })
+
+  /** Step 2 alert derived from the prefill response. */
+  const prefillAlert = computed(() => {
+    const data = prefill.data.value
+    return data && config.prefillAlert ? config.prefillAlert(data) : null
+  })
 
   async function pollInbox(): Promise<void> {
     inboxAttempts.value = 0
@@ -505,12 +578,18 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     inboxLoading,
     inboxAttempts,
     outcomeLetter,
+    outcomeReady,
+    pollsInbox,
+    workflowFailed,
+    receiptRows,
+    submittedAt,
     error,
 
     // Prefill.
     prefillData: prefill.data,
     prefillLoading: prefill.loading,
     prefillError: prefill.error,
+    prefillAlert,
     rows,
     notAsked,
     missingChoices,
