@@ -199,6 +199,8 @@ export interface DemoOutcome {
   /** i18n keys for the completion alert */
   headingKey: string
   bodyKey: string
+  /** Alert variant for the completion message; defaults to 'success'. Use 'info' for an adverse decision. */
+  type?: 'success' | 'info' | 'warning'
 }
 
 export interface DemoStepOverride {

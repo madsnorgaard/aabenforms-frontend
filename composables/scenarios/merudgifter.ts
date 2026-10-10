@@ -126,6 +126,9 @@ export const merudgifterScenario: DemoScenarioConfig = {
     get bodyKey() {
       return `demo.merudgifter.complete.${outcomeVariant()}.body`
     },
+    get type() {
+      return outcomeVariant() === 'afslag' ? 'info' : 'success'
+    },
   },
 
   commentaryKeys: {

@@ -214,7 +214,7 @@
 
           <FdsAlert
             v-if="phase === 'complete' && outcomeLetter"
-            type="success"
+            :type="config.outcome.type ?? 'success'"
             role="status"
             :heading="$t(config.outcome.headingKey)"
             :text="$t(config.outcome.bodyKey)"
