@@ -25,7 +25,7 @@
             </li>
           </ul>
 
-          <a href="https://github.com/madsnorgaard/aabenforms" target="_blank" rel="noreferrer" class="inline-flex items-center gap-1.5 text-sm font-semibold">
+          <a href="https://github.com/madsnorgaard/aabenforms" target="_blank" rel="noreferrer" class="function-link cta-link inline-flex items-center gap-1.5 text-sm font-semibold">
             {{ $t('landingCta.altCta') }} →
           </a>
         </div>
@@ -108,3 +108,11 @@ useI18n()
 const config = useRuntimeConfig()
 const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilladelseEnabled))
 </script>
+
+<style scoped>
+/* CTA text link: function-link look, never DKFDS visited purple. */
+.cta-link,
+.cta-link:visited {
+  color: #0059B3;
+}
+</style>

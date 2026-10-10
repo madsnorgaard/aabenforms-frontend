@@ -10,7 +10,7 @@
           href="https://github.com/madsnorgaard/aabenforms"
           target="_blank"
           rel="noopener"
-          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 border border-primary-200 text-primary-700 text-xs font-semibold tracking-wide uppercase mb-8 reveal-up hover:bg-primary-100 transition-colors"
+          class="hero-badge inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-50 border border-accent-200 text-xs font-semibold tracking-wide uppercase mb-8 reveal-up hover:bg-accent-100 transition-colors"
         >
           <span class="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse" />
           Open Source - GPL 2.0
@@ -47,13 +47,13 @@
           <NuxtLink
             v-if="demoEnabled"
             to="/kontakt"
-            class="inline-flex items-center px-3 py-2 font-semibold"
+            class="button button-secondary"
           >
             {{ $t('hero.cta.book') }}
           </NuxtLink>
           <NuxtLink
             to="/demo"
-            class="inline-flex items-center px-3 py-2 font-semibold"
+            class="button button-tertiary"
           >
             {{ $t('demo.hub.allDemos') }}
           </NuxtLink>
@@ -84,6 +84,14 @@ const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilla
 </script>
 
 <style scoped>
+/* CTA badge: accent green that does not turn DKFDS visited purple. */
+.hero-badge,
+.hero-badge:visited,
+.hero-badge:hover {
+  color: #3C5C22;
+  text-decoration: none;
+}
+
 .hero-section {
   background: linear-gradient(170deg, #ffffff 0%, #f5f5f5 100%);
   border-bottom: 1px solid #dcdcdc;
