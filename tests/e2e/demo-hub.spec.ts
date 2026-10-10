@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
 /**
- * /demo hub: one DKFDS card per guided scenario, the byggetilladelse card
- * links to the wizard, and the page is WCAG 2.1 AA clean (axe).
+ * /demo hub: one DKFDS card per guided scenario, every card links to its
+ * wizard, and the page is WCAG 2.1 AA clean (axe).
  *
  * Requires NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true at build time
  * (the DDEV config sets it); without it the available card has no link.
@@ -50,12 +50,22 @@ test.describe('Demo hub', () => {
     await expect(bygge.locator('.badge', { hasText: 'Simpel' })).toBeVisible()
     await expect(bygge.getByText('Du er Freja Nielsen')).toBeVisible()
 
-    // The three upcoming scenarios are marked and have no link.
-    for (const id of ['merudgifter', 'skoleskift', 'klage']) {
-      const card = page.locator(`[data-scenario="${id}"] .card`)
-      await expect(card.locator('.badge', { hasText: 'Kommer' })).toBeVisible()
-      await expect(card.locator('a.button')).toHaveCount(0)
+    // All four scenarios have shipped: each card links to its wizard.
+    const titles: Record<string, string> = {
+      byggetilladelse: 'Byggetilladelse',
+      merudgifter: 'Merudgifter til et barn med handicap',
+      skoleskift: 'Skoleskift med to forældre',
+      klage: 'Klage over en afgørelse',
     }
+    for (const [id, title] of Object.entries(titles)) {
+      const card = page.locator(`[data-scenario="${id}"] .card`)
+      await expect(card.locator('.card-heading')).toHaveText(title)
+      await expect(card.locator('.badge', { hasText: 'Kommer' })).toHaveCount(0)
+      await expect(card.locator('a.button')).toHaveAttribute('href', new RegExp(`/demo/${id}$`))
+    }
+
+    // Klage carries the "Digital inklusion" tag.
+    await expect(page.locator('[data-scenario="klage"] .tag')).toHaveText('Digital inklusion')
   })
 
   test('has no WCAG 2.1 AA violations', async () => {

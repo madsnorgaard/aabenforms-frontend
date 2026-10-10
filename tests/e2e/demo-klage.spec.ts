@@ -55,7 +55,8 @@ test.describe('Klage demo - full auth', () => {
   test('birthe appeals her afslag; the case becomes Påklaget', async ({ page, context }) => {
     // A fresh appealable case (only created when none is appealable).
     const seed = execSync('cd ../backend && ddev drush aabenforms:demo:seed-klage-case --reset 2>&1').toString()
-    const caseId = seed.match(/#(\d+)/)?.[1]
+    // "Case #101 was spent; seeded fresh case #107": take the seeded one.
+    const caseId = seed.match(/(?:seeded (?:fresh )?case|merudgifter case:) #(\d+)/i)?.[1]
     expect(caseId, seed).toBeTruthy()
 
     await context.clearCookies()
@@ -76,9 +77,20 @@ test.describe('Klage demo - full auth', () => {
     await expect(table.locator('tr[data-prefill-key="applicant_cpr"]')).toContainText(/\d{6}-XXXX/)
     await expect(table.locator('tr[data-prefill-key="applicant_cpr"] .badge')).toHaveText('LIVE-PARAT')
     await expect(table.locator('tr[data-prefill-key="case_id"] .badge')).toHaveText('LIVE')
-    await expect(page.getByText(/fritaget fra Digital Post/).first()).toBeVisible()
-    const option = page.locator('.form-group-radio', { has: page.locator('.form-hint', { hasText: new RegExp(`^${caseId} - `) }) })
-    await option.locator('input[type="radio"]').check()
+    await expect(page.getByTestId('demo-prefill-alert')).toContainText('Birthe er fritaget fra Digital Post')
+    await expect(page.getByRole('group', { name: /^Vælg afgørelse du kan klage over/ })).toBeVisible()
+    await expect(page.getByText('Vælg den afgørelse, du vil klage over.')).toBeVisible()
+    // Vue binds the radio value as a DOM property (no attribute), so find the index.
+    const values = await page.locator('.form-group-radio input[type="radio"]').evaluateAll((els) => els.map((e) => (e as HTMLInputElement).value))
+    const idx = values.indexOf(String(caseId))
+    expect(idx, `case ${caseId} not in ${values.join(',')}`).toBeGreaterThanOrEqual(0)
+    const option = page.locator('.form-group-radio').nth(idx)
+    // Labelled, Danish-formatted hint; the fresh case is preselected.
+    await expect(option.locator('.form-hint')).toHaveText(/^Afgørelse: afslag · Afgjort \d{1,2}\. [a-zæøå]+ \d{4} · Klagefrist \d{1,2}\. [a-zæøå]+ \d{4}$/)
+    await expect(option.locator('input[type="radio"]')).toBeChecked()
+    // Cases that can no longer be appealed are shown but disabled.
+    const disabledValues = await page.locator('.form-group-radio input[type="radio"]:disabled').evaluateAll((els) => els.map((e) => (e as HTMLInputElement).value))
+    expect(disabledValues).not.toContain(String(caseId))
     await scan(page)
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/klage-step2.png`, fullPage: true })
 
@@ -102,6 +114,13 @@ test.describe('Klage demo - full auth', () => {
     await expect(page.getByRole('button', { name: 'Kør igen' })).toBeVisible({ timeout: 30000 })
     await expect(currentStep(page)).toHaveText('Digital Post')
     await expect(page.getByText(/Her forventes intet brev/)).toBeVisible()
+    await expect(page.getByText('Brevet er ikke nået frem endnu')).toHaveCount(0)
+    await expect(page.getByRole('heading', { name: 'Klagen er registreret' })).toBeVisible()
+    const receipt = page.getByTestId('demo-receipt')
+    await expect(receipt).toContainText('Sagsnummer')
+    await expect(receipt.locator('dd').first()).toHaveText(String(caseId))
+    await expect(receipt).toContainText('Påklaget')
+    await expect(receipt).toContainText(/Klagefrist\s*\d{1,2}\. [a-zæøå]+ \d{4}/)
     const status = execSync(`cd ../backend && ddev drush php:eval "echo \\Drupal::entityTypeManager()->getStorage('aabenforms_case')->load(${caseId})->get('status')->value;" 2>/dev/null`).toString().trim()
     expect(status).toBe('paaklaget')
     await scan(page)

@@ -99,8 +99,13 @@ test.describe('Skoleskift demo - full auth', () => {
     await expect(currentStep(page)).toHaveText('Digital Post')
 
     // Step 5: the invitation went to Lars; the case waits for him.
-    await expect(page.getByRole('heading', { name: 'Lars medunderskriver' })).toBeVisible({ timeout: 5000 })
-    await expect(page.getByRole('heading', { name: 'Sagen venter nu på Lars' })).toBeVisible()
+    // Freja's inbox is not awaited or warned about; the hand-over to Lars
+    // sits in the main column right under the step-5 content.
+    await expect(page.getByRole('heading', { name: 'Sagen venter på Lars' })).toBeVisible({ timeout: 5000 })
+    await expect(page.getByRole('heading', { name: 'Invitationen går til Lars' })).toBeVisible()
+    await expect(page.getByText('Brevet er ikke nået frem endnu')).toHaveCount(0)
+    const cosign = page.locator('.demo-wizard__main [data-testid="demo-skoleskift-cosign"]')
+    await expect(cosign.getByRole('heading', { name: 'Lars medunderskriver' })).toBeVisible()
     await scan(page)
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-step5.png`, fullPage: true })
 
