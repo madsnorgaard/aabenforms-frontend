@@ -561,7 +561,9 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     prefill.clear()
     pendingLogin.value = false
     phase.value = 'idle'
-    await userStore.logout()
+    // Full logout (revoke + IdP end_session), back to this demo page so the
+    // next persona starts from a clean IdP login form.
+    await userStore.logout({ returnPath: import.meta.client ? window.location.pathname : '/' })
   }
 
   return {

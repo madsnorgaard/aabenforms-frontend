@@ -122,7 +122,8 @@ useHead({ title: t(scenario.titleKey) })
 // --- Freja: the co-sign hand-over sits in the wizard's afterOutcome slot ---
 
 async function continueAsLars() {
-  await userStore.logout()
+  // Local logout + revoke only: login(fresh) forces prompt=login at the IdP.
+  await userStore.logout({ idpLogout: false })
   login(LARS_RETURN, { fresh: true })
 }
 
@@ -155,12 +156,11 @@ function loginAsLars() {
 }
 
 async function restart() {
-  await userStore.logout()
   try {
     sessionStorage.removeItem(WIZARD_STORAGE_KEY)
   }
   catch { /* private mode */ }
-  await navigateTo(localePath({ path: '/demo/skoleskift' }))
+  await userStore.logout({ returnPath: localePath({ path: '/demo/skoleskift' }) })
 }
 
 watch([larsMode, isAuthenticated], ([lars, authed]) => {

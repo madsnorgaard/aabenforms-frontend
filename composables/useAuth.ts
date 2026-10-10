@@ -150,10 +150,9 @@ export const useAuth = () => {
    * Logout user and clear session
    */
   async function logout() {
-    await userStore.logout()
-
-    // Redirect to homepage
-    navigateTo('/')
+    // Clears local state, revokes the MitID session and ends the IdP
+    // session; the browser lands back on the homepage.
+    await userStore.logout({ returnPath: '/' })
   }
 
   /**
