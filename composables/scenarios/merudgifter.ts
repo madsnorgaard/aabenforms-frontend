@@ -14,7 +14,7 @@ import type { DemoScenarioConfig } from '~/types/demo'
  * The ECA flow (merudgifter_flow) decides on the amount: 1.000 kr/md or more
  * gives medhold and SF2900 close; under that it runs partshøring, afslag and
  * starts a 4-week klagefrist. Both outcomes send the same letter subject
- * ("Afgørelse: merudgiftsydelse (servicelovens §41)").
+ * ("Afgørelse: bevilling af / afslag på merudgiftsydelse (servicelovens §41)").
  */
 
 /** Demo threshold in the ECA flow (kr/md). */
