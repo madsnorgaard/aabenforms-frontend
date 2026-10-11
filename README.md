@@ -1,552 +1,154 @@
 # ÅbenForms Frontend
 
-**Modern Nuxt 3 interface for Danish municipal workflow automation**
+**The citizen-facing Nuxt 3 frontend for ÅbenForms, built on Det Fælles Designsystem (DKFDS).**
 
-[![Nuxt](https://img.shields.io/badge/Nuxt-3.15.0-00DC82)](https://nuxt.com)
-[![Vue](https://img.shields.io/badge/Vue-3.5.27-4FC08D)](https://vuejs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6)](https://www.typescriptlang.org)
-[![Pinia](https://img.shields.io/badge/Pinia-2.3.0-yellow)](https://pinia.vuejs.org)
-[![Playwright](https://img.shields.io/badge/Playwright-1.51.1-45ba4b)](https://playwright.dev)
+[![Nuxt](https://img.shields.io/badge/Nuxt-3.21-00DC82)](https://nuxt.com)
+[![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D)](https://vuejs.org)
+[![DKFDS](https://img.shields.io/badge/DKFDS-11.3.0-0059B3)](https://designsystem.dk)
+[![Playwright](https://img.shields.io/badge/Playwright-1.63-45ba4b)](https://playwright.dev)
 [![License](https://img.shields.io/badge/License-GPL--2.0-green)](LICENSE)
 
-## Overview
+Live at **https://aabenforms.dk**. The backend (Drupal 11 + ECA) runs at https://api.aabenforms.dk. Its code is in [madsnorgaard/AabenForms](https://github.com/madsnorgaard/AabenForms).
 
-ÅbenForms Frontend is a production-ready, responsive web application built with Nuxt 3 that provides:
+## What it does
 
-- **Multi-tenant interfaces** for Danish municipalities with custom branding per tenant
-- **Dynamic webform rendering** from Drupal backend with real-time validation
-- **Workflow task dashboards** with filtering, pagination, and status tracking
-- **Interactive components** including appointment pickers, payment workflows, and execution trackers
-- **Comprehensive accessibility** meeting WCAG 2.1 AA standards
-- **Mobile-first design** with touch-optimized interfaces (83/100 mobile score)
-- **Full internationalization** supporting Danish and English
-- **Production-grade performance** with optimized bundle sizes and loading states
+ÅbenForms shows how a public self-service form can stop asking citizens for things the public sector already knows. The frontend:
 
-## Implementation Status
+- **Renders Drupal webforms** and submits them to the backend, where ECA flows run the case.
+- **Prefills known data with provenance.** Each value shows which register it came from, the legal basis, a status (LIVE, LIVE-PARAT or DEMO) and an audit id.
+- **Logs citizens in with MitID.** Production uses a mock IdP (Keycloak at auth.aabenforms.dk) until real MitID registration is in place.
+- **Shows guided demo scenarios** at `/demo`, covering whole cases from application to decision letter.
+- **Follows DKFDS** throughout, with the official Virk theme (#0059B3) and borger.dk green as an accent.
 
-**Phase 5 Complete** (February 2026)
+### Status labels used in the demos
 
-### Core Features Delivered
+| Label | Meaning |
+|---|---|
+| LIVE | AabenForms' own data, for example the case register |
+| LIVE-PARAT | The integration code exists; it needs a certificate and an agreement (MitID, Digital Post) |
+| DEMO | The integration is not built yet; the data comes from a demo rail (CPR Familie+, STIL, eIndkomst, NemRefusion) |
 
-**Component Library:**
-- WorkflowPayment - Integrated payment processing with MobilePay/card support
-- AppointmentPicker - Interactive date/time selection with availability checking
-- WorkflowExecutionTracker - Real-time workflow progress visualization with step-by-step tracking
-- WebformRenderer - Dynamic form rendering with validation and submission handling
-- WorkflowDashboard - Task management with filtering, sorting, and pagination
+## Demo scenarios
 
-**UI/UX Enhancements:**
-- Skeleton loaders for improved perceived performance
-- Loading spinners with contextual feedback
-- Modal dialogs with keyboard navigation and focus trapping
-- Toast notifications for user feedback
-- Tooltips with accessibility support
-- Error boundaries with graceful degradation
-- Comprehensive empty states and error messages
+| Route | Persona | What the citizen does not have to type |
+|---|---|---|
+| `/demo/byggetilladelse` | Freja | Name, CPR and address (the simple scenario) |
+| `/demo/merudgifter` | Freja | Her children (family register). Income is not fetched, because SEL §41 does not depend on it |
+| `/demo/skoleskift` | Freja, Lars, school leader | Custody and the child's current school. Lars co-signs with his own MitID, the school leader decides, and both parents get the decision letter |
+| `/demo/klage` | Birthe | Her cases, the decision and the klagefrist. She only types the reason |
+| `/demo/sygedagpenge` | Mikkel | Employer and working hours. He only types his limitations |
 
-**Accessibility Achievements:**
-- WCAG 2.1 AA compliance verified across all components
-- Full keyboard navigation support with visible focus indicators
-- Screen reader optimized with proper ARIA labels and live regions
-- Sufficient color contrast ratios (minimum 4.5:1 for text)
-- Semantic HTML structure throughout
-- Skip links and landmark regions for navigation
+Each scenario has a one-click persona login on a DKFDS-styled mock MitID page. The demo pages are switched on by `NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true`.
 
-**Mobile Responsiveness:**
-- Touch-friendly tap targets (minimum 44x44px)
-- Responsive layouts with breakpoint optimization
-- Mobile-optimized form inputs and controls
+## Stack
 
-**Performance Optimization:**
-- Lazy loading for route-based code splitting
-- Image optimization
-- CSS extraction and minification
+| Component | Version |
+|---|---|
+| Nuxt | 3.21 |
+| Vue | 3.5 |
+| DKFDS (`dkfds`) | 11.3.0, Virk theme, self-hosted IBM Plex Sans |
+| @nuxtjs/i18n | 9 (Danish primary, English translation) |
+| Pinia (@pinia/nuxt) | 0.5 |
+| Tailwind CSS | 3.4, with preflight off so DKFDS owns base styles |
+| Playwright + @axe-core/playwright | 1.63 / 4.12 |
+| Node / pnpm | 22 / 9.15.0 |
 
-### Technology Stack
+DKFDS rules for this repo, covering markup, palette and the rem rebase for DKFDS's 62.5% root font size, are in [`docs/DKFDS_REFERENCE.md`](docs/DKFDS_REFERENCE.md).
 
-| Technology | Version | Purpose |
-|-----------|---------|---------|
-| **Framework** |
-| Nuxt | 3.15.0 | Vue.js framework with SSR/SSG support |
-| Vue | 3.5.27 | Progressive JavaScript framework |
-| TypeScript | 5.9.3 | Type-safe development |
-| **State Management** |
-| Pinia | 2.3.0 | Centralized state management |
-| @vueuse/nuxt | 11.3.0 | Composition utilities |
-| **Styling** |
-| Tailwind CSS | 3.4.0 | Utility-first CSS framework |
-| Headless UI | 1.7.23 | Unstyled accessible components |
-| **Internationalization** |
-| @nuxtjs/i18n | 8.5.5 | Multi-language support |
-| **Testing** |
-| Playwright | 1.58.1 | End-to-end testing (containerized) |
-| **Development** |
-| DDEV | Latest | Local development environment |
-| Node.js | 22 | JavaScript runtime |
-| pnpm | 9.15.0 | Fast package manager |
+## Security model
 
-### Backend Integration
+- **The MitID session id is a bearer capability.** Calls to the backend send it as `Authorization: Bearer <id>`, never in a URL.
+- **Logout fully ends the session.** It clears local state, then makes a top-level form POST to the backend's `/mitid/logout`, with the session id in the body. The backend revokes the session and ends the IdP session with an `id_token_hint`.
+- **CPR numbers reach the browser only masked.** The client never sends another person's CPR; the backend resolves family members from the register.
 
-Connects seamlessly to Drupal 11 backend via JSON:API:
+Still open: the MitID callback hands the session id to the SPA in the return URL, and the SPA keeps it in localStorage (backend [#156](https://github.com/madsnorgaard/AabenForms/issues/156), [#252](https://github.com/madsnorgaard/AabenForms/issues/252)).
 
-```typescript
-// Fetch webform schema
-const { fetchResource } = useApi()
-const form = await fetchResource('webform/webform/contact')
+## Cookies
 
-// Submit webform data
-await postResource('webform_submission/contact', {
-  data: {
-    type: 'webform_submission--contact',
-    attributes: { ... }
-  }
-})
-```
+The DKFDS cookie notice (`components/fds/FdsCookieBanner.vue`) sits before the header and does not block the page, because consent must be freely given. The choice is stored in the first-party cookie `af_consent` for 12 months. A statistics script, configured with `NUXT_PUBLIC_ANALYTICS_SCRIPT`, loads only after the visitor accepts. The policy page is `/cookies`.
 
-**API Features:**
-- RESTful JSON:API endpoints
-- Automatic error handling with user-friendly messages
-- Request/response interceptors for auth tokens
-- CORS configured for cross-origin requests
-- Type-safe API clients with TypeScript interfaces
-
-## Quick Start
-
-### Prerequisites
-
-- DDEV installed and running
-- Docker daemon active
-- Backend running at `https://aabenforms.ddev.site`
-
-### Installation
+## Local development (DDEV)
 
 ```bash
-# Clone repository
-git clone https://github.com/madsnorgaard/aabenforms-frontend.git frontend
 cd frontend
-
-# Start DDEV (automatically installs dependencies)
 ddev start
-
-# Access application
-ddev launch
+ddev exec pnpm install
 ```
 
-### Local Development URLs
+| URL | What |
+|---|---|
+| https://aabenforms-frontend.ddev.site:3001 | The frontend (a production build served by the DDEV daemon, no HMR) |
+| https://aabenforms.ddev.site | Backend (Drupal, separate DDEV project) |
+| http://localhost:8080 | Mock MitID (Keycloak, realm `danish-gov-test`) |
 
-| Environment | URL | Purpose |
-|------------|-----|---------|
-| Main Site | https://aabenforms-frontend.ddev.site | Primary development interface |
-| Dev Server | https://aabenforms-frontend.ddev.site:3001 | Direct Nuxt dev server access |
-| Backend API | https://aabenforms.ddev.site/jsonapi | JSON:API endpoints |
-
-## Key Components
-
-### WorkflowPayment
-
-Integrated payment processing component with support for multiple payment methods:
-
-```vue
-<WorkflowPayment
-  :amount="250.00"
-  :workflow-id="workflowId"
-  :payment-methods="['mobilepay', 'card']"
-  @payment-complete="handlePaymentComplete"
-  @payment-error="handlePaymentError"
-/>
-```
-
-**Features:**
-- MobilePay and credit card payment method options (UI layer)
-- Real-time payment status updates
-- Automatic receipt generation
-- Error recovery workflows
-
-### AppointmentPicker
-
-Interactive appointment scheduling with real-time availability:
-
-```vue
-<AppointmentPicker
-  :available-slots="availableSlots"
-  :duration="30"
-  @appointment-selected="handleSelection"
-/>
-```
-
-**Features:**
-- Calendar view with month/week/day modes
-- Real-time availability checking
-- Time slot visualization
-- Timezone handling
-- Conflict prevention
-- Email confirmation integration
-
-### WorkflowExecutionTracker
-
-Visual workflow progress tracking with step-by-step updates:
-
-```vue
-<WorkflowExecutionTracker
-  :workflow-id="workflowId"
-  :steps="workflowSteps"
-  :current-step="currentStep"
-  @step-complete="handleStepComplete"
-/>
-```
-
-**Features:**
-- Linear and branching workflow visualization
-- Manual refresh to fetch latest status (polling or WebSocket not wired)
-- Step validation and error handling
-- Historical step tracking
-- Estimated time remaining
-- Multi-party approval tracking
-
-## Project Structure
-
-```
-frontend/
-├── .ddev/                    # DDEV configuration
-│   └── config.yaml          # Node.js 22, Nuxt daemon
-├── components/               # Vue components
-│   ├── ui/                  # Reusable UI components
-│   │   ├── Button.vue
-│   │   ├── Input.vue
-│   │   ├── Modal.vue
-│   │   ├── Skeleton.vue
-│   │   ├── Spinner.vue
-│   │   └── Tooltip.vue
-│   ├── workflow/            # Workflow-specific components
-│   │   ├── WorkflowPayment.vue
-│   │   ├── AppointmentPicker.vue
-│   │   ├── WorkflowExecutionTracker.vue
-│   │   └── WorkflowDashboard.vue
-│   ├── WebformRenderer.vue  # Dynamic form rendering
-│   └── TenantBranding.vue   # Multi-tenant styling
-├── composables/              # Composition functions
-│   ├── useApi.ts            # JSON:API client
-│   ├── useAuth.ts           # Authentication (MitID)
-│   ├── useTenant.ts         # Tenant detection
-│   └── useWorkflow.ts       # Workflow management
-├── layouts/                  # Page layouts
-│   ├── default.vue          # Standard layout
-│   └── marketing.vue        # Marketing site layout
-├── locales/                  # i18n translations
-│   ├── da.json              # Danish
-│   └── en.json              # English
-├── pages/                    # File-based routing
-│   ├── index.vue            # Marketing homepage
-│   ├── forms/               # Form pages
-│   │   └── [slug].vue       # Dynamic form rendering
-│   └── workflows/           # Workflow pages
-│       ├── tasks.vue        # Task dashboard
-│       └── [id].vue         # Individual workflow view
-├── stores/                   # Pinia state management
-│   ├── user.ts              # User authentication state
-│   ├── tenant.ts            # Multi-tenant configuration
-│   ├── form.ts              # Form data and submission
-│   └── workflow.ts          # Workflow state
-├── types/                    # TypeScript definitions
-│   ├── user.ts
-│   ├── tenant.ts
-│   ├── webform.ts
-│   └── workflow.ts
-├── docs/                     # Documentation
-│   ├── guides/              # Usage guides
-│   ├── reports/             # Test results and reports
-│   └── archive/             # Historical documents
-├── tests/                    # Test suites
-│   └── e2e/                 # Playwright E2E tests (run via container, see docs/testing.md)
-├── app.vue                   # Root component
-├── nuxt.config.ts           # Nuxt configuration
-├── CLAUDE.md                # AI development context
-└── README.md                # This file
-```
-
-## Development
-
-### Common Commands
+DDEV serves a production build, so rebuild after changes:
 
 ```bash
-# View logs
-ddev logs
-
-# Install new dependency
-ddev exec pnpm add <package-name>
-
-# Install dev dependency
-ddev exec pnpm add -D <package-name>
-
-# Restart after config changes
-ddev restart
-
-# SSH into container
-ddev ssh
-
-# Build for production
-ddev exec pnpm run build
-
-# Preview production build
-ddev exec pnpm run preview
-
-# Run E2E tests
-ddev exec pnpm test:e2e
-
-# Type checking
-ddev exec pnpm run vue-tsc --noEmit
+ddev exec "NUXT_SKIP_PRERENDER=1 pnpm run build" && ddev restart
 ```
 
-### Multi-Tenancy
+Personas for the mock MitID are defined in the backend realm file (`backend/.ddev/mocks/keycloak/realms/danish-gov-test.json`).
 
-Automatic tenant detection from domain with fallback support:
+## Project structure
 
-```typescript
-const { detectTenant } = useTenant()
-
-// Detects tenant from current domain
-await detectTenant()
-// Returns tenant configuration including:
-// - name: "Aarhus Kommune"
-// - domain: "aarhus.aabenforms.dk"
-// - branding: { colors, logo, etc. }
-// - settings: tenant-specific configuration
+```
+components/
+  fds/            DKFDS wrappers (header, footer, inputs, alerts, step indicator, cookie banner)
+  demo/           Demo wizard, provenance panel, persona login, Digital Post inbox
+  auth/ landing/ ui/ workflow/
+composables/
+  scenarios/      One config per demo scenario
+  useAuth.ts usePrefill.ts useDemoScenario.ts useConsent.ts useApi.ts ...
+pages/
+  demo/           /demo hub and the five scenarios
+  forms/[slug].vue  webform rendering
+  cases/inbox.vue   caseworker inbox
+  cookies.vue tilgaengelighed.vue kontakt.vue auth/callback.vue
+stores/           user, case, form, tenant
+i18n/locales/     da.json, en.json
+plugins/          consent.client.ts, dkfds.client.ts
+tests/e2e/        Playwright specs, a11y/ holds the axe suite
+docs/             DKFDS_REFERENCE.md, testing.md, guides/, reports/
 ```
 
-**Tenant Types:**
+## Testing
 
-1. **Default Tenant** (`aabenforms.dk`)
-   - Marketing site showcasing platform features
-   - Interactive demo environment
-   - Public documentation and pricing
-   - Lead generation forms
-
-2. **Customer Tenants** (e.g., `aarhus.aabenforms.dk`)
-   - Municipality-specific branding
-   - Production forms and workflows
-   - MitID authentication required
-   - GDPR-compliant data handling
-
-### State Management
-
-Centralized state with Pinia stores:
-
-```typescript
-// User authentication
-import { useUserStore } from '~/stores/user'
-const userStore = useUserStore()
-
-// Tenant configuration
-import { useTenantStore } from '~/stores/tenant'
-const tenantStore = useTenantStore()
-
-// Form data and submission
-import { useFormStore } from '~/stores/form'
-const formStore = useFormStore()
-
-// Workflow management
-import { useWorkflowStore } from '~/stores/workflow'
-const workflowStore = useWorkflowStore()
-```
-
-**Store Features:**
-- Type-safe state access
-- Persistent state with localStorage
-- Automatic state hydration on page load
-- DevTools integration for debugging
-- Actions and getters co-located with state
-
-### Internationalization
-
-Built-in Danish and English support with extensible translation system:
-
-```vue
-<template>
-  <h1>{{ $t('hero.tagline') }}</h1>
-  <p>{{ $t('hero.description') }}</p>
-  <NuxtLink :to="localePath('/forms/contact')">
-    {{ $t('nav.contact') }}
-  </NuxtLink>
-</template>
-
-<script setup>
-const { locale, t } = useI18n()
-
-// Switch language
-locale.value = 'en'
-
-// Use translations in script
-const message = t('form.submit')
-</script>
-```
-
-**Translation Files:**
-- `locales/da.json` - Danish translations
-- `locales/en.json` - English translations
-
-### Testing
-
-End-to-end tests run against a containerized production preview build,
-**not** the Nuxt dev server. Nuxt 3.15 + vue-router 4.6.4 has an SSR
-crash in dev mode that locks up the server under Playwright load. See
-[`docs/testing.md`](docs/testing.md) for the background.
+The specs run against a built frontend and the DDEV backend:
 
 ```bash
-# Default: landing + workflows specs on chromium
-bash run-e2e-container.sh
+# Every demo spec with real mock-MitID logins (chromium)
+BASE_URL=https://aabenforms-frontend.ddev.site:3001 E2E_FULL_AUTH=1 \
+  pnpm exec playwright test --project=chromium
 
-# All specs including auth
-bash run-e2e-container.sh all
+# Only the axe (WCAG 2.1 AA) suite
+BASE_URL=https://aabenforms-frontend.ddev.site:3001 pnpm test:a11y
 
-# Drop into the Playwright container shell
-bash run-e2e-container.sh shell
+# Save screenshots for material
+SCREENSHOT_DIR=/tmp/shots BASE_URL=... E2E_FULL_AUTH=1 pnpm exec playwright test tests/e2e/demo-skoleskift.spec.ts --project=chromium
 ```
 
-Prerequisites:
-- DDEV backend must be running (`ddev start` in the backend repo) so the
-  test container can reach Drupal and Keycloak via the `ddev_default`
-  docker network.
-- `node_modules/` in this repo is masked inside the container and
-  rebuilt, so host Node version does not affect the run.
+Without `E2E_FULL_AUTH=1`, only the smoke tests that need no login run.
 
-Spec layout as of Apr 23, 2026:
-- `tests/e2e/landing.spec.ts` - 11 tests, green against the preview build.
-- `tests/e2e/workflows.spec.ts` - 3 UI tests + 3 backend API tests.
-- `tests/e2e/auth.spec.ts` - 5 describe blocks for the MitID flow. Not
-  yet reliably green inside the container because the spec hardcodes
-  `localhost:8080` for one Keycloak assertion, which from inside the
-  Playwright container resolves to the container itself, not Keycloak.
-  Fix paths documented in [`docs/testing.md`](docs/testing.md).
+**CI today only builds the Docker image** (`.github/workflows/build-check.yml`). Playwright, axe and a dependency audit do not run in CI yet ([#24](https://github.com/madsnorgaard/aabenforms-frontend/issues/24), [#25](https://github.com/madsnorgaard/aabenforms-frontend/issues/25), [#26](https://github.com/madsnorgaard/aabenforms-frontend/issues/26)), so run them locally before merging.
 
-Danish strings in `locales/da.json` must use proper Unicode (æ/ø/å).
-On Apr 23, 2026 27 strings were corrected from ae/oe/aa romanization
-(Foralder → Forælder, etc.).
+## Deployment
 
-## Production Build
+Merging to `main` deploys to production: `deploy.yml` dispatches to [contabo-infrastructure](https://github.com/madsnorgaard/contabo-infrastructure), which builds the Docker image on the server. Build-time flags are set per project in that repo's `deploy.yml`:
 
-### Building for Production
+| Variable | Purpose |
+|---|---|
+| `API_BASE_URL` | Backend base URL (`https://api.aabenforms.dk` in production) |
+| `NUXT_PUBLIC_MITID_ENABLED` | Show MitID login (default on) |
+| `NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED` | Enable the `/demo` pages |
+| `NUXT_PUBLIC_ANALYTICS_SCRIPT` | Statistics script, loaded only after cookie consent |
 
-```bash
-# Build optimized production bundle
-ddev exec pnpm run build
+The production Keycloak at auth.aabenforms.dk is managed by hand. Manual rollout steps are tracked in [#71](https://github.com/madsnorgaard/aabenforms-frontend/issues/71).
 
-# Preview production build locally
-ddev exec pnpm run preview
-```
+## Related
 
-**Build Output:**
-- Server-side rendered (SSR) pages
-- Static assets with content hashing
-- Optimized JavaScript bundles
-- Minified and extracted CSS
-- Service worker for offline support (optional)
-
-### Deployment
-
-Production: https://aabenforms.dk on Contabo VPS2 (Docker + Traefik +
-Let's Encrypt). Image built from this repo's `Dockerfile` using
-node:22-alpine + pnpm; final stage runs `node server/index.mjs` on
-port 3000.
-
-**Deploy flow**: push to `main` fires a `repository_dispatch` into
-[contabo-infrastructure](https://github.com/madsnorgaard/contabo-infrastructure)
-`.github/workflows/deploy.yml`, which runs on a self-hosted runner on
-VPS2. The runner rsyncs the repo and rebuilds the image.
-
-**Repo layout**: this is a *flat* Nuxt repo - the repo root IS the Nuxt
-app. The orchestrator workflow auto-detects layout and also supports
-the monorepo pattern (`frontend/` subdir) used by other projects.
-
-**Readiness gate**: the deploy workflow checks for
-`~/docker/aabenforms.dk/.env` on VPS2 and silently skips if absent.
-This guard once caused six weeks of no-op deploys from Apr 6 - Apr 22
-before it was found; a placeholder `.env` now lives there.
-
-**Build-time flags on the Dockerfile**:
-
-| ARG | Default | Purpose |
-|-----|---------|---------|
-| `API_BASE_URL` | `https://api.aabenforms.dk` | Baked into `runtimeConfig.public.apiBase`. |
-| `NUXT_PUBLIC_MITID_ENABLED` | `false` | When `false`, hides the MitID login button on the landing page. |
-
-`NUXT_PUBLIC_MITID_ENABLED=false` in prod is deliberate. The Drupal
-`authorization_endpoint` config on `api.aabenforms.dk` currently points
-at the local DDEV Keycloak mock (`http://localhost:8080`), so the MitID
-button would redirect every visitor to a URL only the developer's
-laptop can reach. Until real MitID test-gateway registration with
-Digitaliseringsstyrelsen lands, the button is hidden on prod. Flip the
-build ARG to `true` when real MitID is wired.
-
-Local dev (`nuxt dev`) defaults to `mitidEnabled: true` so the button
-stays visible and Playwright auth tests still work.
-
-## Documentation
-
-### User Guides
-
-- **[Component Usage Guide](docs/guides/COMPONENT_USAGE_GUIDE.md)** - How to use all UI components
-- **[Workflow Tracker Implementation](docs/guides/WORKFLOW_TRACKER_IMPLEMENTATION.md)** - Workflow execution tracking
-- **[Performance Optimization](docs/guides/PERFORMANCE_OPTIMIZATION.md)** - Performance best practices
-- **[Accessibility Guide](docs/guides/ACCESSIBILITY_GUIDE.md)** - WCAG 2.1 AA compliance guide
-- **[Multi-Tenant Setup](docs/guides/MULTI_TENANT.md)** - Multi-tenancy configuration
-
-### Technical Reports
-
-- **[Accessibility Report](docs/reports/ACCESSIBILITY_REPORT.md)** - Full WCAG 2.1 AA audit results
-- **[UI/UX Polish Summary](docs/reports/UI_UX_POLISH_SUMMARY.md)** - Production readiness assessment
-- **[Performance Implementation](docs/reports/PERFORMANCE_IMPLEMENTATION_SUMMARY.md)** - Performance optimization results
-
-### Developer Resources
-
-- **[CLAUDE.md](CLAUDE.md)** - Complete AI development context and technical guide
-- **[Backend Repository](https://github.com/madsnorgaard/aabenforms)** - Drupal 11 API documentation
-
-## Browser Support
-
-**Modern Browsers:**
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-**Mobile Browsers:**
-- iOS Safari 14+
-- Chrome for Android 90+
-
-**Note:** Internet Explorer is not supported. Modern ES6+ features are used throughout.
-
-## Contributing
-
-We welcome contributions from the community. To contribute:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-**Guidelines:**
-- Follow existing code style and conventions
-- Include tests for new features
-- Update documentation as needed
-- Ensure all tests pass before submitting PR
-- Add accessibility considerations for UI changes
-
-## Related Projects
-
-- **Backend:** [aabenforms](https://github.com/madsnorgaard/aabenforms) - Drupal 11 backend with JSON:API
-- **Deployment orchestrator:** [contabo-infrastructure](https://github.com/madsnorgaard/contabo-infrastructure) - shared deploy workflow for this project and others on VPS2
+- **Backend:** [madsnorgaard/AabenForms](https://github.com/madsnorgaard/AabenForms), Drupal 11 with ECA flows, prefill, MitID and Digital Post
+- **Deployment:** [contabo-infrastructure](https://github.com/madsnorgaard/contabo-infrastructure)
 
 ## License
 
-GPL-2.0 - See [LICENSE](LICENSE) file for details
-
-## Support
-
-- **Issues:** [GitHub Issues](https://github.com/madsnorgaard/aabenforms-frontend/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/madsnorgaard/aabenforms-frontend/discussions)
-- **Documentation:** [Nuxt 3 Docs](https://nuxt.com/docs) | [Vue 3 Docs](https://vuejs.org/guide)
-
----
-
-**Built with Vue.js and Nuxt 3 for Danish municipalities**
+GPL-2.0. See [LICENSE](LICENSE).
