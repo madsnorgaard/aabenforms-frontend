@@ -3,7 +3,7 @@ import type { PrefillResponse } from '~/types/demo'
 export type PrefillError = 'unauthenticated' | 'not_found' | 'failed' | null
 
 /**
- * GET /api/prefill/{webform_id}?session={workflow_id}
+ * GET /api/prefill/{webform_id} with "Authorization: Bearer <workflow_id>"
  *
  * Runs the register lookups the bound flow would run for the form and returns
  * every value with its provenance (register, contract, honest mode, legal
@@ -32,8 +32,9 @@ export const usePrefill = () => {
     status.value = null
     try {
       const res = await $fetch<PrefillResponse>(
-        `${apiBase}/api/prefill/${encodeURIComponent(webformId)}?session=${encodeURIComponent(sessionId)}`,
-        { headers: { Accept: 'application/json' } },
+        `${apiBase}/api/prefill/${encodeURIComponent(webformId)}`,
+        // The MitID session travels in the Authorization header, never the URL.
+        { headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId}` } },
       )
       data.value = res
       status.value = 200
