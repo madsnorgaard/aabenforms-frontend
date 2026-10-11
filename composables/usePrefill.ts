@@ -20,7 +20,7 @@ export const usePrefill = () => {
   const error = ref<PrefillError>(null)
   const status = ref<number | null>(null)
 
-  async function load(webformId: string, sessionId: string | null | undefined): Promise<PrefillResponse | null> {
+  async function load(webformId: string, sessionId: string | null | undefined, query: Record<string, string> = {}): Promise<PrefillResponse | null> {
     if (!sessionId) {
       error.value = 'unauthenticated'
       status.value = 401
@@ -34,7 +34,9 @@ export const usePrefill = () => {
       const res = await $fetch<PrefillResponse>(
         `${apiBase}/api/prefill/${encodeURIComponent(webformId)}`,
         // The MitID session travels in the Authorization header, never the URL.
-        { headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId}` } },
+        // query: e.g. { subject: '0' } to act on behalf of someone the session
+        // holds a fuldmagt for. Only an index; the backend checks the fuldmagt.
+        { headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId}` }, query },
       )
       data.value = res
       status.value = 200

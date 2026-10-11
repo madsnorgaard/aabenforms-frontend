@@ -245,7 +245,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
 
   async function loadPrefill() {
     error.value = null
-    const res = await prefill.load(config.webformId, sessionId.value)
+    const res = await prefill.load(config.webformId, sessionId.value, config.prefillQuery ?? {})
     if (!res) {
       if (prefill.error.value === 'unauthenticated') {
         // The 15 minute session is gone: log out and start over.
@@ -489,6 +489,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
       values: values.value,
       choices: chosenOptions.value,
       submissionId: submissionId.value,
+      steps: workflowSteps.value,
       t: translate,
       d: formatDate,
     }).filter((r) => r.value)
