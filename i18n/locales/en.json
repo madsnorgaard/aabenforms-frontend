@@ -280,7 +280,8 @@
         "chooseHint": "Fetched from {register}. Choose the one the application concerns.",
         "chooseFirst": "Choose from the list above first.",
         "youKnowHeading": "What only you know",
-        "youKnowNone": "Everything was fetched. There is nothing for you to type."
+        "youKnowNone": "Everything was fetched. There is nothing for you to type.",
+        "nothingToChoose": "There is nothing to choose under \"{field}\" right now: every option is already used or has expired. Try again shortly, or contact the municipality."
       },
       "form": {
         "heading": "What only you know",

@@ -280,7 +280,8 @@
         "chooseHint": "Hentet fra {register}. Vælg den, ansøgningen gælder.",
         "chooseFirst": "Vælg først i listen ovenfor.",
         "youKnowHeading": "Det kun du ved",
-        "youKnowNone": "Alt er hentet. Du skal ikke skrive noget."
+        "youKnowNone": "Alt er hentet. Du skal ikke skrive noget.",
+        "nothingToChoose": "Der er intet at vælge under \"{field}\" lige nu: alle muligheder er allerede brugt eller udløbet. Prøv igen om lidt, eller kontakt kommunen."
       },
       "form": {
         "heading": "Det kun du ved",

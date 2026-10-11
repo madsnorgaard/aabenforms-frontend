@@ -236,6 +236,14 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     Boolean(config.prefillQuery?.subject) && Boolean(prefill.data.value) && !prefill.data.value?.acting_for,
   )
 
+  /**
+   * Rows where every option is disabled (e.g. every decision already
+   * appealed or past its klagefrist): there is nothing to choose.
+   */
+  const noSelectableChoices = computed(() =>
+    rows.value.filter((r) => r.options && r.options.length > 0 && r.options.every((o) => o.disabled)),
+  )
+
   /** Rows with options where no choice has been made yet. */
   const missingChoices = computed(() =>
     rows.value.filter((r) => r.options && r.options.length > 0 && !choices.value[r.key]),
@@ -610,6 +618,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     rows,
     notAsked,
     missingChoices,
+    noSelectableChoices,
     actingForMissing,
     chosenOptions,
 
