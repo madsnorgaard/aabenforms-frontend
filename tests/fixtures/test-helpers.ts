@@ -62,7 +62,7 @@ export async function loginWithMitId(page: Page, user: TestUser = testUsers.citi
   await page.click('#kc-login')
 
   // Wait for redirect back to frontend
-  await page.waitForURL(/auth\/callback|session=/, { timeout: 15000 })
+  await page.waitForURL(/auth\/callback/, { timeout: 15000 })
 
   // Wait for auth to complete (callback page processes and redirects)
   await page.waitForTimeout(2000)

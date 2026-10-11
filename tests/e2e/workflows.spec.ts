@@ -78,13 +78,15 @@ test.describe('Backend API', () => {
     expect(response.status()).toBe(201)
   })
 
-  test('GET /mitid/session/nonexistent returns 404', async ({ request }) => {
-    const response = await request.get(`${API_BASE}/mitid/session/nonexistent-id`, {
-      headers: { 'Accept': 'application/json' },
+  test('GET /api/mitid/session needs a Bearer session, never a URL id', async ({ request }) => {
+    const unknown = await request.get(`${API_BASE}/api/mitid/session`, {
+      headers: { 'Accept': 'application/json', 'Authorization': 'Bearer wf_00000000000000000000000000000000' },
       ignoreHTTPSErrors: true,
     })
-
-    expect(response.status()).toBe(404)
+    expect(unknown.status()).toBe(401)
+    // The old id-in-path route is gone.
+    const legacy = await request.get(`${API_BASE}/mitid/session/wf_00000000000000000000000000000000`, { ignoreHTTPSErrors: true })
+    expect(legacy.status()).toBe(404)
   })
 })
 

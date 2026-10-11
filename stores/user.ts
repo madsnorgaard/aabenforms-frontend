@@ -1,6 +1,53 @@
 import { defineStore } from 'pinia'
 import type { User } from '~/types/user'
 
+/** Public session attributes from the backend (CPR always masked). */
+export interface SessionAttributes {
+  name: string
+  cpr: string
+  email: string
+  expiry: string
+  given_name?: string
+  family_name?: string
+  birthdate?: string
+  assurance_level?: string
+  address?: {
+    street?: string | null
+    postal_code?: string | null
+    city?: string | null
+    municipality_code?: string | null
+  } | null
+}
+
+/** Maps the backend's public session attributes to the app's User. */
+export function sessionUserFromAttributes(a: SessionAttributes): User {
+  return {
+    cpr: a.cpr,
+    name: a.name || '',
+    email: a.email || '',
+    sessionExpiry: a.expiry,
+    given_name: a.given_name || undefined,
+    family_name: a.family_name || undefined,
+    birthdate: a.birthdate || undefined,
+    assurance_level: a.assurance_level || undefined,
+    address: a.address || null,
+  }
+}
+
+/**
+ * The session id is a bearer capability. It lives in sessionStorage: scoped
+ * to this tab and gone when the tab closes, never shared across a shared
+ * device's later visitors. Older builds used localStorage; those keys are
+ * cleared on sight.
+ */
+const SESSION_KEY = 'auth_session_id'
+const EXPIRY_KEY = 'auth_session_expiry'
+
+function clearLegacyStorage() {
+  localStorage.removeItem(SESSION_KEY)
+  localStorage.removeItem(EXPIRY_KEY)
+}
+
 interface UserState {
   user: User | null
   sessionId: string | null
@@ -58,50 +105,29 @@ export const useUserStore = defineStore('user', {
       this.sessionExpiry = sessionExpiry || null
       this.isAuthenticated = true
 
-      // Persist to localStorage
+      // Persist for this tab only
       if (process.client) {
-        localStorage.setItem('auth_session_id', sessionId)
+        sessionStorage.setItem(SESSION_KEY, sessionId)
         if (sessionExpiry) {
-          localStorage.setItem('auth_session_expiry', sessionExpiry)
+          sessionStorage.setItem(EXPIRY_KEY, sessionExpiry)
         }
       }
     },
 
     /**
-     * Load user from session ID via the MitID session endpoint.
+     * Reload the user for a session id (page reload restore).
      *
-     * Same endpoint useAuth.loadUserFromSession hits - this path is the
-     * page-reload restore (localStorage -> fetch latest claims). The
-     * response shape is JSON:API-style with the additive demo fields
-     * (given_name/family_name/birthdate/address/assurance_level).
+     * GET /api/mitid/session with the id in the Authorization header, never
+     * in the URL (#156).
      */
     async loadSession(sessionId: string) {
       this.loading = true
       const config = useRuntimeConfig()
 
       try {
-        const response = await $fetch<{
-          data: {
-            attributes: {
-              name: string
-              cpr: string
-              email: string
-              expiry: string
-              given_name?: string
-              family_name?: string
-              birthdate?: string
-              assurance_level?: string
-              address?: {
-                street?: string | null
-                postal_code?: string | null
-                city?: string | null
-                municipality_code?: string | null
-              } | null
-            }
-          }
-        }>(`${config.public.apiBase}/mitid/session/${sessionId}`, {
+        const response = await $fetch<{ data: { attributes: SessionAttributes } }>(`${config.public.apiBase}/api/mitid/session`, {
           method: 'GET',
-          headers: { Accept: 'application/json' },
+          headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId}` },
         })
 
         if (!response?.data) {
@@ -109,18 +135,7 @@ export const useUserStore = defineStore('user', {
         }
 
         const a = response.data.attributes
-        const user: User = {
-          cpr: a.cpr,
-          name: a.name || '',
-          email: a.email || '',
-          sessionExpiry: a.expiry,
-          given_name: a.given_name || undefined,
-          family_name: a.family_name || undefined,
-          birthdate: a.birthdate || undefined,
-          assurance_level: a.assurance_level || undefined,
-          address: a.address || null,
-        }
-        this.setUser(user, sessionId, a.expiry)
+        this.setUser(sessionUserFromAttributes(a), sessionId, a.expiry)
       }
       catch (error) {
         console.error('Failed to load session:', error)
@@ -132,13 +147,14 @@ export const useUserStore = defineStore('user', {
     },
 
     /**
-     * Restore session from localStorage
+     * Restore this tab's session
      */
     restoreSession() {
       if (!process.client) return
 
-      const sessionId = localStorage.getItem('auth_session_id')
-      const sessionExpiry = localStorage.getItem('auth_session_expiry')
+      clearLegacyStorage()
+      const sessionId = sessionStorage.getItem(SESSION_KEY)
+      const sessionExpiry = sessionStorage.getItem(EXPIRY_KEY)
 
       if (sessionId) {
         this.sessionId = sessionId
@@ -165,8 +181,9 @@ export const useUserStore = defineStore('user', {
       this.isAuthenticated = false
 
       if (process.client) {
-        localStorage.removeItem('auth_session_id')
-        localStorage.removeItem('auth_session_expiry')
+        sessionStorage.removeItem(SESSION_KEY)
+        sessionStorage.removeItem(EXPIRY_KEY)
+        clearLegacyStorage()
       }
     },
 

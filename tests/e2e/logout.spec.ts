@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test'
  * Birthe; he picks "Ikke dig?" at the IdP) and sees the mismatch warning. When
  * the page loads again with his session, it runs the backend RP-initiated
  * logout automatically. Afterwards:
- *  - his old workflow id is revoked (GET /mitid/session/{id} -> 404),
+ *  - his old workflow id is revoked (GET /api/mitid/session -> 401),
  *  - the IdP only shows Birthe's suggested username (no remembered user),
  *  - Birthe signs in and sees her own cases with no mismatch warning.
  *
@@ -43,9 +43,13 @@ test.describe('Logout - full auth', () => {
     // He chose this login here, so the page warns instead of logging out.
     const mismatch = page.getByTestId('demo-persona-mismatch')
     await expect(mismatch).toBeVisible({ timeout: 15000 })
-    const mikkelSession = await page.evaluate(() => localStorage.getItem('auth_session_id'))
+    const mikkelSession = await page.evaluate(() => sessionStorage.getItem('auth_session_id'))
     expect(mikkelSession).toMatch(/^wf_[a-f0-9]{32}$/)
-    expect((await request.get(`${API_BASE}/mitid/session/${mikkelSession}`, { ignoreHTTPSErrors: true })).status()).toBe(200)
+    // Never in localStorage, and never in the URL.
+    expect(await page.evaluate(() => localStorage.getItem('auth_session_id'))).toBeNull()
+    expect(page.url()).not.toContain(mikkelSession!)
+    const sessionOf = (sid: string) => request.get(`${API_BASE}/api/mitid/session`, { headers: { Authorization: `Bearer ${sid}` }, ignoreHTTPSErrors: true })
+    expect((await sessionOf(mikkelSession!)).status()).toBe(200)
 
     // Loading the page again with the wrong persona signed in does the full
     // logout automatically: revoke + IdP end_session, back on the demo page.
@@ -53,8 +57,8 @@ test.describe('Logout - full auth', () => {
     await page.waitForURL(/protocol\/openid-connect\/logout/, { timeout: 15000 }).catch(() => {})
     await page.waitForURL(/\/demo\/klage(\?|$)/, { timeout: 20000 })
     await expect(page.getByRole('button', { name: 'Log ind som Birthe Jensen' })).toBeVisible({ timeout: 15000 })
-    expect(await page.evaluate(() => localStorage.getItem('auth_session_id'))).toBeNull()
-    expect((await request.get(`${API_BASE}/mitid/session/${mikkelSession}`, { ignoreHTTPSErrors: true })).status()).toBe(404)
+    expect(await page.evaluate(() => sessionStorage.getItem('auth_session_id'))).toBeNull()
+    expect((await sessionOf(mikkelSession!)).status()).toBe(401)
 
     // The IdP no longer remembers Mikkel: only Birthe's suggested username.
     await page.getByRole('button', { name: 'Log ind som Birthe Jensen' }).click()

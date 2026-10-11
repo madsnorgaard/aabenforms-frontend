@@ -300,7 +300,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
 
   /**
    * Called on mount and whenever the user store (re)hydrates. On the initial
-   * call the store has not restored localStorage yet, so an unauthenticated
+   * call the store has not restored the session yet, so an unauthenticated
    * state is not conclusive; the wizard calls again once auth has settled.
    */
   function syncFromAuth(initial = false) {

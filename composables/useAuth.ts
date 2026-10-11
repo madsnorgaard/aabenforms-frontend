@@ -1,5 +1,25 @@
 import type { User } from '~/types/user'
-import { useUserStore } from '~/stores/user'
+import { useUserStore, sessionUserFromAttributes, type SessionAttributes } from '~/stores/user'
+
+/** sessionStorage key for the login verifier (PKCE-style handoff, #156). */
+const VERIFIER_KEY = 'af_login_verifier'
+
+function base64url(bytes: Uint8Array): string {
+  let binary = ''
+  for (const b of bytes) binary += String.fromCharCode(b)
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+/** A fresh RFC 7636 verifier: 32 random bytes, base64url (43 chars). */
+function createVerifier(): string {
+  return base64url(crypto.getRandomValues(new Uint8Array(32)))
+}
+
+/** The S256 challenge for a verifier. */
+async function challengeFor(verifier: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))
+  return base64url(new Uint8Array(digest))
+}
 
 /**
  * Authentication composable for MitID OIDC integration.
@@ -27,8 +47,12 @@ export const useAuth = () => {
   /**
    * Initiate MitID login flow
    * Redirects to backend /mitid/login endpoint
+   *
+   * The session id never comes back in a URL (#156): this tab keeps a secret
+   * verifier and sends only its SHA-256 challenge. The callback URL carries a
+   * one-time code that is worthless without the verifier.
    */
-  function login(returnUrl?: string, opts: { fresh?: boolean, loginHint?: string } = {}) {
+  async function login(returnUrl?: string, opts: { fresh?: boolean, loginHint?: string } = {}) {
     // Store the intended destination for after auth completes
     if (returnUrl) {
       sessionStorage.setItem('mitid_return_url', returnUrl)
@@ -44,31 +68,47 @@ export const useAuth = () => {
     // loginHint: only a username suggestion for the IdP (OIDC login_hint);
     // the person still authenticates there. The backend validates it.
     const hint = opts.loginHint ? `&login_hint=${encodeURIComponent(opts.loginHint)}` : ''
-    window.location.href = `${apiBase}/mitid/login?return_url=${encodeURIComponent(callbackUrl)}${fresh}${hint}`
+    const verifier = createVerifier()
+    sessionStorage.setItem(VERIFIER_KEY, verifier)
+    const challenge = `&client_challenge=${await challengeFor(verifier)}`
+    window.location.href = `${apiBase}/mitid/login?return_url=${encodeURIComponent(callbackUrl)}${fresh}${hint}${challenge}`
   }
 
   /**
-   * Handle MitID callback after successful authentication
-   * Extracts session ID from URL query parameter
+   * Handle MitID callback after successful authentication.
+   *
+   * Redeems the one-time code from the URL with this tab's verifier, then
+   * removes the code from the address bar and history.
    */
   async function handleCallback() {
-    // Read the session id from the real URL. Since Nuxt 3.19, useRoute() inside a
-    // page component returns the page's own (frozen) route, and on the prerendered
-    // callback page that route carries no query string during hydration - so the
-    // session id was silently missing and the flow stalled at "logged in".
+    // Read from the real URL: since Nuxt 3.19, useRoute() in a page returns the
+    // page's own (frozen) route, and on the prerendered callback page that
+    // route carries no query string during hydration.
     const route = useRoute()
-    const sessionIdParam
-      = (import.meta.client ? new URLSearchParams(window.location.search).get('session') : null)
-        || (route.query.session as string | undefined)
+    const code
+      = (import.meta.client ? new URLSearchParams(window.location.search).get('code') : null)
+        || (route.query.code as string | undefined)
         || undefined
-    if (!sessionIdParam) {
-      error.value = 'Missing session reference in callback URL'
+    const verifier = sessionStorage.getItem(VERIFIER_KEY)
+    sessionStorage.removeItem(VERIFIER_KEY)
+    if (import.meta.client) {
+      window.history.replaceState(window.history.state, '', window.location.pathname)
+    }
+    if (!code || !verifier) {
+      error.value = 'Missing login code in callback URL'
       return false
     }
 
     try {
-      // Fetch user data using session ID
-      await loadUserFromSession(sessionIdParam)
+      const response = await $fetch<{ data: { id: string, attributes: SessionAttributes } }>(
+        `${apiBase}/api/mitid/session/exchange`,
+        { method: 'POST', body: { code, code_verifier: verifier }, headers: { Accept: 'application/json' } },
+      )
+      if (!response?.data?.id) {
+        throw new Error('Invalid session')
+      }
+      const user: User = sessionUserFromAttributes(response.data.attributes)
+      userStore.setUser(user, response.data.id, response.data.attributes.expiry)
 
       // Redirect to return URL if stored
       const returnUrl = sessionStorage.getItem('mitid_return_url')
@@ -79,6 +119,7 @@ export const useAuth = () => {
 
       return true
     } catch (e: any) {
+      userStore.clearSession()
       console.error('Authentication failed:', e)
       error.value = e?.data?.message || e?.message || 'Could not load MitID session'
       return false
@@ -86,64 +127,7 @@ export const useAuth = () => {
   }
 
   /**
-   * Load user data from MitID session
-   */
-  async function loadUserFromSession(sid: string) {
-    try {
-      // Call backend MitID session endpoint directly (not via JSON:API).
-      // The address block is populated only when the IdP issued address
-      // claims (demo Keycloak yes; real MitID/NemLog-in no) - treated as
-      // optional throughout the frontend.
-      const response = await $fetch<{
-        data: {
-          attributes: {
-            name: string
-            cpr: string
-            email: string
-            expiry: string
-            given_name?: string
-            family_name?: string
-            birthdate?: string
-            assurance_level?: string
-            address?: {
-              street?: string | null
-              postal_code?: string | null
-              city?: string | null
-              municipality_code?: string | null
-            } | null
-          }
-        }
-      }>(`${apiBase}/mitid/session/${sid}`, {
-        headers: { 'Accept': 'application/json' },
-      })
-
-      if (!response.data) {
-        throw new Error('Invalid session')
-      }
-
-      const sessionData = response.data.attributes
-
-      const userData: User = {
-        cpr: sessionData.cpr,
-        name: sessionData.name || '',
-        email: sessionData.email || '',
-        sessionExpiry: sessionData.expiry,
-        given_name: sessionData.given_name || undefined,
-        family_name: sessionData.family_name || undefined,
-        birthdate: sessionData.birthdate || undefined,
-        assurance_level: sessionData.assurance_level || undefined,
-        address: sessionData.address || null,
-      }
-
-      userStore.setUser(userData, sid, sessionData.expiry)
-    } catch (e: any) {
-      userStore.clearSession()
-      throw e
-    }
-  }
-
-  /**
-   * Restore session from localStorage on page load
+   * Restore this tab's session (sessionStorage) on page load
    */
   async function restoreSession() {
     userStore.restoreSession()
