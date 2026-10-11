@@ -1163,7 +1163,16 @@
     "fileTooLarge": "File too large (maximum {size})",
     "unsupportedFileType": "File type not supported",
     "tryAgain": "Try again",
-    "helpText": "If the problem persists, please contact support."
+    "helpText": "If the problem persists, please contact support.",
+    "page": {
+      "solution": "Self-service",
+      "heading": "The page could not be shown",
+      "body": "Something went wrong. Try loading the page again, or go to the front page.",
+      "notFoundHeading": "Page not found",
+      "notFoundBody": "We cannot find the page you are looking for. It may have been moved or deleted.",
+      "home": "Go to the front page",
+      "retry": "Try again"
+    }
   },
   "help": {
     "cpr": {
@@ -1339,5 +1348,8 @@
       "changeChoice": "Change your choice",
       "resetDone": "Your choice has been cleared. The banner is shown again at the bottom of the page so you can choose anew."
     }
+  },
+  "seo": {
+    "description": "Open-source digital self-service for Danish municipalities. Citizens log in with MitID, and what the municipality already knows is fetched instead of asked again."
   }
 }

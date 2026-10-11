@@ -43,7 +43,16 @@ export default defineEventHandler((event) => {
 
   const staticPages: { path: string; changefreq: string; priority: string }[] = [
     { path: '/', changefreq: 'weekly', priority: '1.0' },
-    { path: '/demo/appointment-picker', changefreq: 'monthly', priority: '0.5' },
+    { path: '/demo', changefreq: 'weekly', priority: '0.9' },
+    { path: '/demo/byggetilladelse', changefreq: 'monthly', priority: '0.8' },
+    { path: '/demo/merudgifter', changefreq: 'monthly', priority: '0.8' },
+    { path: '/demo/skoleskift', changefreq: 'monthly', priority: '0.8' },
+    { path: '/demo/klage', changefreq: 'monthly', priority: '0.8' },
+    { path: '/demo/klage-fuldmagt', changefreq: 'monthly', priority: '0.8' },
+    { path: '/demo/sygedagpenge', changefreq: 'monthly', priority: '0.8' },
+    { path: '/kontakt', changefreq: 'yearly', priority: '0.6' },
+    { path: '/tilgaengelighed', changefreq: 'monthly', priority: '0.4' },
+    { path: '/cookies', changefreq: 'yearly', priority: '0.3' },
   ]
 
   const entries: SitemapEntry[] = staticPages.map((page) => ({

@@ -56,6 +56,16 @@ test.describe('Accessibility (WCAG 2.1 AA)', () => {
     expect(violations, formatViolations(violations)).toEqual([])
   })
 
+  test('error page is noindex and has no AA violations', async () => {
+    await page.goto('/findes-ikke', { waitUntil: 'commit', timeout: 20000 })
+    await page.waitForSelector('main#main h1', { timeout: 15000 })
+    await expect(page.locator('h1')).toHaveText(/Siden findes ikke|Page not found/)
+    // An error state must never become a search result.
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/)
+    const { violations } = await scan(page)
+    expect(violations, formatViolations(violations)).toEqual([])
+  })
+
   test('contact form has no AA violations', async () => {
     await page.goto('/kontakt', { waitUntil: 'commit', timeout: 20000 })
     await page.waitForSelector('main#main h1, main#main input', { timeout: 15000 })
