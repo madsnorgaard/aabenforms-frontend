@@ -127,7 +127,7 @@ async function logOff() {
   await userStore.logout()
 }
 
-// Pick up an existing MitID session (localStorage) so the user row renders
+// Pick up an existing MitID session (sessionStorage) so the user row renders
 // on every page, not only the ones that mount a form.
 onMounted(() => {
   if (!userStore.isAuthenticated) {

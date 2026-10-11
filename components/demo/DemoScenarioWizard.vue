@@ -470,7 +470,7 @@ function assuranceLabel(acr: string): string {
 
 // --- lifecycle ---------------------------------------------------------------
 
-// After the MitID round-trip the store restores from localStorage (async). Until
+// After the MitID round-trip the store restores from sessionStorage (async). Until
 // that settles we show "Henter dine MitID-data"; afterwards a cancelled login
 // falls back to the button.
 const authSettled = ref(false)
