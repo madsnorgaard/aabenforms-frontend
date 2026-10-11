@@ -2,37 +2,7 @@ import { test, expect } from '@playwright/test'
 
 const API_BASE = process.env.API_BASE_URL || 'https://aabenforms.ddev.site'
 
-test.describe('Landing demo CTA', () => {
-  test.describe.configure({ mode: 'serial' })
-  let sharedPage: any
-
-  test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext({ ignoreHTTPSErrors: true })
-    sharedPage = await context.newPage()
-    await sharedPage.goto('/', { waitUntil: 'commit', timeout: 20000 })
-    await sharedPage.waitForSelector('h1', { timeout: 15000 })
-    await sharedPage.waitForSelector('#demo', { timeout: 15000 })
-    await sharedPage.locator('#demo').scrollIntoViewIfNeeded()
-  })
-
-  test.afterAll(async () => {
-    await sharedPage?.context().close()
-  })
-
-  test('landing #demo slot points at the dedicated /demo/byggetilladelse page', async () => {
-    // The landing slot is now a CTA card - the interactive contact form
-    // moved to /kontakt and the four-phase Byggetilladelse demo lives at
-    // /demo/byggetilladelse. See tests/e2e/byggetilladelse-demo.spec.ts
-    // for the full-flow coverage.
-    const ctaLink = sharedPage.locator('a[href="/demo/byggetilladelse"]').first()
-    await expect(ctaLink).toBeVisible()
-  })
-
-  test('workflow timeline section still shows ECA + Case Worker context', async () => {
-    await expect(sharedPage.locator('text=/Case Worker|Sagsbehandler/i').first()).toBeVisible()
-    await expect(sharedPage.locator('text=/ECA/i').first()).toBeVisible()
-  })
-})
+// The landing page is covered by landing.spec.ts.
 
 test.describe('Backend API', () => {
   test('POST /api/webform/contact/submit accepts data', async ({ request }) => {
