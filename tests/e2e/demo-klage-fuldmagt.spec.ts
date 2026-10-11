@@ -91,3 +91,27 @@ test.describe('Klage med fuldmagt - full auth', () => {
     expect(basis).toBe('fuldmagt')
   })
 })
+
+test.describe('Klage med fuldmagt - fails closed', () => {
+  test.skip(!FULL_AUTH, 'set E2E_FULL_AUTH=1 to run; requires host-network access to localhost:8080')
+  test.setTimeout(90000)
+
+  test('without a fuldmagt nothing can be chosen or submitted', async ({ page, context }) => {
+    await context.clearCookies()
+    await page.goto('/demo/klage-fuldmagt', { waitUntil: 'networkidle' })
+    await page.getByRole('button', { name: 'Log ind som Mikkel Jensen' }).click()
+    await page.waitForURL(/realms\/danish-gov-test\/protocol\/openid-connect\/auth/, { timeout: 15000 })
+    // Freja holds no fuldmagt for anyone. The login hint pins Mikkel's
+    // username, so restart the login to choose another person.
+    if (!(await page.locator('#username').isVisible())) await page.getByRole('link', { name: /Start over|Start forfra/ }).click()
+    await page.fill('#username', 'freja.nielsen')
+    await page.fill('#password', 'test1234')
+    await page.click('#kc-login')
+    await page.waitForURL(/\/demo\/klage-fuldmagt/, { timeout: 20000 })
+    await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+    // No cases offered (neither Birthe's nor Freja's own) and no way forward.
+    await expect(page.locator('.form-group-radio input[type="radio"]')).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Fortsæt' })).toBeDisabled()
+  })
+})
+

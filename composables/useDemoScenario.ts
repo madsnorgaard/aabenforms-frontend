@@ -227,6 +227,15 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     return (prefill.data.value?.not_asked ?? []).filter((k) => !covered.has(k))
   })
 
+  /**
+   * The scenario acts on someone's behalf (prefillQuery.subject) but the
+   * backend confirmed no representation: fail closed, show nothing to choose
+   * and do not continue. The backend refuses such a submission anyway.
+   */
+  const actingForMissing = computed(() =>
+    Boolean(config.prefillQuery?.subject) && Boolean(prefill.data.value) && !prefill.data.value?.acting_for,
+  )
+
   /** Rows with options where no choice has been made yet. */
   const missingChoices = computed(() =>
     rows.value.filter((r) => r.options && r.options.length > 0 && !choices.value[r.key]),
@@ -356,7 +365,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
   }
 
   function continueToForm() {
-    if (missingChoices.value.length > 0) return
+    if (missingChoices.value.length > 0 || actingForMissing.value) return
     fieldErrors.value = {}
     phase.value = 'form'
   }
@@ -601,6 +610,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     rows,
     notAsked,
     missingChoices,
+    actingForMissing,
     chosenOptions,
 
     // Auth.
