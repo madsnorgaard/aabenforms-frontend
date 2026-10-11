@@ -285,8 +285,8 @@ async function loadLarsInbox() {
   larsLoading.value = true
   try {
     const res = await $fetch<{ data?: DigitalPostLetter[] }>(
-      `${config.public.apiBase}/api/digital-post/recent?session=${encodeURIComponent(sessionId.value)}&limit=10`,
-      { headers: { Accept: 'application/json' } },
+      `${config.public.apiBase}/api/digital-post/recent?limit=10`,
+      { headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId.value}` } },
     )
     // Newest first, as the backend orders them.
     larsInbox.value = res.data ?? []
