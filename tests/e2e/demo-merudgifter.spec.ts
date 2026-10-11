@@ -107,7 +107,7 @@ test.describe('Merudgifter demo - full auth', () => {
     // Run 1: 2.500 kr/md -> medhold.
     await fillAndSubmit(page, '2500')
     await expect(page.getByRole('heading', { name: 'Medhold: merudgifterne dækkes' })).toBeVisible({ timeout: 20000 })
-    await expect(page.getByText('Afgørelse: merudgiftsydelse (servicelovens §41)').first()).toBeVisible()
+    await expect(page.getByText('Afgørelse: bevilling af merudgiftsydelse (servicelovens §41)').first()).toBeVisible()
     await expect(page.getByText(/imødekommet \(medhold\)/).first()).toBeAttached()
     await scan(page)
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/merudgifter-step5.png`, fullPage: true })
@@ -120,5 +120,13 @@ test.describe('Merudgifter demo - full auth', () => {
     await expect(page.getByText(/klagefrist/i).first()).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Afslag med klagevejledning' })).toBeVisible({ timeout: 20000 })
     await expect(page.getByText(/ikke imødekommet \(afslag\)/).first()).toBeAttached()
+    // The rejection letter itself carries the reason and the klagevejledning
+    // (forvaltningsloven §25), not a reference to an attachment.
+    const afslag = page.locator('.demo-inbox__item', { hasText: 'Afgørelse: afslag på merudgiftsydelse' }).first()
+    await afslag.locator('summary').click()
+    await expect(afslag).toContainText('800 kr. om måneden')
+    await expect(afslag).toContainText('Klagevejledning')
+    await expect(afslag).toContainText('senest 4 uger efter, at du har modtaget afgørelsen')
+    await expect(afslag).not.toContainText('vedlagte')
   })
 })
