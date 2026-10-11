@@ -47,7 +47,7 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
           name: 'description',
-          content: 'Open-source workflow automation for Danish municipalities.',
+          content: 'Åben kildekode til digital selvbetjening i danske kommuner. Borgeren logger ind med MitID, og det, kommunen allerede ved, bliver hentet i stedet for at blive spurgt om igen.',
         },
         { name: 'theme-color', content: '#0059B3' },
         { property: 'og:type', content: 'website' },
@@ -55,7 +55,7 @@ export default defineNuxtConfig({
         { property: 'og:title', content: 'AabenForms' },
         {
           property: 'og:description',
-          content: 'Open-source workflow automation for Danish municipalities.',
+          content: 'Åben kildekode til digital selvbetjening i danske kommuner. Borgeren logger ind med MitID, og det, kommunen allerede ved, bliver hentet i stedet for at blive spurgt om igen.',
         },
         { property: 'og:url', content: 'https://aabenforms.dk' },
         { property: 'og:image', content: 'https://aabenforms.dk/og-image.png' },
@@ -65,7 +65,7 @@ export default defineNuxtConfig({
         { name: 'twitter:title', content: 'AabenForms' },
         {
           name: 'twitter:description',
-          content: 'Open-source workflow automation for Danish municipalities.',
+          content: 'Åben kildekode til digital selvbetjening i danske kommuner. Borgeren logger ind med MitID, og det, kommunen allerede ved, bliver hentet i stedet for at blive spurgt om igen.',
         },
         { name: 'twitter:image', content: 'https://aabenforms.dk/og-image.png' },
       ],
@@ -96,11 +96,13 @@ export default defineNuxtConfig({
 
   i18n: {
     locales: [
-      { code: 'da', iso: 'da-DK', name: 'Dansk', file: 'da.json' },
-      { code: 'en', iso: 'en-GB', name: 'English', file: 'en.json' }
+      { code: 'da', language: 'da-DK', name: 'Dansk', file: 'da.json' },
+      { code: 'en', language: 'en-GB', name: 'English', file: 'en.json' }
     ],
     defaultLocale: 'da',
     strategy: 'prefix_except_default',
+    // Absolute URLs for hreflang alternates and og:url (useLocaleHead in app.vue).
+    baseUrl: 'https://aabenforms.dk',
     langDir: 'locales',
     detectBrowserLanguage: {
       useCookie: true,

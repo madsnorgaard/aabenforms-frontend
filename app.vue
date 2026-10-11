@@ -30,6 +30,21 @@
 // of its own, so each page keeps a single h1).
 import spriteSource from '~/public/dkfds/img/all-svg-icons.svg?raw'
 
+// Per-language head: html lang, hreflang alternates, canonical og:url and a
+// description in the visitor's language (the static one in nuxt.config is
+// the Danish default).
+const { t } = useI18n()
+const i18nHead = useLocaleHead({ lang: true, seo: true })
+useHead(() => ({
+  htmlAttrs: { lang: i18nHead.value.htmlAttrs?.lang },
+  link: [...(i18nHead.value.link || [])],
+  meta: [
+    ...(i18nHead.value.meta || []),
+    { name: 'description', content: t('seo.description') },
+    { property: 'og:description', content: t('seo.description') },
+  ],
+}))
+
 // Strip the XML prolog/doctype and mark the root so it is inert for AT.
 const iconSprite = spriteSource
   .replace(/^[\s\S]*?<svg\b/, '<svg')

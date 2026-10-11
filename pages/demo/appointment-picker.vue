@@ -66,6 +66,10 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+// A component harness for the booking flows' AppointmentPicker, not a
+// public demo: keep it out of search results (and out of the sitemap).
+useHead({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] })
+
 interface EventLogItem {
   time: Date
   type: string

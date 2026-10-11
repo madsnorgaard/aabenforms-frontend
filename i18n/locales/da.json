@@ -1164,7 +1164,16 @@
     "fileTooLarge": "Filen er for stor (maksimum {size})",
     "unsupportedFileType": "Filtypen understøttes ikke",
     "tryAgain": "Prøv igen",
-    "helpText": "Hvis problemet fortsætter, kontakt venligst support."
+    "helpText": "Hvis problemet fortsætter, kontakt venligst support.",
+    "page": {
+      "solution": "Selvbetjening",
+      "heading": "Siden kunne ikke vises",
+      "body": "Der opstod en fejl. Prøv at indlæse siden igen, eller gå til forsiden.",
+      "notFoundHeading": "Siden findes ikke",
+      "notFoundBody": "Vi kan ikke finde den side, du leder efter. Den kan være flyttet eller slettet.",
+      "home": "Gå til forsiden",
+      "retry": "Prøv igen"
+    }
   },
   "help": {
     "cpr": {
@@ -1340,5 +1349,8 @@
       "changeChoice": "Ændr dit valg",
       "resetDone": "Dit valg er nulstillet. Banneret vises igen nederst på siden, så du kan vælge på ny."
     }
+  },
+  "seo": {
+    "description": "Åben kildekode til digital selvbetjening i danske kommuner. Borgeren logger ind med MitID, og det, kommunen allerede ved, bliver hentet i stedet for at blive spurgt om igen."
   }
 }
