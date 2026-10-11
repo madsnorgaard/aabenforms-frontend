@@ -39,7 +39,7 @@ async function recentSubjects(request: any, persona: string): Promise<{ subject:
   const out = execSync(`ddev drush aabenforms:seed-mitid-session ${persona} 2>&1`, { cwd: BACKEND_DIR }).toString()
   const sid = /Workflow id:\s*(\S+)/.exec(out)?.[1]
   expect(sid, out).toBeTruthy()
-  const res = await request.get(`${API_BASE}/api/digital-post/recent?session=${encodeURIComponent(sid!)}&limit=5`, { ignoreHTTPSErrors: true })
+  const res = await request.get(`${API_BASE}/api/digital-post/recent?limit=5`, { headers: { Authorization: `Bearer ${sid}` }, ignoreHTTPSErrors: true })
   expect(res.ok()).toBeTruthy()
   return ((await res.json()).data ?? []).map((l: any) => ({ subject: l.subject, created: l.created }))
 }
@@ -260,13 +260,9 @@ test.describe('Skoleskift demo - full auth', () => {
 
     // Run the whole demo again: full logout, back to Freja's start.
     await page.getByRole('button', { name: 'Kør hele demoen igen' }).click()
-    // The parent-approval MitID handoff consumed the browser's server-side
-    // logout hint, so Keycloak may ask to confirm the IdP logout (no
-    // id_token_hint). Confirm it; the IdP session still ends.
-    await page.waitForURL(/(\/demo\/skoleskift\/?$|openid-connect\/logout)/, { timeout: 30000 })
-    if (/openid-connect\/logout/.test(page.url())) {
-      await page.getByRole('button', { name: /Logout|Log ud/ }).click()
-    }
+    // The logout POST carries the SPA's own session, so the IdP gets an
+    // id_token_hint: no click on Keycloak's "Do you want to log out?" page
+    // is needed (it would hold the browser there and time this out).
     await page.waitForURL(/\/demo\/skoleskift\/?$/, { timeout: 30000 })
     await expect(page.getByRole('button', { name: 'Log ind som Freja Nielsen' })).toBeVisible({ timeout: 15000 })
   })

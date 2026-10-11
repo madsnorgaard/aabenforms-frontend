@@ -174,11 +174,11 @@ export const useUserStore = defineStore('user', {
      * Logout user.
      *
      * Fails closed: local state is cleared first and always, whatever the
-     * network does. Then the MitID session is revoked server-side (the id
-     * travels in the POST body, never the URL; errors are ignored) and, unless
-     * idpLogout is false, the browser is sent through the backend's
-     * RP-initiated logout so the IdP session ends too - on a shared device
-     * the next person must not be offered the previous person's login.
+     * network does. Then, unless idpLogout is false, the browser POSTs the
+     * session id (in the body, never the URL) to the backend's RP-initiated
+     * logout, which revokes it and ends the IdP session too - on a shared
+     * device the next person must not be offered the previous person's login.
+     * With idpLogout false the session is only revoked over XHR.
      *
      * @param options.idpLogout  End the IdP session too (default true).
      * @param options.returnPath Frontend path to land on afterwards (default '/').
@@ -189,7 +189,11 @@ export const useUserStore = defineStore('user', {
 
       this.clearSession()
 
-      if (sessionId) {
+      const idpLogout = options.idpLogout !== false && import.meta.client
+
+      // Without IdP logout, revoke the session over XHR. With it, the logout
+      // POST below revokes it and uses its id_token as id_token_hint.
+      if (sessionId && !idpLogout) {
         try {
           await $fetch(`${config.public.apiBase}/api/mitid/session/revoke`, {
             method: 'POST',
@@ -202,12 +206,30 @@ export const useUserStore = defineStore('user', {
         }
       }
 
-      if (options.idpLogout !== false && import.meta.client) {
+      if (idpLogout) {
         const path = options.returnPath && options.returnPath.startsWith('/') && !options.returnPath.startsWith('//')
           ? options.returnPath
           : '/'
         const returnUrl = `${window.location.origin}${path}`
-        window.location.assign(`${config.public.apiBase}/mitid/logout?return_url=${encodeURIComponent(returnUrl)}`)
+        const action = `${config.public.apiBase}/mitid/logout?return_url=${encodeURIComponent(returnUrl)}`
+        if (!sessionId) {
+          window.location.assign(action)
+          return
+        }
+        // A top-level form POST, so the session id travels in the body, never
+        // the URL. The backend revokes it and hints the IdP with its id_token;
+        // without the hint Keycloak stops on its own logout confirmation.
+        const form = document.createElement('form')
+        form.method = 'POST'
+        form.action = action
+        form.style.display = 'none'
+        const field = document.createElement('input')
+        field.type = 'hidden'
+        field.name = 'session_id'
+        field.value = sessionId
+        form.appendChild(field)
+        document.body.appendChild(form)
+        form.submit()
       }
     }
   }
