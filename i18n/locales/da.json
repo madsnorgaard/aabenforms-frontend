@@ -652,7 +652,7 @@
       "leader": {
         "eyebrow": "Skoleskift med to forældre - afgørelse",
         "heading": "Skolelederen træffer afgørelse",
-        "intro": "Skolelederen logger ind i kommunens sagsbehandling med sin medarbejderkonto. Kun en medarbejder, der står i organisationens medarbejderregister, kan træffe afgørelsen - ellers afviser flowet den.",
+        "intro": "Skolelederen får en mail på sin arbejdsmail om, at en sag venter, med et link til kommunens sagsbehandling. Mailen indeholder ingen personoplysninger. Skolelederen logger ind med sin medarbejderkonto, og kun en medarbejder, der står i organisationens medarbejderregister for den ønskede skole, kan træffe afgørelsen.",
         "cardHeading": "Du er skoleleder i denne demo",
         "story": "Ansøgningen om Emils skoleskift er underskrevet af begge forældre. Du ser sagen med maskerede CPR-numre og vælger \"Godkend skoleskift\" eller \"Afvis\".",
         "username": "Brugernavn: {username}",

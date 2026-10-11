@@ -652,7 +652,7 @@
       "leader": {
         "eyebrow": "School transfer with two parents - decision",
         "heading": "The school leader decides",
-        "intro": "The school leader logs in to the municipality's case handling with a staff account. Only an employee registered in the organisation's directory can make the decision - otherwise the flow rejects it.",
+        "intro": "The school leader gets an e-mail at work saying a case is waiting, with a link to the municipality's case handling. The e-mail contains no personal data. The leader logs in with a staff account, and only an employee registered in the organisation's directory for the requested school can make the decision.",
         "cardHeading": "You are the school leader in this demo",
         "story": "Both parents have signed the application for Emil's school transfer. You see the case with masked CPR numbers and choose \"Godkend skoleskift\" (approve) or \"Afvis\" (reject).",
         "username": "Username: {username}",
