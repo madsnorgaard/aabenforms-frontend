@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-xl border border-neutral-200 bg-white shadow-2xl shadow-neutral-900/10 overflow-hidden max-h-[85vh] overflow-y-auto">
+  <div class="rounded border border-neutral-200 bg-white overflow-hidden max-h-[85vh] overflow-y-auto">
     <!-- Header -->
     <div class="px-6 pt-6 pb-4 border-b border-neutral-100 sticky top-0 bg-white z-10">
       <div class="flex items-center gap-3 mb-3">
@@ -21,11 +21,11 @@
       <!-- Progress bar -->
       <div class="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
         <div
-          class="h-full rounded-full transition-all duration-500 ease-out bg-primary-500"
+          class="h-full rounded-full transition-all duration-500 ease-out motion-reduce:transition-none bg-primary-500"
           :style="{ width: `${progress}%` }"
         />
       </div>
-      <p class="text-[11px] text-neutral-400 mt-1.5 font-medium tracking-wide uppercase">
+      <p class="text-xs text-neutral-600 mt-[6px] mb-0 font-medium">
         {{ visibleCount }} / {{ allSteps.length }} {{ $t('demo.workflow.stepsCompleted') }}
       </p>
     </div>
@@ -63,8 +63,8 @@
 
             <!-- Separator before lifecycle steps -->
             <div v-if="step._separator" class="min-w-0 pt-px">
-              <p class="text-[11px] font-semibold text-primary-700 uppercase tracking-widest">{{ step.name }}</p>
-              <p class="text-xs text-neutral-400 mt-0.5">{{ step.description }}</p>
+              <p class="text-sm font-semibold text-primary-700 m-0">{{ step.name }}</p>
+              <p class="text-xs text-neutral-600 mt-0.5">{{ step.description }}</p>
             </div>
 
             <!-- Normal step content -->
@@ -82,12 +82,9 @@
 
     <!-- Footer -->
     <div class="px-6 pb-6">
-      <button
-        @click="$emit('close')"
-        class="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors bg-neutral-900 text-white hover:bg-neutral-800"
-      >
+      <FdsButton variant="primary" class="w-percent-100" @click="$emit('close')">
         {{ continueLabel || $t('demo.workflow.submitAnother') }}
-      </button>
+      </FdsButton>
     </div>
   </div>
 </template>
@@ -188,5 +185,15 @@ onUnmounted(() => {
 .step-enter-from {
   opacity: 0;
   transform: translateX(-12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-enter-active {
+    transition: none;
+  }
+
+  .step-enter-from {
+    transform: none;
+  }
 }
 </style>

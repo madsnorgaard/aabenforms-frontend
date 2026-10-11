@@ -1,78 +1,71 @@
 <template>
-  <section class="hero-section relative overflow-hidden">
-    <!-- Subtle grid background -->
-    <div class="absolute inset-0 grid-bg" aria-hidden="true" />
+  <section class="landing-hero bg-alternative">
+    <div class="container landing-hero__inner">
+      <div class="row">
+        <div class="col-12 col-lg-8">
+          <p class="mt-0 mb-6">
+            <a
+              href="https://github.com/madsnorgaard/aabenforms"
+              target="_blank"
+              rel="noopener"
+              class="badge badge-success landing-hero__badge"
+            >{{ $t('hero.badge') }}</a>
+          </p>
 
-    <div class="relative max-w-6xl mx-auto px-6 lg:px-8 pt-20 pb-24 lg:pt-28 lg:pb-32">
-      <div class="max-w-3xl">
-        <!-- Badge -->
-        <a
-          href="https://github.com/madsnorgaard/aabenforms"
-          target="_blank"
-          rel="noopener"
-          class="hero-badge inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-50 border border-accent-200 text-xs font-semibold tracking-wide uppercase mb-8 reveal-up hover:bg-accent-100 transition-colors"
-        >
-          <span class="w-1.5 h-1.5 rounded-full bg-success-500 animate-pulse" />
-          Open Source - GPL 2.0
-        </a>
+          <h1 class="landing-hero__title mt-0 mb-5">
+            <span class="d-block">Åben</span>
+            <span class="d-block landing-hero__title-accent">Forms</span>
+          </h1>
 
-        <!-- Main heading -->
-        <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight text-neutral-900 mb-6 reveal-up delay-1">
-          <span class="block">Åben</span>
-          <span class="block text-primary-700">Forms</span>
-        </h1>
+          <p class="font-lead mt-0 mb-4">
+            {{ $t('hero.tagline') }}
+          </p>
 
-        <!-- Tagline -->
-        <p class="text-xl lg:text-2xl text-neutral-600 leading-relaxed mb-4 max-w-2xl reveal-up delay-2">
-          {{ $t('hero.tagline') }}
-        </p>
+          <p class="landing-hero__stack mt-0 mb-7">
+            Drupal 11 &middot; Nuxt 3 &middot; ECA &middot; JSON:API
+          </p>
 
-        <!-- Sub-note: understated technical credibility -->
-        <p class="text-sm text-neutral-600 font-medium mb-10 reveal-up delay-2">
-          Drupal 11 &middot; Nuxt 3 &middot; ECA Workflows &middot; JSON:API
-        </p>
-
-        <!-- Actions: primary jumps straight into the live demo when it's
-             enabled (DDEV); on production the demo route is gated, so we
-             route the primary CTA to /kontakt for a live walkthrough
-             instead of dead-ending on the disabled-state page. Secondary
-             is always the meeting-booking link for high-intent visitors. -->
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4 reveal-up delay-3">
-          <NuxtLink
-            :to="demoEnabled ? '/demo/byggetilladelse' : '/kontakt'"
-            class="button button-primary"
-          >
-            {{ demoEnabled ? $t('hero.cta.demo') : $t('hero.cta.demoOffline') }}<svg class="icon-svg" focusable="false" aria-hidden="true"><use href="#arrow-forward" /></svg>
-          </NuxtLink>
-          <NuxtLink
-            v-if="demoEnabled"
-            to="/kontakt"
-            class="button button-secondary"
-          >
-            {{ $t('hero.cta.book') }}
-          </NuxtLink>
-          <NuxtLink
-            to="/demo"
-            class="button button-tertiary"
-          >
-            {{ $t('demo.hub.allDemos') }}
-          </NuxtLink>
+          <!-- Primary jumps straight into the live demo when it is enabled
+               (DDEV); on production the demo route is gated, so the primary
+               CTA goes to /kontakt for a walkthrough instead of dead-ending
+               on the disabled-state page. -->
+          <div class="button-group">
+            <NuxtLink
+              :to="localePath(demoEnabled ? '/demo/byggetilladelse' : '/kontakt')"
+              class="button button-primary"
+            >
+              {{ demoEnabled ? $t('hero.cta.demo') : $t('hero.cta.demoOffline') }}<svg class="icon-svg" focusable="false" aria-hidden="true"><use href="#arrow-forward" /></svg>
+            </NuxtLink>
+            <NuxtLink
+              v-if="demoEnabled"
+              :to="localePath('/kontakt')"
+              class="button button-secondary"
+            >
+              {{ $t('hero.cta.book') }}
+            </NuxtLink>
+            <NuxtLink
+              :to="localePath('/demo')"
+              class="button button-tertiary"
+            >
+              {{ $t('demo.hub.allDemos') }}
+            </NuxtLink>
+          </div>
         </div>
-      </div>
 
-      <!-- Right-side decorative element: a simplified workflow diagram -->
-      <div class="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 w-72 opacity-[0.07]" aria-hidden="true">
-        <svg viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="40" y="10" width="120" height="50" rx="8" stroke="currentColor" stroke-width="2" class="text-primary-900"/>
-          <line x1="100" y1="60" x2="100" y2="100" stroke="currentColor" stroke-width="2" class="text-primary-900"/>
-          <circle cx="100" cy="120" r="20" stroke="currentColor" stroke-width="2" class="text-primary-900"/>
-          <line x1="100" y1="140" x2="100" y2="180" stroke="currentColor" stroke-width="2" class="text-primary-900"/>
-          <rect x="40" y="180" width="120" height="50" rx="8" stroke="currentColor" stroke-width="2" class="text-primary-900"/>
-          <line x1="100" y1="230" x2="100" y2="270" stroke="currentColor" stroke-width="2" class="text-primary-900"/>
-          <polygon points="80,270 120,270 100,310" stroke="currentColor" stroke-width="2" fill="none" class="text-primary-900"/>
-          <line x1="100" y1="310" x2="100" y2="350" stroke="currentColor" stroke-width="2" class="text-primary-900"/>
-          <rect x="40" y="350" width="120" height="50" rx="8" stroke="currentColor" stroke-width="2" class="text-primary-900"/>
-        </svg>
+        <!-- Decorative: a simplified workflow diagram, hidden from assistive tech. -->
+        <div class="d-none d-lg-block col-lg-4" aria-hidden="true">
+          <svg class="landing-hero__diagram" viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="40" y="10" width="120" height="50" rx="4" stroke="currentColor" stroke-width="2" />
+            <line x1="100" y1="60" x2="100" y2="100" stroke="currentColor" stroke-width="2" />
+            <circle cx="100" cy="120" r="20" stroke="currentColor" stroke-width="2" />
+            <line x1="100" y1="140" x2="100" y2="180" stroke="currentColor" stroke-width="2" />
+            <rect x="40" y="180" width="120" height="50" rx="4" stroke="currentColor" stroke-width="2" />
+            <line x1="100" y1="230" x2="100" y2="270" stroke="currentColor" stroke-width="2" />
+            <polygon points="80,270 120,270 100,310" stroke="currentColor" stroke-width="2" fill="none" />
+            <line x1="100" y1="310" x2="100" y2="350" stroke="currentColor" stroke-width="2" />
+            <rect x="40" y="350" width="120" height="50" rx="4" stroke="currentColor" stroke-width="2" />
+          </svg>
+        </div>
       </div>
     </div>
   </section>
@@ -80,45 +73,67 @@
 
 <script setup lang="ts">
 const config = useRuntimeConfig()
+const localePath = useLocalePath()
 const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilladelseEnabled))
 </script>
 
 <style scoped>
-/* CTA badge: accent green that does not turn DKFDS visited purple. */
-.hero-badge,
-.hero-badge:visited,
-.hero-badge:hover {
-  color: #3C5C22;
-  text-decoration: none;
-}
-
-.hero-section {
-  background: linear-gradient(170deg, #ffffff 0%, #f5f5f5 100%);
+/* DKFDS alternative (gray-100) band with the gray-200 rule. */
+.landing-hero {
   border-bottom: 1px solid #dcdcdc;
 }
 
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(68, 131, 30, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(68, 131, 30, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
+.landing-hero__inner {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
-.reveal-up {
-  animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+@media (min-width: 992px) {
+  .landing-hero__inner {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
 }
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.35s; }
 
-@keyframes revealUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
+/* The open source badge is a link: keep the badge colours after a visit. */
+.landing-hero__badge,
+.landing-hero__badge:visited,
+.landing-hero__badge:hover {
+  text-decoration: none;
+}
+
+.landing-hero__badge:hover {
+  text-decoration: underline;
+}
+
+.landing-hero__title {
+  font-size: 3rem;
+  line-height: 1.05;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+@media (min-width: 992px) {
+  .landing-hero__title {
+    font-size: 4.5rem;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+}
+
+.landing-hero__title-accent {
+  color: #0059b3;
+}
+
+.landing-hero__stack {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #454545;
+}
+
+.landing-hero__diagram {
+  display: block;
+  width: 100%;
+  max-width: 18rem;
+  margin-left: auto;
+  color: #dcdcdc;
 }
 </style>

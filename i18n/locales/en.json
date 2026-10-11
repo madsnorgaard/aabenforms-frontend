@@ -23,19 +23,20 @@
     "lukket": "Closed"
   },
   "hero": {
-    "tagline": "The full MitID flow for a building permit in 60 seconds. Open source on bare Drupal 11. No licence fees, no per-form charges.",
+    "tagline": "Try the whole building-permit journey, from MitID login to the decision in Digital Post. Open source on Drupal 11. No licence fee and no charge per submitted form.",
     "cta": {
-      "demo": "Open interactive demo",
-      "demoOffline": "Book a live walkthrough",
-      "book": "Book a 30-min meeting →",
-      "learn": "Learn More"
-    }
+      "demo": "Open the interactive demo",
+      "demoOffline": "Book a walkthrough",
+      "book": "Book a 30-minute meeting",
+      "learn": "Learn more"
+    },
+    "badge": "Open source, GPL-2.0"
   },
   "comparison": {
     "eyebrow": "Compared to alternatives",
     "themLabel": "Proprietary alternatives",
     "heading": "What you get that proprietary alternatives don't offer",
-    "lead": "Most workflow platforms in the Danish municipal market are closed, licence-based and vendor-hosted. Here's how we differ:",
+    "lead": "Most platforms for digital case flows in the Danish municipal market are closed, licence-based and vendor-hosted. Here is how we differ:",
     "row1": {
       "title": "Source code",
       "us": "Open source (GPL-2.0)",
@@ -48,87 +49,89 @@
     },
     "row3": {
       "title": "Hosting",
-      "us": "Own server or EU VPS, ideally Denmark - you own the data and the location",
+      "us": "Your own server or an EU VPS, ideally in Denmark. You own the data and decide where it lives.",
       "them": "Vendor-hosted, monthly licence"
     },
     "row4": {
       "title": "Pricing model",
-      "us": "Free software. You only pay for hosting and optional consulting.",
+      "us": "The software is free. You only pay for hosting, operations and any consulting.",
       "them": "Annual licence plus a fee per submitted form or case"
     },
     "row5": {
       "title": "Dependencies",
-      "us": "Bare Drupal 11 + drupal:key",
-      "them": "Complex ecosystem of dependencies"
+      "us": "Drupal 11 and well-known modules such as Webform, ECA and OpenID Connect",
+      "them": "The vendor's own closed platform"
     },
-    "footnote": "The proprietary alternatives solve their problem just fine. We solve it in a way you can maintain yourself, without licence costs that scale with case volume."
+    "footnote": "The proprietary alternatives do their job just fine. We do it in a way you can maintain yourself, without licence costs that grow with case volume.",
+    "topicLabel": "Topic"
   },
   "features": {
     "title": "What you get from day 1",
     "workflows": {
-      "title": "13 case types ready",
-      "description": "Building permit, parking permit, marriage booking, parental approval, formal complaint and 8 other flows shipped and ready - or draw your own in the visual modeler."
+      "title": "Ready-made flows to build on",
+      "description": "Building permit, parking permit, marriage booking, parental approval, complaints and more flows come included. Several of them can be tried in the demo, including a complaint about a decision."
     },
     "multiTenant": {
-      "title": "MitID + NemLog-in OIDC",
-      "description": "OIDC with PKCE S256, CPR pre-fill from claims, NSIS substantial/high. NemLog-in Erhverv on the roadmap. One core, both citizen and business."
+      "title": "MitID and NemLog-in via OIDC",
+      "description": "OIDC with PKCE (S256), CPR pre-fill from the login and NSIS level substantial or high. The code is ready, but going live needs a certificate and an agreement with NemLog-in. The demo uses a mock IdP. NemLog-in Erhverv is on the roadmap."
     },
     "danish": {
       "title": "Digital Post (SF1601)",
-      "description": "fake_db for local dev, WireMock for tests, Serviceplatformen for production - same code, four modes, one switch."
+      "description": "The same code in four modes, switched with one setting: fake_db locally, WireMock in tests, and Serviceplatformen's test and production environments. Production needs a certificate and an agreement."
     },
     "security": {
-      "title": "GDPR by design",
-      "description": "Field-level CPR encryption and an audit log on every MitID session and Digital Post send."
+      "title": "CPR protection",
+      "description": "CPR numbers are encrypted at field level, and every MitID session and every Digital Post dispatch is written to the audit log."
     }
   },
   "workflowDemo": {
-    "title": "Multi-Party Workflow Automation",
-    "subtitle": "See how ÅbenForms handles complex case flows with multiple parties and automatic integrations",
+    "title": "Case flows with several parties",
+    "subtitle": "See how ÅbenForms handles case flows with several parties and automatic integrations.",
     "example": {
-      "title": "Example: Building Permit Workflow"
+      "title": "Example: building permit"
     },
     "steps": {
       "citizen": {
         "actor": "Citizen",
         "role": "Applicant",
-        "action": "Submits building permit with MitID login. System automatically retrieves CPR data and validates building address against Denmark's Address Register."
+        "action": "Applies for a building permit with MitID login. Name and CPR are fetched automatically, and the building address is validated against the Danish Address Register."
       },
       "caseworker": {
-        "actor": "Case Worker",
+        "actor": "Caseworker",
         "role": "Municipal employee",
-        "action": "Receives notification via Digital Post. Reviews application, creates case in SBSYS and assigns to technical reviewer."
+        "action": "Gets the case in their inbox, reviews the application and passes it on for technical assessment. Filing in an ESDH system such as SBSYS is prepared."
       },
       "technical": {
-        "actor": "Technical Reviewer",
+        "actor": "Technical reviewer",
         "role": "Building specialist",
-        "action": "Assesses building plans and compliance with building regulations. Approves or requests changes."
+        "action": "Assesses the drawings against the building regulations and approves or asks for changes."
       },
       "approval": {
-        "actor": "Final Approval",
-        "role": "Automatic or manual",
-        "action": "Upon approval, permit is sent as PDF via Digital Post. Citizen receives real-time status updates."
+        "actor": "Decision",
+        "role": "Automatic or by a caseworker",
+        "action": "On approval the permit is sent as a PDF via Digital Post."
       }
     },
     "integrations": {
       "mitid": "MitID",
-      "cpr": "CPR Lookup",
-      "cvr": "CVR Data",
+      "cpr": "CPR lookup",
+      "cvr": "CVR data",
       "address": "Address",
       "digitalpost": "Digital Post",
-      "sbsys": "SBSYS Case",
-      "pdf": "PDF Generation"
+      "sbsys": "ESDH (SBSYS)",
+      "pdf": "PDF document"
     },
     "eca": {
-      "title": "Modern ECA Workflow Engine",
-      "description": "ÅbenForms uses ECA (Event-Condition-Action) as a modern, actively developed replacement for the legacy Maestro system.",
+      "title": "The flows run on ECA",
+      "description": "ÅbenForms builds its flows on ECA (Event-Condition-Action), an actively developed Drupal module, rather than the older Maestro.",
       "benefits": {
-        "visual": "Visual modeler for easy workflow design",
-        "modern": "Actively developed for Drupal 11 with modern architecture",
-        "flexible": "Flexible event-driven logic without hard-coded business rules",
-        "headless": "Headless-compatible with JSON:API integration"
+        "visual": "A visual modeler where the flow can be read and changed",
+        "modern": "Actively developed for Drupal 11",
+        "flexible": "Event-driven logic instead of business rules hard-coded in the code",
+        "headless": "Headless: the frontend talks to Drupal over JSON:API"
       }
-    }
+    },
+    "stepSr": "Step {n}:"
   },
   "demo": {
     "hub": {
@@ -879,14 +882,25 @@
     }
   },
   "landingCta": {
-    "eyebrow": "Live demo",
-    "heading": "We eat MitID for breakfast",
-    "lead": "Click through the full building-permit flow - sign in with our mock MitID, watch the ECA flow run live, and find the decision in the Digital Post inbox.",
-    "cta": "Open interactive demo",
+    "eyebrow": "Try the demo",
+    "heading": "MitID in, decision out",
+    "lead": "Click through the whole building-permit journey. Sign in with our mock MitID, watch the ECA flow run and find the decision in the Digital Post inbox.",
+    "cta": "Open the interactive demo",
     "altCta": "Read the technical walkthrough",
-    "bullet1": "Real OIDC handshake with PKCE and nonce",
-    "bullet2": "ECA flow runs synchronously and returns all steps",
-    "bullet3": "Letter retrieved from the Digital Post log after dispatch"
+    "bullet1": "A real OIDC login with PKCE and nonce against a test IdP",
+    "bullet2": "The ECA flow runs synchronously and returns every step",
+    "bullet3": "The decision is read back from the Digital Post log after dispatch",
+    "preview": {
+      "stepLabel": "Step 3 of 4: The flow is running",
+      "step1": "CPR lookup (SF1520)",
+      "step2": "Application written to the audit log",
+      "step3": "Receipt sent via Digital Post (SF1601)",
+      "doneSr": "Done:",
+      "runningSr": "In progress:",
+      "inboxLabel": "Digital Post: inbox",
+      "inboxTitle": "Received: application for a building permit",
+      "inboxMeta": "Demo Municipality, transaction 8a3f12c…"
+    }
   },
   "kontakt": {
     "title": "Contact",
@@ -921,28 +935,24 @@
   },
   "cta": {
     "title": "Explore the platform",
-    "subtitle": "Run your own proof of concept or book a guided demo session",
-    "button": "Request a Demo"
+    "subtitle": "Run your own proof of concept, or book a walkthrough with us",
+    "button": "Request a demo"
   },
   "demoRequest": {
-    "title": "Request a Demo",
+    "title": "Request a demo",
     "subtitle": "We will contact you within 24 hours to schedule a guided session.",
     "name": "Your name",
-    "namePlaceholder": "Full name",
     "email": "Email",
-    "emailPlaceholder": "your.email{'@'}example.dk",
     "organization": "Organization",
-    "organizationPlaceholder": "Municipality or organization name",
     "message": "Message (optional)",
-    "messagePlaceholder": "Tell us about your use case or questions...",
-    "submit": "Send Request",
+    "submit": "Send request",
     "submitting": "Sending...",
-    "error": "Could not send your request. Please try again.",
-    "successTitle": "Request Received",
+    "error": "We could not send your request. Please try again.",
+    "successTitle": "Request received",
     "successMessage": "Thank you! We will contact you within 24 hours to schedule your demo session."
   },
   "footer": {
-    "license": "Open source under GPL-2.0 license",
+    "license": "Open source under the GPL-2.0 licence",
     "apiStatus": "Backend API",
     "connecting": "Connecting",
     "offline": "Offline",

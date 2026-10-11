@@ -1,103 +1,57 @@
 <template>
-  <section class="py-20 lg:py-28 bg-neutral-50 border-t border-neutral-100">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-      <div class="max-w-2xl mb-14">
-        <p class="text-xs font-semibold tracking-widest uppercase text-primary-700 mb-3">
-          {{ $t('workflowDemo.example.title') }}
-        </p>
-        <h2 class="text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mb-4">
-          {{ $t('workflowDemo.title') }}
-        </h2>
-        <p class="text-lg text-neutral-500">
-          {{ $t('workflowDemo.subtitle') }}
-        </p>
+  <section class="landing-section landing-section--gray bg-alternative" aria-labelledby="landing-timeline-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-8">
+          <p class="subheading mb-3">
+            {{ $t('workflowDemo.example.title') }}
+          </p>
+          <h2 id="landing-timeline-heading" class="h1 mt-0 mb-5">
+            {{ $t('workflowDemo.title') }}
+          </h2>
+          <p class="font-lead mt-0 mb-7">
+            {{ $t('workflowDemo.subtitle') }}
+          </p>
+        </div>
       </div>
 
-      <!-- Timeline -->
-      <div class="relative ml-4 lg:ml-6">
-        <!-- Vertical rail (centered on 20px dots: (20-2)/2 = 9px) -->
-        <div class="absolute left-[9px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-primary-300 via-primary-400 to-success-400" aria-hidden="true" />
-
-        <div class="space-y-0">
-          <div
-            v-for="(step, index) in steps"
-            :key="index"
-            class="relative pl-12 pb-10 last:pb-0 group"
-          >
-            <!-- Node centered on rail -->
-            <div
-              class="absolute left-0 top-1 w-[20px] h-[20px] rounded-full border-[3px] border-white transition-all duration-300"
-              :class="[
-                index === activeStep
-                  ? 'bg-primary-600 ring-2 ring-primary-300 scale-110'
-                  : 'bg-neutral-300 ring-1 ring-neutral-200 group-hover:bg-primary-400 group-hover:ring-primary-200'
-              ]"
-            />
-
-            <!-- Content card -->
-            <div
-              class="rounded-xl border bg-white p-6 transition-all duration-300 cursor-default"
-              :class="[
-                index === activeStep
-                  ? 'border-primary-200 shadow-lg shadow-primary-100/50'
-                  : 'border-neutral-200 hover:border-primary-200 hover:shadow-md'
-              ]"
-              @mouseenter="activeStep = index"
-            >
-              <div class="flex items-start justify-between gap-4 mb-3">
-                <div>
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="text-xs font-bold uppercase tracking-wider text-neutral-600">
-                      {{ String(index + 1).padStart(2, '0') }}
-                    </span>
-                    <h3 class="text-lg font-bold text-neutral-900">
-                      {{ $t(step.actorKey) }}
-                    </h3>
-                  </div>
-                  <p class="text-sm text-neutral-600">{{ $t(step.roleKey) }}</p>
-                </div>
-              </div>
-
-              <p class="text-sm text-neutral-600 leading-relaxed mb-4">
-                {{ $t(step.actionKey) }}
-              </p>
-
-              <!-- Integration chips -->
-              <div v-if="step.integrations" class="flex flex-wrap gap-1.5">
+      <!-- Timeline: an ordered list of DKFDS cards on a plain gray rail. -->
+      <ol class="nobullet-list landing-timeline">
+        <li
+          v-for="(step, index) in steps"
+          :key="step.actorKey"
+          class="landing-timeline__item"
+        >
+          <span class="landing-timeline__node" aria-hidden="true">{{ index + 1 }}</span>
+          <div class="card collapsed-height mb-0">
+            <div class="card-content">
+              <h3 class="h4 mt-0 mb-2">
+                <span class="sr-only">{{ $t('workflowDemo.stepSr', { n: index + 1 }) }} </span>{{ $t(step.actorKey) }}
+              </h3>
+              <p class="landing-timeline__role">{{ $t(step.roleKey) }}</p>
+              <p>{{ $t(step.actionKey) }}</p>
+              <p v-if="step.integrations" class="landing-timeline__badges">
                 <span
                   v-for="integration in step.integrations"
                   :key="integration"
-                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-neutral-100 text-neutral-600 border border-neutral-200"
-                >
-                  {{ $t(`workflowDemo.integrations.${integration}`) }}
-                </span>
-              </div>
+                  class="badge"
+                >{{ $t(`workflowDemo.integrations.${integration}`) }}</span>
+              </p>
             </div>
           </div>
-        </div>
-      </div>
+        </li>
+      </ol>
 
-      <!-- ECA callout -->
-      <div class="mt-12 rounded-xl border border-success-200 bg-success-50/50 p-6 lg:p-8 flex gap-4">
-        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-success-100 flex items-center justify-center">
-          <svg class="w-5 h-5 text-success-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-          </svg>
-        </div>
-        <div>
-          <h4 class="text-base font-bold text-neutral-900 mb-1">
+      <!-- ECA summary -->
+      <div class="card collapsed-height mt-8 mb-0 landing-eca">
+        <div class="card-content">
+          <h3 class="h4 mt-0 mb-4">
             {{ $t('workflowDemo.eca.title') }}
-          </h4>
-          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1.5 mt-3">
-            <li
-              v-for="benefit in ecaBenefits"
-              :key="benefit"
-              class="flex items-start gap-2 text-sm text-neutral-600"
-            >
-              <svg class="w-4 h-4 text-success-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 16 16" stroke="currentColor" stroke-width="2">
-                <path d="M3 8.5l3.5 3.5L13 4" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              {{ $t(`workflowDemo.eca.benefits.${benefit}`) }}
+          </h3>
+          <ul class="nobullet-list landing-eca__list">
+            <li v-for="benefit in ecaBenefits" :key="benefit">
+              <svg class="icon-svg landing-eca__icon" focusable="false" aria-hidden="true"><use href="#check" /></svg>
+              <span>{{ $t(`workflowDemo.eca.benefits.${benefit}`) }}</span>
             </li>
           </ul>
         </div>
@@ -107,8 +61,6 @@
 </template>
 
 <script setup lang="ts">
-const activeStep = ref(0)
-
 const steps = [
   {
     actorKey: 'workflowDemo.steps.citizen.actor',
@@ -120,7 +72,7 @@ const steps = [
     actorKey: 'workflowDemo.steps.caseworker.actor',
     roleKey: 'workflowDemo.steps.caseworker.role',
     actionKey: 'workflowDemo.steps.caseworker.action',
-    integrations: ['digitalpost', 'sbsys'],
+    integrations: ['sbsys'],
   },
   {
     actorKey: 'workflowDemo.steps.technical.actor',
@@ -138,3 +90,100 @@ const steps = [
 
 const ecaBenefits = ['visual', 'modern', 'flexible', 'headless']
 </script>
+
+<style scoped>
+.landing-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.landing-section--gray {
+  border-top: 1px solid #dcdcdc;
+}
+
+.landing-timeline {
+  position: relative;
+  max-width: none;
+}
+
+/* Rail: DKFDS gray-300, centred under the 2rem nodes. */
+.landing-timeline::before {
+  content: "";
+  position: absolute;
+  left: calc(1rem - 1px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #bfbfbf;
+}
+
+.landing-timeline__item {
+  position: relative;
+  padding-left: 3rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.landing-timeline__item:last-child {
+  margin-bottom: 0;
+}
+
+.landing-timeline__node {
+  position: absolute;
+  left: 0;
+  top: 1.25rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #0059b3;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 2rem;
+  text-align: center;
+}
+
+.landing-timeline .card {
+  background-color: #ffffff;
+}
+
+.landing-timeline__role {
+  color: #454545;
+}
+
+.landing-timeline__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.landing-eca {
+  background-color: #ffffff;
+}
+
+.landing-eca__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem 2rem;
+  max-width: none;
+}
+
+@media (min-width: 768px) {
+  .landing-eca__list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.landing-eca__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0;
+}
+
+.landing-eca__icon {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  fill: #358000;
+}
+</style>
