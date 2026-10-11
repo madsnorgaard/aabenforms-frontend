@@ -65,7 +65,7 @@
           <FdsAlert
             v-if="prefillAlert"
             :type="prefillAlert.type"
-            :text="$t(prefillAlert.textKey)"
+            :text="$t(prefillAlert.textKey, prefillAlert.textParams ?? {})"
             class="mb-5"
             data-testid="demo-prefill-alert"
           />

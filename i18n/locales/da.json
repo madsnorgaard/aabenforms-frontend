@@ -470,7 +470,7 @@
         }
       },
       "prefill": {
-        "exempt": "Birthe er fritaget fra Digital Post. Afgørelser skal derfor sendes som fysisk brev. Det register-tjek er på vej (backend #242)."
+        "exempt": "Birthe er fritaget fra Digital Post. Breve til hende sendes derfor som fysisk brev."
       },
       "option": {
         "decision": "Afgørelse: {type}",
@@ -486,7 +486,7 @@
         "deadline": "Klagefrist"
       },
       "login": {
-        "body": "Birthe logger ind med sit eget MitID. Mikkel hjælper ved køkkenbordet, men logger aldrig ind som sin mor. At handle på hendes vegne med fuldmagt er på vores køreplan (backend #241)."
+        "body": "Birthe logger ind med sit eget MitID. Mikkel hjælper ved køkkenbordet, men logger aldrig ind som sin mor. Vil han klage for hende, kan han gøre det med digital fuldmagt (se demoen \"Mikkel klager på vegne af sin mor\")."
       },
       "form": {
         "body": "Sagen, afgørelsen og klagefristen er hentet. Birthe skriver kun, hvorfor hun klager."
@@ -502,14 +502,14 @@
       },
       "complete": {
         "heading": "Klagen er registreret",
-        "body": "Sagen har nu status Påklaget. Kvitteringen sendes ikke som brev i denne demo."
+        "body": "Sagen har nu status Påklaget. Kvitteringen sendes til Birthe som fysisk brev, fordi hun er fritaget fra Digital Post."
       },
       "commentary": {
-        "login": "MitID-login giver kommunen Birthes CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse. Fuldmagt, så Mikkel kan handle for hende, er køreplan (backend #241).",
+        "login": "MitID-login giver kommunen Birthes CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
         "prefill": "GET /api/prefill/klage slår Birthes sager op i AabenForms sagsregister (live) med afgørelse, afgørelsesdato og klagefrist. En sag, der allerede er påklaget, eller hvor klagefristen er udløbet, vises men kan ikke vælges.",
         "form": "Kun det, registret ikke ved: hvorfor Birthe klager. Sagsnummeret følger med fra valget i trin 2.",
-        "workflow": "ECA-flowet (klage_flow) validerer MitID-sessionen, tjekker at sagen tilhører den indloggede borger, og registrerer klagen. Sagen får status Påklaget.",
-        "letter": "Her forventes intet brev: Birthe er fritaget fra Digital Post, og fysisk post er endnu ikke koblet på (backend #242). Kvitteringen sendes derfor ikke som brev i denne demo, og den tomme indbakke er forventet."
+        "workflow": "ECA-flowet (klage_flow) validerer MitID-sessionen, tjekker at sagen tilhører den indloggede borger, registrerer klagen og sender en kvittering. Sagen får status Påklaget.",
+        "letter": "Kvitteringen sendes som fysisk brev, fordi Birthe er fritaget fra Digital Post (printkanalen er DEMO). Derfor er hendes digitale indbakke tom, og det er forventet."
       }
     },
     "merudgifter": {
@@ -830,6 +830,51 @@
         "primary": "Book et 15-min møde",
         "secondary": "Læs den tekniske gennemgang på GitHub",
         "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
+    },
+    "klageFuldmagt": {
+      "title": "Mikkel klager på vegne af sin mor",
+      "story": "Mikkel har digital fuldmagt fra sin mor Birthe. Han logger ind med sit eget MitID og klager for hende. Hendes sager og klagefristen hentes, han skriver kun hvorfor.",
+      "intro": "Digital inklusion med fuldmagt: Birthe kan ikke selv klare det digitalt, så hun har givet sin søn Mikkel digital fuldmagt. Han logger ind som sig selv, og kommunen kan se, hvem han må handle for. Birthes sager og klagefristen hentes, Mikkel skriver kun, hvorfor hun klager.",
+      "login": {
+        "body": "Mikkel logger ind med sit eget MitID. Hans login fortæller kommunen, at han har digital fuldmagt fra Birthe til klagesager. Han logger aldrig ind som sin mor."
+      },
+      "form": {
+        "body": "Birthes sag, afgørelsen og klagefristen er hentet. Mikkel skriver kun, hvorfor hun klager."
+      },
+      "hub": {
+        "fetched": {
+          "fuldmagt": "Hvem du må handle for (digital fuldmagt via MitID)"
+        },
+        "tags": {
+          "onBehalf": "Fuldmagt"
+        }
+      },
+      "fields": {
+        "applicantCpr": "Klagen gælder",
+        "begrundelseHint": "Skriv med Birthes ord, hvorfor hun er uenig i afgørelsen."
+      },
+      "prefill": {
+        "actingFor": "Du handler på vegne af {name} ({cpr}) med digital fuldmagt. Sagerne nedenfor er hendes, og klagen indgives i hendes navn.",
+        "noFuldmagt": "Dit login har ingen fuldmagt, der dækker klagesager. Log ind som Mikkel Jensen for at prøve forløbet."
+      },
+      "complete": {
+        "heading": "Klagen er registreret i Birthes navn",
+        "body": "Sagen har nu status Påklaget. Kommunen har registreret, at Mikkel indgav klagen med digital fuldmagt. Kvitteringen går til Birthe, og Mikkel får en kopi."
+      },
+      "receipt": {
+        "actor": "Indgivet af",
+        "actorValue": "Mikkel Jensen med digital fuldmagt",
+        "letter": "Kvittering til Birthe",
+        "letterPhysical": "Sendt som fysisk brev (fritaget for Digital Post)",
+        "letterDigital": "Sendt med Digital Post"
+      },
+      "commentary": {
+        "login": "Mikkels MitID-login bærer en digital fuldmagt fra Birthe (i demoen et claim fra mock-IdP'en, i drift NemLog-in Digital Fuldmagt). Fuldmagten gemmes i hans session på serveren og vises kun med navn og maskeret CPR.",
+        "prefill": "GET /api/prefill/klage?subject=0 peger kun på den fuldmagt, serveren selv har fra MitID. Serveren tjekker, at fuldmagten dækker klagesager, slår Birthes sager op og logger opslaget på Mikkel.",
+        "form": "Kun det, registret ikke ved: hvorfor Birthe klager. Browseren sender aldrig Birthes CPR, kun et indeks i fuldmagten.",
+        "workflow": "Ved indsendelse bliver Birthe ansøger og Mikkel registreres som den, der handlede, med grundlaget digital fuldmagt. ECA-flowet tjekker fuldmagten igen fra sessionen, før sagen får status Påklaget, og sender kvitteringen.",
+        "letter": "Kvitteringen går til Birthe. Hun er fritaget fra Digital Post, så den sendes som fysisk brev (printkanalen er DEMO). Mikkel får en kopi i sin egen Digital Post, fordi fuldmagten tillader det."
       }
     }
   },
