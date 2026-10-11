@@ -1,6 +1,7 @@
 import type { DemoScenarioConfig } from '~/types/demo'
 import { byggetilladelseScenario } from './byggetilladelse'
 import { klageScenario } from './klage'
+import { klageFuldmagtScenario } from './klageFuldmagt'
 import { merudgifterScenario } from './merudgifter'
 import { skoleskiftScenario } from './skoleskift'
 import { sygedagpengeScenario } from './sygedagpenge'
@@ -17,6 +18,7 @@ export const demoScenarios: DemoScenarioConfig[] = [
   merudgifterScenario,
   skoleskiftScenario,
   klageScenario,
+  klageFuldmagtScenario,
   sygedagpengeScenario,
 ]
 

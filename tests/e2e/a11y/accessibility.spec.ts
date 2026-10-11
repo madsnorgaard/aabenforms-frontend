@@ -44,6 +44,18 @@ test.describe('Accessibility (WCAG 2.1 AA)', () => {
     expect(violations, formatViolations(violations)).toEqual([])
   })
 
+  test('accessibility statement is complete and has no AA violations', async () => {
+    await page.goto('/tilgaengelighed', { waitUntil: 'commit', timeout: 20000 })
+    await page.waitForSelector('main#main h1', { timeout: 15000 })
+    // The statement names its status, its known gaps and where to complain.
+    await expect(page.getByTestId('a11y-status')).toContainText('delvist i overensstemmelse')
+    await expect(page.getByTestId('a11y-gaps').locator('li')).toHaveCount(5)
+    await expect(page.locator('main#main a[href="mailto:kontakt@aabenforms.dk"]')).toBeVisible()
+    await expect(page.locator('a[href="https://www.was.digst.dk"]')).toBeVisible()
+    const { violations } = await scan(page)
+    expect(violations, formatViolations(violations)).toEqual([])
+  })
+
   test('contact form has no AA violations', async () => {
     await page.goto('/kontakt', { waitUntil: 'commit', timeout: 20000 })
     await page.waitForSelector('main#main h1, main#main input', { timeout: 15000 })

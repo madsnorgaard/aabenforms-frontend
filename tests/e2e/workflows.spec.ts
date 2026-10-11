@@ -56,28 +56,6 @@ test.describe('Backend API', () => {
     expect(body.data).toHaveProperty('id')
   })
 
-  test('POST /api/webform/parent_request_form/submit creates submission', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/api/webform/parent_request_form/submit`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      data: {
-        data: {
-          child_name: 'Test Child',
-          child_cpr: '0101200001',
-          parent1_email: 'parent1@test.dk',
-          parent2_email: 'parent2@test.dk',
-          parents_together: 'together',
-          request_details: 'E2E test dual-parent approval workflow',
-        },
-      },
-      ignoreHTTPSErrors: true,
-    })
-
-    expect(response.status()).toBe(201)
-  })
-
   test('GET /api/mitid/session needs a Bearer session, never a URL id', async ({ request }) => {
     const unknown = await request.get(`${API_BASE}/api/mitid/session`, {
       headers: { 'Accept': 'application/json', 'Authorization': 'Bearer wf_00000000000000000000000000000000' },
@@ -90,136 +68,29 @@ test.describe('Backend API', () => {
   })
 })
 
-test.describe('OS2Forms stub workflows', () => {
-  test('POST /api/webform/hr_onboarding/submit accepts data', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/api/webform/hr_onboarding/submit`, {
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      data: {
-        data: {
-          new_hire_name: 'Playwright New Hire',
-          new_hire_email: 'hire@test.dk',
-          start_date: '2026-05-01',
-          department: 'Digitalisering',
-          job_title: 'Developer',
-          manager_email: 'manager@test.dk',
-          it_distribution_email: 'it@test.dk',
-          equipment_needs: 'MacBook, iPhone, access to GitLab',
-        },
-      },
-      ignoreHTTPSErrors: true,
-    })
-    expect(response.status()).toBe(201)
-    const body = await response.json()
-    expect(body.data).toHaveProperty('id')
-  })
+// Staff and MitID-gated forms must never accept an anonymous submission:
+// the webform's own access check refuses it before any flow runs.
+const PROTECTED_FORMS = [
+  'parent_request_form',
+  'hr_onboarding',
+  'mileage_expense',
+  'phone_declaration',
+  'citizen_service_application',
+  'association_booking',
+  'med_election_nomination',
+]
 
-  test('POST /api/webform/mileage_expense/submit accepts data', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/api/webform/mileage_expense/submit`, {
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      data: {
-        data: {
-          employee_name: 'Playwright Employee',
-          employee_id: 'E12345',
-          claim_type: 'mileage',
-          claim_date: '2026-04-20',
-          amount: 250,
-          kilometres: 45,
-          purpose: 'Client visit',
-          manager_email: 'manager@test.dk',
-        },
-      },
-      ignoreHTTPSErrors: true,
+test.describe('Protected forms refuse anonymous submissions', () => {
+  for (const form of PROTECTED_FORMS) {
+    test(`POST /api/webform/${form}/submit without login is refused`, async ({ request }) => {
+      const response = await request.post(`${API_BASE}/api/webform/${form}/submit`, {
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        data: { data: { note: 'anonymous e2e probe' } },
+        ignoreHTTPSErrors: true,
+      })
+      expect([401, 403]).toContain(response.status())
+      const body = await response.json()
+      expect(body.data?.id).toBeUndefined()
     })
-    expect(response.status()).toBe(201)
-    const body = await response.json()
-    expect(body.data).toHaveProperty('id')
-  })
-
-  test('POST /api/webform/phone_declaration/submit accepts data', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/api/webform/phone_declaration/submit`, {
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      data: {
-        data: {
-          employee_name: 'Playwright Employee',
-          employee_id: 'E12345',
-          tax_year: '2026',
-          phone_number: '12345678',
-          private_use_declared: 'yes',
-          manager_email: 'manager@test.dk',
-          declaration_date: '2026-04-23',
-        },
-      },
-      ignoreHTTPSErrors: true,
-    })
-    expect(response.status()).toBe(201)
-    const body = await response.json()
-    expect(body.data).toHaveProperty('id')
-  })
-
-  test('POST /api/webform/citizen_service_application/submit accepts data', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/api/webform/citizen_service_application/submit`, {
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      data: {
-        data: {
-          applicant_name: 'Freja Nielsen',
-          applicant_cpr: '0101904521',
-          applicant_email: 'citizen@test.dk',
-          service_type: 'housing_benefit',
-          application_details: 'Applying for housing benefit due to income change.',
-          supporting_info: 'Documentation attached separately in production.',
-          caseworker_email: 'caseworker@test.dk',
-        },
-      },
-      ignoreHTTPSErrors: true,
-    })
-    expect(response.status()).toBe(201)
-    const body = await response.json()
-    expect(body.data).toHaveProperty('id')
-  })
-
-  test('POST /api/webform/association_booking/submit accepts data', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/api/webform/association_booking/submit`, {
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      data: {
-        data: {
-          association_name: 'Test Forening',
-          cvr: '12345678',
-          contact_name: 'Karen Christensen',
-          contact_email: 'association@test.dk',
-          contact_phone: '87654321',
-          request_type: 'booking',
-          facility_or_purpose: 'Community hall for annual meeting',
-          requested_date: '2026-06-15',
-          amount: 500,
-          reviewer_email: 'reviewer@test.dk',
-        },
-      },
-      ignoreHTTPSErrors: true,
-    })
-    expect(response.status()).toBe(201)
-    const body = await response.json()
-    expect(body.data).toHaveProperty('id')
-  })
-
-  test('POST /api/webform/med_election_nomination/submit accepts data', async ({ request }) => {
-    const response = await request.post(`${API_BASE}/api/webform/med_election_nomination/submit`, {
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      data: {
-        data: {
-          election_id: 'MED-2026-Q2',
-          nomination_type: 'self',
-          nominator_name: 'Sofie Hansen',
-          nominator_cpr: '2506924015',
-          nominee_name: 'Sofie Hansen',
-          nominee_department: 'IT',
-          statement: 'Candidate statement for MED committee',
-          consent: true,
-        },
-      },
-      ignoreHTTPSErrors: true,
-    })
-    expect(response.status()).toBe(201)
-    const body = await response.json()
-    expect(body.data).toHaveProperty('id')
-  })
+  }
 })

@@ -470,7 +470,7 @@
         }
       },
       "prefill": {
-        "exempt": "Birthe is exempt from Digital Post, so decisions must be sent as a physical letter. That register check is on its way (backend #242)."
+        "exempt": "Birthe is exempt from Digital Post. Letters to her are therefore sent as physical letters."
       },
       "option": {
         "decision": "Decision: {type}",
@@ -486,7 +486,7 @@
         "deadline": "Appeal deadline"
       },
       "login": {
-        "body": "Birthe logs in with her own MitID. Mikkel helps at the kitchen table but never logs in as his mother. Acting on her behalf with a power of attorney (fuldmagt) is on our roadmap (backend #241)."
+        "body": "Birthe logs in with her own MitID. Mikkel helps at the kitchen table but never logs in as his mother. To appeal for her he can use a digital power of attorney (see the demo \"Mikkel appeals on behalf of his mother\")."
       },
       "form": {
         "body": "The case, the decision and the appeal deadline are fetched. Birthe only writes why she appeals."
@@ -502,14 +502,14 @@
       },
       "complete": {
         "heading": "The appeal is registered",
-        "body": "The case now has the status Appealed (Påklaget). The receipt is not sent as a letter in this demo."
+        "body": "The case now has the status Appealed. The receipt is sent to Birthe as a physical letter because she is exempt from Digital Post."
       },
       "commentary": {
-        "login": "MitID login gives the municipality Birthe's CPR number. It reaches the browser masked only and is filled in on the server on submit. A power of attorney so Mikkel can act for her is roadmap (backend #241).",
+        "login": "The MitID login gives the municipality Birthe's CPR number. It reaches the browser only masked and is filled in on the server at submission.",
         "prefill": "GET /api/prefill/klage looks up Birthe's cases in the AabenForms case register (live) with decision, decision date and appeal deadline. A case that is already appealed, or whose deadline has passed, is shown but cannot be chosen.",
         "form": "Only what the register does not know: why Birthe appeals. The case number carries over from the choice in step 2.",
-        "workflow": "The ECA flow (klage_flow) validates the MitID session, checks that the case belongs to the logged-in citizen and registers the appeal. The case gets the status Appealed (Påklaget).",
-        "letter": "No letter is expected here: Birthe is exempt from Digital Post and physical mail is not connected yet (backend #242). The receipt is therefore not sent as a letter in this demo, and the empty inbox is expected."
+        "workflow": "The ECA flow (klage_flow) validates the MitID session, checks the case belongs to the logged-in citizen, registers the appeal and sends a receipt. The case becomes Appealed.",
+        "letter": "The receipt is sent as a physical letter because Birthe is exempt from Digital Post (the print channel is DEMO). Her digital inbox is therefore empty, as expected."
       }
     },
     "merudgifter": {
@@ -652,7 +652,7 @@
       "leader": {
         "eyebrow": "School transfer with two parents - decision",
         "heading": "The school leader decides",
-        "intro": "The school leader logs in to the municipality's case handling with a staff account. Only an employee registered in the organisation's directory can make the decision - otherwise the flow rejects it.",
+        "intro": "The school leader gets an e-mail at work saying a case is waiting, with a link to the municipality's case handling. The e-mail contains no personal data. The leader logs in with a staff account, and only an employee registered in the organisation's directory for the requested school can make the decision.",
         "cardHeading": "You are the school leader in this demo",
         "story": "Both parents have signed the application for Emil's school transfer. You see the case with masked CPR numbers and choose \"Godkend skoleskift\" (approve) or \"Afvis\" (reject).",
         "username": "Username: {username}",
@@ -830,6 +830,51 @@
         "primary": "Book a 15-min meeting",
         "secondary": "Read the technical walkthrough on GitHub",
         "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
+    },
+    "klageFuldmagt": {
+      "title": "Mikkel appeals on behalf of his mother",
+      "story": "Mikkel has a digital power of attorney from his mother Birthe. He logs in with his own MitID and appeals for her. Her cases and the deadline are fetched, he only types why.",
+      "intro": "Digital inclusion with a power of attorney: Birthe cannot manage digitally herself, so she has given her son Mikkel a digital power of attorney. He logs in as himself, and the municipality can see whom he may act for. Birthe's cases and the appeal deadline are fetched, Mikkel only types why she appeals.",
+      "login": {
+        "body": "Mikkel logs in with his own MitID. His login tells the municipality that he holds a digital power of attorney from Birthe for appeals. He never logs in as his mother."
+      },
+      "form": {
+        "body": "Birthe's case, the decision and the appeal deadline are fetched. Mikkel only types why she appeals."
+      },
+      "hub": {
+        "fetched": {
+          "fuldmagt": "Whom you may act for (digital power of attorney via MitID)"
+        },
+        "tags": {
+          "onBehalf": "Power of attorney"
+        }
+      },
+      "fields": {
+        "applicantCpr": "The appeal is for",
+        "begrundelseHint": "In Birthe's words, why she disagrees with the decision."
+      },
+      "prefill": {
+        "actingFor": "You are acting on behalf of {name} ({cpr}) with a digital power of attorney. The cases below are hers, and the appeal is filed in her name.",
+        "noFuldmagt": "Your login holds no power of attorney covering appeals. Log in as Mikkel Jensen to try the journey."
+      },
+      "complete": {
+        "heading": "The appeal is registered in Birthe's name",
+        "body": "The case now has the status Appealed. The municipality has recorded that Mikkel filed it with a digital power of attorney. The receipt goes to Birthe, and Mikkel gets a copy."
+      },
+      "receipt": {
+        "actor": "Filed by",
+        "actorValue": "Mikkel Jensen with a digital power of attorney",
+        "letter": "Receipt to Birthe",
+        "letterPhysical": "Sent as a physical letter (exempt from Digital Post)",
+        "letterDigital": "Sent with Digital Post"
+      },
+      "commentary": {
+        "login": "Mikkel's MitID login carries a digital power of attorney from Birthe (in the demo a claim from the mock IdP, in production NemLog-in Digital Fuldmagt). It is kept in his session on the server and shown only with name and masked CPR.",
+        "prefill": "GET /api/prefill/klage?subject=0 only points at the power of attorney the server itself holds from MitID. The server checks it covers appeals, looks up Birthe's cases and logs the lookup against Mikkel.",
+        "form": "Only what the register does not know: why Birthe appeals. The browser never sends Birthe's CPR, only an index into the power of attorney.",
+        "workflow": "On submit Birthe becomes the applicant and Mikkel is recorded as the person who acted, on the basis of a digital power of attorney. The ECA flow re-checks the power of attorney from the session before the case becomes Appealed, and sends the receipt.",
+        "letter": "The receipt goes to Birthe. She is exempt from Digital Post, so it is sent as a physical letter (the print channel is DEMO). Mikkel gets a copy in his own Digital Post because the power of attorney allows it."
       }
     }
   },
@@ -1212,9 +1257,32 @@
       "placeholderHeading": "This page is being prepared",
       "accessibility": {
         "title": "Accessibility statement",
-        "lead": "ÅbenForms must be usable by everyone. This page holds the web accessibility status for the solution.",
-        "placeholder": "The final statement is produced on was.digst.dk and inserted here when the solution goes live with an authority.",
-        "body": "If you run into accessibility problems, write to us via the contact page. Please describe what you tried and which assistive technology you used."
+        "lead": "ÅbenForms must be usable by everyone. This page shows how the citizen part of the solution meets the web accessibility requirements, and what is still missing.",
+        "scopeHeading": "What this statement covers",
+        "scope": "The citizen part of ÅbenForms on aabenforms.dk: the front page, the contact page, the cookie page, the demo overview and the self-service journeys. The requirements come from the Danish web accessibility act, implementing EU directive 2016/2102. The standard is EN 301 549, which refers to WCAG 2.1 level AA.",
+        "outOfScope": "The caseworker and administration part is not covered. It has not been tested yet.",
+        "statusHeading": "Status: partially compliant",
+        "status": "The solution is built on the Danish common design system (DKFDS) and tested automatically. A full manual screen reader test has not been done yet, and some parts are missing. We therefore do not declare full compliance.",
+        "testedHeading": "What has been tested",
+        "testedIntro": "Automated testing with axe-core (WCAG 2.0 and 2.1, level A and AA), last run without errors on 11 October 2026:",
+        "tested1": "the front page, the contact form and the cookie page",
+        "tested2": "the address field, also operated with the keyboard only",
+        "tested3": "a MitID-protected form in its login state",
+        "tested4": "the demo overview and each demo journey along the way and at the end",
+        "gapsHeading": "Known gaps",
+        "gaps1": "The front page still has a few elements outside the design system (an animated badge, a glass effect and a dark code card). They are being reworked.",
+        "gaps2": "The caseworker and administration part has not been tested.",
+        "gaps3": "No manual test with a screen reader and magnification has been done.",
+        "gaps4": "The tests do not yet run automatically on every change, but before every release.",
+        "gaps5": "You are logged out after 15 minutes of inactivity, and you cannot yet extend the time or save a draft.",
+        "methodHeading": "How we assessed it",
+        "method": "Self-assessment, based on automated testing and a review of the components against the design system. The statement was prepared on 11 October 2026 and is updated with every release that changes the citizen part.",
+        "feedbackHeading": "Tell us",
+        "feedback": "If you run into accessibility problems, write to {email} or use the contact page. Please describe what you tried, which page it was and which assistive technology you used. We reply within 10 working days.",
+        "contactLink": "Go to the contact page",
+        "complaintHeading": "How to complain",
+        "complaint": "If you do not get a satisfactory answer, you can complain to the Danish Agency for Digital Government, which supervises the web accessibility act.",
+        "complaintLink": "Complain to the Agency for Digital Government (was.digst.dk)"
       },
       "cookies": {
         "title": "Cookie policy",

@@ -5,17 +5,17 @@ import type { DemoScenarioConfig } from '~/types/demo'
  *
  * Mikkel helps his mother Birthe at the kitchen table, but Birthe logs in
  * with her own MitID: the helper never logs in as the parent. Acting on her
- * behalf with fuldmagt is roadmap (backend #241).
+ * behalf with digital fuldmagt is its own scenario (klageFuldmagt.ts).
  *
  * Fetched: the applicant CPR from the MitID login (live-capable) and Birthe's
  * cases from the AabenForms sagsregister (live) with afgørelse, afgørelsesdato
  * and the computed klagefrist, as a radio choice. Typed: only the reason.
  *
  * The ECA flow (klage_flow) runs mitid_validate -> verify_ownership ->
- * case_appeal; the case status becomes "paaklaget". No Digital Post letter
- * is sent: Birthe is exempt from Digital Post and the physical-letter rail is
- * not built yet (backend #242). Step 5 therefore shows a receipt (case
- * number, new status, klagefrist) instead of waiting for a letter.
+ * case_appeal -> send_receipt; the case status becomes "paaklaget". Birthe
+ * is exempt from Digital Post, so the receipt goes as a physical letter
+ * (backend #242, DEMO print rail) and her digital inbox stays empty. Step 5
+ * therefore shows a receipt instead of waiting for a letter.
  */
 
 const str = (v: unknown): string => (v === null || v === undefined ? '' : String(v))
@@ -91,12 +91,12 @@ export const klageScenario: DemoScenarioConfig = {
     },
   }),
 
-  // Birthe is exempt from Digital Post; the physical-letter rail is #242.
+  // Birthe is exempt from Digital Post: her letters go on paper (#242).
   prefillAlert: (prefill) =>
     prefill.session.digital_post_exempt ? { type: 'info', textKey: 'demo.klage.prefill.exempt' } : null,
 
   outcome: {
-    // No letter: Digital Post exempt and no physical-letter rail yet (#242).
+    // No digital letter: Digital Post exempt, the receipt goes on paper (#242).
     expectLetter: false,
     headingKey: 'demo.klage.complete.heading',
     bodyKey: 'demo.klage.complete.body',

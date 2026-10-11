@@ -9,7 +9,8 @@ import AxeBuilder from '@axe-core/playwright'
  *  - Full (E2E_FULL_AUTH=1): resets Birthe's demo case (drush, backend DDEV),
  *    logs in as birthe.jensen, picks the appealable case, types the reason
  *    and follows klage_flow (verify_ownership -> case_appeal) to step 5.
- *    No Digital Post letter is expected: Birthe is exempt (backend #242).
+ *    Her receipt goes as a physical letter (exempt, backend #242), so no
+ *    digital letter is expected in her inbox.
  *    SCREENSHOT_DIR stores step 2 and step 5 at 1400x900.
  *
  * Requires NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true at build time (the
@@ -115,7 +116,7 @@ test.describe('Klage demo - full auth', () => {
     await expect(page.locator('#demo-step-letter')).toBeVisible({ timeout: 30000 })
     await expect(page.getByRole('button', { name: 'Kør igen' })).toBeVisible({ timeout: 30000 })
     await expect(currentStep(page)).toHaveText('Digital Post')
-    await expect(page.getByText(/Her forventes intet brev/)).toBeVisible()
+    await expect(page.getByText(/sendes som fysisk brev, fordi Birthe er fritaget/)).toBeVisible()
     await expect(page.getByText('Brevet er ikke nået frem endnu')).toHaveCount(0)
     await expect(page.getByRole('heading', { name: 'Klagen er registreret' })).toBeVisible()
     const receipt = page.getByTestId('demo-receipt')

@@ -76,6 +76,8 @@ export interface PrefillResponse {
   /** element keys the citizen still has to answer */
   not_asked: string[]
   session: PrefillSession
+  /** Set when acting on behalf of someone (prefill ?subject=): masked CPR only. */
+  acting_for?: { name: string, cpr: string, basis: string } | null
 }
 
 // --- Submit response and Digital Post -------------------------------------
@@ -219,6 +221,8 @@ export interface DemoOutcomeContext {
   values: Record<string, string>
   choices: Record<string, PrefillOption | null>
   submissionId: string
+  /** The workflow steps the flow actually ran (e.g. which letter channel was used). */
+  steps: WorkflowStep[]
   t: DemoTranslate
   d: DemoDateFormat
 }
@@ -296,7 +300,13 @@ export interface DemoScenarioConfig {
   /** i18n key for the step 3 intro; defaults to demo.wizard.form.body */
   formBodyKey?: string
   /** alert at the top of step 2, derived from the prefill response (e.g. Digital Post exemption) */
-  prefillAlert?: (prefill: PrefillResponse) => { type: 'info' | 'warning'; textKey: string } | null
+  prefillAlert?: (prefill: PrefillResponse) => { type: 'info' | 'warning'; textKey: string; textParams?: Record<string, string> } | null
+  /**
+   * Extra prefill query, e.g. { subject: '0' } to act on behalf of the first
+   * person the MitID session holds a fuldmagt for. An index only: the
+   * backend checks the fuldmagt and its scope.
+   */
+  prefillQuery?: Record<string, string>
   /** hub card tags (DKFDS tags), i18n keys */
   tags?: string[]
 }
