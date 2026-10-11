@@ -104,7 +104,14 @@
               {{ $t('demo.wizard.prefill.reload') }}
             </FdsButton>
           </div>
-          <p v-if="missingChoices.length > 0 && !prefillLoading && !actingForMissing" class="demo-wizard__hint mt-3">
+          <FdsAlert
+            v-if="noSelectableChoices.length > 0 && !prefillLoading && !actingForMissing"
+            type="info"
+            :text="$t('demo.wizard.prefill.nothingToChoose', { field: noSelectableChoices[0].label })"
+            class="mt-3"
+            data-testid="demo-nothing-to-choose"
+          />
+          <p v-else-if="missingChoices.length > 0 && !prefillLoading && !actingForMissing" class="demo-wizard__hint mt-3">
             {{ $t('demo.wizard.prefill.chooseFirst') }}
           </p>
         </section>
@@ -357,6 +364,7 @@ const {
   rows,
   notAsked,
   missingChoices,
+  noSelectableChoices,
   actingForMissing,
   user,
   isAuthenticated,
