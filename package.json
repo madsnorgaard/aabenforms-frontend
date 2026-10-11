@@ -43,5 +43,24 @@
     "typescript": "^5.6.0",
     "vue-tsc": "^3.3.11"
   },
-  "packageManager": "pnpm@9.15.0"
+  "packageManager": "pnpm@9.15.0",
+  "pnpm": {
+    "overrides": {
+      "devalue@<5.9.3": "^5.9.4",
+      "shell-quote@<1.11.0": "^1.12.0",
+      "source-map-js@<1.2.2": "^1.2.2",
+      "picomatch@<2.3.2": "^2.3.2",
+      "serialize-javascript@<7.1.2": "^7.1.2"
+    },
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-86w9-cpqp-85rv",
+        "GHSA-vfj7-8cjw-p6xm",
+        "GHSA-v5rq-49vh-5v5c",
+        "GHSA-x6jw-m9v5-85vh",
+        "GHSA-g4wm-2vf7-vfgr",
+        "GHSA-858h-whjf-mvg5"
+      ]
+    }
+  }
 }

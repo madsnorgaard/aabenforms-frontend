@@ -18,13 +18,38 @@
  * Local DDEV needs `aabenforms_digital_post.settings:sender_cvr` set
  * to a non-empty value (e.g. `ddev drush config:set ... sender_cvr
  * 12345678 -y`). Production already has this configured.
+ *
+ * citizen_service_application is MitID-gated since PR #257: an anonymous
+ * POST is refused with 401 (asserted in all-templates.spec.ts and
+ * workflows.spec.ts). The submissions here carry the workflow_id of a
+ * drush-seeded MitID session for Freja, exactly as the SPA does, and the
+ * backend binds the applicant CPR from that session. Seeding needs DDEV,
+ * so the spec runs only with E2E_FULL_AUTH=1.
  */
 
+import { execSync } from 'node:child_process'
 import { test, expect } from '@playwright/test'
 
 const API_BASE = process.env.API_BASE_URL || 'https://aabenforms.ddev.site'
+const BACKEND_DIR = process.env.BACKEND_DIR || '../backend'
+const FULL_AUTH = process.env.E2E_FULL_AUTH === '1'
+
+/** Seeds a MitID session for a mock persona (DDEV only) and returns its workflow id. */
+function seedMitIdSession(persona: string): string {
+  const out = execSync(`ddev drush aabenforms:seed-mitid-session ${persona} 2>&1`, { cwd: BACKEND_DIR }).toString()
+  const sid = /Workflow id:\s*(\S+)/.exec(out)?.[1]
+  if (!sid) throw new Error(`could not seed a MitID session for ${persona}: ${out}`)
+  return sid
+}
 
 test.describe('digital_post_send fake_db happy path', () => {
+  test.skip(!FULL_AUTH, 'set E2E_FULL_AUTH=1 to run; seeds a MitID session with drush (DDEV only)')
+
+  let workflowId: string
+  test.beforeAll(() => {
+    workflowId = seedMitIdSession('freja')
+  })
+
   test('citizen_service_application submission triggers a successful Digital Post send', async ({ request }) => {
     const response = await request.post(
       `${API_BASE}/api/webform/citizen_service_application/submit`,
@@ -34,8 +59,9 @@ test.describe('digital_post_send fake_db happy path', () => {
           Accept: 'application/json',
         },
         data: {
+          workflow_id: workflowId,
           data: {
-            applicant_cpr: '0101900001',
+            applicant_cpr: '0101904521',
             applicant_email: 'freja@test.dk',
             service_type: 'pension_supplement',
             reason: 'E2E smoke test',
@@ -92,8 +118,9 @@ test.describe('digital_post_send fake_db happy path', () => {
       {
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         data: {
+          workflow_id: workflowId,
           data: {
-            applicant_cpr: '0101900001',
+            applicant_cpr: '0101904521',
             applicant_email: 'freja@test.dk',
             service_type: 'pension_supplement',
             reason: 'E2E uniqueness probe',

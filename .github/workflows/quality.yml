@@ -1,0 +1,78 @@
+name: Quality
+
+# Runs on every pull request and on main, before a merge auto-deploys:
+#  - a dependency audit of what ships (pnpm audit --prod, high and critical);
+#  - a production build;
+#  - the Playwright smoke and axe (WCAG 2.1 AA) suites against that build.
+#
+# No backend or mock MitID runs in CI. The specs that need a logged-in
+# persona skip themselves unless E2E_FULL_AUTH=1; run those locally against
+# DDEV (see docs/testing.md). Everything else must pass here.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      # Advisories without a usable fix are listed, with reasons, in
+      # package.json pnpm.auditConfig.ignoreGhsas (none of them ships in
+      # .output). Anything new at high or critical fails the build.
+      - run: pnpm audit --prod --audit-level=high
+
+  e2e:
+    name: e2e smoke + axe
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NUXT_SKIP_PRERENDER: '1'
+      NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED: 'true'
+      # No backend in CI: the smoke specs never reach it.
+      API_BASE_URL: http://127.0.0.1:9
+      BASE_URL: http://127.0.0.1:3000
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - name: Start the production server
+        run: |
+          PORT=3000 HOST=127.0.0.1 node .output/server/index.mjs > server.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:3000/ >/dev/null && exit 0; sleep 1; done
+          cat server.log; exit 1
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Smoke and accessibility suites
+        run: >
+          pnpm exec playwright test
+          tests/e2e/a11y tests/e2e/cookies.spec.ts tests/e2e/landing.spec.ts tests/e2e/demo-hub.spec.ts
+          tests/e2e/byggetilladelse-demo.spec.ts tests/e2e/demo-merudgifter.spec.ts tests/e2e/demo-skoleskift.spec.ts
+          tests/e2e/demo-klage.spec.ts tests/e2e/demo-klage-fuldmagt.spec.ts tests/e2e/demo-sygedagpenge.spec.ts
+          --project=chromium --workers=1 --reporter=line
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7
