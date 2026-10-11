@@ -23,19 +23,20 @@
     "lukket": "Lukket"
   },
   "hero": {
-    "tagline": "Hele MitID-flowet for en byggetilladelse på 60 sekunder. Åben kildekode på bare Drupal 11. Ingen licens-omkostninger, ingen pris per indsendt formular.",
+    "tagline": "Prøv hele forløbet for en byggetilladelse, fra MitID-login til afgørelsen i Digital Post. Åben kildekode på Drupal 11. Ingen licensbetaling og ingen pris per indsendt formular.",
     "cta": {
-      "demo": "Åben interaktiv demo",
-      "demoOffline": "Book en live demonstration",
-      "book": "Book et 30-min møde →",
-      "learn": "Læs Mere"
-    }
+      "demo": "Åbn den interaktive demo",
+      "demoOffline": "Book en gennemgang",
+      "book": "Book et møde på 30 minutter",
+      "learn": "Læs mere"
+    },
+    "badge": "Åben kildekode, GPL-2.0"
   },
   "comparison": {
     "eyebrow": "Sammenligning",
     "themLabel": "Proprietære alternativer",
     "heading": "Hvad får du, som de proprietære alternativer ikke giver?",
-    "lead": "De fleste workflow-platforme på det danske kommunale marked er lukkede, licens-baserede og hostet hos leverandøren. Sådan ser vi forskellene:",
+    "lead": "De fleste platforme til digitale sagsforløb på det danske kommunale marked er lukkede, licensbaserede og drives hos leverandøren. Sådan adskiller vi os:",
     "row1": {
       "title": "Kildekode",
       "us": "Åben kildekode (GPL-2.0)",
@@ -48,87 +49,89 @@
     },
     "row3": {
       "title": "Hosting",
-      "us": "Egen server eller VPS i Europa, helst Danmark - du ejer dataene og lokationen",
-      "them": "Leverandør-hostet, månedlig licens"
+      "us": "Egen server eller VPS i EU, helst i Danmark. Du ejer data og bestemmer, hvor de ligger.",
+      "them": "Drives hos leverandøren, månedlig licens"
     },
     "row4": {
-      "title": "Pris-model",
-      "us": "Gratis software. Du betaler kun for hosting og evt. konsulent.",
+      "title": "Prismodel",
+      "us": "Softwaren er gratis. Du betaler kun for drift og eventuel konsulenthjælp.",
       "them": "Årlig licens plus pris per indsendt formular eller sagsforløb"
     },
     "row5": {
       "title": "Afhængigheder",
-      "us": "Bare Drupal 11 + drupal:key",
-      "them": "Komplekst økosystem af afhængigheder"
+      "us": "Drupal 11 og velkendte moduler som Webform, ECA og OpenID Connect",
+      "them": "Leverandørens egen, lukkede platform"
     },
-    "footnote": "De proprietære alternativer løser deres problem fint. Vi løser det bare på en måde du selv kan vedligeholde, uden licens-omkostninger der vokser med antallet af sager."
+    "footnote": "De proprietære alternativer løser deres opgave fint. Vi løser den bare på en måde, du selv kan vedligeholde, uden licensomkostninger der vokser med antallet af sager.",
+    "topicLabel": "Emne"
   },
   "features": {
     "title": "Hvad får du fra dag 1?",
     "workflows": {
-      "title": "13 sagstyper klar",
-      "description": "Byggetilladelse, parkeringstilladelse, vielsesbooking, forældregodkendelse, klage og 8 andre forløb pakket og klar - eller tegn dine egne i den visuelle modeler."
+      "title": "Færdige forløb at bygge videre på",
+      "description": "Byggetilladelse, parkeringstilladelse, vielsesbooking, forældregodkendelse, klage og flere andre forløb følger med. Flere af dem kan du prøve i demoen, blandt andet klage over en afgørelse."
     },
     "multiTenant": {
-      "title": "MitID + NemLog-in OIDC",
-      "description": "OIDC med PKCE S256, CPR-prefill fra claims, NSIS-niveau substantial/high. NemLog-in Erhverv på vej. Én kerne, både borger og virksomhed."
+      "title": "MitID og NemLog-in via OIDC",
+      "description": "OIDC med PKCE (S256), CPR-udfyldning fra login og NSIS-niveau betydelig eller høj. Koden er klar, men drift kræver certifikat og aftale med NemLog-in. Demoen bruger en mock-IdP. NemLog-in Erhverv er på vej."
     },
     "danish": {
       "title": "Digital Post (SF1601)",
-      "description": "fake_db til lokal udvikling, WireMock til test, Serviceplatformen til produktion - samme kode, fire modes, ét greb."
+      "description": "Samme kode i fire tilstande, skiftet med én indstilling: fake_db lokalt, WireMock i test og Serviceplatformens test- og produktionsmiljø. Produktion kræver certifikat og aftale."
     },
     "security": {
-      "title": "Indbygget GDPR",
-      "description": "Felt-niveau kryptering af CPR og audit-log på hver MitID-session og Digital Post-afsendelse."
+      "title": "Beskyttelse af CPR",
+      "description": "CPR krypteres på feltniveau, og hver MitID-session og hver afsendelse via Digital Post skrives i revisionsloggen."
     }
   },
   "workflowDemo": {
-    "title": "Multi-Party Workflow Automatisering",
-    "subtitle": "Se hvordan ÅbenForms håndterer komplekse sagsforløb med flere parter og automatiske integrationer",
+    "title": "Sagsforløb med flere parter",
+    "subtitle": "Se hvordan ÅbenForms håndterer sagsforløb med flere parter og automatiske integrationer.",
     "example": {
-      "title": "Eksempel: Byggetilladelse Workflow"
+      "title": "Eksempel: byggetilladelse"
     },
     "steps": {
       "citizen": {
         "actor": "Borger",
         "role": "Ansøger",
-        "action": "Indsender byggetilladelse med MitID-login. System henter automatisk CPR-data og validerer byggeadresse mod Danmarks Adresseregister."
+        "action": "Søger om byggetilladelse med MitID-login. Navn og CPR hentes automatisk, og byggeadressen valideres mod Danmarks Adresseregister."
       },
       "caseworker": {
         "actor": "Sagsbehandler",
         "role": "Kommunal medarbejder",
-        "action": "Modtager notifikation via Digital Post. Gennemgår ansøgning, opretter sag i SBSYS og tildeler til teknisk revisor."
+        "action": "Får sagen i sin indbakke, gennemgår ansøgningen og sender den videre til teknisk vurdering. Journalisering i ESDH, fx SBSYS, er forberedt."
       },
       "technical": {
-        "actor": "Teknisk Revisor",
+        "actor": "Teknisk sagkyndig",
         "role": "Bygningskyndig",
-        "action": "Vurderer byggetegninger og compliance med bygningsreglement. Godkender eller anmoder om ændringer."
+        "action": "Vurderer tegningerne op mod bygningsreglementet og godkender eller beder om ændringer."
       },
       "approval": {
-        "actor": "Endelig Godkendelse",
-        "role": "Automatisk eller manuel",
-        "action": "Ved godkendelse sendes tilladelse som PDF via Digital Post. Borger får real-time status opdateringer."
+        "actor": "Afgørelse",
+        "role": "Automatisk eller ved en sagsbehandler",
+        "action": "Ved godkendelse sendes tilladelsen som PDF via Digital Post."
       }
     },
     "integrations": {
       "mitid": "MitID",
-      "cpr": "CPR Opslag",
-      "cvr": "CVR Data",
+      "cpr": "CPR-opslag",
+      "cvr": "CVR-data",
       "address": "Adresse",
       "digitalpost": "Digital Post",
-      "sbsys": "SBSYS Sag",
-      "pdf": "PDF Generering"
+      "sbsys": "ESDH (SBSYS)",
+      "pdf": "PDF-dokument"
     },
     "eca": {
-      "title": "Moderne ECA Workflow Engine",
-      "description": "ÅbenForms bruger ECA (Event-Condition-Action) som en moderne, aktivt udviklet erstatning for det forældede Maestro system.",
+      "title": "Forløbene kører på ECA",
+      "description": "ÅbenForms bygger sine forløb på ECA (Event-Condition-Action), et aktivt udviklet Drupal-modul, frem for det ældre Maestro.",
       "benefits": {
-        "visual": "Visuel modeler til nem workflow-design",
-        "modern": "Aktivt udviklet til Drupal 11 med moderne arkitektur",
-        "flexible": "Fleksibel event-drevet logik uden hard-coded forretningsregler",
-        "headless": "Headless-kompatibel med JSON:API integration"
+        "visual": "Visuel modeler, hvor forløbet kan læses og ændres",
+        "modern": "Aktivt udviklet til Drupal 11",
+        "flexible": "Hændelsesstyret logik i stedet for forretningsregler skrevet fast i koden",
+        "headless": "Headless: frontenden taler med Drupal via JSON:API"
       }
-    }
+    },
+    "stepSr": "Trin {n}:"
   },
   "demo": {
     "hub": {
@@ -834,14 +837,25 @@
     }
   },
   "landingCta": {
-    "eyebrow": "Live demo",
-    "heading": "Vi spiser MitID til morgenmad",
-    "lead": "Klik dig gennem hele byggetilladelsesflowet - autentificer med vores mock-MitID, se ECA-flowet køre live, og find afgørelsen i Digital Post-indbakken.",
-    "cta": "Åben interaktiv demo",
+    "eyebrow": "Prøv demoen",
+    "heading": "MitID ind, afgørelse ud",
+    "lead": "Klik dig gennem hele forløbet for en byggetilladelse. Du logger ind med vores mock-MitID, ser ECA-flowet køre og finder afgørelsen i Digital Post-indbakken.",
+    "cta": "Åbn den interaktive demo",
     "altCta": "Læs den tekniske gennemgang",
-    "bullet1": "Rigtigt OIDC-håndtryk med PKCE og nonce",
-    "bullet2": "ECA-flow kører synkront og returnerer alle steps",
-    "bullet3": "Brev hentes ud af Digital Post-loggen efter afsendelse"
+    "bullet1": "Ægte OIDC-login med PKCE og nonce mod en test-IdP",
+    "bullet2": "ECA-flowet kører synkront og returnerer hvert trin",
+    "bullet3": "Afgørelsen hentes ud af Digital Post-loggen efter afsendelse",
+    "preview": {
+      "stepLabel": "Trin 3 af 4: Flowet kører",
+      "step1": "CPR-opslag (SF1520)",
+      "step2": "Ansøgningen skrevet i revisionsloggen",
+      "step3": "Kvittering sendes via Digital Post (SF1601)",
+      "doneSr": "Færdig:",
+      "runningSr": "I gang:",
+      "inboxLabel": "Digital Post: indbakke",
+      "inboxTitle": "Modtaget: ansøgning om byggetilladelse",
+      "inboxMeta": "Demo-kommune, transaktion 8a3f12c…"
+    }
   },
   "kontakt": {
     "title": "Kontakt",
@@ -876,28 +890,24 @@
   },
   "cta": {
     "title": "Udforsk platformen",
-    "subtitle": "Kør dit eget proof of concept eller book en guidet demo-session",
-    "button": "Book en Demo"
+    "subtitle": "Kør din egen afprøvning, eller book en gennemgang med os",
+    "button": "Book en demo"
   },
   "demoRequest": {
     "title": "Book en demo",
     "subtitle": "Vi kontakter dig inden for 24 timer for at planlægge en guidet session.",
     "name": "Dit navn",
-    "namePlaceholder": "Fulde navn",
     "email": "E-mail",
-    "emailPlaceholder": "din.email{'@'}eksempel.dk",
     "organization": "Organisation",
-    "organizationPlaceholder": "Kommune eller organisationsnavn",
-    "message": "Besked (valgfri)",
-    "messagePlaceholder": "Fortæl os om jeres behov eller spørgsmål...",
+    "message": "Besked (frivilligt)",
     "submit": "Send anmodning",
     "submitting": "Sender...",
-    "error": "Kunne ikke sende din anmodning. Prøv venligst igen.",
+    "error": "Vi kunne ikke sende din anmodning. Prøv igen.",
     "successTitle": "Anmodning modtaget",
     "successMessage": "Tak! Vi kontakter dig inden for 24 timer for at planlægge din demo-session."
   },
   "footer": {
-    "license": "Open source under GPL-2.0 licens",
+    "license": "Åben kildekode under GPL-2.0-licensen",
     "apiStatus": "Backend API",
     "connecting": "Forbinder",
     "offline": "Offline",

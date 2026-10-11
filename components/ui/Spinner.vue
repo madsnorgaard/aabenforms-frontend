@@ -61,6 +61,13 @@ const messageSizeClass = computed(() => {
   }
 }
 
+/* Functional busy signal, so it stays, but slower under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2.4s;
+  }
+}
+
 /* Sizes */
 .spinner-sm {
   width: 24px;
@@ -88,13 +95,13 @@ const messageSizeClass = computed(() => {
 
 /* Colors */
 .spinner-primary {
-  border-color: rgba(0, 122, 204, 0.2);
-  border-top-color: #007acc;
+  border-color: rgba(0, 89, 179, 0.2);
+  border-top-color: #0059b3;
 }
 
 .spinner-secondary {
-  border-color: rgba(205, 68, 51, 0.2);
-  border-top-color: #cd4433;
+  border-color: rgba(0, 77, 153, 0.2);
+  border-top-color: #004d99;
 }
 
 .spinner-white {
@@ -103,12 +110,12 @@ const messageSizeClass = computed(() => {
 }
 
 .spinner-neutral {
-  border-color: rgba(115, 115, 115, 0.2);
-  border-top-color: #737373;
+  border-color: rgba(112, 112, 112, 0.2);
+  border-top-color: #707070;
 }
 
 .spinner-message {
-  color: #666;
+  color: #454545;
   font-weight: 500;
   margin: 0;
 }

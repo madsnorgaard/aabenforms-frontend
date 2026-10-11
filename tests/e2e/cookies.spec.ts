@@ -18,8 +18,8 @@ function formatViolations(violations: any[]): string {
 }
 
 async function scan(page: Page) {
-  // The landing hero fades in (reveal-up); axe would measure the buttons
-  // mid-fade as low contrast, so let running animations finish first.
+  // Let any running transition (e.g. the DKFDS cookie banner) finish so axe
+  // never measures an element mid-fade as low contrast.
   await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== 'running'), null, { timeout: 5000 }).catch(() => {})
   return new AxeBuilder({ page }).withTags(WCAG_AA_TAGS).analyze()
 }

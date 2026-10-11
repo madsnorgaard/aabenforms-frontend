@@ -49,7 +49,7 @@ const customStyle = computed(() => {
 .skeleton {
   position: relative;
   overflow: hidden;
-  background: #e0e0e0;
+  background: #dcdcdc;
 }
 
 .skeleton-shimmer {
@@ -65,6 +65,13 @@ const customStyle = computed(() => {
     transparent
   );
   animation: shimmer 1.5s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+    display: none;
+  }
 }
 
 @keyframes shimmer {

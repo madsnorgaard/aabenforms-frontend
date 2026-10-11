@@ -1,67 +1,57 @@
 <template>
-  <section class="py-20 lg:py-28 bg-white border-t border-neutral-100">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-      <div class="max-w-2xl mb-14">
-        <h2 class="text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mb-4">
-          {{ $t('features.title') }}
-        </h2>
-        <p class="text-lg text-neutral-500">
-          {{ $t('workflowDemo.eca.description') }}
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-neutral-200 rounded-xl overflow-hidden border border-neutral-200">
-        <div
-          v-for="cap in capabilities"
-          :key="cap.label"
-          class="bg-white p-6 lg:p-8 group hover:bg-primary-50/50 transition-colors duration-300"
-        >
-          <!-- Icon -->
-          <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-5"
-               :class="cap.iconBg">
-            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" v-html="cap.iconPath" />
-          </div>
-
-          <h3 class="text-base font-bold text-neutral-900 mb-2">
-            {{ cap.label }}
-          </h3>
-          <p class="text-sm text-neutral-500 leading-relaxed">
-            {{ cap.desc }}
+  <section class="landing-section bg-normal" aria-labelledby="landing-capabilities-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-8">
+          <h2 id="landing-capabilities-heading" class="h1 mt-0 mb-5">
+            {{ $t('features.title') }}
+          </h2>
+          <p class="font-lead mt-0 mb-6">
+            {{ $t('workflowDemo.eca.description') }}
           </p>
         </div>
       </div>
+
+      <ul class="row card-row">
+        <li
+          v-for="cap in capabilities"
+          :key="cap.label"
+          class="col-12 col-sm-6 col-lg-3"
+        >
+          <div class="card">
+            <div class="card-content">
+              <svg class="icon-svg landing-capability__icon mb-4" focusable="false" aria-hidden="true"><use :href="`#${cap.icon}`" /></svg>
+              <h3 class="h4 mt-0 mb-3">{{ cap.label }}</h3>
+              <p>{{ cap.desc }}</p>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
+// Icons come from the DKFDS sprite inlined in app.vue.
 const capabilities = computed(() => [
-  {
-    iconPath: '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />',
-    iconBg: 'bg-warning-50 text-warning-600',
-    label: t('features.workflows.title'),
-    desc: t('features.workflows.description'),
-  },
-  {
-    iconPath: '<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />',
-    iconBg: 'bg-primary-50 text-primary-600',
-    label: t('features.multiTenant.title'),
-    desc: t('features.multiTenant.description'),
-  },
-  {
-    iconPath: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M3 8v10a2 2 0 002 2h14a2 2 0 002-2V8M3 8l9-5 9 5" />',
-    iconBg: 'bg-success-50 text-success-600',
-    label: t('features.danish.title'),
-    desc: t('features.danish.description'),
-  },
-  {
-    iconPath: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />',
-    iconBg: 'bg-secondary-50 text-secondary-600',
-    label: t('features.security.title'),
-    desc: t('features.security.description'),
-  },
+  { icon: 'list-check', label: t('features.workflows.title'), desc: t('features.workflows.description') },
+  { icon: 'lock', label: t('features.multiTenant.title'), desc: t('features.multiTenant.description') },
+  { icon: 'email', label: t('features.danish.title'), desc: t('features.danish.description') },
+  { icon: 'how-to-reg', label: t('features.security.title'), desc: t('features.security.description') },
 ])
 </script>
+
+<style scoped>
+.landing-section {
+  padding-top: 4rem;
+  padding-bottom: 2.5rem;
+}
+
+.landing-capability__icon {
+  width: 2rem;
+  height: 2rem;
+  fill: #0059b3;
+}
+</style>

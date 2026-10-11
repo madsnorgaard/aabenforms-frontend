@@ -1,118 +1,174 @@
 <template>
-  <section id="demo" class="py-20 lg:py-28 bg-white border-t border-neutral-100">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-10 lg:gap-16 items-center">
+  <section id="demo" class="landing-section bg-normal" aria-labelledby="landing-demo-heading">
+    <div class="container">
+      <div class="row">
         <!-- Copy column -->
-        <div>
-          <p class="text-xs font-semibold tracking-widest uppercase text-secondary-600 mb-4">
+        <div class="col-12 col-lg-6">
+          <p class="subheading mb-3">
             {{ $t('landingCta.eyebrow') }}
           </p>
-          <h2 class="text-3xl lg:text-5xl font-bold text-neutral-900 tracking-tight mb-5 leading-[1.05]">
+          <h2 id="landing-demo-heading" class="h1 mt-0 mb-5">
             {{ $t('landingCta.heading') }}
           </h2>
-          <p class="text-lg text-neutral-500 leading-relaxed mb-8 max-w-prose">
+          <p class="font-lead mt-0 mb-6">
             {{ $t('landingCta.lead') }}
           </p>
 
-          <ul class="space-y-3 mb-8">
-            <li v-for="key in ['bullet1', 'bullet2', 'bullet3']" :key="key" class="flex items-start gap-3">
-              <span class="mt-1 inline-flex w-5 h-5 rounded-full bg-success-50 border border-success-200 items-center justify-center flex-shrink-0">
-                <svg class="w-2.5 h-2.5 text-success-600" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <path d="M2 6.5l2.5 2.5L10 3" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-              <span class="text-sm text-neutral-700 leading-relaxed">{{ $t(`landingCta.${key}`) }}</span>
+          <ul class="nobullet-list landing-checklist mb-6">
+            <li v-for="key in ['bullet1', 'bullet2', 'bullet3']" :key="key">
+              <svg class="icon-svg landing-checklist__icon" focusable="false" aria-hidden="true"><use href="#check" /></svg>
+              <span>{{ $t(`landingCta.${key}`) }}</span>
             </li>
           </ul>
 
-          <a href="https://github.com/madsnorgaard/aabenforms" target="_blank" rel="noreferrer" class="function-link cta-link inline-flex items-center gap-1.5 text-sm font-semibold">
-            {{ $t('landingCta.altCta') }} →
-          </a>
+          <p class="mb-6">
+            <a
+              href="https://github.com/madsnorgaard/AabenForms/blob/main/docs/DATA-FLOW.md"
+              target="_blank"
+              rel="noreferrer"
+              class="function-link landing-cta-link"
+            >{{ $t('landingCta.altCta') }}<svg class="icon-svg" focusable="false" aria-hidden="true"><use href="#open-in-new" /></svg></a>
+          </p>
         </div>
 
-        <!-- Visual column: the whole preview panel is the click target so we
-             don't repeat the hero CTA button. When the live demo flag is
-             off (production today) we route to /kontakt instead so visitors
-             don't dead-end on the disabled-state page. -->
-        <NuxtLink :to="demoEnabled ? '/demo/byggetilladelse' : '/kontakt'" class="relative block group" :aria-label="$t('landingCta.cta')">
-          <div class="absolute -inset-6 bg-gradient-to-br from-secondary-100/50 to-primary-100/40 rounded-[28px] blur-2xl opacity-60 group-hover:opacity-90 transition-opacity" aria-hidden="true" />
-          <div class="relative rounded-2xl border border-neutral-200 bg-neutral-900 text-neutral-100 overflow-hidden shadow-2xl shadow-neutral-900/15 group-hover:shadow-neutral-900/25 group-hover:-translate-y-0.5 transition-all">
-            <div class="px-5 py-4 border-b border-white/5 flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-error-400"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-warning-400"></span>
-              <span class="w-2.5 h-2.5 rounded-full bg-success-400"></span>
-              <span class="ml-3 text-xs text-neutral-300 font-mono">/demo/byggetilladelse</span>
-            </div>
+        <!-- Preview column: the whole DKFDS card is the link, so the hero CTA
+             is not repeated as another button. When the live demo flag is off
+             (production today) it routes to /kontakt so visitors do not
+             dead-end on the disabled-state page. -->
+        <div class="col-12 col-lg-6">
+          <NuxtLink
+            :to="localePath(demoEnabled ? '/demo/byggetilladelse' : '/kontakt')"
+            class="card landing-preview"
+          >
+            <div class="card-content">
+              <span class="card-subheading">/demo/byggetilladelse</span>
+              <h3 class="card-heading h3">{{ $t('landingCta.cta') }}</h3>
 
-            <div class="p-6 space-y-5">
-              <div class="grid grid-cols-4 gap-1.5">
-                <div class="h-1 rounded-full bg-success-500" />
-                <div class="h-1 rounded-full bg-success-500" />
-                <div class="h-1 rounded-full bg-secondary-500" />
-                <div class="h-1 rounded-full bg-white/10" />
-              </div>
+              <p class="landing-preview__label">{{ $t('landingCta.preview.stepLabel') }}</p>
+              <ol class="nobullet-list landing-preview__steps">
+                <li>
+                  <svg class="icon-svg landing-preview__done" focusable="false" aria-hidden="true"><use href="#check" /></svg>
+                  <span><span class="sr-only">{{ $t('landingCta.preview.doneSr') }} </span>{{ $t('landingCta.preview.step1') }}</span>
+                </li>
+                <li>
+                  <svg class="icon-svg landing-preview__done" focusable="false" aria-hidden="true"><use href="#check" /></svg>
+                  <span><span class="sr-only">{{ $t('landingCta.preview.doneSr') }} </span>{{ $t('landingCta.preview.step2') }}</span>
+                </li>
+                <li>
+                  <svg class="icon-svg landing-preview__running" focusable="false" aria-hidden="true"><use href="#hourglass" /></svg>
+                  <span><span class="sr-only">{{ $t('landingCta.preview.runningSr') }} </span>{{ $t('landingCta.preview.step3') }}</span>
+                </li>
+              </ol>
 
-              <div class="rounded-lg bg-white/5 border border-white/10 p-3.5">
-                <p class="text-xs uppercase tracking-widest font-semibold text-secondary-300 mb-2">Trin 3 · Workflow kører</p>
-                <ol class="space-y-2.5">
-                  <li class="flex items-center gap-3">
-                    <span class="w-5 h-5 rounded-full bg-success-500 flex items-center justify-center">
-                      <svg class="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                        <path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                    <span class="text-xs text-neutral-200">CPR registry lookup (SF1520)</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="w-5 h-5 rounded-full bg-success-500 flex items-center justify-center">
-                      <svg class="w-3 h-3 text-white" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                        <path d="M2 6l3 3 5-5" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                    <span class="text-xs text-neutral-200">building_permit_submitted audit log</span>
-                  </li>
-                  <li class="flex items-center gap-3">
-                    <span class="w-5 h-5 rounded-full bg-secondary-500 flex items-center justify-center">
-                      <svg class="w-3 h-3 text-white animate-spin" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                        <circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.4"/>
-                        <path d="M10 6a4 4 0 00-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                      </svg>
-                    </span>
-                    <span class="text-xs text-neutral-200">Send confirmation via Digital Post (SF1601)</span>
-                  </li>
-                </ol>
-              </div>
-
-              <div class="rounded-lg bg-white/5 border border-white/10 p-3.5">
-                <div class="flex items-center gap-2 mb-1.5">
-                  <svg class="w-4 h-4 text-neutral-300" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                    <path d="M2.5 5.5h15v9a1 1 0 01-1 1h-13a1 1 0 01-1-1v-9z"/>
-                    <path d="M2.8 5.6L10 11l7.2-5.4"/>
-                  </svg>
-                  <p class="text-xs uppercase tracking-widest font-semibold text-neutral-300">Digital Post · Indbakke</p>
-                </div>
-                <p class="text-xs text-neutral-200 font-semibold">Modtaget: ansøgning om byggetilladelse</p>
-                <p class="text-xs text-neutral-300 mt-0.5">Test Kommune · transaktion 8a3f12c…</p>
+              <div class="landing-preview__inbox">
+                <p class="landing-preview__label">
+                  <svg class="icon-svg" focusable="false" aria-hidden="true"><use href="#email" /></svg>
+                  {{ $t('landingCta.preview.inboxLabel') }}
+                </p>
+                <p class="landing-preview__inbox-title">{{ $t('landingCta.preview.inboxTitle') }}</p>
+                <p class="landing-preview__inbox-meta">{{ $t('landingCta.preview.inboxMeta') }}</p>
               </div>
             </div>
-          </div>
-        </NuxtLink>
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-useI18n()
 const config = useRuntimeConfig()
+const localePath = useLocalePath()
 const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilladelseEnabled))
 </script>
 
 <style scoped>
+.landing-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.landing-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.landing-checklist__icon {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  fill: #358000;
+}
+
 /* CTA text link: function-link look, never DKFDS visited purple. */
-.cta-link,
-.cta-link:visited {
-  color: #0059B3;
+.landing-cta-link,
+.landing-cta-link:visited {
+  color: #004d99;
+}
+
+.landing-preview {
+  margin-bottom: 0;
+  height: auto;
+}
+
+.landing-preview .card-content {
+  width: 100%;
+}
+
+.landing-preview__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #454545;
+  margin: 0 0 0.5rem;
+}
+
+.landing-preview__steps {
+  width: 100%;
+  margin: 0 0 1.5rem;
+}
+
+.landing-preview__steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.landing-preview__done {
+  flex-shrink: 0;
+  fill: #358000;
+}
+
+.landing-preview__running {
+  flex-shrink: 0;
+  fill: #0059b3;
+}
+
+.landing-preview__inbox {
+  width: 100%;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  padding: 1rem;
+}
+
+.landing-preview__inbox p {
+  margin: 0;
+}
+
+.landing-preview__inbox-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.landing-preview__inbox-meta {
+  font-size: 0.875rem;
+  color: #454545;
 }
 </style>
