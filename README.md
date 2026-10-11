@@ -129,7 +129,7 @@ SCREENSHOT_DIR=/tmp/shots BASE_URL=... E2E_FULL_AUTH=1 pnpm exec playwright test
 
 Without `E2E_FULL_AUTH=1`, only the smoke tests that need no login run.
 
-**CI today only builds the Docker image** (`.github/workflows/build-check.yml`). Playwright, axe and a dependency audit do not run in CI yet ([#24](https://github.com/madsnorgaard/aabenforms-frontend/issues/24), [#25](https://github.com/madsnorgaard/aabenforms-frontend/issues/25), [#26](https://github.com/madsnorgaard/aabenforms-frontend/issues/26)), so run them locally before merging.
+**CI** (`.github/workflows/quality.yml`) runs on every pull request and on main: a dependency audit of what ships, a production build, and the Playwright smoke and axe suites without a backend. The full-auth specs run locally against DDEV. See [`docs/testing.md`](docs/testing.md).
 
 ## Deployment
 

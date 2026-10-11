@@ -1,129 +1,51 @@
-# End-to-end testing
+# Testing
 
-Playwright runs against a containerized production preview build, not
-the Nuxt dev server. This doc explains why, how to run it, and what is
-and isn't covered today.
+Playwright runs against a **production build** of the frontend, never the Nuxt dev server. That way it tests what deploys, including build-time problems the dev server skips.
 
-## Why not the dev server
+## In CI (every pull request and main)
 
-Nuxt 3.15 paired with vue-router 4.6.4 has a reproducible SSR crash in
-dev mode:
+`.github/workflows/quality.yml` runs two jobs:
 
-```
-Cannot read properties of undefined (reading 'value')
-  at ComputedRefImpl.fn (node_modules/vue-router/dist/vue-router.mjs:903:98)
-```
+- **dependency audit:** `pnpm audit --prod --audit-level=high`. Advisories without a usable fix are listed in `package.json` under `pnpm.auditConfig.ignoreGhsas`. None of them ships in `.output`: they come from `@nuxt/devtools` (simple-git), the dev server (node-forge) and build tooling (braces). Re-check the list when Nuxt is upgraded.
+- **e2e smoke + axe:**
+  - builds with `NUXT_SKIP_PRERENDER=1`, starts `node .output/server/index.mjs`, and runs the smoke specs and the axe suite (`tests/e2e/a11y`, WCAG 2.0 and 2.1 A + AA) in Chromium;
+  - runs with no backend and no mock MitID, so the specs that need a logged-in persona skip themselves (`E2E_FULL_AUTH`);
+  - uploads `test-results/` on failure.
 
-It surfaces after a handful of rapid page renders - tests pass in
-isolation but the suite locks up the dev server. The dev server can
-stay alive for interactive browser testing; it just isn't a reliable
-Playwright target.
+`build-check.yml` also builds the production Docker image.
 
-Running against a prod-like `nuxt preview` build sidesteps the crash
-and also catches build-time issues that dev mode skips.
+## Locally, with the full backend (DDEV)
 
-## Prerequisites
-
-- DDEV backend must be running. From the backend repo:
-  ```bash
-  ddev start
-  ```
-  This boots Drupal, Keycloak, WireMock, and exposes the
-  `ddev_default` docker network the test containers attach to.
-- Docker must be able to reach the `ddev_default` network. The runner
-  script refuses to start if it isn't present.
-
-## Running the suite
-
-From the frontend repo root:
+The full-auth specs log in with real mock-MitID personas and need the backend DDEV project and Keycloak running.
 
 ```bash
-# Default: landing + workflows specs on chromium (fast, green today)
-bash run-e2e-container.sh
+# DDEV serves a production build: rebuild after every change.
+ddev exec "NUXT_SKIP_PRERENDER=1 pnpm run build" && ddev restart
 
-# All specs including auth (auth has a known limitation, see below)
-bash run-e2e-container.sh all
+# Everything, with logins (chromium).
+BASE_URL=https://aabenforms-frontend.ddev.site:3001 E2E_FULL_AUTH=1 \
+  pnpm exec playwright test --project=chromium --workers=1
 
-# Drop into the Playwright container shell
-bash run-e2e-container.sh shell
+# One scenario, with screenshots for material.
+SCREENSHOT_DIR=/tmp/shots BASE_URL=https://aabenforms-frontend.ddev.site:3001 E2E_FULL_AUTH=1 \
+  pnpm exec playwright test tests/e2e/demo-skoleskift.spec.ts --project=chromium
 ```
 
-The script sits on top of `docker-compose.test.yml`. Raw compose works
-too:
+Personas: `freja.nielsen`, `lars.andersen`, `mikkel.jensen`, `sofie.hansen`, `birthe.jensen`, password `test1234`.
+
+Many test logins inside one minute can hit the backend's rate limits (#142). Clear them locally with:
 
 ```bash
-docker compose -f docker-compose.test.yml up --build \
-  --abort-on-container-exit --exit-code-from playwright
+cd ../backend && ddev drush sqlq "DELETE FROM flood WHERE event LIKE 'aabenforms%'"
 ```
 
-## What's in the suite
+## What is covered
 
-As of Apr 23, 2026:
-
-| File | Tests | Status |
-|------|-------|--------|
-| `tests/e2e/landing.spec.ts` | 11 | Green |
-| `tests/e2e/workflows.spec.ts` | 3 UI + 3 backend API | Green |
-| `tests/e2e/auth.spec.ts` | 5 describe blocks for MitID flow | Blocked inside container |
-
-## Known limitation: auth tests inside the container
-
-`auth.spec.ts` asserts on `localhost:8080` for the Keycloak redirect.
-Drupal on DDEV emits that URL to the browser. When Playwright's browser
-runs inside the container, `localhost:8080` resolves to the Playwright
-container itself, not Keycloak. The assertion fails.
-
-Two fixes are known (neither applied yet):
-
-1. Run the Playwright service with `network_mode: host` and expose the
-   preview on a free host port.
-2. Make Drupal's `authorization_endpoint` configurable via an
-   `AUTH_BASE_URL` env var, emit the Keycloak container hostname
-   (`ddev-aabenforms-keycloak:8080`) in the test environment, and
-   relax the spec's URL regex accordingly.
-
-Option 2 is cleaner and survives Playwright running from anywhere.
-
-## Adding a new spec
-
-The existing specs use a shared-page pattern to survive the dev server
-(kept in place here as a belt-and-braces habit and because some specs
-still hit the Nuxt runtime from browser contexts):
-
-```ts
-test.describe('Feature', () => {
-  test.describe.configure({ mode: 'serial' })
-  let sharedPage: Page
-
-  test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext({ ignoreHTTPSErrors: true })
-    sharedPage = await context.newPage()
-    await sharedPage.goto('/', { waitUntil: 'commit', timeout: 20000 })
-    await sharedPage.waitForSelector('h1', { timeout: 15000 })
-    // Elements wrapped in <ClientOnly> need an explicit hydration wait:
-    await sharedPage.waitForSelector('button:has-text("MitID")', { timeout: 15000 })
-  })
-
-  test.afterAll(async () => { await sharedPage?.context().close() })
-
-  test('asserts something', async () => {
-    await expect(sharedPage.getByRole('button', { name: /MitID/i })).toBeVisible()
-  })
-})
-```
-
-One describe block = one page load. Tests inside the block read state
-from that single page. Serial mode prevents Playwright from opening
-parallel pages that would hit the Nitro server's limits.
-
-## i18n reminder
-
-Danish locale strings in `locales/da.json` must use proper Unicode
-(æ/ø/å). A lint-style check worth running before adding new strings:
-
-```bash
-grep -nE "Foralder|faelles|foraeldre|kraever|Gennemga[^å]|bekraefte|ansoeg|afgoer|gennemfort|Fortael|spoergsmaal|Proev|lovmaessig" locales/da.json
-```
-
-Anything this matches is probably a character-encoding slip and should
-be fixed before shipping.
+| Area | Specs |
+|---|---|
+| Front page, cookie banner, accessibility statement | `landing.spec.ts`, `cookies.spec.ts`, `a11y/` |
+| Demo hub and every scenario | `demo-hub.spec.ts`, `byggetilladelse-demo.spec.ts`, `demo-*.spec.ts` |
+| Logout, session handling | `logout.spec.ts` |
+| Backend API contracts (protected forms refuse anonymous submits) | `workflows.spec.ts`, `specs/` |
+| Caseworker inbox | `cases-inbox.spec.ts` |
+| Screenshots for presentation material | `pitch-screens.spec.ts`, `school-family-*.spec.ts` |
