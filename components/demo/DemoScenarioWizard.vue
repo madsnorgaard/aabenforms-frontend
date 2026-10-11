@@ -84,6 +84,7 @@
           <p>{{ $t('demo.wizard.prefill.body') }}</p>
 
           <DemoProvenancePanel
+            v-if="!actingForMissing"
             :rows="rows"
             :typed-labels="typedLabels"
             :choices="choices"
@@ -94,7 +95,7 @@
           <div class="button-group mt-6">
             <FdsButton
               variant="primary"
-              :disabled="prefillLoading || !prefillData || missingChoices.length > 0"
+              :disabled="prefillLoading || !prefillData || missingChoices.length > 0 || actingForMissing"
               @click="continueToForm"
             >
               {{ $t('demo.wizard.continue') }}
@@ -103,7 +104,7 @@
               {{ $t('demo.wizard.prefill.reload') }}
             </FdsButton>
           </div>
-          <p v-if="missingChoices.length > 0 && !prefillLoading" class="demo-wizard__hint mt-3">
+          <p v-if="missingChoices.length > 0 && !prefillLoading && !actingForMissing" class="demo-wizard__hint mt-3">
             {{ $t('demo.wizard.prefill.chooseFirst') }}
           </p>
         </section>
@@ -356,6 +357,7 @@ const {
   rows,
   notAsked,
   missingChoices,
+  actingForMissing,
   user,
   isAuthenticated,
   authLoading,
