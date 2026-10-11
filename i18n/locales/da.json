@@ -166,7 +166,7 @@
             "description": "Beskrivelse af byggeprojektet"
           },
           "commentary": {
-            "prefill": "GET /api/prefill/building_permit?session=[id] kører de opslag, flowet ville køre: navn og CPR fra MitID-sessionen (maskeret af backend), og hver linje får sin egen revisionspost. Adressen kommer fra mock-IdP'ens claims, som ægte MitID ikke udsteder, derfor DEMO."
+            "prefill": "GET /api/prefill/building_permit (MitID-sessionen i Authorization-headeren, aldrig i URL'en) kører de opslag, flowet ville køre: navn og CPR fra MitID-sessionen (maskeret af backend), og hver linje får sin egen revisionspost. Adressen kommer fra mock-IdP'ens claims, som ægte MitID ikke udsteder, derfor DEMO."
           }
         },
         "merudgifter": {
@@ -327,7 +327,7 @@
       },
       "commentary": {
         "login": "Frontend sender dig til /mitid/login. Drupal laver state, nonce og PKCE-challenge og sender dig til identitetsudbyderen. Tilbage på /auth/callback bytter vi koden til en session.",
-        "prefill": "GET /api/prefill/[formular]?session=[id] kører de registeropslag, flowet ville køre, og returnerer hver værdi med kilde, kontrakt, hjemmel og revisionsnummer. CPR kommer altid maskeret fra serveren.",
+        "prefill": "GET /api/prefill/[formular] (MitID-sessionen i Authorization-headeren, aldrig i URL'en) kører de registeropslag, flowet ville køre, og returnerer hver værdi med kilde, kontrakt, hjemmel og revisionsnummer. CPR kommer altid maskeret fra serveren.",
         "form": "Kun det, registrene ikke kender, bliver spurgt om. Valg fra listekilder (barn, sag) følger med i ansøgningen.",
         "workflow": "POST til /api/webform/[formular]/submit kører ECA-flowet synkront og returnerer alle trin. Identitetsporten tjekker sessionen på serveren.",
         "letter": "GET /api/digital-post/recent slår op i Digital Post-loggen for din session. I produktion er det et SF1601-kald til NgDP."
