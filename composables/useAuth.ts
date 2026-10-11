@@ -28,7 +28,7 @@ export const useAuth = () => {
    * Initiate MitID login flow
    * Redirects to backend /mitid/login endpoint
    */
-  function login(returnUrl?: string) {
+  function login(returnUrl?: string, opts: { fresh?: boolean, loginHint?: string } = {}) {
     // Store the intended destination for after auth completes
     if (returnUrl) {
       sessionStorage.setItem('mitid_return_url', returnUrl)
@@ -38,7 +38,13 @@ export const useAuth = () => {
     const callbackUrl = `${window.location.origin}/auth/callback`
 
     // Redirect to backend MitID login, telling it to return to our callback page
-    window.location.href = `${apiBase}/mitid/login?return_url=${encodeURIComponent(callbackUrl)}`
+    // fresh: force a new MitID sign-in (prompt=login) so the IdP cannot reuse
+    // the previous person's session on a shared device.
+    const fresh = opts.fresh ? '&fresh=1' : ''
+    // loginHint: only a username suggestion for the IdP (OIDC login_hint);
+    // the person still authenticates there. The backend validates it.
+    const hint = opts.loginHint ? `&login_hint=${encodeURIComponent(opts.loginHint)}` : ''
+    window.location.href = `${apiBase}/mitid/login?return_url=${encodeURIComponent(callbackUrl)}${fresh}${hint}`
   }
 
   /**
@@ -147,10 +153,9 @@ export const useAuth = () => {
    * Logout user and clear session
    */
   async function logout() {
-    await userStore.logout()
-
-    // Redirect to homepage
-    navigateTo('/')
+    // Clears local state, revokes the MitID session and ends the IdP
+    // session; the browser lands back on the homepage.
+    await userStore.logout({ returnPath: '/' })
   }
 
   /**

@@ -32,7 +32,7 @@ export const useTenantStore = defineStore('tenant', {
      * Get primary color for theming
      */
     primaryColor: (state): string => {
-      return state.tenant?.primaryColor || '#007acc'
+      return state.tenant?.primaryColor || '#0060a8'
     },
 
     /**
@@ -118,7 +118,7 @@ export const useTenantStore = defineStore('tenant', {
         name: domainData.attributes.name,
         domain: domainData.attributes.hostname,
         logo: domainData.attributes.logo_url,
-        primaryColor: domainData.attributes.primary_color || '#007acc',
+        primaryColor: domainData.attributes.primary_color || '#0060a8',
         secondaryColor: domainData.attributes.secondary_color || '#28a745',
         settings: {
           ...domainData.attributes.third_party_settings,
@@ -136,7 +136,7 @@ export const useTenantStore = defineStore('tenant', {
       this.tenant = {
         name: 'ÅbenForms',
         domain: window.location.hostname,
-        primaryColor: '#007acc',
+        primaryColor: '#0060a8',
         secondaryColor: '#28a745',
         settings: {
           enableMitId: true,
@@ -177,11 +177,11 @@ export const useTenantStore = defineStore('tenant', {
       const root = document.documentElement
 
       // Set CSS custom properties
-      root.style.setProperty('--color-primary', this.tenant.primaryColor || '#007acc')
+      root.style.setProperty('--color-primary', this.tenant.primaryColor || '#0060a8')
       root.style.setProperty('--color-secondary', this.tenant.secondaryColor || '#28a745')
 
       // Generate lighter/darker variants
-      const primary = this.tenant.primaryColor || '#007acc'
+      const primary = this.tenant.primaryColor || '#0060a8'
       const secondary = this.tenant.secondaryColor || '#28a745'
 
       root.style.setProperty('--color-primary-light', this.lightenColor(primary, 20))

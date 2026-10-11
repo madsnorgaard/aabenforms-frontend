@@ -1,14 +1,29 @@
-# ÅbenForms Frontend - WCAG 2.1 AA Accessibility Compliance Report
+# ÅbenForms Frontend - WCAG 2.1 AA Accessibility Report
 
-**Date**: February 2, 2026
-**Version**: 1.0.0
 **Compliance Target**: WCAG 2.1 Level AA
 
 ## Executive Summary
 
-This report documents the accessibility audit and improvements made to the ÅbenForms frontend application to achieve WCAG 2.1 AA compliance. All interactive components have been enhanced with proper ARIA attributes, keyboard navigation, screen reader support, and sufficient color contrast ratios.
+This report documents the accessibility of the ÅbenForms frontend. As of the
+WCAG remediation pass, the earlier "compliant" claim is now **backed by
+automated verification**: an `@axe-core/playwright` suite
+(`tests/e2e/a11y/accessibility.spec.ts`, run with `pnpm test:a11y`) scans the
+live flows and asserts **zero WCAG 2.0/2.1 A + AA violations**.
 
-**Compliance Status**:  **WCAG 2.1 AA Compliant**
+**Measured status** (axe, `wcag2a wcag2aa wcag21a wcag21aa`): **0 violations**
+on the landing page, the contact form, the address-autocomplete combobox, and
+the MitID-gated form gate state, plus a keyboard-operability assertion for the
+combobox. This is a per-route automated result, not a substitute for a full
+manual audit (screen-reader passes, cognitive review), but it replaces the
+previously untested claim with reproducible evidence.
+
+**What the remediation fixed** (real violations axe surfaced): per-field errors
+were wired through the form renderer so `aria-invalid` / `aria-describedby` /
+`role=alert` actually fire; a skip link + single `<main>` landmark + route-change
+focus were added; the address combobox label was programmatically associated and
+a live result-count region added; colour-contrast failures (mid-tone brand blue
+as small text, `neutral-400` on white, `neutral-500` on dark) were corrected; and
+`min-h-[44px]` touch targets were enforced on buttons and icon links.
 
 ---
 

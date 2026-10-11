@@ -20,103 +20,149 @@
       role="alert"
       aria-live="assertive"
     >
-      <p class="error-message">{{ error }}</p>
-      <button type="button" @click="loadForm" class="retry-button">
+      <FdsAlert type="error" :heading="$t('form.loadError')" :text="error" class="mb-5" />
+      <FdsButton type="button" variant="secondary" class="retry-button" @click="loadForm">
         {{ $t('form.retry') }}
-      </button>
+      </FdsButton>
     </div>
 
     <!-- MitID gate: the flow behind this form validates identity, so demand a
          session before showing the fields at all. -->
     <div v-else-if="mitidGateActive" class="mitid-gate" role="region" :aria-label="$t('auth.loginRequired')">
       <p class="mitid-gate-text">{{ $t('form.mitidRequired') }}</p>
-      <UiButton type="button" class="mitid-login-button" @click="startMitidLogin">
+      <FdsButton type="button" class="mitid-login-button" @click="startMitidLogin">
         {{ $t('auth.loginWithMitId') }}
-      </UiButton>
+      </FdsButton>
     </div>
 
     <div v-else-if="schema" class="form-fields">
+      <FdsErrorSummary :errors="summaryErrors" />
+      <h1 v-if="schema.title">{{ schema.title }}</h1>
       <div v-if="schema.requires_mitid && isAuthenticated" class="mitid-session-banner" role="status">
-        {{ $t('form.mitidLoggedInAs') }} <strong>{{ user?.name }}</strong>
+        <FdsAlert type="info" paragraph>
+          {{ $t('form.mitidLoggedInAs') }} <strong>{{ user?.name }}</strong>
+        </FdsAlert>
       </div>
       <!-- Render each form field -->
       <div
         v-for="(field, key) in schema.elements"
         :key="key"
         class="form-field"
-        :class="`field-type-${field['#type']}`"
+        :class="[`field-type-${field['#type']}`, `field-key-${cssSafe(String(key))}`]"
       >
         <!-- Text field -->
-        <UiInput
+        <FdsInput
           v-if="field['#type'] === 'textfield'"
+          :id="fieldId(String(key))"
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
-          :placeholder="field['#placeholder']"
-          :type="'text'"
+          :optional="isMarkedOptional(field)"
+          :required-label="isMarkedRequired(field)"
+          :hint="field['#description']"
+          :error="fieldErrors[key]"
+          type="text"
         />
 
         <!-- Email field -->
-        <UiInput
+        <FdsInput
           v-else-if="field['#type'] === 'email'"
+          :id="fieldId(String(key))"
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
-          :placeholder="field['#placeholder']"
-          :type="'email'"
+          :optional="isMarkedOptional(field)"
+          :required-label="isMarkedRequired(field)"
+          :hint="field['#description']"
+          :error="fieldErrors[key]"
+          autocomplete="email"
+          inputmode="email"
+          type="email"
+          width="l"
         />
 
         <!-- Textarea -->
-        <UiTextarea
+        <FdsTextarea
           v-else-if="field['#type'] === 'textarea'"
+          :id="fieldId(String(key))"
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
-          :placeholder="field['#placeholder']"
-          :rows="field['#rows'] || 4"
+          :optional="isMarkedOptional(field)"
+          :required-label="isMarkedRequired(field)"
+          :hint="field['#description']"
+          :error="fieldErrors[key]"
+          :rows="field['#rows'] || 5"
         />
 
         <!-- Select/dropdown -->
-        <UiSelect
+        <FdsSelect
           v-else-if="field['#type'] === 'select'"
+          :id="fieldId(String(key))"
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
+          :optional="isMarkedOptional(field)"
+          :required-label="isMarkedRequired(field)"
+          :hint="field['#description']"
+          :error="fieldErrors[key]"
           :options="field['#options'] || {}"
+          :placeholder="$t('form.selectPlaceholder')"
+          width="l"
         />
 
         <!-- CPR field (custom; 'cpr_field' is the legacy element id) -->
-        <UiInput
+        <FdsInput
           v-else-if="field['#type'] === 'cpr' || field['#type'] === 'cpr_field'"
+          :id="fieldId(String(key))"
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
-          placeholder="DDMMYY-XXXX"
+          :optional="isMarkedOptional(field)"
+          :required-label="isMarkedRequired(field)"
+          :hint="field['#description'] || $t('form.cprHint')"
+          :error="fieldErrors[key]"
           type="text"
+          inputmode="numeric"
+          autocomplete="off"
           maxlength="11"
+          :char-width="11"
           class="cpr-field"
         />
 
         <!-- CVR field (custom) -->
-        <UiInput
+        <FdsInput
           v-else-if="field['#type'] === 'cvr'"
+          :id="fieldId(String(key))"
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
-          placeholder="12 34 56 78"
+          :optional="isMarkedOptional(field)"
+          :required-label="isMarkedRequired(field)"
+          :hint="field['#description'] || $t('form.cvrHint')"
+          :error="fieldErrors[key]"
           type="text"
+          inputmode="numeric"
+          autocomplete="off"
           maxlength="11"
+          :char-width="11"
           class="cvr-field"
         />
 
         <!-- Number field -->
-        <UiInput
+        <FdsInput
           v-else-if="field['#type'] === 'number'"
+          :id="fieldId(String(key))"
           v-model="formData[key]"
           :label="field['#title']"
           :required="field['#required']"
-          :placeholder="field['#placeholder']"
-          :type="'number'"
+          :optional="isMarkedOptional(field)"
+          :required-label="isMarkedRequired(field)"
+          :hint="field['#description']"
+          :error="fieldErrors[key]"
+          type="number"
+          inputmode="numeric"
+          width="xs"
         />
 
         <!-- Hidden field: no visible output -->
@@ -128,25 +174,41 @@
           :model-value="addressModels[key] || null"
           :label="field['#title']"
           :required="field['#required']"
+          :error="fieldErrors[key]"
           @update:model-value="(v) => onAddressUpdate(String(key), v)"
         />
 
         <!-- Fallback for unsupported field types -->
         <div v-else class="unsupported-field">
-          <label>{{ field['#title'] }} ({{ field['#type'] }})</label>
-          <p class="field-notice">{{ $t('form.unsupportedFieldType') }}</p>
+          <FdsAlert type="warning" :heading="`${field['#title']} (${field['#type']})`" :text="$t('form.unsupportedFieldType')" paragraph />
         </div>
+      </div>
+
+      <!-- Server-side errors (not tied to a field) -->
+      <div
+        v-if="validationErrors.length > 0"
+        id="form-errors"
+        class="validation-errors"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <FdsAlert type="error" :heading="$t('form.validationErrors')">
+          <ul class="nobullet-list">
+            <li v-for="(err, idx) in validationErrors" :key="idx">{{ err }}</li>
+          </ul>
+        </FdsAlert>
       </div>
 
       <!-- Submit button -->
       <div class="form-actions">
-        <UiButton
+        <FdsButton
           type="submit"
           :disabled="submitting"
           class="submit-button"
+          full-width-xs
         >
           {{ submitting ? $t('form.submitting') : (schema.settings?.submit_label || $t('form.submit')) }}
-        </UiButton>
+        </FdsButton>
       </div>
 
       <!-- Success message -->
@@ -157,22 +219,7 @@
         aria-live="polite"
         aria-atomic="true"
       >
-        <p>{{ schema.settings?.confirmation_message || $t('form.success') }}</p>
-      </div>
-
-      <!-- Validation errors -->
-      <div
-        v-if="validationErrors.length > 0"
-        class="validation-errors"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-        id="form-errors"
-      >
-        <p class="error-title">{{ $t('form.validationErrors') }}</p>
-        <ul>
-          <li v-for="(err, idx) in validationErrors" :key="idx">{{ err }}</li>
-        </ul>
+        <FdsAlert type="success" :heading="$t('form.successHeading')" :text="schema.settings?.confirmation_message || $t('form.success')" />
       </div>
     </div>
   </form>
@@ -182,6 +229,8 @@
 const props = defineProps<{
   webformId: string
 }>()
+
+import type { FdsErrorSummaryItem } from '~/components/fds/FdsErrorSummary.vue'
 
 const { fetchResource, postResource } = useApi()
 const { t } = useI18n()
@@ -197,6 +246,30 @@ const addressModels = ref<Record<string, { id: string; street: string; postal_co
 const submitting = ref(false)
 const success = ref(false)
 const validationErrors = ref<string[]>([])
+// Per-field error messages keyed by element key. Bound to each field's :error
+// so the DKFDS form-error state (aria-invalid + aria-describedby) lights up,
+// and mirrored into the Fejlopsummering (summaryErrors) with the field ids.
+const fieldErrors = ref<Record<string, string>>({})
+const summaryErrors = ref<FdsErrorSummaryItem[]>([])
+
+// Stable DOM id per element key: error-summary links target it.
+function fieldId(key: string): string {
+  return `wf-${cssSafe(key)}`
+}
+
+// DKFDS minority rule: when most fields are required, mark the optional ones
+// "(frivilligt)"; when most are optional, mark the required ones instead.
+const mostFieldsRequired = computed(() => {
+  const visible = Object.values<any>(schema.value?.elements || {}).filter((f) => f['#type'] !== 'hidden')
+  const required = visible.filter((f) => f['#required']).length
+  return required * 2 >= visible.length
+})
+function isMarkedOptional(field: any): boolean {
+  return mostFieldsRequired.value && !field['#required']
+}
+function isMarkedRequired(field: any): boolean {
+  return !mostFieldsRequired.value && !!field['#required']
+}
 
 // Mirror a selected address into the flat keys the backend expects
 // (`<key>_street`, `<key>_postal_code`, `<key>_city`, `<key>_id`).
@@ -291,8 +364,50 @@ async function loadForm() {
   }
 }
 
+// Whether a field currently holds a value (address fields track a model).
+function fieldHasValue(key: string, field: any): boolean {
+  if (field['#type'] === 'address') {
+    return !!addressModels.value[key]
+  }
+  const value = formData.value[key]
+  return value !== undefined && value !== null && String(value).trim() !== ''
+}
+
+// Client-side required validation. Populates fieldErrors (per-field, named)
+// and the Fejlopsummering list, and returns whether the form is valid. Error
+// text names the field ("Byggeadresse skal udfyldes"), per WCAG 3.3.1; the
+// summary takes focus itself so a keyboard/AT user lands on the list of what
+// needs fixing (DKFDS pattern).
+function validateRequired(): boolean {
+  fieldErrors.value = {}
+  validationErrors.value = []
+  const summary: FdsErrorSummaryItem[] = []
+  for (const [key, field] of Object.entries<any>(schema.value?.elements || {})) {
+    if (field['#type'] === 'hidden' || !field['#required']) {
+      continue
+    }
+    if (!fieldHasValue(key, field)) {
+      const label = field['#title'] || key
+      const message = t('form.fieldRequired', { field: label })
+      fieldErrors.value[key] = message
+      summary.push({ id: fieldId(key), message })
+    }
+  }
+  summaryErrors.value = summary
+  return summary.length === 0
+}
+
+// A CSS-attribute-safe version of an element key for the selector above.
+function cssSafe(key: string): string {
+  return key.replace(/[^a-zA-Z0-9_-]/g, '-')
+}
+
 // Submit form to backend
 async function submitForm() {
+  if (!validateRequired()) {
+    return
+  }
+
   submitting.value = true
   validationErrors.value = []
   success.value = false
@@ -344,123 +459,39 @@ async function submitForm() {
 </script>
 
 <style scoped>
+/* Layout only; colours, type and the alert/button/field styling are DKFDS. */
 .webform-renderer {
   max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
 }
 
 .loading {
   text-align: center;
   padding: 4rem 0;
-  color: #666;
-}
-
-.error {
-  padding: 2rem;
-  background: #fee;
-  border: 1px solid #fcc;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.error-message {
-  color: #c00;
-  margin-bottom: 1rem;
-}
-
-.retry-button {
-  padding: 0.5rem 1rem;
-  background: #c00;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.retry-button:hover {
-  background: #a00;
 }
 
 .form-fields {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
 .form-field {
   position: relative;
 }
 
-.unsupported-field {
-  padding: 1rem;
-  background: #ffffcc;
-  border: 1px solid #ffeb3b;
-  border-radius: 4px;
-}
-
 .mitid-gate {
-  padding: 2rem;
-  background: #f0f6fc;
-  border: 1px solid #b6d4f0;
-  border-radius: 8px;
-  text-align: center;
+  padding: 2rem 0;
 }
 
 .mitid-gate-text {
   margin: 0 0 1.5rem 0;
 }
 
-.mitid-session-banner {
-  padding: 0.75rem 1rem;
-  background: #efe;
-  border: 1px solid #cec;
-  border-radius: 8px;
-  color: #060;
-  font-size: 0.9rem;
-}
-
-.field-notice {
-  margin: 0.5rem 0 0 0;
-  font-size: 0.875rem;
-  color: #666;
-}
-
 .form-actions {
   margin-top: 2rem;
 }
 
-.submit-button {
-  width: 100%;
-}
-
+.validation-errors,
 .success {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #efe;
-  border: 1px solid #cec;
-  border-radius: 8px;
-  color: #060;
-  text-align: center;
-}
-
-.validation-errors {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: #fee;
-  border: 1px solid #fcc;
-  border-radius: 8px;
-}
-
-.error-title {
-  color: #c00;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.validation-errors ul {
-  margin: 0;
-  padding-left: 1.5rem;
-  color: #c00;
+  margin-top: 1.5rem;
 }
 </style>

@@ -131,6 +131,213 @@
     }
   },
   "demo": {
+    "hub": {
+      "authority": "Demo-kommune",
+      "heading": "Prøv ÅbenForms",
+      "lead": "Vi spørger ikke om det, vi allerede ved.",
+      "body": "Hver demo er en rigtig selvbetjeningsløsning: du logger ind med en mock-MitID, vi henter det, kommunen allerede har i sine registre, og du skriver kun det, som kun du ved. Bagefter kører sagsbehandlingen, og afgørelsen lander i Digital Post. Hvert trin viser, hvilket register vi spurgte, med hvilken hjemmel, og om rammen er live eller demo.",
+      "allDemos": "Alle demoer",
+      "fetched": "Hentes automatisk:",
+      "typed": "Du skriver selv:",
+      "persona": "Du er {name}",
+      "open": "Prøv {title}",
+      "coming": "Kommer",
+      "comingBody": "Scenariet er på vej. Byggetilladelse kan prøves nu.",
+      "offline": "Demoen kører lokalt med mock-MitID. Book en gennemgang via Kontakt.",
+      "honestHeading": "Ærlig status",
+      "honestBody": "DEMO betyder testdata, fordi integrationen endnu ikke er færdigbygget (fx CPR Familie+ og STIL). LIVE-PARAT betyder, at koden er bygget og kun mangler certifikat og aftale (fx MitID og Digital Post). LIVE betyder ÅbenForms' egne data, fx sagsregistret. Ingen demo henter i dag data fra et eksternt register. Mærkerne er de samme som på parathedstavlen.",
+      "difficulty": {
+        "simple": "Simpel",
+        "medium": "Mellem",
+        "advanced": "Avanceret"
+      },
+      "scenarios": {
+        "byggetilladelse": {
+          "title": "Byggetilladelse",
+          "story": "Freja vil bygge en tilbygning. Hun logger ind, og kommunen kender allerede navn, CPR og adresse.",
+          "intro": "Log ind med mock-MitID, se hvad kommunen allerede ved om dig, beskriv dit byggeprojekt, og følg sagen hele vejen til brevet i Digital Post.",
+          "addressHint": "Hentet fra dit login. Ret adressen, hvis byggeriet ligger et andet sted.",
+          "fetched": {
+            "name": "Navn (MitID)",
+            "cpr": "CPR-nummer, maskeret (MitID)",
+            "address": "Adresse (mock-MitID, demo)"
+          },
+          "typed": {
+            "description": "Beskrivelse af byggeprojektet"
+          },
+          "commentary": {
+            "prefill": "GET /api/prefill/building_permit?session=[id] kører de opslag, flowet ville køre: navn og CPR fra MitID-sessionen (maskeret af backend), og hver linje får sin egen revisionspost. Adressen kommer fra mock-IdP'ens claims, som ægte MitID ikke udsteder, derfor DEMO."
+          }
+        },
+        "merudgifter": {
+          "title": "Merudgifter til barn",
+          "story": "Freja søger merudgifter til Emil efter serviceloven § 41. Børnene hentes, hun vælger barnet og skriver kun behovet. Indkomsten hentes ikke, for § 41 afhænger ikke af den.",
+          "intro": "Ansøg om dækning af merudgifter til et barn med funktionsnedsættelse.",
+          "fetched": {
+            "children": "Børn med forældremyndighed (CPR Familie+, demo)",
+            "noIncome": "Ikke indkomst: § 41 afhænger ikke af forældrenes indkomst (dataminimering)",
+            "cpr": "Navn og CPR (MitID)"
+          },
+          "typed": {
+            "disability": "Barnets funktionsnedsættelse og behov",
+            "amount": "Månedlig merudgift"
+          }
+        },
+        "skoleskift": {
+          "title": "Skoleskift med to forældre",
+          "story": "Freja ønsker skoleskift for Emil. Fælles forældremyndighed hentes fra registret, og Lars medunderskriver med sit eget MitID.",
+          "intro": "Ansøg om skoleskift for et barn med fælles forældremyndighed.",
+          "fetched": {
+            "child": "Barn (CPR Familie+, demo)",
+            "custody": "Forældremyndighed (CPR Familie+, demo)",
+            "parent2": "Den anden forælder (CPR Familie+, demo)",
+            "school": "Nuværende skole (STIL elevdata, demo)"
+          },
+          "typed": {
+            "school": "Ønsket skole",
+            "reason": "Begrundelse",
+            "targetSchool": "Ønsket ny skole"
+          }
+        },
+        "klage": {
+          "title": "Klage over afgørelse",
+          "story": "Birthe hjælper sin mor med at klage. Sagerne og klagefristen hentes, kun begrundelsen skrives.",
+          "intro": "Klag over en afgørelse fra kommunen med hjælp fra en pårørende.",
+          "fetched": {
+            "cases": "Dine sager hos kommunen (sagsregister)",
+            "deadline": "Klagefrist (sagsregister)",
+            "cpr": "Navn og CPR (MitID)"
+          },
+          "typed": {
+            "reason": "Begrundelse for klagen"
+          }
+        },
+        "sygedagpenge": {
+          "title": "Sygedagpenge",
+          "story": "Mikkel er kommet til skade og kan ikke arbejde. Arbejdsgiveren har meldt ham syg. Kommunen henter beskæftigelse og løn, så han kun skriver, hvad han ikke kan, og hvor længe det forventes at vare.",
+          "intro": "Udfyld kommunens oplysningsskema om sygedagpenge.",
+          "fetched": {
+            "employer": "Arbejdsgiver og CVR (eIndkomst, demo)",
+            "hours": "Arbejdstimer de seneste 6 måneder og beskæftigelseskravet (eIndkomst, demo)",
+            "firstSickDay": "Første sygedag fra arbejdsgiverens sygemelding (NemRefusion, demo)",
+            "cpr": "Navn og CPR (MitID)"
+          },
+          "typed": {
+            "limitations": "Hvad du ikke kan på grund af sygdommen",
+            "duration": "Forventet varighed og om du er i behandling"
+          },
+          "tags": {
+            "inclusion": "Digital inklusion"
+          }
+        }
+      }
+    },
+    "wizard": {
+      "steps": {
+        "login": "Log ind med MitID",
+        "prefill": "Hentede oplysninger",
+        "form": "Det kun du ved",
+        "workflow": "Sagsbehandling",
+        "letter": "Digital Post"
+      },
+      "continue": "Fortsæt",
+      "back": "Tilbage",
+      "login": {
+        "body": "Du sendes til mock-MitID. Intet rigtigt CPR-nummer er i spil.",
+        "cardHeading": "Du er {name} i denne demo",
+        "button": "Log ind som {name}",
+        "passwordNote": "Mock-MitID-kodeord: {password}",
+        "switchingPersona": "Logger den forrige demo-person ud, så du kan logge ind som {name} ...",
+        "loggedInAs": "Du er logget ind som {name}."
+      },
+      "inboxStatus": {
+        "success": "Leveret",
+        "failure": "Fejlet"
+      },
+      "prefill": {
+        "heading": "Det spurgte vi ikke om",
+        "body": "Kommunen har allerede disse oplysninger. Her kan du se, hvad vi hentede, hvor det kommer fra, og med hvilken hjemmel. Hver linje har sit eget revisionsnummer.",
+        "tableHeading": "Hentet fra registrene",
+        "caption": "Oplysninger hentet fra registrene med kilde, hjemmel og status",
+        "loading": "Henter oplysninger fra registrene ...",
+        "nothing": "Der blev ikke hentet nogen oplysninger til denne formular.",
+        "reload": "Hent igen",
+        "col": {
+          "field": "Oplysning",
+          "value": "Værdi",
+          "source": "Kilde",
+          "legal": "Hjemmel",
+          "status": "Status"
+        },
+        "audit": "audit #{id}",
+        "noAudit": "ingen revisionspost",
+        "noValue": "ikke fundet",
+        "chooseBelow": "vælg nedenfor",
+        "choose": "Vælg {field}",
+        "chooseHint": "Hentet fra {register}. Vælg den, ansøgningen gælder.",
+        "chooseFirst": "Vælg først i listen ovenfor.",
+        "youKnowHeading": "Det kun du ved",
+        "youKnowNone": "Alt er hentet. Du skal ikke skrive noget."
+      },
+      "form": {
+        "heading": "Det kun du ved",
+        "body": "Vi har udfyldt det, kommunen allerede ved. Udfyld resten.",
+        "fromRegister": "fra {register}",
+        "editHint": "Hentet fra {register}. Ret, hvis det ikke passer."
+      },
+      "workflow": {
+        "heading": "Sagsbehandling"
+      },
+      "letter": {
+        "heading": "Digital Post",
+        "noLetterHeading": "Brevet er ikke nået frem endnu",
+        "noLetterBody": "Sagsbehandlingen kørte, men Digital Post-loggen har endnu ikke et brev til denne session. Tryk Opdater om lidt.",
+        "failedHeading": "Sagsbehandlingen stoppede",
+        "failedBody": "Et trin i sagsbehandlingen fejlede. Se trinnet med fejl under Sagsbehandling, og prøv igen."
+      },
+      "inbox": {
+        "new": "Nyt",
+        "noneNew": "Ingen nye breve fra denne ansøgning.",
+        "older": "Tidligere breve ({n})"
+      },
+      "complete": {
+        "heading": "Sagen er afgjort",
+        "body": "Fra login til brev i Digital Post uden et manuelt skridt på serveren."
+      },
+      "validation": {
+        "required": "Udfyld {field}",
+        "number": "{field} skal være et tal",
+        "min": "{field} skal være mindst {min}",
+        "max": "{field} må højst være {max}"
+      },
+      "errors": {
+        "heading": "Der opstod en fejl",
+        "sessionExpired": "Din MitID-session er udløbet (15 minutter). Log ind igen.",
+        "prefillFailed": "Oplysningerne kunne ikke hentes fra registrene. Prøv igen.",
+        "formNotFound": "Formularen findes ikke på serveren.",
+        "submitFailed": "Ansøgningen kunne ikke sendes. Prøv igen."
+      },
+      "mode": {
+        "live": "LIVE",
+        "liveHelp": "ÅbenForms' egne data, fx sagsregistret",
+        "liveCapable": "LIVE-PARAT",
+        "liveCapableHelp": "koden er bygget, mangler certifikat og aftale",
+        "demo": "DEMO",
+        "demoHelp": "testdata, integrationen er ikke færdigbygget"
+      },
+      "commentary": {
+        "login": "Frontend sender dig til /mitid/login. Drupal laver state, nonce og PKCE-challenge og sender dig til identitetsudbyderen. Tilbage på /auth/callback bytter vi koden til en session.",
+        "prefill": "GET /api/prefill/[formular]?session=[id] kører de registeropslag, flowet ville køre, og returnerer hver værdi med kilde, kontrakt, hjemmel og revisionsnummer. CPR kommer altid maskeret fra serveren.",
+        "form": "Kun det, registrene ikke kender, bliver spurgt om. Valg fra listekilder (barn, sag) følger med i ansøgningen.",
+        "workflow": "POST til /api/webform/[formular]/submit kører ECA-flowet synkront og returnerer alle trin. Identitetsporten tjekker sessionen på serveren.",
+        "letter": "GET /api/digital-post/recent slår op i Digital Post-loggen for din session. I produktion er det et SF1601-kald til NgDP."
+      },
+      "persona": {
+        "mismatchHeading": "Du er logget ind som {name}",
+        "mismatchBody": "Oplysningerne nedenfor er dine egne. Denne demo er bygget til {persona}. Log ind igen som {username} for at se scenariet som tænkt.",
+        "switch": "Log af og log ind som {persona}"
+      }
+    },
     "interactive": "Interaktiv",
     "interactiveDemo": "Interaktiv Demo",
     "forms": {
@@ -243,6 +450,223 @@
         "Citizen identity verified via NemID/MitID national eID": "Borgeridentitet bekræftet via NemID/MitID nationalt eID",
         "Personal data retrieved from the national CPR registry (SF1520)": "Persondata hentet fra det nationale CPR-register (SF1520)",
         "Audit log entry created for regulatory compliance": "Revisionslog-post oprettet for lovmæssig overholdelse"
+      }
+    },
+    "klage": {
+      "title": "Klage over en afgørelse",
+      "story": "Mikkel hjælper sin mor Birthe. Hun logger ind med sit eget MitID. Sagen, afgørelsen og klagefristen hentes, hun skriver kun hvorfor hun klager.",
+      "intro": "Digital inklusion ved køkkenbordet: Mikkel sidder ved siden af, men Birthe logger selv ind med MitID. Hendes sager, afgørelsen og klagefristen hentes fra sagsregistret, så hun kun skal skrive, hvorfor hun klager.",
+      "hub": {
+        "fetched": {
+          "cases": "Dine sager med afgørelse (sagsregister)",
+          "deadline": "Klagefrist, beregnet med helligdage (sagsregister)",
+          "cpr": "Navn og CPR (MitID)"
+        },
+        "typed": {
+          "reason": "Hvorfor du klager"
+        },
+        "tags": {
+          "inclusion": "Digital inklusion"
+        }
+      },
+      "prefill": {
+        "exempt": "Birthe er fritaget fra Digital Post. Afgørelser skal derfor sendes som fysisk brev. Det register-tjek er på vej (backend #242)."
+      },
+      "option": {
+        "decision": "Afgørelse: {type}",
+        "decided": "Afgjort {date}",
+        "deadline": "Klagefrist {date}",
+        "status": "Status: {status}",
+        "chooseHint": "Hentet fra {register}. Vælg den afgørelse, du vil klage over."
+      },
+      "receipt": {
+        "caseNumber": "Sagsnummer",
+        "status": "Ny status",
+        "statusValue": "Påklaget",
+        "deadline": "Klagefrist"
+      },
+      "login": {
+        "body": "Birthe logger ind med sit eget MitID. Mikkel hjælper ved køkkenbordet, men logger aldrig ind som sin mor. At handle på hendes vegne med fuldmagt er på vores køreplan (backend #241)."
+      },
+      "form": {
+        "body": "Sagen, afgørelsen og klagefristen er hentet. Birthe skriver kun, hvorfor hun klager."
+      },
+      "fields": {
+        "applicantCpr": "Dit CPR-nummer",
+        "case": "Afgørelse du kan klage over",
+        "begrundelse": "Hvorfor klager du?",
+        "begrundelseHint": "Skriv hvad der er forkert i afgørelsen, og hvad afgørelsen efter din mening bør være."
+      },
+      "validation": {
+        "begrundelse": "Skriv hvorfor du klager over afgørelsen"
+      },
+      "complete": {
+        "heading": "Klagen er registreret",
+        "body": "Sagen har nu status Påklaget. Kvitteringen sendes ikke som brev i denne demo."
+      },
+      "commentary": {
+        "login": "MitID-login giver kommunen Birthes CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse. Fuldmagt, så Mikkel kan handle for hende, er køreplan (backend #241).",
+        "prefill": "GET /api/prefill/klage slår Birthes sager op i AabenForms sagsregister (live) med afgørelse, afgørelsesdato og klagefrist. En sag, der allerede er påklaget, eller hvor klagefristen er udløbet, vises men kan ikke vælges.",
+        "form": "Kun det, registret ikke ved: hvorfor Birthe klager. Sagsnummeret følger med fra valget i trin 2.",
+        "workflow": "ECA-flowet (klage_flow) validerer MitID-sessionen, tjekker at sagen tilhører den indloggede borger, og registrerer klagen. Sagen får status Påklaget.",
+        "letter": "Her forventes intet brev: Birthe er fritaget fra Digital Post, og fysisk post er endnu ikke koblet på (backend #242). Kvitteringen sendes derfor ikke som brev i denne demo, og den tomme indbakke er forventet."
+      }
+    },
+    "merudgifter": {
+      "title": "Merudgifter til et barn med handicap",
+      "story": "Freja søger om dækning af merudgifter for Emil. Børnene hentes, hun skriver kun om behovet. Indkomst hentes ikke.",
+      "intro": "Log ind med mock-MitID, vælg barnet fra CPR-registret, beskriv behovet og følg afgørelsen til brevet i Digital Post. Indkomsten hentes ikke: merudgiftsydelsen efter § 41 afhænger ikke af forældrenes indkomst.",
+      "fields": {
+        "applicantCpr": "Dit CPR-nummer",
+        "child": "Barn",
+        "funktionsnedsaettelse": "Beskriv barnets funktionsnedsættelse",
+        "funktionsnedsaettelseHint": "Fx diagnose og hvilke ekstra udgifter den giver i hverdagen.",
+        "maanedligMerudgift": "Anslåede nødvendige merudgifter (kr./måned)",
+        "maanedligMerudgiftHint": "I demoen er grænsen 1.000 kr./md.: fra 1.000 kr. gives medhold, under 1.000 kr. ender sagen med afslag og klagevejledning."
+      },
+      "validation": {
+        "funktionsnedsaettelse": "Beskriv barnets funktionsnedsættelse",
+        "maanedligMerudgift": "Angiv de månedlige merudgifter i kroner"
+      },
+      "complete": {
+        "medhold": {
+          "heading": "Medhold: merudgifterne dækkes",
+          "body": "Beløbet er mindst 1.000 kr./md., så flowet traf afgørelse om medhold, sendte afgørelsesbrevet og lukkede sagen via SF2900."
+        },
+        "afslag": {
+          "heading": "Afslag med klagevejledning",
+          "body": "Beløbet er under 1.000 kr./md. Flowet gennemførte partshøring, traf afgørelse om afslag, sendte brevet med klagevejledning og startede en klagefrist på 4 uger."
+        },
+        "neutral": {
+          "heading": "Afgørelsen er sendt",
+          "body": "Afgørelsesbrevet ligger i Digital Post herunder."
+        }
+      },
+      "commentary": {
+        "login": "MitID-login giver kommunen dit CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
+        "prefill": "GET /api/prefill/merudgifter henter dine børn fra CPR Familie+ (SF6006, demo). Husstandsindkomsten hentes ikke, fordi § 41 ikke afhænger af forældrenes indkomst (dataminimering). Hvert opslag logges med hjemmel: Serviceloven §41, Forvaltningsloven §7, DBF art. 6(1)(e).",
+        "form": "Kun det, registrene ikke ved: barnets funktionsnedsættelse og de månedlige merudgifter. Beløbet styrer afgørelsen i demoen: 1.000 kr./md. eller mere giver medhold, mindre giver partshøring og afslag.",
+        "workflow": "ECA-flowet opretter og journaliserer sagen og forgrener på beløbet: medhold lukkes via SF2900, afslag går gennem partshøring og starter en klagefrist. Indkomsten indgår ikke.",
+        "letter": "Afgørelsesbrevet sendes til Digital Post (simuleret). Ved afslag indeholder det klagevejledning, og klagefristen er startet på sagen."
+      },
+      "disabled": {
+        "heading": "Den interaktive demo kører lokalt - vi viser den gerne live",
+        "body": "Det fulde flow - MitID-login, registeropslag, ECA-afgørelse og Digital Post - kører i en lokal DDEV-opsætning med en mock identitetsudbyder. Book et 15-min møde, så viser vi det hele i jeres tempo.",
+        "primary": "Book et 15-min møde",
+        "secondary": "Læs den tekniske gennemgang på GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
+    },
+    "skoleskift": {
+      "title": "Skoleskift med to forældre",
+      "story": "Freja søger om skoleskift for Emil. Forældremyndigheden hentes fra registret, så Lars får en invitation i Digital Post og medunderskriver med sit eget MitID.",
+      "intro": "Log ind som Freja, vælg barnet fra CPR-registret, vælg skole og skriv begrundelsen. Forældremyndigheden hentes fra registret, så Lars bliver inviteret til at medunderskrive. Bagefter skifter du til Lars og underskriver med hans MitID.",
+      "formBody": "Forældremyndigheden og den anden indehaver kommer fra CPR-registret. Du skal kun vælge skole og skrive, hvorfor barnet skal skifte.",
+      "fields": {
+        "applicantCpr": "Dit CPR-nummer",
+        "child": "Barn og forældremyndighed",
+        "currentSchool": "Nuværende skole",
+        "targetSchool": "Ønsket skole",
+        "reason": "Begrundelse for skoleskiftet",
+        "reasonHint": "Fx flytning, trivsel eller skolevej."
+      },
+      "validation": {
+        "currentSchool": "Vælg barnets nuværende skole",
+        "targetSchool": "Vælg den skole, barnet skal skifte til",
+        "reason": "Skriv en begrundelse for skoleskiftet"
+      },
+      "schools": {
+        "751101": "Frederiksbjerg Skole",
+        "751102": "Katrinebjergskolen",
+        "751103": "Møllevangskolen",
+        "751104": "Risskov Skole",
+        "751105": "Skåde Skole"
+      },
+      "complete": {
+        "heading": "Sagen venter på Lars",
+        "body": "Invitationen til medunderskrift er sendt til Lars i Digital Post."
+      },
+      "recipient": {
+        "heading": "Invitationen går til Lars",
+        "body": "Ved fælles forældremyndighed er skoleskift en væsentlig beslutning, som begge forældre skal godkende. Flowet har sendt invitationen til Lars' egen Digital Post. Frejas indbakke herunder får derfor ikke et nyt brev, og sagen behandles først, når Lars har underskrevet."
+      },
+      "cosign": {
+        "heading": "Lars medunderskriver",
+        "body": "Lars modtager linket i sin egen Digital Post. Fortsæt som Lars: Freja bliver logget ud, og du logger ind med Lars' MitID for at læse invitationen og underskrive.",
+        "continue": "Fortsæt som Lars"
+      },
+      "lars": {
+        "eyebrow": "Skoleskift med to forældre - trin 2 af 2",
+        "heading": "Lars medunderskriver",
+        "intro": "Lars har fælles forældremyndighed over Emil. Han logger ind med sit eget MitID, åbner invitationen i Digital Post og følger linket til kommunens underskriftsside.",
+        "login": "Log ind med MitID som Lars",
+        "loginStory": "Lars har fået en invitation i Digital Post og skal medunderskrive ansøgningen om Emils skoleskift.",
+        "waitingHeading": "Sagen venter på din underskrift",
+        "waitingBody": "Åbn brevet \"Medunderskrift: ansøgning om skoleskift\" og følg linket. Underskriftssiden ligger hos kommunen og kræver MitID igen.",
+        "wrongPersonaHeading": "Du er ikke logget ind som Lars",
+        "wrongPersonaBody": "Mock-MitID huskede {name}. Start forfra, eller åbn siden i et privat vindue og log ind som lars.andersen.",
+        "restart": "Start forfra som Freja"
+      },
+      "commentary": {
+        "login": "Freja logger ind med mock-MitID. Sessionen bærer hendes CPR på serveren, så CPR-feltet aldrig kommer fra browseren.",
+        "prefill": "CPR Familie+ (SF6006) returnerer børnene i Frejas varetægt og for hvert barn, hvem der har forældremyndigheden. For Emil er den fælles med Lars Andersen, så forældremyndighed og den anden forælder spørges der ikke om.",
+        "form": "Registret siger, hvem der har forældremyndigheden. Ansøgningen sender derfor \"fælles, den anden er enig\", og det er Lars' egen underskrift, der bekræfter det.",
+        "workflow": "Flowet kontrollerer forældremyndigheden mod registret, opretter og journaliserer sagen, slår skolen op og sender Lars en invitation til medunderskrift med et signeret link, der gælder i 14 dage.",
+        "letter": "Invitationen går til Lars' CPR, ikke til Frejas. Derfor ligger den ikke i Frejas indbakke her (den viser kun hendes egne breve), og demoen skifter persona til Lars."
+      },
+      "disabled": {
+        "heading": "Demoen er ikke slået til",
+        "body": "Skoleskift-demoen kræver mock-MitID og er kun aktiv i demomiljøet.",
+        "primary": "Kontakt os"
+      },
+      "option": {
+        "currentSchool": "Nuværende skole: {school}"
+      },
+      "receipt": {
+        "successHeading": "Medunderskrift modtaget",
+        "successBody": "Tak, Lars. Din underskrift er registreret, og ansøgningen går nu videre til skolelederen.",
+        "heading": "Kvittering",
+        "caseNumber": "Sagsnummer",
+        "status": "Status",
+        "child": "Barn",
+        "schools": "Skoleskift",
+        "schoolsValue": "{from} til {to}",
+        "signedBy": "Underskrevet af",
+        "and": "og",
+        "stage": {
+          "awaiting_decision": "Klar til skoleleders afgørelse",
+          "decided": "Afgjort",
+          "in_progress": "Under behandling"
+        },
+        "decision": {
+          "medhold": "Skoleskift godkendt",
+          "afslag": "Skoleskift afvist"
+        },
+        "loadError": "Kvitteringen kunne ikke hentes. Prøv igen om lidt."
+      },
+      "leaderNext": {
+        "heading": "Næste skridt: skolelederen træffer afgørelse",
+        "body": "Skolelederen er medarbejder i kommunen. Afgørelsen træffes i kommunens sagsbehandling med en medarbejderkonto, ikke med borgerens MitID.",
+        "continue": "Fortsæt som skoleleder"
+      },
+      "leader": {
+        "eyebrow": "Skoleskift med to forældre - afgørelse",
+        "heading": "Skolelederen træffer afgørelse",
+        "intro": "Skolelederen logger ind i kommunens sagsbehandling med sin medarbejderkonto. Kun en medarbejder, der står i organisationens medarbejderregister, kan træffe afgørelsen - ellers afviser flowet den.",
+        "cardHeading": "Du er skoleleder i denne demo",
+        "story": "Ansøgningen om Emils skoleskift er underskrevet af begge forældre. Du ser sagen med maskerede CPR-numre og vælger \"Godkend skoleskift\" eller \"Afvis\".",
+        "username": "Brugernavn: {username}",
+        "login": "Log ind som skoleleder",
+        "back": "Tilbage til Lars"
+      },
+      "ending": {
+        "heading": "Afgørelsen er sendt til begge forældre",
+        "body": "Skolelederens afgørelse er registreret på sagen, og afgørelsesbrevet er sendt med Digital Post til {names}.",
+        "klagefrist": "Klagefrist",
+        "klagefristBody": "Forældrene kan klage over afgørelsen senest {date}.",
+        "inboxHeading": "Lars' Digital Post",
+        "pending": "Afgørelsesbrevene er ikke registreret endnu.",
+        "restart": "Kør hele demoen igen"
       }
     },
     "byggetilladelse": {
@@ -358,6 +782,55 @@
         "secondary": "Læs den tekniske gennemgang på GitHub",
         "githubUrl": "https://github.com/madsnorgaard/aabenforms"
       }
+    },
+    "sygedagpenge": {
+      "title": "Sygedagpenge",
+      "story": "Mikkel er kommet til skade og kan ikke arbejde. Arbejdsgiveren har meldt ham syg. Kommunen henter beskæftigelse og løn, så han kun skriver, hvad han ikke kan, og hvor længe det forventes at vare.",
+      "intro": "Log ind med mock-MitID, se arbejdsgiver, arbejdstimer og første sygedag, som kommunen allerede kender, skriv kun hvad du ikke kan, og følg afgørelsen til brevet i Digital Post med datoen for den første opfølgningssamtale.",
+      "fields": {
+        "applicantCpr": "Dit CPR-nummer",
+        "employer": "Arbejdsgiver",
+        "employerCvr": "Arbejdsgiverens CVR-nummer",
+        "hoursRequirement": "Beskæftigelseskrav",
+        "hoursMet": "{hours} timer de seneste {months} måneder - kravet på {required} timer er opfyldt",
+        "hoursNotMet": "{hours} timer de seneste {months} måneder - kravet på {required} timer er ikke opfyldt",
+        "firstSickDay": "Første sygedag",
+        "sicknessDescription": "Hvad kan du ikke på grund af din sygdom?",
+        "sicknessDescriptionHint": "Beskriv, hvad du ikke kan i dit arbejde lige nu. Du skal ikke oplyse en diagnose.",
+        "expectedDuration": "Hvor længe forventer du at være syg?",
+        "durationUnder4": "Under 4 uger",
+        "duration4to8": "4-8 uger",
+        "durationOver8": "Over 8 uger",
+        "durationUnknown": "Ved ikke",
+        "inTreatment": "Er du i behandling?",
+        "yes": "Ja",
+        "no": "Nej",
+        "contactPhone": "Telefonnummer (valgfrit)",
+        "contactPhoneHint": "Kommunen kan ringe til dig om den første opfølgningssamtale."
+      },
+      "validation": {
+        "sicknessDescription": "Beskriv, hvad du ikke kan på grund af din sygdom",
+        "expectedDuration": "Vælg, hvor længe du forventer at være syg",
+        "inTreatment": "Vælg, om du er i behandling"
+      },
+      "commentary": {
+        "login": "MitID-login giver kommunen dit CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
+        "prefill": "GET /api/prefill/sygedagpenge henter arbejdsgiver og arbejdstimer fra eIndkomst (demo) og første sygedag fra arbejdsgiverens sygemelding i NemRefusion (demo). Lønnen bruges af kommunen til beregningen, men sendes ikke til browseren. Hvert opslag logges med hjemmel: Sygedagpengeloven §32, Forvaltningsloven §7, DBF art. 6(1)(e).",
+        "form": "Kun det, registrene ikke ved: hvad du ikke kan, hvor længe det forventes at vare, og om du er i behandling. Du skal ikke oplyse en diagnose. Er du uenig i arbejdsgiverens oplysninger, giver du kommunen besked.",
+        "workflow": "ECA-flowet bekræfter MitID, opretter og journaliserer sagen og tjekker beskæftigelseskravet: mindst 240 timer i de seneste 6 hele kalendermåneder og mindst 40 timer i 5 af dem. Opfyldt giver ret til sygedagpenge, ellers partshøring og afslag med klagevejledning.",
+        "letter": "Afgørelsesbrevet sendes til Digital Post (simuleret) i et klart sprog med datoen for den første opfølgningssamtale. Datoen er 8 uger efter første sygedag - en forenkling i demoen, borger.dk siger, at kommunen vurderer sagen inden for 8 uger."
+      },
+      "complete": {
+        "heading": "Du har ret til sygedagpenge",
+        "body": "Beskæftigelseskravet er opfyldt. Arbejdsgiveren betaler de første 30 kalenderdage, derefter udbetaler kommunen. Brevet herunder har datoen for den første opfølgningssamtale."
+      },
+      "disabled": {
+        "heading": "Den interaktive demo kører lokalt - vi viser den gerne live",
+        "body": "Det fulde flow - MitID-login, registeropslag, ECA-afgørelse og Digital Post - kører i en lokal DDEV-opsætning med en mock identitetsudbyder. Book et 15-min møde, så viser vi det hele i jeres tempo.",
+        "primary": "Book et 15-min møde",
+        "secondary": "Læs den tekniske gennemgang på GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
     }
   },
   "landingCta": {
@@ -441,14 +914,28 @@
     "validationErrors": "Ret venligst følgende fejl:",
     "unknownError": "Ukendt fejl",
     "unsupportedFieldType": "Dette felttype understøttes ikke endnu",
+    "fieldRequired": "{field} skal udfyldes",
+    "pageTitle": "Selvbetjeningsformular",
     "address": {
       "searchPlaceholder": "Søg adresse...",
       "noResults": "Ingen adresser fundet",
+      "resultCount": "{count} adresseforslag",
+      "label": "Adresse",
       "clear": "Ryd",
       "attribution": "Adressedata leveres af Danmarks Adresseregister (Dataforsyningen)"
     },
     "mitidRequired": "Denne ansøgning kræver, at du bekræfter din identitet med MitID, før du kan udfylde den.",
-    "mitidLoggedInAs": "Logget ind med MitID som"
+    "mitidLoggedInAs": "Logget ind med MitID som",
+    "selectPlaceholder": "Vælg",
+    "cprHint": "Fx 010190-1234",
+    "cvrHint": "Fx 12 34 56 78",
+    "successHeading": "Din indsendelse er modtaget"
+  },
+  "a11y": {
+    "skipToContent": "Spring til hovedindhold"
+  },
+  "landing": {
+    "pageTitle": "AabenForms - selvbetjening for danske kommuner"
   },
   "auth": {
     "loginWithMitId": "Log ind med MitID",
@@ -658,5 +1145,121 @@
     "newWindow": "Åbner i nyt vindue",
     "externalLink": "Eksternt link",
     "currentPage": "Aktuel side"
+  },
+  "fds": {
+    "header": {
+      "menu": "Menu",
+      "closeMenu": "Luk menu",
+      "close": "Luk",
+      "logOff": "Log af",
+      "userHeading": "Bruger",
+      "authorityHeading": "Myndighed",
+      "mainMenu": "Hovedmenu",
+      "solutionTitle": "Selvbetjening for kommuner",
+      "authorityName": "Open source-platform",
+      "demoSolutionTitle": "Selvbetjening",
+      "logoLabel": "ÅbenForms - gå til forsiden",
+      "liveDemo": "Live demo"
+    },
+    "nav": {
+      "home": "Forside",
+      "contact": "Kontakt"
+    },
+    "language": {
+      "label": "Vælg sprog"
+    },
+    "footer": {
+      "authority": "Myndighed",
+      "contact": "Kontakt",
+      "about": "Om løsningen",
+      "accessibility": "Tilgængelighedserklæring",
+      "cookies": "Cookiepolitik",
+      "contactPage": "Skriv til os",
+      "status": "Driftsstatus"
+    },
+    "form": {
+      "optional": "(frivilligt)",
+      "required": "(*skal udfyldes)",
+      "errorPrefix": "Fejl: "
+    },
+    "errorSummary": {
+      "heading": "Der er problemer"
+    },
+    "alert": {
+      "info": "Information",
+      "success": "Succes",
+      "warning": "Advarsel",
+      "error": "Fejl",
+      "close": "Luk"
+    },
+    "steps": {
+      "label": "Trinindikator",
+      "step": "Trin",
+      "of": "af",
+      "heading": "Trin",
+      "close": "Luk",
+      "completed": "Trin {n} gennemført",
+      "errorIn": "Fejl i trin {n}"
+    },
+    "validation": {
+      "nameRequired": "Skriv dit navn",
+      "emailRequired": "Skriv din e-mailadresse",
+      "emailInvalid": "Skriv en gyldig e-mailadresse, fx navn{'@'}eksempel.dk",
+      "subjectRequired": "Vælg et emne",
+      "messageRequired": "Skriv din besked"
+    },
+    "pages": {
+      "placeholderHeading": "Siden er under udarbejdelse",
+      "accessibility": {
+        "title": "Tilgængelighedserklæring",
+        "lead": "ÅbenForms skal kunne bruges af alle. Her finder du status på webtilgængeligheden for løsningen.",
+        "placeholder": "Den endelige erklæring udarbejdes på was.digst.dk og indsættes her, når løsningen tages i drift hos en myndighed.",
+        "body": "Oplever du problemer med tilgængeligheden, så skriv til os via kontaktsiden. Beskriv gerne, hvad du forsøgte, og hvilket hjælpemiddel du brugte."
+      },
+      "cookies": {
+        "title": "Cookiepolitik",
+        "lead": "Her kan du læse, hvilke cookies løsningen bruger, og hvad de bruges til.",
+        "placeholder": "Løsningen sætter i dag kun en nødvendig cookie, der husker dit sprogvalg. Der indsamles ikke statistik.",
+        "body": "Nødvendige cookies kræver ikke samtykke. Hvis vi senere tilføjer statistik, bliver du spurgt først."
+      }
+    }
+  },
+  "cookies": {
+    "banner": {
+      "heading": "Fortæl os om du accepterer cookies",
+      "text": "Vi indsamler statistik ved hjælp af tredjepartscookies til at forbedre brugeroplevelsen. Alle indsamlede data anonymiseres.",
+      "link": "Læs mere om vores brug af cookies",
+      "accept": "Accepter cookies",
+      "reject": "Nej tak til cookies"
+    },
+    "page": {
+      "title": "Cookies på ÅbenForms",
+      "lead": "Her kan du se, hvilke cookies ÅbenForms sætter i din browser, hvad de bruges til, og hvordan du ændrer dit valg.",
+      "whatHeading": "Hvad er en cookie?",
+      "whatBody": "En cookie er en lille tekstfil, som gemmes i din browser, så løsningen kan huske noget fra én sidevisning til den næste, fx dit sprogvalg. En cookie kan ikke sprede virus eller læse andre filer på din computer.",
+      "listHeading": "Cookies, vi sætter",
+      "listIntro": "ÅbenForms sætter i dag kun to cookies. Begge er nødvendige for, at løsningen virker, og ingen af dem deles med andre.",
+      "colName": "Navn",
+      "colPurpose": "Formål",
+      "colType": "Type",
+      "colExpiry": "Levetid",
+      "necessary": "Nødvendig",
+      "oneYear": "1 år",
+      "i18nPurpose": "Husker, om du har valgt dansk eller engelsk, så du får samme sprog næste gang.",
+      "consentPurpose": "Husker dit svar på cookiebanneret (accepteret eller afvist), så du ikke bliver spurgt igen.",
+      "necessaryHeading": "Nødvendige cookies kræver ikke samtykke",
+      "necessaryBody": "Nødvendige cookies er dem, der skal til, for at løsningen kan huske dine egne valg. Dem må vi sætte uden at spørge først, og de bruges ikke til at følge dig på tværs af websteder.",
+      "mitidHeading": "Dit MitID-login er ikke en cookie",
+      "mitidBody": "Når du logger ind med MitID, er det serveren, der holder styr på din session. Din browser gemmer kun et sessions-id i sit lokale lager (ikke i en cookie), og det slettes, når du logger af, eller når sessionen udløber.",
+      "statsHeading": "Statistik",
+      "statsBody": "Vi sætter i dag ingen statistikcookies og indlæser ingen scripts fra tredjeparter. Hvis vi senere tilføjer statistik, bliver den kun slået til, hvis du har accepteret cookies i banneret, og vi opdaterer denne side først.",
+      "choiceHeading": "Ændr dit valg",
+      "choiceCurrent": "Dit nuværende valg:",
+      "choiceAccepted": "Du har accepteret cookies.",
+      "choiceRejected": "Du har sagt nej tak til cookies.",
+      "choiceNone": "Du har ikke taget stilling endnu. Banneret vises nederst på siden.",
+      "changeChoice": "Ændr dit valg",
+      "resetDone": "Dit valg er nulstillet. Banneret vises igen nederst på siden, så du kan vælge på ny."
+    }
   }
 }

@@ -5,20 +5,21 @@
       <img :src="tenant.logo" :alt="`${tenant.name} logo`" />
     </div>
 
-    <!-- Tenant Name -->
+    <!-- Tenant Name (a branding label, not the page heading, to keep a single
+         h1 per page). -->
     <div v-if="showName" class="tenant-name">
-      <h1>{{ tenant?.name || 'ÅbenForms' }}</h1>
+      <p class="tenant-name-text">{{ tenant?.name || 'ÅbenForms' }}</p>
     </div>
 
     <!-- Dynamic Theme Styles -->
     <component :is="'style'" v-if="tenant">
       :root {
-        --color-primary: {{ tenant.primaryColor || '#007acc' }};
-        --color-primary-50: {{ lighten(tenant.primaryColor || '#007acc', 0.95) }};
-        --color-primary-100: {{ lighten(tenant.primaryColor || '#007acc', 0.9) }};
-        --color-primary-600: {{ tenant.primaryColor || '#007acc' }};
-        --color-primary-700: {{ darken(tenant.primaryColor || '#007acc', 0.1) }};
-        --color-primary-900: {{ darken(tenant.primaryColor || '#007acc', 0.2) }};
+        --color-primary: {{ tenant.primaryColor || '#0060a8' }};
+        --color-primary-50: {{ lighten(tenant.primaryColor || '#0060a8', 0.95) }};
+        --color-primary-100: {{ lighten(tenant.primaryColor || '#0060a8', 0.9) }};
+        --color-primary-600: {{ tenant.primaryColor || '#0060a8' }};
+        --color-primary-700: {{ darken(tenant.primaryColor || '#0060a8', 0.1) }};
+        --color-primary-900: {{ darken(tenant.primaryColor || '#0060a8', 0.2) }};
 
         --color-secondary: {{ tenant.secondaryColor || '#28a745' }};
         --color-secondary-50: {{ lighten(tenant.secondaryColor || '#28a745', 0.95) }};
@@ -35,9 +36,11 @@
         background-color: var(--color-primary-700) !important;
       }
 
-      .text-primary-600 {
-        color: var(--color-primary-600) !important;
-      }
+      /* Text intentionally NOT re-coloured to the raw tenant primary: a
+         mid-tone brand blue (e.g. #007acc) fails WCAG AA as small text on
+         white. Eyebrow labels and links keep the Tailwind primary-600
+         (#0071c9, >= 4.5:1), so accessibility does not depend on the tenant's
+         chosen hue. Buttons/borders below still take the tenant colour. */
 
       .border-primary-600 {
         border-color: var(--color-primary-600) !important;
@@ -115,11 +118,11 @@ function darken(color: string, amount: number): string {
   height: auto;
 }
 
-.tenant-name h1 {
+.tenant-name-text {
   text-align: center;
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--color-primary, #007acc);
+  color: var(--color-primary, #0060a8);
   margin: 0 0 1rem 0;
 }
 </style>

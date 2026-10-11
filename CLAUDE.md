@@ -508,9 +508,19 @@ git push origin main
 
 ### Lighthouse Score Targets
 - **Performance**: 95+
-- **Accessibility**: 100
+- **Accessibility**: 100 (verify, do not assume)
 - **Best Practices**: 100
 - **SEO**: 100
+
+### Accessibility (WCAG 2.1 AA) - verified, not assumed
+Accessibility is checked by an `@axe-core/playwright` suite at
+`tests/e2e/a11y/accessibility.spec.ts` (`pnpm test:a11y`), which asserts zero
+WCAG 2.0/2.1 A + AA violations on the landing page, contact form, address
+combobox, and the MitID-gated form, plus combobox keyboard operability. Run it
+against a built server (the DDEV daemon serves `node .output/server/index.mjs`,
+so rebuild with `ddev exec "NUXT_SKIP_PRERENDER=1 pnpm run build"` before
+scanning). Do not claim AA compliance without a green run. See
+`docs/reports/ACCESSIBILITY_REPORT.md`.
 
 ## Support
 

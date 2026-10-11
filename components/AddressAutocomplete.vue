@@ -1,16 +1,21 @@
 <template>
   <div class="address-field">
-    <label v-if="label" class="address-label">
+    <label v-if="label" :for="inputId" class="address-label">
       {{ label }}<span v-if="required" class="address-required" aria-hidden="true"> *</span>
     </label>
     <div class="address-search-wrap">
       <input
+        :id="inputId"
         ref="inputEl"
         v-model="query"
         type="text"
         class="address-input"
         :placeholder="placeholderText"
         :required="required && !modelValue"
+        :aria-required="required ? 'true' : undefined"
+        :aria-invalid="error ? 'true' : 'false'"
+        :aria-describedby="error ? `${inputId}-error` : undefined"
+        :aria-label="!label ? $t('form.address.label') : undefined"
         :aria-expanded="open"
         :aria-controls="listboxId"
         :aria-activedescendant="activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined"
@@ -61,6 +66,8 @@
       </button>
     </div>
     <p class="address-attribution">{{ $t('form.address.attribution') }}</p>
+    <p v-if="error" :id="`${inputId}-error`" class="address-error" role="alert">{{ error }}</p>
+    <p class="sr-only" role="status" aria-live="polite">{{ resultAnnouncement }}</p>
   </div>
 </template>
 
@@ -87,6 +94,8 @@ const props = withDefaults(defineProps<{
   label?: string
   required?: boolean
   placeholder?: string
+  /** Per-field validation error to announce and describe. */
+  error?: string
   /** Restrict results to a municipality (4-digit kommunekode). */
   kommuneKode?: string
   /** Search access addresses (house numbers) only. */
@@ -100,6 +109,7 @@ const props = withDefaults(defineProps<{
   label: '',
   required: false,
   placeholder: '',
+  error: '',
   kommuneKode: undefined,
   adgangsadresserOnly: false,
   maksimum: 10,
@@ -125,6 +135,17 @@ const open = ref(false)
 const loading = ref(false)
 const activeIndex = ref(-1)
 const inputEl = ref<HTMLInputElement | null>(null)
+// SSR-stable id so the label/aria-describedby wiring hydrates cleanly.
+const inputId = useId()!
+// A screen-reader-only announcement of how many suggestions are available.
+const resultAnnouncement = computed(() => {
+  if (!open.value || query.value.length < 2 || loading.value) {
+    return ''
+  }
+  return suggestions.value.length > 0
+    ? t('form.address.resultCount', { count: suggestions.value.length })
+    : t('form.address.noResults')
+})
 const listboxId = `address-listbox-${Math.random().toString(36).slice(2, 9)}`
 
 const placeholderText = computed(() => props.placeholder || t('form.address.searchPlaceholder'))
@@ -337,15 +358,20 @@ onBeforeUnmount(() => {
 
 .address-clear {
   position: absolute;
-  top: 0.5rem;
-  right: 0.625rem;
+  top: 0.25rem;
+  right: 0.375rem;
   background: none;
   border: none;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #4b5563;
   cursor: pointer;
-  padding: 2px 4px;
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
 }
 
 .address-clear:hover {
@@ -356,6 +382,13 @@ onBeforeUnmount(() => {
 .address-attribution {
   margin: 0;
   font-size: 0.6875rem;
-  color: #9ca3af;
+  /* neutral-600: >= 4.5:1 on white (was #9ca3af ~2.5:1). */
+  color: #4b5563;
+}
+
+.address-error {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.875rem;
+  color: #b91c1c;
 }
 </style>

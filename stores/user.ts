@@ -171,23 +171,44 @@ export const useUserStore = defineStore('user', {
     },
 
     /**
-     * Logout user
+     * Logout user.
+     *
+     * Fails closed: local state is cleared first and always, whatever the
+     * network does. Then the MitID session is revoked server-side (the id
+     * travels in the POST body, never the URL; errors are ignored) and, unless
+     * idpLogout is false, the browser is sent through the backend's
+     * RP-initiated logout so the IdP session ends too - on a shared device
+     * the next person must not be offered the previous person's login.
+     *
+     * @param options.idpLogout  End the IdP session too (default true).
+     * @param options.returnPath Frontend path to land on afterwards (default '/').
      */
-    async logout() {
+    async logout(options: { idpLogout?: boolean, returnPath?: string } = {}) {
       const config = useRuntimeConfig()
+      const sessionId = this.sessionId
 
-      // Call backend logout endpoint
-      if (this.sessionId) {
+      this.clearSession()
+
+      if (sessionId) {
         try {
-          await $fetch(`${config.public.apiBase}/api/session/${this.sessionId}`, {
-            method: 'DELETE'
+          await $fetch(`${config.public.apiBase}/api/mitid/session/revoke`, {
+            method: 'POST',
+            body: { session_id: sessionId },
+            timeout: 5000,
           })
-        } catch (error) {
-          console.error('Logout failed:', error)
+        }
+        catch {
+          // Ignored: local state is already gone; the session expires anyway.
         }
       }
 
-      this.clearSession()
+      if (options.idpLogout !== false && import.meta.client) {
+        const path = options.returnPath && options.returnPath.startsWith('/') && !options.returnPath.startsWith('//')
+          ? options.returnPath
+          : '/'
+        const returnUrl = `${window.location.origin}${path}`
+        window.location.assign(`${config.public.apiBase}/mitid/logout?return_url=${encodeURIComponent(returnUrl)}`)
+      }
     }
   }
 })

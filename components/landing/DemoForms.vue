@@ -25,7 +25,7 @@
             </li>
           </ul>
 
-          <a href="https://github.com/madsnorgaard/aabenforms" target="_blank" rel="noreferrer" class="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-600 hover:text-neutral-900">
+          <a href="https://github.com/madsnorgaard/aabenforms" target="_blank" rel="noreferrer" class="function-link cta-link inline-flex items-center gap-1.5 text-sm font-semibold">
             {{ $t('landingCta.altCta') }} →
           </a>
         </div>
@@ -41,7 +41,7 @@
               <span class="w-2.5 h-2.5 rounded-full bg-error-400"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-warning-400"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-success-400"></span>
-              <span class="ml-3 text-[11px] text-neutral-400 font-mono">/demo/byggetilladelse</span>
+              <span class="ml-3 text-xs text-neutral-300 font-mono">/demo/byggetilladelse</span>
             </div>
 
             <div class="p-6 space-y-5">
@@ -53,7 +53,7 @@
               </div>
 
               <div class="rounded-lg bg-white/5 border border-white/10 p-3.5">
-                <p class="text-[10px] uppercase tracking-widest font-semibold text-secondary-300 mb-2">Trin 3 · Workflow kører</p>
+                <p class="text-xs uppercase tracking-widest font-semibold text-secondary-300 mb-2">Trin 3 · Workflow kører</p>
                 <ol class="space-y-2.5">
                   <li class="flex items-center gap-3">
                     <span class="w-5 h-5 rounded-full bg-success-500 flex items-center justify-center">
@@ -89,10 +89,10 @@
                     <path d="M2.5 5.5h15v9a1 1 0 01-1 1h-13a1 1 0 01-1-1v-9z"/>
                     <path d="M2.8 5.6L10 11l7.2-5.4"/>
                   </svg>
-                  <p class="text-[10px] uppercase tracking-widest font-semibold text-neutral-400">Digital Post · Indbakke</p>
+                  <p class="text-xs uppercase tracking-widest font-semibold text-neutral-300">Digital Post · Indbakke</p>
                 </div>
                 <p class="text-xs text-neutral-200 font-semibold">Modtaget: ansøgning om byggetilladelse</p>
-                <p class="text-[10px] text-neutral-500 mt-0.5">Test Kommune · transaktion 8a3f12c…</p>
+                <p class="text-xs text-neutral-300 mt-0.5">Test Kommune · transaktion 8a3f12c…</p>
               </div>
             </div>
           </div>
@@ -108,3 +108,11 @@ useI18n()
 const config = useRuntimeConfig()
 const demoEnabled = computed<boolean>(() => Boolean(config.public.demoByggetilladelseEnabled))
 </script>
+
+<style scoped>
+/* CTA text link: function-link look, never DKFDS visited purple. */
+.cta-link,
+.cta-link:visited {
+  color: #0059B3;
+}
+</style>

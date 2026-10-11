@@ -1,59 +1,95 @@
 import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
 
 /**
- * /demo/byggetilladelse interactive demo.
+ * /demo/byggetilladelse on the guided scenario wizard (DKFDS Trinindikator).
  *
  * Two modes:
  *
- *  - Smoke (default): renders the demo page and asserts the kickoff state
- *    is wired correctly. The "Start demo med MitID" button is verified to
- *    be a real anchor/button that would redirect to the backend's
- *    /mitid/login. We DO NOT follow the redirect because the containerized
- *    runner can't reach localhost:8080 (Keycloak) - that's a known
- *    constraint documented in project_aabenforms.md.
+ *  - Smoke (default): renders the wizard and asserts step 1 is wired: the
+ *    step indicator, the mock-IdP notice, the capability tags and that the
+ *    MitID button redirects to the backend's /mitid/login. The redirect is
+ *    NOT followed: the containerized runner cannot reach localhost:8080
+ *    (Keycloak).
  *
- *  - Full (E2E_FULL_AUTH=1): drives a real round-trip through the themed
- *    Keycloak login as freja.nielsen, lands back at the prefilled form,
- *    submits, watches workflow-steps animate, and asserts a Digital Post
- *    letter appears. MUST be run on host network so localhost:8080 is
- *    reachable from the browser context (the containerized runner sees its
- *    own bridge network, not the host's loopback).
+ *  - Full (E2E_FULL_AUTH=1): drives the real round-trip through the themed
+ *    Keycloak login as freja.nielsen, lands on step 2 (provenance table with
+ *    the masked CPR), continues to step 3, submits, watches the workflow
+ *    steps, and asserts the "Modtaget" letter in the Digital Post step. Run
+ *    on the host network so the browser reaches localhost:8080.
  *
- * Both modes require NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true at
- * build/runtime; otherwise the page renders the disabled-state and these
- * tests will fail at the first assertion.
+ * Both modes require NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true at build
+ * time; otherwise the page renders the disabled state.
  */
 
 const FULL_AUTH = process.env.E2E_FULL_AUTH === '1'
+const WCAG_AA_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
+
+function formatViolations(violations: any[]): string {
+  return violations
+    .map((v) => `[${v.impact}] ${v.id}: ${v.help}\n  ${v.nodes.map((n: any) => n.target.join(' ')).join('\n  ')}`)
+    .join('\n\n')
+}
+
+async function scan(page: any) {
+  const { violations } = await new AxeBuilder({ page }).withTags(WCAG_AA_TAGS).analyze()
+  expect(violations, formatViolations(violations)).toEqual([])
+}
 
 test.describe('Byggetilladelse demo - smoke', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/demo/byggetilladelse', { waitUntil: 'networkidle', timeout: 20000 })
   })
 
-  test('renders the kickoff page with the mock-IdP banner', async ({ page }) => {
-    await expect(page.locator('h1')).toContainText(/MitID|byggetilladelse/i)
-    // Mock-IdP banner must be visible on every screen of the demo.
+  test('renders step 1 with the step indicator, mock-IdP notice and capability tags', async ({ page }) => {
+    await expect(page.locator('h1')).toHaveText('Byggetilladelse')
+    await expect(page.locator('header .authority-name').first()).toHaveText('Demo-kommune')
+
+    // Trinindikator: five steps, the first current.
+    const steps = page.locator('nav[aria-label="Trinindikator"] ol.step-indicator > li')
+    await expect(steps).toHaveCount(5)
+    await expect(steps.nth(0)).toHaveClass(/current/)
+    await expect(steps.nth(0).locator('.step-title')).toHaveText('Log ind med MitID')
+    await expect(steps.nth(4).locator('.step-title')).toHaveText('Digital Post')
+
+    // Persona hint and the mock-IdP notice.
+    await expect(page.getByRole('heading', { name: 'Du er Freja Nielsen i denne demo' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Log ind som Freja Nielsen' })).toBeVisible()
+    await expect(page.getByText('Mock-MitID-kodeord: test1234')).toBeVisible()
     await expect(page.getByText(/Mock.IdP/i).first()).toBeVisible()
-    // Capability badges (BPMN/ECA/MitID/Digital Post/GDPR).
-    await expect(page.getByRole('button', { name: 'BPMN' })).toBeVisible()
+
+    // Capability tags (DKFDS tags as toggle buttons).
     await expect(page.getByRole('button', { name: 'ECA' })).toBeVisible()
     await expect(page.getByRole('button', { name: /Digital Post/i })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Modeler' })).toBeVisible()
   })
 
-  test('Start demo button kicks off MitID redirect (no follow)', async ({ page }) => {
-    // Intercept the navigation. We don't actually follow it - we just verify
-    // the URL the browser is about to hit matches the backend mitid/login.
+  test('step 1 has no WCAG 2.1 AA violations', async ({ page }) => {
+    await page.waitForSelector('button:has-text("Log ind som")', { timeout: 15000 })
+    await scan(page)
+  })
+
+  test('mobile step indicator shows "Trin 1 af 5"', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    const button = page.locator('button.step-indicator-button')
+    await expect(button).toBeVisible()
+    await expect(button).toContainText(/Trin\s*1\s*af 5/)
+  })
+
+  test('MitID button kicks off the MitID redirect (no follow)', async ({ page }) => {
     const navigationPromise = page.waitForRequest(
-      req => req.url().includes('/mitid/login') && req.method() === 'GET',
+      (req) => req.url().includes('/mitid/login') && req.method() === 'GET',
       { timeout: 5000 },
     ).catch(() => null)
 
-    await page.getByRole('button', { name: /Log ind via mock.MitID/i }).click()
+    await page.getByRole('button', { name: 'Log ind som Freja Nielsen' }).click()
 
     const req = await navigationPromise
     expect(req, 'expected a request to /mitid/login').not.toBeNull()
     expect(req!.url()).toContain('/mitid/login')
+    // One click: the persona's username travels as a login_hint suggestion.
+    expect(req!.url()).toContain('login_hint=freja.nielsen')
+    expect(req!.url()).toContain('fresh=1')
   })
 })
 
@@ -62,31 +98,50 @@ test.describe('Byggetilladelse demo - full auth', () => {
 
   test('completes the full flow as freja.nielsen', async ({ page }) => {
     await page.goto('/demo/byggetilladelse', { waitUntil: 'networkidle' })
-    await expect(page.locator('h1')).toContainText(/MitID/i)
+    await expect(page.locator('h1')).toHaveText('Byggetilladelse')
 
-    // Kickoff -> themed Keycloak login.
-    await page.getByRole('button', { name: /Log ind via mock.MitID/i }).click()
+    // Step 1 -> themed Keycloak login.
+    await page.getByRole('button', { name: 'Log ind som Freja Nielsen' }).click()
     await page.waitForURL(/realms\/danish-gov-test\/protocol\/openid-connect\/auth/, { timeout: 15000 })
-
-    // Themed login page must show our brand banner.
-    await expect(page.getByText(/Mock.IdP|Demo/i).first()).toBeVisible()
-
-    await page.fill('#username', 'freja.nielsen')
+    // login_hint prefills the username; only the password is typed.
+    await expect(page.locator('#kc-hinted-username')).toHaveText('freja.nielsen')
     await page.fill('#password', 'test1234')
     await page.click('#kc-login')
 
-    // Land back on the demo with prefilled form.
+    // Back on the wizard at step 2: the provenance table.
     await page.waitForURL(/\/demo\/byggetilladelse/, { timeout: 20000 })
-    await expect(page.getByText(/Auto.udfyldt fra MitID|Auto.filled from MitID/i).first()).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+    const table = page.locator('table.demo-provenance__table')
+    await expect(table).toBeVisible({ timeout: 15000 })
+    await expect(table.locator('tr[data-prefill-key="applicant_name"]')).toContainText('Freja Nielsen')
+    // The CPR arrives masked from the backend and is shown as delivered.
+    await expect(table.locator('tr[data-prefill-key="cpr"]')).toContainText(/\d{6}-XXXX/)
+    await expect(table.locator('tr[data-prefill-key="cpr"] .badge')).toHaveText('LIVE-PARAT')
+    await expect(table.locator('tr[data-prefill-key="cpr"]')).toContainText(/audit #\d+/)
+    // The address rail is the mock IdP: honest DEMO badge.
+    await expect(table.locator('tr[data-prefill-key="property_address"] .badge')).toHaveText('DEMO')
+    await expect(page.getByText('Beskrivelse af projektet')).toBeVisible()
+    await scan(page)
 
-    // Fill description and submit.
+    // Step 3: the only typed field.
+    await page.getByRole('button', { name: 'Fortsæt' }).click()
+    await expect(page.locator('ol.step-indicator li.current .step-title').first()).toHaveText('Det kun du ved')
+
+    // Validation goes to the DKFDS error summary.
+    await page.getByRole('button', { name: /Indsend ansøgning/i }).click()
+    await expect(page.locator('[data-module="error-summary"]')).toBeVisible()
+    await expect(page.locator('[data-module="error-summary"] a')).toHaveCount(1)
+    await scan(page)
+
     await page.locator('textarea').fill('Tilbygning på 30 m² mod nordfacaden, etage 1.')
-    await page.getByRole('button', { name: /Indsend ansøgning|Submit application/i }).click()
+    await page.getByRole('button', { name: /Indsend ansøgning/i }).click()
 
-    // Workflow tracker animates.
-    await expect(page.getByText(/Workflow|workflow/i).first()).toBeVisible({ timeout: 10000 })
-
-    // Inbox eventually shows a letter.
-    await expect(page.getByText(/Modtaget: ansøgning om byggetilladelse/i).first()).toBeVisible({ timeout: 15000 })
+    // Step 4: workflow steps reveal, then step 5 with the letter.
+    await expect(page.getByRole('heading', { name: 'Sagsbehandling' })).toBeVisible({ timeout: 15000 })
+    await expect(page.locator('#demo-step-letter')).toBeVisible({ timeout: 20000 })
+    await expect(page.getByText(/Modtaget: ansøgning om byggetilladelse/i).first()).toBeVisible({ timeout: 20000 })
+    await expect(page.getByRole('button', { name: 'Kør igen' })).toBeVisible({ timeout: 15000 })
+    await expect(page.locator('ol.step-indicator li.current .step-title').first()).toHaveText('Digital Post')
+    await scan(page)
   })
 })

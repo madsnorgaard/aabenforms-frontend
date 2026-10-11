@@ -131,6 +131,213 @@
     }
   },
   "demo": {
+    "hub": {
+      "authority": "Demo Municipality",
+      "heading": "Try ÅbenForms",
+      "lead": "We do not ask for what we already know.",
+      "body": "Every demo is a real self-service flow: you log in with a mock MitID, we fetch what the municipality already holds in its registers, and you only type what only you know. Then the case runs and the decision lands in Digital Post. Every step shows which register we asked, on which legal basis, and whether the rail is live or demo.",
+      "allDemos": "All demos",
+      "fetched": "Fetched automatically:",
+      "typed": "You type:",
+      "persona": "You are {name}",
+      "open": "Try {title}",
+      "coming": "Coming",
+      "comingBody": "This scenario is on its way. Building permit can be tried now.",
+      "offline": "The demo runs locally with a mock MitID. Book a walkthrough via Contact.",
+      "honestHeading": "Honest status",
+      "honestBody": "DEMO means test data, because the integration is not finished yet (e.g. CPR Family+ and STIL). LIVE-READY means the code is built and only needs a certificate and agreement (e.g. MitID and Digital Post). LIVE means AabenForms' own data, e.g. the case register. No demo fetches data from an external register today. The badges are the same as on the readiness board.",
+      "difficulty": {
+        "simple": "Simple",
+        "medium": "Medium",
+        "advanced": "Advanced"
+      },
+      "scenarios": {
+        "byggetilladelse": {
+          "title": "Building permit",
+          "story": "Freja wants to build an extension. She logs in, and the municipality already knows her name, CPR and address.",
+          "intro": "Log in with the mock MitID, see what the municipality already knows about you, describe your building project, and follow the case all the way to the letter in Digital Post.",
+          "addressHint": "Fetched from your login. Change the address if the project is elsewhere.",
+          "fetched": {
+            "name": "Name (MitID)",
+            "cpr": "CPR number, masked (MitID)",
+            "address": "Address (mock MitID, demo)"
+          },
+          "typed": {
+            "description": "Description of the building project"
+          },
+          "commentary": {
+            "prefill": "GET /api/prefill/building_permit?session=[id] runs the lookups the flow would run: name and CPR from the MitID session (masked by the backend), and every row gets its own audit entry. The address comes from the mock IdP's claims, which real MitID does not issue, hence DEMO."
+          }
+        },
+        "merudgifter": {
+          "title": "Extra expenses for a child",
+          "story": "Freja applies for extra expenses for Emil under the Social Services Act section 41. The children are fetched; she picks the child and only types the need. Income is not fetched, as section 41 does not depend on it.",
+          "intro": "Apply for coverage of extra expenses for a child with a disability.",
+          "fetched": {
+            "children": "Children in your custody (CPR Family+, demo)",
+            "noIncome": "Not income: section 41 does not depend on the parents' income (data minimisation)",
+            "cpr": "Name and CPR (MitID)"
+          },
+          "typed": {
+            "disability": "The child's disability and needs",
+            "amount": "Monthly extra expense"
+          }
+        },
+        "skoleskift": {
+          "title": "School transfer with two parents",
+          "story": "Freja wants a school transfer for Emil. Joint custody is fetched from the register, and Lars co-signs with his own MitID.",
+          "intro": "Apply for a school transfer for a child in joint custody.",
+          "fetched": {
+            "child": "Child (CPR Family+, demo)",
+            "custody": "Custody (CPR Family+, demo)",
+            "parent2": "The other parent (CPR Family+, demo)",
+            "school": "Current school (STIL pupil data, demo)"
+          },
+          "typed": {
+            "school": "Preferred school",
+            "reason": "Reason",
+            "targetSchool": "Requested new school"
+          }
+        },
+        "klage": {
+          "title": "Appeal a decision",
+          "story": "Birthe helps her mother appeal. The cases and the appeal deadline are fetched; only the reason is typed.",
+          "intro": "Appeal a decision by the municipality with help from a relative.",
+          "fetched": {
+            "cases": "Your cases with the municipality (case register)",
+            "deadline": "Appeal deadline (case register)",
+            "cpr": "Name and CPR (MitID)"
+          },
+          "typed": {
+            "reason": "Reason for the appeal"
+          }
+        },
+        "sygedagpenge": {
+          "title": "Sickness benefit",
+          "story": "Mikkel has been injured and cannot work. His employer has reported him sick. The municipality fetches employment and pay, so he only writes what he cannot do and how long it is expected to last.",
+          "intro": "Fill in the municipality's sickness benefit information form.",
+          "fetched": {
+            "employer": "Employer and CVR (eIndkomst, demo)",
+            "hours": "Working hours in the last 6 months and the employment requirement (eIndkomst, demo)",
+            "firstSickDay": "First day of sickness from the employer's report (NemRefusion, demo)",
+            "cpr": "Name and CPR (MitID)"
+          },
+          "typed": {
+            "limitations": "What you cannot do because of the illness",
+            "duration": "Expected duration and whether you are in treatment"
+          },
+          "tags": {
+            "inclusion": "Digital inclusion"
+          }
+        }
+      }
+    },
+    "wizard": {
+      "steps": {
+        "login": "Log in with MitID",
+        "prefill": "Fetched information",
+        "form": "What only you know",
+        "workflow": "Case processing",
+        "letter": "Digital Post"
+      },
+      "continue": "Continue",
+      "back": "Back",
+      "login": {
+        "body": "You are sent to the mock MitID. No real CPR number is involved.",
+        "cardHeading": "You are {name} in this demo",
+        "button": "Log in as {name}",
+        "passwordNote": "Mock MitID password: {password}",
+        "switchingPersona": "Signing out the previous demo person so you can log in as {name} ...",
+        "loggedInAs": "You are logged in as {name}."
+      },
+      "inboxStatus": {
+        "success": "Delivered",
+        "failure": "Failed"
+      },
+      "prefill": {
+        "heading": "What we did not ask for",
+        "body": "The municipality already holds this information. Here you can see what we fetched, where it comes from, and on which legal basis. Every row has its own audit number.",
+        "tableHeading": "Fetched from the registers",
+        "caption": "Information fetched from the registers with source, legal basis and status",
+        "loading": "Fetching information from the registers ...",
+        "nothing": "No information was fetched for this form.",
+        "reload": "Fetch again",
+        "col": {
+          "field": "Information",
+          "value": "Value",
+          "source": "Source",
+          "legal": "Legal basis",
+          "status": "Status"
+        },
+        "audit": "audit #{id}",
+        "noAudit": "no audit entry",
+        "noValue": "not found",
+        "chooseBelow": "choose below",
+        "choose": "Choose {field}",
+        "chooseHint": "Fetched from {register}. Choose the one the application concerns.",
+        "chooseFirst": "Choose from the list above first.",
+        "youKnowHeading": "What only you know",
+        "youKnowNone": "Everything was fetched. There is nothing for you to type."
+      },
+      "form": {
+        "heading": "What only you know",
+        "body": "We filled in what the municipality already knows. Fill in the rest.",
+        "fromRegister": "from {register}",
+        "editHint": "Fetched from {register}. Change it if it is not right."
+      },
+      "workflow": {
+        "heading": "Case processing"
+      },
+      "letter": {
+        "heading": "Digital Post",
+        "noLetterHeading": "The letter has not arrived yet",
+        "noLetterBody": "The case ran, but the Digital Post log has no letter for this session yet. Press Refresh in a moment.",
+        "failedHeading": "The case processing stopped",
+        "failedBody": "A step in the case processing failed. See the failed step under Case processing, and try again."
+      },
+      "inbox": {
+        "new": "New",
+        "noneNew": "No new letters from this application.",
+        "older": "Earlier letters ({n})"
+      },
+      "complete": {
+        "heading": "The case is decided",
+        "body": "From login to a letter in Digital Post without a single manual step on the server."
+      },
+      "validation": {
+        "required": "Fill in {field}",
+        "number": "{field} must be a number",
+        "min": "{field} must be at least {min}",
+        "max": "{field} must be at most {max}"
+      },
+      "errors": {
+        "heading": "Something went wrong",
+        "sessionExpired": "Your MitID session has expired (15 minutes). Log in again.",
+        "prefillFailed": "The information could not be fetched from the registers. Try again.",
+        "formNotFound": "The form does not exist on the server.",
+        "submitFailed": "The application could not be sent. Try again."
+      },
+      "mode": {
+        "live": "LIVE",
+        "liveHelp": "AabenForms' own data, e.g. the case register",
+        "liveCapable": "LIVE-READY",
+        "liveCapableHelp": "code is built, needs certificate and agreement",
+        "demo": "DEMO",
+        "demoHelp": "test data, integration not finished"
+      },
+      "commentary": {
+        "login": "The frontend sends you to /mitid/login. Drupal creates state, nonce and a PKCE challenge and sends you to the identity provider. Back on /auth/callback we exchange the code for a session.",
+        "prefill": "GET /api/prefill/[form]?session=[id] runs the register lookups the flow would run and returns every value with source, contract, legal basis and audit number. The CPR always arrives masked from the server.",
+        "form": "Only what the registers do not know is asked for. Choices from list sources (child, case) travel with the application.",
+        "workflow": "POST to /api/webform/[form]/submit runs the ECA flow synchronously and returns every step. The identity gate checks the session on the server.",
+        "letter": "GET /api/digital-post/recent looks up the Digital Post log for your session. In production this is an SF1601 call to NgDP."
+      },
+      "persona": {
+        "mismatchHeading": "You are signed in as {name}",
+        "mismatchBody": "The data below is your own. This demo is written for {persona}. Sign in again as {username} to see the scenario as intended.",
+        "switch": "Sign out and sign in as {persona}"
+      }
+    },
     "interactive": "Interactive",
     "interactiveDemo": "Interactive Demo",
     "forms": {
@@ -243,6 +450,223 @@
         "Citizen identity verified via NemID/MitID national eID": "Citizen identity verified via NemID/MitID national eID",
         "Personal data retrieved from the national CPR registry (SF1520)": "Personal data retrieved from the national CPR registry (SF1520)",
         "Audit log entry created for regulatory compliance": "Audit log entry created for regulatory compliance"
+      }
+    },
+    "klage": {
+      "title": "Appeal a decision",
+      "story": "Mikkel helps his mother Birthe. She logs in with her own MitID. The case, the decision and the appeal deadline are fetched, she only writes why she appeals.",
+      "intro": "Digital inclusion at the kitchen table: Mikkel sits beside her, but Birthe logs in with MitID herself. Her cases, the decision and the appeal deadline come from the case register, so she only writes why she appeals.",
+      "hub": {
+        "fetched": {
+          "cases": "Your cases with a decision (case register)",
+          "deadline": "Appeal deadline, holiday-aware (case register)",
+          "cpr": "Name and CPR (MitID)"
+        },
+        "typed": {
+          "reason": "Why you appeal"
+        },
+        "tags": {
+          "inclusion": "Digital inclusion"
+        }
+      },
+      "prefill": {
+        "exempt": "Birthe is exempt from Digital Post, so decisions must be sent as a physical letter. That register check is on its way (backend #242)."
+      },
+      "option": {
+        "decision": "Decision: {type}",
+        "decided": "Decided {date}",
+        "deadline": "Appeal deadline {date}",
+        "status": "Status: {status}",
+        "chooseHint": "Fetched from {register}. Choose the decision you want to appeal."
+      },
+      "receipt": {
+        "caseNumber": "Case number",
+        "status": "New status",
+        "statusValue": "Appealed (Påklaget)",
+        "deadline": "Appeal deadline"
+      },
+      "login": {
+        "body": "Birthe logs in with her own MitID. Mikkel helps at the kitchen table but never logs in as his mother. Acting on her behalf with a power of attorney (fuldmagt) is on our roadmap (backend #241)."
+      },
+      "form": {
+        "body": "The case, the decision and the appeal deadline are fetched. Birthe only writes why she appeals."
+      },
+      "fields": {
+        "applicantCpr": "Your CPR number",
+        "case": "Decision you can appeal",
+        "begrundelse": "Why do you appeal?",
+        "begrundelseHint": "Write what is wrong in the decision, and what you think the decision should be."
+      },
+      "validation": {
+        "begrundelse": "Write why you appeal the decision"
+      },
+      "complete": {
+        "heading": "The appeal is registered",
+        "body": "The case now has the status Appealed (Påklaget). The receipt is not sent as a letter in this demo."
+      },
+      "commentary": {
+        "login": "MitID login gives the municipality Birthe's CPR number. It reaches the browser masked only and is filled in on the server on submit. A power of attorney so Mikkel can act for her is roadmap (backend #241).",
+        "prefill": "GET /api/prefill/klage looks up Birthe's cases in the AabenForms case register (live) with decision, decision date and appeal deadline. A case that is already appealed, or whose deadline has passed, is shown but cannot be chosen.",
+        "form": "Only what the register does not know: why Birthe appeals. The case number carries over from the choice in step 2.",
+        "workflow": "The ECA flow (klage_flow) validates the MitID session, checks that the case belongs to the logged-in citizen and registers the appeal. The case gets the status Appealed (Påklaget).",
+        "letter": "No letter is expected here: Birthe is exempt from Digital Post and physical mail is not connected yet (backend #242). The receipt is therefore not sent as a letter in this demo, and the empty inbox is expected."
+      }
+    },
+    "merudgifter": {
+      "title": "Extra expenses for a child with a disability",
+      "story": "Freja applies for coverage of extra expenses for Emil. The children are fetched; she only writes about the need. Income is not fetched.",
+      "intro": "Log in with the mock MitID, pick the child from the CPR register, describe the need and follow the decision to the letter in Digital Post. Income is not fetched: the section 41 benefit does not depend on the parents' income.",
+      "fields": {
+        "applicantCpr": "Your CPR number",
+        "child": "Child",
+        "funktionsnedsaettelse": "Describe the child's disability",
+        "funktionsnedsaettelseHint": "For example the diagnosis and which extra expenses it causes day to day.",
+        "maanedligMerudgift": "Estimated necessary extra expenses (DKK/month)",
+        "maanedligMerudgiftHint": "In the demo the threshold is 1,000 DKK/month: from 1,000 DKK the application is granted, below 1,000 DKK it ends in a refusal with appeal guidance."
+      },
+      "validation": {
+        "funktionsnedsaettelse": "Describe the child's disability",
+        "maanedligMerudgift": "Enter the monthly extra expenses in DKK"
+      },
+      "complete": {
+        "medhold": {
+          "heading": "Granted: the extra expenses are covered",
+          "body": "The amount is at least 1,000 DKK/month, so the flow granted the application, sent the decision letter and closed the case via SF2900."
+        },
+        "afslag": {
+          "heading": "Refusal with appeal guidance",
+          "body": "The amount is below 1,000 DKK/month. The flow ran the consultation of the party, refused the application, sent the letter with appeal guidance and started a 4-week appeal deadline."
+        },
+        "neutral": {
+          "heading": "The decision has been sent",
+          "body": "The decision letter is in Digital Post below."
+        }
+      },
+      "commentary": {
+        "login": "The MitID login gives the municipality your CPR number. It only reaches the browser masked and is filled in on the server at submission.",
+        "prefill": "GET /api/prefill/merudgifter fetches your children from CPR Family+ (SF6006, demo). Household income is not fetched, because section 41 does not depend on the parents' income (data minimisation). Every lookup is logged with its legal basis: Social Services Act section 41, Public Administration Act section 7, GDPR art. 6(1)(e).",
+        "form": "Only what the registers do not know: the child's disability and the monthly extra expenses. The amount drives the decision in the demo: 1,000 DKK/month or more is granted, less gives consultation and a refusal.",
+        "workflow": "The ECA flow opens and journals the case and branches on the amount: a grant is closed via SF2900, a refusal goes through consultation of the party and starts an appeal deadline. Income plays no part.",
+        "letter": "The decision letter is sent to Digital Post (simulated). On a refusal it carries appeal guidance, and the appeal deadline has started on the case."
+      },
+      "disabled": {
+        "heading": "The interactive demo runs locally - we'll happily walk you through it",
+        "body": "The full flow - MitID login, register lookups, ECA decision and Digital Post - runs in a local DDEV setup with a mock identity provider. Book a 15-min meeting and we'll walk it end-to-end at your pace.",
+        "primary": "Book a 15-min meeting",
+        "secondary": "Read the technical walkthrough on GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
+    },
+    "skoleskift": {
+      "title": "School transfer with two parents",
+      "story": "Freja applies for a school transfer for Emil. Custody is fetched from the register, so Lars gets an invitation in Digital Post and co-signs with his own MitID.",
+      "intro": "Log in as Freja, choose the child from the CPR register, choose the school and write the reason. Custody is fetched from the register, so Lars is invited to co-sign. Afterwards you switch to Lars and sign with his MitID.",
+      "formBody": "Custody and the other holder come from the CPR register. You only choose the school and write why the child should transfer.",
+      "fields": {
+        "applicantCpr": "Your CPR number",
+        "child": "Child and custody",
+        "currentSchool": "Current school",
+        "targetSchool": "Wished school",
+        "reason": "Reason for the transfer",
+        "reasonHint": "E.g. moving house, wellbeing or the route to school."
+      },
+      "validation": {
+        "currentSchool": "Choose the child's current school",
+        "targetSchool": "Choose the school the child should transfer to",
+        "reason": "Write a reason for the transfer"
+      },
+      "schools": {
+        "751101": "Frederiksbjerg Skole",
+        "751102": "Katrinebjergskolen",
+        "751103": "Møllevangskolen",
+        "751104": "Risskov Skole",
+        "751105": "Skåde Skole"
+      },
+      "complete": {
+        "heading": "The case is waiting for Lars",
+        "body": "The co-sign invitation has been sent to Lars in Digital Post."
+      },
+      "recipient": {
+        "heading": "The invitation goes to Lars",
+        "body": "With joint custody a school transfer is a major decision both parents must approve. The flow has sent the invitation to Lars' own Digital Post. Freja's inbox below therefore gets no new letter, and the case is only processed once Lars has signed."
+      },
+      "cosign": {
+        "heading": "Lars co-signs",
+        "body": "Lars receives the link in his own Digital Post. Continue as Lars: Freja is logged out, and you log in with Lars' MitID to read the invitation and sign.",
+        "continue": "Continue as Lars"
+      },
+      "lars": {
+        "eyebrow": "School transfer with two parents - part 2 of 2",
+        "heading": "Lars co-signs",
+        "intro": "Lars shares custody of Emil. He logs in with his own MitID, opens the invitation in Digital Post and follows the link to the municipality's signing page.",
+        "login": "Log in with MitID as Lars",
+        "loginStory": "Lars has received an invitation in Digital Post and must co-sign the application for Emil's school transfer.",
+        "waitingHeading": "The case is waiting for your signature",
+        "waitingBody": "Open the letter \"Medunderskrift: ansøgning om skoleskift\" (co-signature: school transfer application) and follow the link. The signing page is hosted by the municipality and asks for MitID again.",
+        "wrongPersonaHeading": "You are not logged in as Lars",
+        "wrongPersonaBody": "The mock MitID remembered {name}. Start over, or open the page in a private window and log in as lars.andersen.",
+        "restart": "Start over as Freja"
+      },
+      "commentary": {
+        "login": "Freja logs in with mock MitID. The session carries her CPR on the server, so the CPR field never comes from the browser.",
+        "prefill": "CPR Familie+ (SF6006) returns the children in Freja's custody and, for each child, who holds custody. For Emil it is joint with Lars Andersen, so custody and the other parent are not asked.",
+        "form": "The register says who holds custody. The application therefore sends \"joint, the other agrees\", and Lars' own signature is what confirms it.",
+        "workflow": "The flow checks custody against the register, opens and journals the case, looks up the school and sends Lars a co-sign invitation with a signed link valid for 14 days.",
+        "letter": "The invitation goes to Lars' CPR, not Freja's. That is why it is not in Freja's inbox here (it only shows her own letters), and the demo switches persona to Lars."
+      },
+      "disabled": {
+        "heading": "The demo is not enabled",
+        "body": "The school transfer demo needs the mock MitID and is only active in the demo environment.",
+        "primary": "Contact us"
+      },
+      "option": {
+        "currentSchool": "Current school: {school}"
+      },
+      "receipt": {
+        "successHeading": "Co-signature received",
+        "successBody": "Thank you, Lars. Your signature is recorded and the application now goes to the school leader.",
+        "heading": "Receipt",
+        "caseNumber": "Case number",
+        "status": "Status",
+        "child": "Child",
+        "schools": "School transfer",
+        "schoolsValue": "{from} to {to}",
+        "signedBy": "Signed by",
+        "and": "and",
+        "stage": {
+          "awaiting_decision": "Ready for the school leader's decision",
+          "decided": "Decided",
+          "in_progress": "In progress"
+        },
+        "decision": {
+          "medhold": "School transfer approved",
+          "afslag": "School transfer rejected"
+        },
+        "loadError": "The receipt could not be loaded. Try again shortly."
+      },
+      "leaderNext": {
+        "heading": "Next: the school leader decides",
+        "body": "The school leader is a municipal employee. The decision is made in the municipality's case handling with a staff account, not with the citizen's MitID.",
+        "continue": "Continue as school leader"
+      },
+      "leader": {
+        "eyebrow": "School transfer with two parents - decision",
+        "heading": "The school leader decides",
+        "intro": "The school leader logs in to the municipality's case handling with a staff account. Only an employee registered in the organisation's directory can make the decision - otherwise the flow rejects it.",
+        "cardHeading": "You are the school leader in this demo",
+        "story": "Both parents have signed the application for Emil's school transfer. You see the case with masked CPR numbers and choose \"Godkend skoleskift\" (approve) or \"Afvis\" (reject).",
+        "username": "Username: {username}",
+        "login": "Log in as school leader",
+        "back": "Back to Lars"
+      },
+      "ending": {
+        "heading": "The decision has been sent to both parents",
+        "body": "The school leader's decision is registered on the case, and the decision letter was sent through Digital Post to {names}.",
+        "klagefrist": "Appeal deadline",
+        "klagefristBody": "The parents can appeal the decision until {date}.",
+        "inboxHeading": "Lars' Digital Post",
+        "pending": "The decision letters are not registered yet.",
+        "restart": "Run the whole demo again"
       }
     },
     "byggetilladelse": {
@@ -358,6 +782,55 @@
         "secondary": "Read the technical walkthrough on GitHub",
         "githubUrl": "https://github.com/madsnorgaard/aabenforms"
       }
+    },
+    "sygedagpenge": {
+      "title": "Sickness benefit",
+      "story": "Mikkel has been injured and cannot work. His employer has reported him sick. The municipality fetches employment and pay, so he only writes what he cannot do and how long it is expected to last.",
+      "intro": "Log in with the mock MitID, see the employer, working hours and first day of sickness the municipality already knows, write only what you cannot do, and follow the decision to the letter in Digital Post with the date of the first follow-up meeting.",
+      "fields": {
+        "applicantCpr": "Your CPR number",
+        "employer": "Employer",
+        "employerCvr": "Employer's CVR number",
+        "hoursRequirement": "Employment requirement",
+        "hoursMet": "{hours} hours in the last {months} months - the {required}-hour requirement is met",
+        "hoursNotMet": "{hours} hours in the last {months} months - the {required}-hour requirement is not met",
+        "firstSickDay": "First day of sickness",
+        "sicknessDescription": "What can you not do because of your illness?",
+        "sicknessDescriptionHint": "Describe what you cannot do in your job right now. You do not have to give a diagnosis.",
+        "expectedDuration": "How long do you expect to be ill?",
+        "durationUnder4": "Less than 4 weeks",
+        "duration4to8": "4-8 weeks",
+        "durationOver8": "More than 8 weeks",
+        "durationUnknown": "Don't know",
+        "inTreatment": "Are you in treatment?",
+        "yes": "Yes",
+        "no": "No",
+        "contactPhone": "Phone number (optional)",
+        "contactPhoneHint": "The municipality may call you about the first follow-up meeting."
+      },
+      "validation": {
+        "sicknessDescription": "Describe what you cannot do because of your illness",
+        "expectedDuration": "Choose how long you expect to be ill",
+        "inTreatment": "Choose whether you are in treatment"
+      },
+      "commentary": {
+        "login": "The MitID login gives the municipality your CPR number. It only reaches the browser masked and is filled in on the server at submission.",
+        "prefill": "GET /api/prefill/sygedagpenge fetches the employer and working hours from eIndkomst (demo) and the first day of sickness from the employer's report in NemRefusion (demo). The municipality uses the pay to calculate the benefit, but it is not sent to the browser. Every lookup is logged with its legal basis: Sickness Benefit Act section 32, Public Administration Act section 7, GDPR art. 6(1)(e).",
+        "form": "Only what the registers do not know: what you cannot do, how long it is expected to last and whether you are in treatment. You do not have to give a diagnosis. If you disagree with the employer's information, you tell the municipality.",
+        "workflow": "The ECA flow confirms MitID, opens and journals the case and checks the employment requirement: at least 240 hours in the last 6 full calendar months and at least 40 hours in 5 of them. Met gives the right to sickness benefit; otherwise consultation of the party and a refusal with appeal guidance.",
+        "letter": "The decision letter is sent to Digital Post (simulated) in plain language with the date of the first follow-up meeting. The date is 8 weeks after the first day of sickness - a demo simplification; borger.dk says the municipality assesses the case within 8 weeks."
+      },
+      "complete": {
+        "heading": "You are entitled to sickness benefit",
+        "body": "The employment requirement is met. The employer pays for the first 30 calendar days, then the municipality pays. The letter below has the date of the first follow-up meeting."
+      },
+      "disabled": {
+        "heading": "The interactive demo runs locally - we'll happily walk you through it",
+        "body": "The full flow - MitID login, register lookups, ECA decision and Digital Post - runs in a local DDEV setup with a mock identity provider. Book a 15-min meeting and we'll walk it end-to-end at your pace.",
+        "primary": "Book a 15-min meeting",
+        "secondary": "Read the technical walkthrough on GitHub",
+        "githubUrl": "https://github.com/madsnorgaard/aabenforms"
+      }
     }
   },
   "landingCta": {
@@ -441,14 +914,28 @@
     "validationErrors": "Please correct the following errors:",
     "unknownError": "Unknown error",
     "unsupportedFieldType": "This field type is not yet supported",
+    "fieldRequired": "{field} is required",
+    "pageTitle": "Self-service form",
     "address": {
       "searchPlaceholder": "Search address...",
       "noResults": "No addresses found",
+      "resultCount": "{count} address suggestions",
+      "label": "Address",
       "clear": "Clear",
       "attribution": "Address data from Denmark's Address Register (Dataforsyningen)"
     },
     "mitidRequired": "This application requires you to confirm your identity with MitID before you can fill it in.",
-    "mitidLoggedInAs": "Logged in with MitID as"
+    "mitidLoggedInAs": "Logged in with MitID as",
+    "selectPlaceholder": "Select",
+    "cprHint": "E.g. 010190-1234",
+    "cvrHint": "E.g. 12 34 56 78",
+    "successHeading": "Your submission has been received"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content"
+  },
+  "landing": {
+    "pageTitle": "AabenForms - self-service for Danish municipalities"
   },
   "auth": {
     "loginWithMitId": "Log in with MitID",
@@ -658,5 +1145,121 @@
     "newWindow": "Opens in new window",
     "externalLink": "External link",
     "currentPage": "Current page"
+  },
+  "fds": {
+    "header": {
+      "menu": "Menu",
+      "closeMenu": "Close menu",
+      "close": "Close",
+      "logOff": "Log out",
+      "userHeading": "User",
+      "authorityHeading": "Authority",
+      "mainMenu": "Main menu",
+      "solutionTitle": "Self-service for municipalities",
+      "authorityName": "Open source platform",
+      "demoSolutionTitle": "Self-service",
+      "logoLabel": "ÅbenForms - go to the front page",
+      "liveDemo": "Live demo"
+    },
+    "nav": {
+      "home": "Home",
+      "contact": "Contact"
+    },
+    "language": {
+      "label": "Select language"
+    },
+    "footer": {
+      "authority": "Authority",
+      "contact": "Contact",
+      "about": "About the solution",
+      "accessibility": "Accessibility statement",
+      "cookies": "Cookie policy",
+      "contactPage": "Write to us",
+      "status": "Service status"
+    },
+    "form": {
+      "optional": "(optional)",
+      "required": "(*required)",
+      "errorPrefix": "Error: "
+    },
+    "errorSummary": {
+      "heading": "There are problems"
+    },
+    "alert": {
+      "info": "Information",
+      "success": "Success",
+      "warning": "Warning",
+      "error": "Error",
+      "close": "Close"
+    },
+    "steps": {
+      "label": "Step indicator",
+      "step": "Step",
+      "of": "of",
+      "heading": "Steps",
+      "close": "Close",
+      "completed": "Step {n} completed",
+      "errorIn": "Error in step {n}"
+    },
+    "validation": {
+      "nameRequired": "Enter your name",
+      "emailRequired": "Enter your email address",
+      "emailInvalid": "Enter a valid email address, e.g. name{'@'}example.com",
+      "subjectRequired": "Select a subject",
+      "messageRequired": "Enter your message"
+    },
+    "pages": {
+      "placeholderHeading": "This page is being prepared",
+      "accessibility": {
+        "title": "Accessibility statement",
+        "lead": "ÅbenForms must be usable by everyone. This page holds the web accessibility status for the solution.",
+        "placeholder": "The final statement is produced on was.digst.dk and inserted here when the solution goes live with an authority.",
+        "body": "If you run into accessibility problems, write to us via the contact page. Please describe what you tried and which assistive technology you used."
+      },
+      "cookies": {
+        "title": "Cookie policy",
+        "lead": "Read which cookies the solution uses and what they are for.",
+        "placeholder": "Today the solution only sets one necessary cookie that remembers your language choice. No statistics are collected.",
+        "body": "Necessary cookies do not require consent. If we add statistics later, you will be asked first."
+      }
+    }
+  },
+  "cookies": {
+    "banner": {
+      "heading": "Tell us whether you accept cookies",
+      "text": "We collect statistics using third-party cookies to improve the user experience. All collected data is anonymised.",
+      "link": "Read more about our use of cookies",
+      "accept": "Accept cookies",
+      "reject": "No thanks to cookies"
+    },
+    "page": {
+      "title": "Cookies on ÅbenForms",
+      "lead": "See which cookies ÅbenForms sets in your browser, what they are for, and how to change your choice.",
+      "whatHeading": "What is a cookie?",
+      "whatBody": "A cookie is a small text file stored in your browser so the solution can remember something from one page view to the next, such as your language choice. A cookie cannot spread viruses or read other files on your computer.",
+      "listHeading": "Cookies we set",
+      "listIntro": "ÅbenForms currently sets only two cookies. Both are necessary for the solution to work, and neither is shared with anyone.",
+      "colName": "Name",
+      "colPurpose": "Purpose",
+      "colType": "Type",
+      "colExpiry": "Lifetime",
+      "necessary": "Necessary",
+      "oneYear": "1 year",
+      "i18nPurpose": "Remembers whether you chose Danish or English, so you get the same language next time.",
+      "consentPurpose": "Remembers your answer to the cookie banner (accepted or rejected), so you are not asked again.",
+      "necessaryHeading": "Necessary cookies do not require consent",
+      "necessaryBody": "Necessary cookies are the ones the solution needs to remember your own choices. We may set them without asking first, and they are not used to follow you across websites.",
+      "mitidHeading": "Your MitID login is not a cookie",
+      "mitidBody": "When you log in with MitID, the server keeps track of your session. Your browser only stores a session id in its local storage (not in a cookie), and it is deleted when you log off or the session expires.",
+      "statsHeading": "Statistics",
+      "statsBody": "We currently set no statistics cookies and load no third-party scripts. If we add statistics later, they are only enabled if you accepted cookies in the banner, and we update this page first.",
+      "choiceHeading": "Change your choice",
+      "choiceCurrent": "Your current choice:",
+      "choiceAccepted": "You have accepted cookies.",
+      "choiceRejected": "You have said no thanks to cookies.",
+      "choiceNone": "You have not made a choice yet. The banner is shown at the bottom of the page.",
+      "changeChoice": "Change your choice",
+      "resetDone": "Your choice has been cleared. The banner is shown again at the bottom of the page so you can choose anew."
+    }
   }
 }

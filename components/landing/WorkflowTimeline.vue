@@ -2,7 +2,7 @@
   <section class="py-20 lg:py-28 bg-neutral-50 border-t border-neutral-100">
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
       <div class="max-w-2xl mb-14">
-        <p class="text-xs font-semibold tracking-widest uppercase text-primary-600 mb-3">
+        <p class="text-xs font-semibold tracking-widest uppercase text-primary-700 mb-3">
           {{ $t('workflowDemo.example.title') }}
         </p>
         <h2 class="text-3xl lg:text-4xl font-bold text-neutral-900 tracking-tight mb-4">
@@ -47,14 +47,14 @@
               <div class="flex items-start justify-between gap-4 mb-3">
                 <div>
                   <div class="flex items-center gap-2 mb-1">
-                    <span class="text-xs font-bold uppercase tracking-wider text-neutral-400">
+                    <span class="text-xs font-bold uppercase tracking-wider text-neutral-600">
                       {{ String(index + 1).padStart(2, '0') }}
                     </span>
                     <h3 class="text-lg font-bold text-neutral-900">
                       {{ $t(step.actorKey) }}
                     </h3>
                   </div>
-                  <p class="text-sm text-neutral-400">{{ $t(step.roleKey) }}</p>
+                  <p class="text-sm text-neutral-600">{{ $t(step.roleKey) }}</p>
                 </div>
               </div>
 
