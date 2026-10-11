@@ -166,7 +166,7 @@
             "description": "Description of the building project"
           },
           "commentary": {
-            "prefill": "GET /api/prefill/building_permit?session=[id] runs the lookups the flow would run: name and CPR from the MitID session (masked by the backend), and every row gets its own audit entry. The address comes from the mock IdP's claims, which real MitID does not issue, hence DEMO."
+            "prefill": "GET /api/prefill/building_permit (MitID session in the Authorization header, never the URL) runs the lookups the flow would run: name and CPR from the MitID session (masked by the backend), and every row gets its own audit entry. The address comes from the mock IdP's claims, which real MitID does not issue, hence DEMO."
           }
         },
         "merudgifter": {
@@ -327,7 +327,7 @@
       },
       "commentary": {
         "login": "The frontend sends you to /mitid/login. Drupal creates state, nonce and a PKCE challenge and sends you to the identity provider. Back on /auth/callback we exchange the code for a session.",
-        "prefill": "GET /api/prefill/[form]?session=[id] runs the register lookups the flow would run and returns every value with source, contract, legal basis and audit number. The CPR always arrives masked from the server.",
+        "prefill": "GET /api/prefill/[form] (MitID session in the Authorization header, never the URL) runs the register lookups the flow would run and returns every value with source, contract, legal basis and audit number. The CPR always arrives masked from the server.",
         "form": "Only what the registers do not know is asked for. Choices from list sources (child, case) travel with the application.",
         "workflow": "POST to /api/webform/[form]/submit runs the ECA flow synchronously and returns every step. The identity gate checks the session on the server.",
         "letter": "GET /api/digital-post/recent looks up the Digital Post log for your session. In production this is an SF1601 call to NgDP."
