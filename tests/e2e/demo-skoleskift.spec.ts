@@ -158,6 +158,8 @@ test.describe('Skoleskift demo - full auth', () => {
     // Lars' own Digital Post holds the invitation with the signed link.
     const letter = page.locator('.demo-inbox__item', { hasText: 'Medunderskrift: ansøgning om skoleskift' }).first()
     await expect(letter).toBeVisible({ timeout: 15000 })
+    // Only this run's invitation, never letters from earlier runs.
+    await expect(page.locator('.demo-inbox__item')).toHaveCount(1)
     await letter.locator('summary').click()
     const link = letter.getByRole('link', { name: 'Se og underskriv anmodningen' })
     await expect(link).toHaveAttribute('href', /\/parent-approval\/2\/\d+\/[^/]+$/)
@@ -245,6 +247,8 @@ test.describe('Skoleskift demo - full auth', () => {
     await expect(page.getByTestId('skoleskift-klagefrist')).toContainText(/senest \d{1,2}\. \w+ \d{4}/)
     await expect(page.getByTestId('skoleskift-receipt-status')).toHaveText('Skoleskift godkendt')
     await expect(page.locator('.demo-inbox__item', { hasText: 'Afgørelse: skoleskift' }).first()).toBeVisible({ timeout: 15000 })
+    // Exactly this case's two letters: the invitation and the decision.
+    await expect(page.locator('.demo-inbox__item')).toHaveCount(2)
     await scan(page)
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-ending.png`, fullPage: true })
 

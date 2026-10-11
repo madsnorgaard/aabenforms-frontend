@@ -209,6 +209,8 @@ async function continueAsLars() {
 
 interface SkoleskiftReceipt {
   case_id: number | null
+  /** Unix time the case was submitted; letters before it belong to older runs. */
+  submitted: number
   child_name: string
   current_school: string
   target_school: string
@@ -263,20 +265,31 @@ const leaderLoginUrl = computed(() => `${config.public.apiBase}/da/user/login?de
 
 // --- Lars: his own Digital Post ---------------------------------------------
 
-const larsLetters = ref<DigitalPostLetter[]>([])
+const larsInbox = ref<DigitalPostLetter[]>([])
 const larsLoading = ref(false)
+const CASE_LETTER = /medunderskrift|afgørelse: skoleskift/i
+
+// Only this case's letters (invitation and decision), never the rest of
+// Lars' mailbox or earlier demo runs. With a receipt the case's submit time
+// is known; before Lars has co-signed only the newest invitation is his.
+const larsLetters = computed<DigitalPostLetter[]>(() => {
+  const caseLetters = larsInbox.value.filter((l) => CASE_LETTER.test(l.subject))
+  const submitted = receipt.value?.submitted
+  if (submitted) return caseLetters.filter((l) => l.created >= submitted - 5)
+  const invitation = caseLetters.find((l) => /medunderskrift/i.test(l.subject))
+  return invitation ? [invitation] : []
+})
 
 async function loadLarsInbox() {
   if (!sessionId.value) return
   larsLoading.value = true
   try {
     const res = await $fetch<{ data?: DigitalPostLetter[] }>(
-      `${config.public.apiBase}/api/digital-post/recent?session=${encodeURIComponent(sessionId.value)}&limit=5`,
+      `${config.public.apiBase}/api/digital-post/recent?session=${encodeURIComponent(sessionId.value)}&limit=10`,
       { headers: { Accept: 'application/json' } },
     )
-    // Show only this case's letters (invitation and decision), not the rest
-    // of this person's mailbox.
-    larsLetters.value = (res.data ?? []).filter((l) => /medunderskrift|afgørelse: skoleskift/i.test(l.subject))
+    // Newest first, as the backend orders them.
+    larsInbox.value = res.data ?? []
   }
   catch (e) {
     console.error('Inbox fetch failed:', e)
