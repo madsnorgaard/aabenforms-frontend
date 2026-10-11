@@ -200,7 +200,11 @@ test.describe('Skoleskift demo - full auth', () => {
     await expect(page.locator('h1')).toHaveText('Skolelederen træffer afgørelse')
     await scan(page)
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-leader-intro.png`, fullPage: true })
-    await page.getByRole('link', { name: 'Log ind som skoleleder' }).click()
+    // The leader receives the case_handler_notice mail in a simulated work inbox.
+    const mail = page.getByTestId('work-mail-message')
+    await expect(mail).toBeVisible()
+    await expect(mail.getByTestId('work-mail-link')).toHaveText('Åbn sagen i sagsbehandlingen')
+    await mail.getByTestId('work-mail-link').click()
     await page.waitForURL(/\/user\/login/, { timeout: 15000, waitUntil: 'domcontentloaded' })
     await page.fill('#edit-name', 'skoleleder')
     await page.fill('#edit-pass', LEADER_PASSWORD)

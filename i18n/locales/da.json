@@ -656,12 +656,12 @@
       "leader": {
         "eyebrow": "Skoleskift med to forældre - afgørelse",
         "heading": "Skolelederen træffer afgørelse",
-        "intro": "Skolelederen får en mail på sin arbejdsmail om, at en sag venter, med et link til kommunens sagsbehandling. Mailen indeholder ingen personoplysninger. Skolelederen logger ind med sin medarbejderkonto, og kun en medarbejder, der står i organisationens medarbejderregister for den ønskede skole, kan træffe afgørelsen.",
-        "cardHeading": "Du er skoleleder i denne demo",
-        "story": "Ansøgningen om Emils skoleskift er underskrevet af begge forældre. Du ser sagen med maskerede CPR-numre og vælger \"Godkend skoleskift\" eller \"Afvis\".",
-        "username": "Brugernavn: {username}",
-        "login": "Log ind som skoleleder",
-        "back": "Tilbage til Lars"
+        "intro": "Skolelederen er medarbejder i kommunen og arbejder ikke med MitID, men i kommunens egne systemer. Sådan ser det ud for skolelederen: en mail på arbejdsmailen om, at en sag venter, og et link til kommunens sagsbehandling.",
+        "story": "Mailen indeholder ingen personoplysninger, kun sagsnummeret. Sagen vises først efter login med medarbejderkontoen, og kun en medarbejder, der står i organisationens medarbejderregister for den ønskede skole, kan træffe afgørelsen. Her ser skolelederen sagen om Emils skoleskift med maskerede CPR-numre og vælger \"Godkend skoleskift\" eller \"Afvis\".",
+        "back": "Tilbage til Lars",
+        "mailbox": "Skoleleder, Risskov Skole",
+        "staffLoginHeading": "Login med medarbejderkonto",
+        "staffLogin": "Linket i mailen fører til kommunens login for medarbejdere (brugernavn: {username}). Adgangskoden er personlig, som i en rigtig kommune, så i den offentlige demo er det præsentanten, der logger ind og viser afgørelsen."
       },
       "ending": {
         "heading": "Afgørelsen er sendt til begge forældre",
@@ -880,6 +880,23 @@
         "workflow": "Ved indsendelse bliver Birthe ansøger og Mikkel registreres som den, der handlede, med grundlaget digital fuldmagt. ECA-flowet tjekker fuldmagten igen fra sessionen, før sagen får status Påklaget, og sender kvitteringen.",
         "letter": "Kvitteringen går til Birthe. Hun er fritaget fra Digital Post, så den sendes som fysisk brev (printkanalen er DEMO). Mikkel får en kopi i sin egen Digital Post, fordi fuldmagten tillader det."
       }
+    },
+    "workMail": {
+      "caption": "Skolelederens arbejdsmail",
+      "app": "Arbejdsmail",
+      "inbox": "Indbakke",
+      "sent": "Sendt",
+      "archive": "Arkiv",
+      "now": "Nu",
+      "from": "Fra",
+      "to": "Til",
+      "sender": "ÅbenForms sagsbehandling",
+      "subject": "En sag afventer din afgørelse",
+      "subjectWithId": "Sag nr. {id} afventer din afgørelse",
+      "line1": "En ansøgning, som begge forældremyndighedsindehavere har underskrevet, afventer din afgørelse.",
+      "line2": "Log ind med din medarbejderkonto for at se sagen og træffe afgørelse:",
+      "open": "Åbn sagen i sagsbehandlingen",
+      "line3": "Denne mail indeholder ingen personoplysninger. Sagen vises først, når du er logget ind."
     }
   },
   "landingCta": {
