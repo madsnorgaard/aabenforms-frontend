@@ -515,8 +515,9 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     inboxLoading.value = true
     try {
       const res = await $fetch<{ data?: DigitalPostLetter[] }>(
-        `${apiBase}/api/digital-post/recent?session=${encodeURIComponent(sessionId.value)}&limit=5`,
-        { headers: { Accept: 'application/json' } },
+        `${apiBase}/api/digital-post/recent?limit=5`,
+        // The MitID session travels in the Authorization header, never the URL.
+        { headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId.value}` } },
       )
       inboxLetters.value = res.data ?? []
     }
