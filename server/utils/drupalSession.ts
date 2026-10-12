@@ -86,10 +86,10 @@ export function assertSameOrigin(event: H3Event): void {
  * proxy every citizen would share Nitro's IP. X-Forwarded-Host carries the
  * public API host because fetch() does not let a caller set Host.
  */
-function drupalTarget(event: H3Event): { base: string, headers: Record<string, string> } {
+function drupalTarget(event: H3Event, viaPublic = false): { base: string, headers: Record<string, string>, internal: boolean } {
   const config = useRuntimeConfig()
   const publicBase = String(config.public.apiBase)
-  const internalBase = String(config.apiInternalBase || '')
+  const internalBase = viaPublic ? '' : String(config.apiInternalBase || '')
   const headers: Record<string, string> = { Accept: 'application/json' }
   const ip = getRequestIP(event, { xForwardedFor: true })
   if (ip) headers['X-Forwarded-For'] = ip
@@ -98,7 +98,17 @@ function drupalTarget(event: H3Event): { base: string, headers: Record<string, s
     headers['X-Forwarded-Host'] = url.host
     headers['X-Forwarded-Proto'] = url.protocol.replace(':', '')
   }
-  return { base: internalBase || publicBase, headers }
+  return { base: internalBase || publicBase, headers, internal: internalBase !== '' }
+}
+
+/** Codes for "no connection was made", where a retry cannot duplicate work. */
+const CONNECT_ERRORS = new Set(['ENOTFOUND', 'EAI_AGAIN', 'ECONNREFUSED', 'EHOSTUNREACH'])
+
+function isConnectError(err: unknown): boolean {
+  for (let e: any = err, depth = 0; e && depth < 4; e = e.cause, depth++) {
+    if (typeof e.code === 'string' && CONNECT_ERRORS.has(e.code)) return true
+  }
+  return false
 }
 
 export interface DrupalCall {
@@ -114,8 +124,8 @@ export interface DrupalCall {
  * through unchanged, errors included; a network failure becomes a 502. A 401
  * means the session is gone, so the cookie is cleared.
  */
-export async function drupalFetch<T>(event: H3Event, path: string, call: DrupalCall = {}): Promise<T> {
-  const { base, headers } = drupalTarget(event)
+export async function drupalFetch<T>(event: H3Event, path: string, call: DrupalCall = {}, viaPublic = false): Promise<T> {
+  const { base, headers, internal } = drupalTarget(event, viaPublic)
   if (call.session) headers.Authorization = `Bearer ${call.session}`
   setResponseHeader(event, 'Cache-Control', 'no-store, private')
   try {
@@ -133,6 +143,13 @@ export async function drupalFetch<T>(event: H3Event, path: string, call: DrupalC
       // Same status and body as a direct call, so callers read errors as before.
       setResponseStatus(event, err.response.status)
       return err.data as T
+    }
+    if (internal && isConnectError(err)) {
+      // Misconfigured network: stay available through the public proxy, at
+      // the cost of Drupal seeing Nuxt's IP instead of the citizen's. Only
+      // when no connection was made, so a slow submit is never sent twice.
+      console.warn('Drupal internal base unreachable, falling back to the public URL', path)
+      return drupalFetch<T>(event, path, call, true)
     }
     console.error('Drupal session proxy error', path, err)
     throw createError({ statusCode: 502, statusMessage: 'Backend unavailable' })
