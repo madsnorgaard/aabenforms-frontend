@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process'
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
+import { expectSessionHiddenFromPage, watchResponsesForSessionIds } from '../fixtures/session'
 
 /**
  * /demo/skoleskift on the guided scenario wizard (issue #68).
@@ -88,6 +89,7 @@ test.describe('Skoleskift demo - full auth', () => {
 
   test('freja applies, lars co-signs, the school leader decides, both parents get the letter', async ({ page, context }) => {
     await page.setViewportSize({ width: 1400, height: 900 })
+    const leakedResponses = watchResponsesForSessionIds(page)
     await page.goto('/demo/skoleskift', { waitUntil: 'networkidle' })
     await expect(page.locator('h1')).toHaveText(TITLE)
     // Answer the cookie banner once so it does not cover the screenshots.
@@ -250,6 +252,10 @@ test.describe('Skoleskift demo - full auth', () => {
     await expect(page.locator('.demo-inbox__item', { hasText: 'Afgørelse: skoleskift' }).first()).toBeVisible({ timeout: 15000 })
     // Exactly this case's two letters: the invitation and the decision.
     await expect(page.locator('.demo-inbox__item')).toHaveCount(2)
+    // Two MitID logins, a submit, a co-sign and the inbox: page JavaScript
+    // never held a session id, and no response carried one (#252).
+    await expectSessionHiddenFromPage(page)
+    expect(leakedResponses()).toEqual([])
     await scan(page)
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-ending.png`, fullPage: true })
 

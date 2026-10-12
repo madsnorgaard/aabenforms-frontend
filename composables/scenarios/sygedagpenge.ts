@@ -123,14 +123,13 @@ export const sygedagpengeScenario: DemoScenarioConfig = {
   // applicant_cpr travels masked: the backend swaps in the CPR from the real
   // MitID session. The first sick day and CVR travel as the registers
   // delivered them (raw ISO date, not the formatted display).
-  submitBody: ({ values, prefill, sessionId }) => {
+  submitBody: ({ values, prefill }) => {
     const raw = (key: string) => {
       const v = prefill?.fields[key]?.value
       return typeof v === 'string' || typeof v === 'number' ? String(v) : ''
     }
     return {
       data: {
-        workflow_id: sessionId,
         applicant_cpr: values.applicant_cpr ?? '',
         employer_cvr: raw('employer_cvr'),
         first_sick_day: raw('first_sick_day'),

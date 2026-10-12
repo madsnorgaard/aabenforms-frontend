@@ -18,6 +18,8 @@ web_environment:
     - API_BASE_URL=https://aabenforms.ddev.site
     - NUXT_PUBLIC_MITID_ENABLED=true
     - NUXT_PUBLIC_DEMO_BYGGETILLADELSE_ENABLED=true
+    # The session routes reach Drupal container-to-container, like production.
+    - NUXT_API_INTERNAL_BASE=http://ddev-aabenforms-web
 corepack_enable: true
 web_extra_exposed_ports:
     - name: nuxt

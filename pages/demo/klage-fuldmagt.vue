@@ -61,8 +61,8 @@ useHead({ title: t(scenario.titleKey) })
 const { restoreSession } = useAuth()
 
 onMounted(() => {
-  // Hydrate this tab's MitID session (sessionStorage) so a returning visitor
-  // (and the callback round-trip) resumes at the right step.
+  // Restore the MitID session (HttpOnly cookie, checked server-side) so a
+  // returning visitor (and the callback round-trip) resumes at the right step.
   restoreSession()
 })
 </script>

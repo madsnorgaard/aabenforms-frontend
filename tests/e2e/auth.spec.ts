@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test'
 import { testUsers, type TestUser } from '../fixtures/test-helpers'
+import { expectSessionHiddenFromPage, sessionFromCookie } from '../fixtures/session'
 
 /**
  * MitID authentication from the /forms/<id> identity gate.
@@ -11,7 +12,8 @@ import { testUsers, type TestUser } from '../fixtures/test-helpers'
  *    protected routes send them away.
  *  - Full (E2E_FULL_AUTH=1): the gate button goes to the mock-MitID Keycloak
  *    realm, the persona logs in, and the browser returns to the same form with
- *    the session (held in sessionStorage, never in the URL) and the fields.
+ *    the session (an HttpOnly cookie page JavaScript cannot read, never in
+ *    the URL or storage) and the fields.
  *    Needs host-network access to localhost:8080.
  */
 
@@ -37,11 +39,11 @@ async function loginThroughGate(page: Page, formId: string, user: TestUser): Pro
   // Back on the same form, not on the landing page.
   await page.waitForURL(new RegExp(`/forms/${formId}(\\?|$)`), { timeout: 30000 })
   await expect(page.locator('.mitid-session-banner')).toContainText(user.name, { timeout: 15000 })
-  const sid = await page.evaluate(() => sessionStorage.getItem('auth_session_id'))
+  const sid = await sessionFromCookie(page.context())
   expect(sid).toMatch(/^wf_/)
-  // The session id never travels in a URL or in localStorage.
-  expect(page.url()).not.toContain(sid!)
-  expect(await page.evaluate(() => localStorage.getItem('auth_session_id'))).toBeNull()
+  // The session id never reaches page JavaScript: not in a URL, a readable
+  // cookie or storage.
+  await expectSessionHiddenFromPage(page)
   return sid!
 }
 

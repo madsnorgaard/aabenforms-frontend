@@ -95,9 +95,8 @@ export const klageFuldmagtScenario: DemoScenarioConfig = {
   // Only an index into the verified fuldmagt goes up, plus Birthe's masked
   // CPR as shown. The backend resolves her CPR from Mikkel's session and
   // records him as the actor; no CPR leaves the browser.
-  submitBody: ({ values, choices, sessionId }) => ({
+  submitBody: ({ values, choices }) => ({
     data: {
-      workflow_id: sessionId,
       on_behalf_of: '0',
       case_id: String(choices.case_id?.case_id ?? ''),
       applicant_cpr: values.applicant_cpr ?? '',

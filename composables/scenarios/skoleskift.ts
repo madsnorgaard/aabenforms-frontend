@@ -120,12 +120,11 @@ export const skoleskiftScenario: DemoScenarioConfig = {
   // child among the applicant's own custody children
   // (WebformApiController::resolveFamilyCprs). parent2_cpr is always taken
   // from the registry server-side, so the client sends ''.
-  submitBody: ({ values, choices, sessionId }) => {
+  submitBody: ({ values, choices }) => {
     const child = choices.child_cpr ?? null
     const status = custodyStatus(child)
     return {
       data: {
-        workflow_id: sessionId,
         applicant_cpr: values.applicant_cpr ?? '',
         child_name: String(child?.name ?? ''),
         child_cpr: String(child?.cpr ?? ''),

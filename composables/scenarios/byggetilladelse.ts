@@ -72,13 +72,12 @@ export const byggetilladelseScenario: DemoScenarioConfig = {
     },
   ],
 
-  // The MitID session cookie is not shared cross-origin, so the workflow id
-  // (the bearer capability from login) travels in the payload; the backend
-  // scopes the identity gate to it and fills the CPR from the session.
-  submitBody: ({ values, user, sessionId }) => ({
+  // The server adds the MitID session (workflow_id) from its HttpOnly cookie;
+  // the backend scopes the identity gate to it and fills the CPR from the
+  // session.
+  submitBody: ({ values, user }) => ({
     data: {
       attributes: {
-        workflow_id: sessionId,
         data: {
           cpr: user?.cpr,
           applicant_name: user?.name,

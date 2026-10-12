@@ -35,26 +35,41 @@ export function sessionUserFromAttributes(a: SessionAttributes): User {
 }
 
 /**
- * The session id is a bearer capability. It lives in sessionStorage: scoped
- * to this tab and gone when the tab closes, never shared across a shared
- * device's later visitors. Older builds used localStorage; those keys are
- * cleared on sight.
+ * The MitID session id is a bearer capability, so browser code never holds
+ * it (#252): the Nuxt server keeps it in an HttpOnly cookie and the browser
+ * calls same-origin routes under /api/session/. Older builds kept the id in
+ * sessionStorage or localStorage; those keys are cleared on sight.
  */
-const SESSION_KEY = 'auth_session_id'
-const EXPIRY_KEY = 'auth_session_expiry'
+const LEGACY_KEYS = ['auth_session_id', 'auth_session_expiry']
 
 function clearLegacyStorage() {
-  localStorage.removeItem(SESSION_KEY)
-  localStorage.removeItem(EXPIRY_KEY)
+  for (const key of LEGACY_KEYS) {
+    try {
+      localStorage.removeItem(key)
+      sessionStorage.removeItem(key)
+    }
+    catch {
+      // Storage can be unavailable (private mode); nothing to clear then.
+    }
+  }
+}
+
+/** A backend expiry (Unix seconds, or an ISO date) as epoch milliseconds. */
+function expiryMs(expiry: string | null): number | null {
+  if (!expiry) return null
+  const ms = /^\d+$/.test(expiry) ? Number(expiry) * 1000 : Date.parse(expiry)
+  return Number.isFinite(ms) ? ms : null
 }
 
 interface UserState {
   user: User | null
-  sessionId: string | null
   sessionExpiry: string | null
   isAuthenticated: boolean
   loading: boolean
 }
+
+/** One in-flight restore shared by every caller on a page load. */
+let restoring: Promise<void> | null = null
 
 /**
  * User store for managing authentication state
@@ -63,7 +78,6 @@ interface UserState {
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     user: null,
-    sessionId: null,
     sessionExpiry: null,
     isAuthenticated: false,
     loading: false
@@ -83,8 +97,8 @@ export const useUserStore = defineStore('user', {
      * Check if session is expired
      */
     isSessionExpired: (state): boolean => {
-      if (!state.sessionExpiry) return false
-      return new Date(state.sessionExpiry) < new Date()
+      const ms = expiryMs(state.sessionExpiry)
+      return ms !== null && ms < Date.now()
     },
 
     /**
@@ -99,43 +113,29 @@ export const useUserStore = defineStore('user', {
     /**
      * Set user from MitID authentication
      */
-    setUser(user: User, sessionId: string, sessionExpiry?: string) {
+    setUser(user: User, sessionExpiry?: string | number) {
       this.user = user
-      this.sessionId = sessionId
-      this.sessionExpiry = sessionExpiry || null
+      this.sessionExpiry = sessionExpiry != null && sessionExpiry !== '' ? String(sessionExpiry) : null
       this.isAuthenticated = true
-
-      // Persist for this tab only
-      if (process.client) {
-        sessionStorage.setItem(SESSION_KEY, sessionId)
-        if (sessionExpiry) {
-          sessionStorage.setItem(EXPIRY_KEY, sessionExpiry)
-        }
-      }
     },
 
     /**
-     * Reload the user for a session id (page reload restore).
-     *
-     * GET /api/mitid/session with the id in the Authorization header, never
-     * in the URL (#156).
+     * Load the signed-in citizen from the session cookie. The cookie is
+     * HttpOnly, so only the server knows whether there is one.
      */
-    async loadSession(sessionId: string) {
+    async loadSession() {
       this.loading = true
-      const config = useRuntimeConfig()
-
       try {
-        const response = await $fetch<{ data: { attributes: SessionAttributes } }>(`${config.public.apiBase}/api/mitid/session`, {
-          method: 'GET',
-          headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId}` },
+        const response = await $fetch<{ data: { attributes: SessionAttributes } | null }>('/api/session/me', {
+          headers: { Accept: 'application/json' },
         })
-
-        if (!response?.data) {
-          throw new Error('Invalid session response')
+        const a = response?.data?.attributes
+        if (a) {
+          this.setUser(sessionUserFromAttributes(a), a.expiry)
         }
-
-        const a = response.data.attributes
-        this.setUser(sessionUserFromAttributes(a), sessionId, a.expiry)
+        else {
+          this.clearSession()
+        }
       }
       catch (error) {
         console.error('Failed to load session:', error)
@@ -147,28 +147,16 @@ export const useUserStore = defineStore('user', {
     },
 
     /**
-     * Restore this tab's session
+     * Restore the session on page load. Concurrent callers share one request.
      */
-    restoreSession() {
-      if (!process.client) return
-
+    restoreSession(): Promise<void> {
+      if (!import.meta.client) return Promise.resolve()
       clearLegacyStorage()
-      const sessionId = sessionStorage.getItem(SESSION_KEY)
-      const sessionExpiry = sessionStorage.getItem(EXPIRY_KEY)
-
-      if (sessionId) {
-        this.sessionId = sessionId
-        this.sessionExpiry = sessionExpiry
-
-        // Check if expired
-        if (this.isSessionExpired) {
-          this.clearSession()
-          return
-        }
-
-        // Load full user data from backend
-        this.loadSession(sessionId)
-      }
+      if (this.isAuthenticated && !this.isSessionExpired) return Promise.resolve()
+      restoring ??= this.loadSession().finally(() => {
+        restoring = null
+      })
+      return restoring
     },
 
     /**
@@ -176,13 +164,10 @@ export const useUserStore = defineStore('user', {
      */
     clearSession() {
       this.user = null
-      this.sessionId = null
       this.sessionExpiry = null
       this.isAuthenticated = false
 
-      if (process.client) {
-        sessionStorage.removeItem(SESSION_KEY)
-        sessionStorage.removeItem(EXPIRY_KEY)
+      if (import.meta.client) {
         clearLegacyStorage()
       }
     },
@@ -191,62 +176,41 @@ export const useUserStore = defineStore('user', {
      * Logout user.
      *
      * Fails closed: local state is cleared first and always, whatever the
-     * network does. Then, unless idpLogout is false, the browser POSTs the
-     * session id (in the body, never the URL) to the backend's RP-initiated
-     * logout, which revokes it and ends the IdP session too - on a shared
-     * device the next person must not be offered the previous person's login.
-     * With idpLogout false the session is only revoked over XHR.
+     * network does. The server clears the session cookie and, unless
+     * idpLogout is false, returns the IdP logout URL: the backend revoked the
+     * session and hinted the IdP with its id_token, so the IdP session ends
+     * too and on a shared device the next person is not offered the previous
+     * person's login. With idpLogout false the session is only revoked.
      *
      * @param options.idpLogout  End the IdP session too (default true).
      * @param options.returnPath Frontend path to land on afterwards (default '/').
      */
     async logout(options: { idpLogout?: boolean, returnPath?: string } = {}) {
-      const config = useRuntimeConfig()
-      const sessionId = this.sessionId
-
       this.clearSession()
+      if (!import.meta.client) return
 
-      const idpLogout = options.idpLogout !== false && import.meta.client
+      const idpLogout = options.idpLogout !== false
+      const returnPath = options.returnPath && options.returnPath.startsWith('/') && !options.returnPath.startsWith('//')
+        ? options.returnPath
+        : '/'
 
-      // Without IdP logout, revoke the session over XHR. With it, the logout
-      // POST below revokes it and uses its id_token as id_token_hint.
-      if (sessionId && !idpLogout) {
-        try {
-          await $fetch(`${config.public.apiBase}/api/mitid/session/revoke`, {
-            method: 'POST',
-            body: { session_id: sessionId },
-            timeout: 5000,
-          })
-        }
-        catch {
-          // Ignored: local state is already gone; the session expires anyway.
-        }
+      let redirect: string | null = null
+      try {
+        const res = await $fetch<{ redirect: string | null }>('/api/session/logout', {
+          method: 'POST',
+          body: { idpLogout, returnPath },
+          timeout: 10000,
+        })
+        redirect = res?.redirect ?? null
+      }
+      catch {
+        // Local state is already gone; the session expires anyway.
       }
 
       if (idpLogout) {
-        const path = options.returnPath && options.returnPath.startsWith('/') && !options.returnPath.startsWith('//')
-          ? options.returnPath
-          : '/'
-        const returnUrl = `${window.location.origin}${path}`
-        const action = `${config.public.apiBase}/mitid/logout?return_url=${encodeURIComponent(returnUrl)}`
-        if (!sessionId) {
-          window.location.assign(action)
-          return
-        }
-        // A top-level form POST, so the session id travels in the body, never
-        // the URL. The backend revokes it and hints the IdP with its id_token;
-        // without the hint Keycloak stops on its own logout confirmation.
-        const form = document.createElement('form')
-        form.method = 'POST'
-        form.action = action
-        form.style.display = 'none'
-        const field = document.createElement('input')
-        field.type = 'hidden'
-        field.name = 'session_id'
-        field.value = sessionId
-        form.appendChild(field)
-        document.body.appendChild(form)
-        form.submit()
+        // No answer: still run the backend logout so the IdP session ends.
+        const fallback = `${useRuntimeConfig().public.apiBase}/mitid/logout?return_url=${encodeURIComponent(window.location.origin + returnPath)}`
+        window.location.assign(redirect || fallback)
       }
     }
   }
