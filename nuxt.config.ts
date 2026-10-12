@@ -84,6 +84,10 @@ export default defineNuxtConfig({
     // demo token), swappable for a registered token when KDS Brugerstyring launches.
     adressevaelgerToken: process.env.NUXT_ADRESSEVAELGER_TOKEN || 'aabenforms-adr-2026',
     adressevaelgerApiUrl: process.env.NUXT_ADRESSEVAELGER_API_URL || 'https://adressevaelger.dk',
+    // Server-only: where the session routes reach Drupal without the public
+    // proxy, so Drupal sees the citizen's IP in X-Forwarded-For (production:
+    // http://aabenforms_drupal on the shared docker network). Empty = apiBase.
+    apiInternalBase: process.env.NUXT_API_INTERNAL_BASE || '',
     public: {
       apiBase: process.env.API_BASE_URL || 'https://aabenforms.ddev.site',
       mitidEnabled: process.env.NUXT_PUBLIC_MITID_ENABLED !== 'false',
@@ -149,8 +153,10 @@ export default defineNuxtConfig({
     '/auth/callback': { prerender: false },
     '/en/auth/callback': { prerender: false },
 
-    // API routes - no caching
-    '/api/**': { cors: true, headers: { 'cache-control': 'no-cache' } },
+    // Server API routes - no caching. The session routes hold the MitID
+    // session cookie: never cached, and no CORS headers at all.
+    '/api/adressevaelger/**': { cors: true, headers: { 'cache-control': 'no-cache' } },
+    '/api/session/**': { headers: { 'cache-control': 'no-store, private' } },
 
     // Form pages - SSR with short cache
     '/forms/**': { swr: 3600 },

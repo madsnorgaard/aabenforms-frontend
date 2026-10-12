@@ -9,9 +9,9 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { isAuthenticated, restoreSession, isSessionExpired } = useAuth()
 
-  // Try to restore this tab's session on first access
+  // Restore the session (HttpOnly cookie, checked server-side) on first access
   if (!isAuthenticated.value && process.client) {
-    restoreSession()
+    await restoreSession()
   }
 
   // Check if user is authenticated

@@ -37,9 +37,8 @@ const STEP_REVEAL_MS = 550
 type Choices = Record<string, string>
 
 export const useDemoScenario = (config: DemoScenarioConfig) => {
-  const { apiBase } = useRuntimeConfig().public
   const { t, locale } = useI18n()
-  const { user, sessionId, isAuthenticated } = useAuth()
+  const { user, isAuthenticated } = useAuth()
   const userStore = useUserStore()
   const prefill = usePrefill()
 
@@ -262,7 +261,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
 
   async function loadPrefill() {
     error.value = null
-    const res = await prefill.load(config.webformId, sessionId.value, config.prefillQuery ?? {})
+    const res = await prefill.load(config.webformId, config.prefillQuery ?? {})
     if (!res) {
       if (prefill.error.value === 'unauthenticated') {
         // The 15 minute session is gone: log out and start over.
@@ -414,7 +413,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
   }
 
   async function submit(): Promise<void> {
-    if (!isAuthenticated.value || !user.value || !sessionId.value) {
+    if (!isAuthenticated.value || !user.value) {
       error.value = 'not_authenticated'
       return
     }
@@ -434,12 +433,13 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
       prefill: prefill.data.value,
       choices: chosenOptions.value,
       user: user.value as User,
-      sessionId: sessionId.value,
     })
 
     try {
       const res = await $fetch<SubmissionResponse>(
-        `${apiBase}/api/webform/${encodeURIComponent(config.webformId)}/submit`,
+        // Same origin: the server adds the MitID session from its HttpOnly
+        // cookie as workflow_id (#252).
+        `/api/session/submit/${encodeURIComponent(config.webformId)}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -529,13 +529,12 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
   }
 
   async function refreshInbox(): Promise<void> {
-    if (!sessionId.value) return
+    if (!isAuthenticated.value) return
     inboxLoading.value = true
     try {
       const res = await $fetch<{ data?: DigitalPostLetter[] }>(
-        `${apiBase}/api/digital-post/recent?limit=5`,
-        // The MitID session travels in the Authorization header, never the URL.
-        { headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId.value}` } },
+        '/api/session/digital-post-recent',
+        { headers: { Accept: 'application/json' }, query: { limit: '5' } },
       )
       inboxLetters.value = res.data ?? []
     }
@@ -624,7 +623,6 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
 
     // Auth.
     user,
-    sessionId,
     isAuthenticated,
     authLoading: computed(() => userStore.loading),
 

@@ -212,8 +212,6 @@ export interface DemoSubmitContext {
   /** chosen option object per prefill key that had `options` */
   choices: Record<string, PrefillOption | null>
   user: User | null
-  /** the MitID workflow id (bearer capability from login) */
-  sessionId: string
 }
 
 /** What `outcome.receipt` gets after the workflow ran. */

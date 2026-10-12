@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { test, expect } from '@playwright/test'
+import { expectSessionHiddenFromPage, sessionFromCookie, watchResponsesForSessionIds } from '../fixtures/session'
 
 /**
  * Logout ends the MitID session everywhere (security fix).
@@ -28,6 +29,7 @@ test.describe('Logout - full auth', () => {
     execSync('cd ../backend && ddev drush aabenforms:demo:seed-klage-case --reset 2>&1')
 
     await context.clearCookies()
+    const leakedResponses = watchResponsesForSessionIds(page)
     await page.goto('/demo/klage', { waitUntil: 'networkidle' })
 
     // Mikkel signs in on Birthe's scenario: the button suggests Birthe, he
@@ -43,11 +45,10 @@ test.describe('Logout - full auth', () => {
     // He chose this login here, so the page warns instead of logging out.
     const mismatch = page.getByTestId('demo-persona-mismatch')
     await expect(mismatch).toBeVisible({ timeout: 15000 })
-    const mikkelSession = await page.evaluate(() => sessionStorage.getItem('auth_session_id'))
+    const mikkelSession = await sessionFromCookie(context)
     expect(mikkelSession).toMatch(/^wf_[a-f0-9]{32}$/)
-    // Never in localStorage, and never in the URL.
-    expect(await page.evaluate(() => localStorage.getItem('auth_session_id'))).toBeNull()
-    expect(page.url()).not.toContain(mikkelSession!)
+    // HttpOnly: never readable by page JavaScript, never in the URL.
+    await expectSessionHiddenFromPage(page)
     const sessionOf = (sid: string) => request.get(`${API_BASE}/api/mitid/session`, { headers: { Authorization: `Bearer ${sid}` }, ignoreHTTPSErrors: true })
     expect((await sessionOf(mikkelSession!)).status()).toBe(200)
 
@@ -57,7 +58,7 @@ test.describe('Logout - full auth', () => {
     await page.waitForURL(/protocol\/openid-connect\/logout/, { timeout: 15000 }).catch(() => {})
     await page.waitForURL(/\/demo\/klage(\?|$)/, { timeout: 20000 })
     await expect(page.getByRole('button', { name: 'Log ind som Birthe Jensen' })).toBeVisible({ timeout: 15000 })
-    expect(await page.evaluate(() => sessionStorage.getItem('auth_session_id'))).toBeNull()
+    expect(await sessionFromCookie(context)).toBeNull()
     expect((await sessionOf(mikkelSession!)).status()).toBe(401)
 
     // The IdP no longer remembers Mikkel: only Birthe's suggested username.
@@ -76,5 +77,8 @@ test.describe('Logout - full auth', () => {
     await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
     await expect(page.getByTestId('demo-persona-mismatch')).toHaveCount(0)
     await expect(page.locator('.form-group-radio input[type="radio"]:not(:disabled)').first()).toBeVisible()
+    await expectSessionHiddenFromPage(page)
+    // No response the browser received carried a session id.
+    expect(leakedResponses()).toEqual([])
   })
 })

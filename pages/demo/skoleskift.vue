@@ -189,7 +189,7 @@ const localePath = useLocalePath()
 const route = useRoute()
 const config = useRuntimeConfig()
 const userStore = useUserStore()
-const { user, sessionId, isAuthenticated, login, restoreSession } = useAuth()
+const { user, isAuthenticated, login, restoreSession } = useAuth()
 
 const scenario = skoleskiftScenario
 const enabled = computed<boolean>(() => Boolean(config.public.demoByggetilladelseEnabled))
@@ -233,12 +233,12 @@ const receipt = ref<SkoleskiftReceipt | null>(null)
 const receiptError = ref(false)
 
 async function loadReceipt() {
-  if (!sessionId.value) return
+  if (!isAuthenticated.value) return
   receiptError.value = false
   try {
-    // The MitID session travels in the Authorization header, never the URL.
-    const res = await $fetch<{ data: SkoleskiftReceipt }>(`${config.public.apiBase}/api/skoleskift/medunderskrift`, {
-      headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId.value}` },
+    // Same origin: the server adds Lars' MitID session from its HttpOnly cookie.
+    const res = await $fetch<{ data: SkoleskiftReceipt }>('/api/session/skoleskift-receipt', {
+      headers: { Accept: 'application/json' },
     })
     receipt.value = res.data
     rememberCaseId(res.data.case_id)
@@ -312,12 +312,12 @@ const larsLetters = computed<DigitalPostLetter[]>(() => {
 })
 
 async function loadLarsInbox() {
-  if (!sessionId.value) return
+  if (!isAuthenticated.value) return
   larsLoading.value = true
   try {
     const res = await $fetch<{ data?: DigitalPostLetter[] }>(
-      `${config.public.apiBase}/api/digital-post/recent?limit=10`,
-      { headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId.value}` } },
+      '/api/session/digital-post-recent',
+      { headers: { Accept: 'application/json' }, query: { limit: '10' } },
     )
     // Newest first, as the backend orders them.
     larsInbox.value = res.data ?? []
@@ -362,11 +362,11 @@ watch([larsMode, isAuthenticated, isLars], ([lars, authed, okLars]) => {
   }
 }, { immediate: true })
 
-onMounted(() => {
-  // Hydrate this tab's MitID session (sessionStorage) so a returning visitor
-  // (and the callback round-trip) resumes at the right step.
-  restoreSession()
+onMounted(async () => {
+  // Restore the MitID session (HttpOnly cookie, checked server-side) so a
+  // returning visitor (and the callback round-trip) resumes at the right step.
   leaderCaseId.value = readCaseId()
+  await restoreSession()
   if (larsMode.value && isAuthenticated.value && isLars.value) {
     loadLarsInbox()
     loadReceipt()

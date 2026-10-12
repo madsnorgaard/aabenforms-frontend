@@ -36,7 +36,6 @@ export const useAuth = () => {
 
   // Access state from Pinia store
   const user = computed(() => userStore.user)
-  const sessionId = computed(() => userStore.sessionId)
   const loading = computed(() => userStore.loading)
   const isAuthenticated = computed(() => userStore.isAuthenticated)
   const maskedCpr = computed(() => userStore.maskedCpr)
@@ -100,15 +99,17 @@ export const useAuth = () => {
     }
 
     try {
-      const response = await $fetch<{ data: { id: string, attributes: SessionAttributes } }>(
-        `${apiBase}/api/mitid/session/exchange`,
+      // Same-origin: the server redeems the code and keeps the session in an
+      // HttpOnly cookie. Only the public attributes come back (#252).
+      const response = await $fetch<{ data: { attributes: SessionAttributes } }>(
+        '/api/session/exchange',
         { method: 'POST', body: { code, code_verifier: verifier }, headers: { Accept: 'application/json' } },
       )
-      if (!response?.data?.id) {
+      if (!response?.data?.attributes) {
         throw new Error('Invalid session')
       }
       const user: User = sessionUserFromAttributes(response.data.attributes)
-      userStore.setUser(user, response.data.id, response.data.attributes.expiry)
+      userStore.setUser(user, response.data.attributes.expiry)
 
       // Redirect to return URL if stored
       const returnUrl = sessionStorage.getItem('mitid_return_url')
@@ -127,10 +128,10 @@ export const useAuth = () => {
   }
 
   /**
-   * Restore this tab's session (sessionStorage) on page load
+   * Restore the session (HttpOnly cookie, checked server-side) on page load
    */
   async function restoreSession() {
-    userStore.restoreSession()
+    await userStore.restoreSession()
   }
 
   /**
@@ -151,7 +152,6 @@ export const useAuth = () => {
   return {
     // State (from Pinia store)
     user,
-    sessionId,
     loading,
     isAuthenticated,
     maskedCpr,

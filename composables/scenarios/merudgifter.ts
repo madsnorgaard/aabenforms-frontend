@@ -92,13 +92,12 @@ export const merudgifterScenario: DemoScenarioConfig = {
   // applicant_cpr travels masked: the backend swaps in the CPR from the real
   // MitID session (fillCprFromMitIdSession). child_cpr travels masked as the
   // register delivered it; the demo flow accepts it.
-  submitBody: ({ values, choices, sessionId }) => {
+  submitBody: ({ values, choices }) => {
     const child = choices.child_cpr ?? null
     const amount = Number(String(values.maanedlig_merudgift ?? '').replace(/\./g, '').replace(',', '.'))
     lastAmount.value = Number.isNaN(amount) ? null : amount
     return {
       data: {
-        workflow_id: sessionId,
         applicant_cpr: values.applicant_cpr ?? '',
         child_name: String(child?.name ?? ''),
         child_cpr: String(child?.cpr ?? ''),

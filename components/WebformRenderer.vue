@@ -235,7 +235,7 @@ import type { FdsErrorSummaryItem } from '~/components/fds/FdsErrorSummary.vue'
 const { fetchResource, postResource } = useApi()
 const { t } = useI18n()
 const route = useRoute()
-const { isAuthenticated, user, sessionId, login, restoreSession } = useAuth()
+const { isAuthenticated, user, login, restoreSession } = useAuth()
 
 // State
 const loading = ref(true)
@@ -413,10 +413,9 @@ async function submitForm() {
   success.value = false
 
   try {
-    const config = useRuntimeConfig()
-
-    // Use custom API endpoint for submission
-    await $fetch(`${config.public.apiBase}/api/webform/${props.webformId}/submit`, {
+    // Same origin: the server adds the MitID session from its HttpOnly
+    // cookie as workflow_id when there is one (#252).
+    await $fetch(`/api/session/submit/${props.webformId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -426,10 +425,6 @@ async function submitForm() {
           type: `webform_submission--${props.webformId}`,
           attributes: {
             data: formData.value,
-            // The MitID session id doubles as the workflow id the backend
-            // identity gate validates (cross-origin, so it rides in the
-            // payload rather than a shared cookie).
-            ...(sessionId.value ? { workflow_id: sessionId.value } : {})
           }
         }
       })

@@ -82,9 +82,8 @@ export const klageScenario: DemoScenarioConfig = {
   // applicant_cpr travels masked: the backend fills the real CPR from the
   // MitID session and verify_ownership checks the case belongs to it. No
   // other person's CPR is ever sent from the browser.
-  submitBody: ({ values, choices, sessionId }) => ({
+  submitBody: ({ values, choices }) => ({
     data: {
-      workflow_id: sessionId,
       case_id: String(choices.case_id?.case_id ?? ''),
       applicant_cpr: values.applicant_cpr ?? '',
       klage_begrundelse: (values.klage_begrundelse ?? '').trim(),

@@ -27,6 +27,11 @@ FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+# The MitID session routes reach Drupal container-to-container on the shared
+# docker network, so Drupal sees the citizen's IP in X-Forwarded-For (#252).
+# Read by Nuxt at runtime; override per deployment.
+ARG NUXT_API_INTERNAL_BASE=http://aabenforms_drupal
+ENV NUXT_API_INTERNAL_BASE=$NUXT_API_INTERNAL_BASE
 
 # Copy only built output
 COPY --from=builder /app/.output ./
