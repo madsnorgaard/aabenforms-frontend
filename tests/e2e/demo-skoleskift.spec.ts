@@ -180,7 +180,6 @@ test.describe('Skoleskift demo - full auth', () => {
     await page.locator('input[name="action"][value="approve"]').check({ timeout: 20000 })
     // Honeypot rejects submissions faster than a human (time limit grows on
     // repeated fast posts), so read the page like a parent would first.
-    await page.waitForTimeout(15000)
     await page.locator('form input[type="submit"], form button[type="submit"]').last().click()
     // Back on the frontend: Lars' receipt, from his own MitID session.
     await page.waitForURL(/\/demo\/skoleskift\?som=lars&medunderskrevet=1/, { timeout: 20000 })
@@ -232,7 +231,6 @@ test.describe('Skoleskift demo - full auth', () => {
     await page.getByLabel('Godkend skoleskift').check()
     if (SCREENSHOT_DIR) await page.screenshot({ path: `${SCREENSHOT_DIR}/skoleskift-leader-decision.png`, fullPage: true })
     // Honeypot covers every Drupal form (time limit), staff forms included.
-    await page.waitForTimeout(15000)
     const decidedAt = Math.floor(Date.now() / 1000) - 5
     await page.getByRole('button', { name: 'Send afgørelse' }).click()
     await page.waitForURL(/\/sagsbehandling\/skoleskift\/\d+\/afgjort/, { waitUntil: 'domcontentloaded' })
@@ -242,7 +240,6 @@ test.describe('Skoleskift demo - full auth', () => {
     await expect(decided).toContainText('Freja Nielsen, Lars Andersen')
 
     // Sign the leader out; back to Lars' page for the ending.
-    await page.waitForTimeout(15000)
     await page.getByRole('button', { name: 'Log ud og vend tilbage til demoen' }).click()
     await page.waitForURL(/\/demo\/skoleskift\?som=lars&afgjort=1/, { timeout: 20000 })
     const ending = page.locator('[data-testid="skoleskift-ending"]')
