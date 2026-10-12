@@ -34,6 +34,8 @@ test.describe('Klage med fuldmagt - smoke', () => {
     await expect(page.locator('h1')).toHaveText(TITLE)
     await expect(page.getByRole('button', { name: 'Log ind som Mikkel Jensen' })).toBeVisible()
     await expect(page.getByText(/logger aldrig ind som sin mor/)).toBeVisible()
+    // Step 1, the login step, is the first page a citizen sees.
+    await scan(page)
   })
 })
 

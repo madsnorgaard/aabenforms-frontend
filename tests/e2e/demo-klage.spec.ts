@@ -48,6 +48,8 @@ test.describe('Klage demo - smoke', () => {
     await expect(page.getByRole('button', { name: 'Log ind som Birthe Jensen' })).toBeVisible()
     await expect(page.getByText('Mock-MitID-kodeord: test1234')).toBeVisible()
     await expect(page.getByText(/logger aldrig ind som sin mor/)).toBeVisible()
+    // Step 1, the login step, is the first page a citizen sees.
+    await scan(page)
   })
 })
 
