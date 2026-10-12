@@ -72,6 +72,8 @@ test.describe('Merudgifter demo - smoke', () => {
     await expect(page.getByRole('heading', { name: 'Du er Freja Nielsen i denne demo' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Log ind som Freja Nielsen' })).toBeVisible()
     await expect(page.getByText('Mock-MitID-kodeord: test1234')).toBeVisible()
+    // Step 1, the login step, is the first page a citizen sees.
+    await scan(page)
   })
 })
 

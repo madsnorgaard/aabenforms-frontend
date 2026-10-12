@@ -10,10 +10,29 @@ automated verification**: an `@axe-core/playwright` suite
 (`tests/e2e/a11y/accessibility.spec.ts`, run with `pnpm test:a11y`) scans the
 live flows and asserts **zero WCAG 2.0/2.1 A + AA violations**.
 
-**Measured status** (axe, `wcag2a wcag2aa wcag21a wcag21aa`): **0 violations**
-on the landing page, the contact form, the address-autocomplete combobox, and
-the MitID-gated form gate state, plus a keyboard-operability assertion for the
-combobox. This is a per-route automated result, not a substitute for a full
+**Last green run: 12 October 2026**, against the DDEV production build with
+real mock-MitID logins (37 Playwright tests, chromium). Measured status (axe,
+`wcag2a wcag2aa wcag21a wcag21aa`): **0 violations** on:
+
+- the landing page, the accessibility statement, the error page, the contact
+  form, the address-autocomplete combobox and the MitID-gated form gate state,
+  plus a keyboard-operability check for the combobox
+  (`tests/e2e/a11y/accessibility.spec.ts`);
+- the cookie page and the demo hub (`/demo`);
+- every demo scenario, from the first step (the login step) to the last (the
+  receipt or decision letter), including the validation error summary:
+  byggetilladelse, merudgifter, skoleskift (including the co-signing parent's
+  and the school leader's pages), sygedagpenge, klage and klage med fuldmagt
+  (`tests/e2e/demo-*.spec.ts`, `tests/e2e/byggetilladelse-demo.spec.ts`).
+
+The suite does not run in CI yet (#24, #25); run it locally before a
+release:
+
+```bash
+E2E_FULL_AUTH=1 BASE_URL=https://aabenforms-frontend.ddev.site:3001 \
+  npx playwright test tests/e2e/a11y tests/e2e/demo-*.spec.ts \
+  tests/e2e/byggetilladelse-demo.spec.ts tests/e2e/cookies.spec.ts --project=chromium
+``` This is a per-route automated result, not a substitute for a full
 manual audit (screen-reader passes, cognitive review), but it replaces the
 previously untested claim with reproducible evidence.
 
@@ -1096,7 +1115,7 @@ The application is now accessible to users with disabilities, including those us
 
 ### Next Steps
 
-1.  Implement skip navigation links in layout
+1.  ~~Implement skip navigation links in layout~~ Done: `FdsSkipLink` targets `#main`.
 2.  Add PDF/UA support for generated documents
 3.  Create content authoring accessibility guidelines for Drupal backend
 4.  Consider external accessibility audit for legal compliance verification
@@ -1104,7 +1123,8 @@ The application is now accessible to users with disabilities, including those us
 ---
 
 **Report Generated**: February 2, 2026
-**Last Updated**: February 2, 2026
+**Last Updated**: October 12, 2026 (automated run date and scope; the sections
+below describe the February remediation)
 **Version**: 1.0.0
 **Prepared By**: Claude Sonnet 4.5 (AI Assistant)
 **Review Status**: Ready for external audit
