@@ -656,12 +656,12 @@
       "leader": {
         "eyebrow": "School transfer with two parents - decision",
         "heading": "The school leader decides",
-        "intro": "The school leader gets an e-mail at work saying a case is waiting, with a link to the municipality's case handling. The e-mail contains no personal data. The leader logs in with a staff account, and only an employee registered in the organisation's directory for the requested school can make the decision.",
-        "cardHeading": "You are the school leader in this demo",
-        "story": "Both parents have signed the application for Emil's school transfer. You see the case with masked CPR numbers and choose \"Godkend skoleskift\" (approve) or \"Afvis\" (reject).",
-        "username": "Username: {username}",
-        "login": "Log in as school leader",
-        "back": "Back to Lars"
+        "intro": "The school leader is a municipal employee and works in the municipality's own systems, not with MitID. This is what the school leader sees: an e-mail at work saying a case is waiting, with a link to the municipality's case handling.",
+        "story": "The e-mail contains no personal data, only the case number. The case is shown only after logging in with the staff account, and only an employee registered in the organisation's directory for the requested school can decide. There the school leader sees Emil's school transfer with masked CPR numbers and chooses \"Godkend skoleskift\" (approve) or \"Afvis\" (reject).",
+        "back": "Back to Lars",
+        "mailbox": "School leader, Risskov Skole",
+        "staffLoginHeading": "Staff login",
+        "staffLogin": "The link in the e-mail leads to the municipality's staff login (username: {username}). The password is personal, as in a real municipality, so in the public demo the presenter logs in and shows the decision."
       },
       "ending": {
         "heading": "The decision has been sent to both parents",
@@ -880,6 +880,23 @@
         "workflow": "On submit Birthe becomes the applicant and Mikkel is recorded as the person who acted, on the basis of a digital power of attorney. The ECA flow re-checks the power of attorney from the session before the case becomes Appealed, and sends the receipt.",
         "letter": "The receipt goes to Birthe. She is exempt from Digital Post, so it is sent as a physical letter (the print channel is DEMO). Mikkel gets a copy in his own Digital Post because the power of attorney allows it."
       }
+    },
+    "workMail": {
+      "caption": "The school leader's work e-mail",
+      "app": "Work e-mail",
+      "inbox": "Inbox",
+      "sent": "Sent",
+      "archive": "Archive",
+      "now": "Now",
+      "from": "From",
+      "to": "To",
+      "sender": "ÅbenForms case handling",
+      "subject": "A case awaits your decision",
+      "subjectWithId": "Case {id} awaits your decision",
+      "line1": "An application that both custody holders have signed awaits your decision.",
+      "line2": "Log in with your staff account to see the case and decide:",
+      "open": "Open the case in case handling",
+      "line3": "This e-mail contains no personal data. The case is only shown after you log in."
     }
   },
   "landingCta": {

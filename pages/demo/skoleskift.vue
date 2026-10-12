@@ -126,16 +126,24 @@
             <p class="demo-skoleskift__eyebrow">{{ $t('demo.skoleskift.leader.eyebrow') }}</p>
             <h1>{{ $t('demo.skoleskift.leader.heading') }}</h1>
             <p class="font-lead">{{ $t('demo.skoleskift.leader.intro') }}</p>
-            <div class="card" data-testid="skoleskift-leader-login">
-              <div class="card-content">
-                <h2 class="card-heading h3">{{ $t('demo.skoleskift.leader.cardHeading') }}</h2>
-                <p class="mt-3">{{ $t('demo.skoleskift.leader.story') }}</p>
-                <div class="card-actions mt-5">
-                  <a :href="leaderLoginUrl" class="button button-primary">{{ $t('demo.skoleskift.leader.login') }}</a>
-                </div>
-                <p class="mt-3 mb-0">{{ $t('demo.skoleskift.leader.username', { username: 'skoleleder' }) }}</p>
-              </div>
-            </div>
+            <p>{{ $t('demo.skoleskift.leader.story') }}</p>
+          </div>
+        </div>
+        <DemoWorkMailbox
+          class="mt-5"
+          :case-id="leaderCaseId"
+          :link="leaderLoginUrl"
+          :account="$t('demo.skoleskift.leader.mailbox')"
+        />
+        <div class="row">
+          <div class="col-12 col-lg-8">
+            <FdsAlert
+              type="info"
+              class="mt-5"
+              :heading="$t('demo.skoleskift.leader.staffLoginHeading')"
+              :text="$t('demo.skoleskift.leader.staffLogin', { username: 'skoleleder' })"
+              data-testid="skoleskift-leader-login"
+            />
           </div>
         </div>
       </template>
@@ -233,6 +241,7 @@ async function loadReceipt() {
       headers: { Accept: 'application/json', Authorization: `Bearer ${sessionId.value}` },
     })
     receipt.value = res.data
+    rememberCaseId(res.data.case_id)
   }
   catch (e: any) {
     receipt.value = null
@@ -259,6 +268,28 @@ function formatDate(iso: string): string {
 }
 
 // --- School leader: staff login on the backend (Drupal account, not MitID) --
+
+// The case number for the leader's work mail. Display only, never used to
+// authorise anything: the staff login decides what the leader may see.
+const LEADER_CASE_KEY = 'aabenforms-demo:skoleskift:case'
+const leaderCaseId = ref<number | null>(null)
+
+function rememberCaseId(id: number | null) {
+  try {
+    if (id) sessionStorage.setItem(LEADER_CASE_KEY, String(id))
+  }
+  catch { /* private mode */ }
+}
+
+function readCaseId(): number | null {
+  try {
+    const id = Number(sessionStorage.getItem(LEADER_CASE_KEY))
+    return Number.isInteger(id) && id > 0 ? id : null
+  }
+  catch {
+    return null
+  }
+}
 
 // Fixed backend paths; Drupal only follows a local destination.
 const leaderLoginUrl = computed(() => `${config.public.apiBase}/da/user/login?destination=${encodeURIComponent('/da/sagsbehandling/skoleskift')}`)
@@ -306,6 +337,7 @@ function loginAsLars() {
 async function restart() {
   try {
     sessionStorage.removeItem(WIZARD_STORAGE_KEY)
+    sessionStorage.removeItem(LEADER_CASE_KEY)
   }
   catch { /* private mode */ }
   await userStore.logout({ returnPath: localePath({ path: '/demo/skoleskift' }) })
@@ -334,6 +366,7 @@ onMounted(() => {
   // Hydrate this tab's MitID session (sessionStorage) so a returning visitor
   // (and the callback round-trip) resumes at the right step.
   restoreSession()
+  leaderCaseId.value = readCaseId()
   if (larsMode.value && isAuthenticated.value && isLars.value) {
     loadLarsInbox()
     loadReceipt()
