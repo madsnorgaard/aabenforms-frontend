@@ -6,7 +6,7 @@ Playwright runs against a **production build** of the frontend, never the Nuxt d
 
 `.github/workflows/quality.yml` runs two jobs:
 
-- **dependency audit:** `pnpm audit --prod --audit-level=high`. Advisories without a usable fix are listed in `package.json` under `pnpm.auditConfig.ignoreGhsas`. None of them ships in `.output`: they come from `@nuxt/devtools` (simple-git), the dev server (node-forge) and build tooling (braces). Re-check the list when Nuxt is upgraded.
+- **dependency audit:** `pnpm audit --prod --audit-level=high`. Advisories without a usable fix are listed in `package.json` under `pnpm.auditConfig.ignoreGhsas`. None of them ships in `.output`: they come from `@nuxt/devtools` (simple-git), the dev server (node-forge) and build tooling (braces). GHSA-83rm-6c8r-g728 (vue-i18n 10.0.8, pulled in by `@nuxtjs/i18n` 9) has no fix in the 10.x line; it needs `escapeParameter: true` and a `srcdoc` attribute inside a translation message, and this app uses neither. It goes away with the move to Nuxt 4 and `@nuxtjs/i18n` 10 (#98). Re-check the list when Nuxt is upgraded.
 - **e2e smoke + axe:**
   - builds with `NUXT_SKIP_PRERENDER=1`, starts `node .output/server/index.mjs`, and runs the smoke specs and the axe suite (`tests/e2e/a11y`, WCAG 2.0 and 2.1 A + AA) in Chromium;
   - runs with no backend and no mock MitID, so the specs that need a logged-in persona skip themselves (`E2E_FULL_AUTH`);
