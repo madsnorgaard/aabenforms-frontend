@@ -130,23 +130,22 @@ export default defineNuxtConfig({
     transpile: ['pinia'],
   },
 
-  // Nitro configuration for production
-  // NUXT_SKIP_PRERENDER=1 builds without prerendering, for environments where
-  // the backend is not reachable at build time (e.g. local demo builds).
+  // Nitro configuration for production.
+  // Pages are not prerendered: the Content-Security-Policy in
+  // server/plugins/csp.ts hashes each page's inline script at render time,
+  // which a static file cannot carry. A side effect is that the image build
+  // no longer needs the backend to be reachable.
   nitro: {
     compressPublicAssets: true,
-    prerender: process.env.NUXT_SKIP_PRERENDER
-      ? { crawlLinks: false, routes: [] }
-      : {
-          crawlLinks: true,
-          routes: ['/'],
-        },
+    prerender: { crawlLinks: false, routes: [] },
   },
 
   // Route rules for caching and optimization
   routeRules: {
-    // Static pages - cache for 1 hour
-    '/': { prerender: !process.env.NUXT_SKIP_PRERENDER },
+    // The landing page is server-rendered like every other page: no prerender
+    // (the CSP plugin hashes the inline script per response) and no shared
+    // cache, because a cached response would replay the first visitor's
+    // i18n_redirected cookie to everyone.
 
     // The MitID callback depends on ?session=...; a prerendered copy hydrates with a
     // query-less page route and stalls the login flow.
