@@ -983,7 +983,7 @@
     "submitting": "Indsender...",
     "success": "Tak for din indsendelse! Vi vender tilbage hurtigst muligt.",
     "loadError": "Vi kunne ikke hente formularen. Prøv igen.",
-    "submitError": "Vi kunne ikke sende ansøgningen. Prøv igen.",
+    "submitError": "Vi kunne ikke sende din ansøgning. Prøv igen.",
     "validationErrors": "Ret disse fejl, før du sender:",
     "unknownError": "Ukendt fejl",
     "unsupportedFieldType": "Vi kan ikke vise dette felt endnu. Kontakt kommunen, hvis du ikke kan udfylde ansøgningen.",
