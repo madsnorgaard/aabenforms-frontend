@@ -94,6 +94,7 @@ test.describe('Sygedagpenge demo - full auth', () => {
     await page.getByRole('button', { name: 'Fortsæt' }).click()
     await expect(currentStep(page)).toHaveText('Det kun du ved')
     await expect(page.getByText('Du skal ikke oplyse en diagnose.').first()).toBeVisible()
+    await page.locator('input#erklaering').check()
     await page.getByRole('button', { name: /Indsend/i }).click()
     await expect(page.locator('[data-module="error-summary"] a')).toHaveCount(3)
     await scan(page)

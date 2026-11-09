@@ -266,6 +266,31 @@ test.describe('Generic webform wizard', () => {
     expect(data).not.toHaveProperty('stop_barn_over_18')
   })
 
+  test('a 422 field error from the backend lands on the erklæring checkbox', async ({ page }) => {
+    await openForm(page)
+    await page.route(`**/api/session/submit/${FORM_ID}`, (route) =>
+      route.fulfill({
+        status: 422,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'Validation failed', field: 'erklaering', errors: { erklaering: 'Du skal erklære, at oplysningerne er rigtige.' } }),
+      }),
+    )
+    await page.getByRole('radio', { name: 'Ja' }).check()
+    await nextButton(page).click()
+    await page.getByLabel('Dit navn').fill('Freja Nielsen')
+    await page.getByLabel('E-mail').fill('freja@example.dk')
+    await nextButton(page).click()
+    await page.getByRole('checkbox', { name: /Jeg erklærer/ }).check()
+    await page.getByRole('button', { name: 'Indsend ansøgning' }).click()
+
+    const field = page.locator('.field-key-erklaering')
+    await expect(field.locator('.form-error-message')).toContainText('Du skal erklære, at oplysningerne er rigtige.')
+    await expect(field.locator('input#wf-erklaering')).toHaveAttribute('aria-invalid', 'true')
+    await expect(page.locator('[data-module="error-summary"]').getByRole('link', { name: 'Du skal erklære, at oplysningerne er rigtige.' })).toHaveAttribute('href', '#wf-erklaering')
+    await expect(page.locator('.validation-errors')).toHaveCount(0)
+    await expect(page.locator('.webform-receipt')).toHaveCount(0)
+  })
+
   test('wizard, summary and receipt have no WCAG 2.1 AA violations', async ({ page }) => {
     await openForm(page)
     await page.getByRole('radio', { name: 'Nej' }).check()

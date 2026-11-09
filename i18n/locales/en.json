@@ -1037,7 +1037,9 @@
     "contactPhone": "Phone",
     "contactEmail": "Email",
     "contactHours": "Phone hours",
-    "printReceipt": "Print receipt"
+    "printReceipt": "Print receipt",
+    "declaration": "I declare that the information is correct and I know the municipality can check it in the registers.",
+    "declarationRequired": "You must declare that the information is correct before you send the application"
   },
   "a11y": {
     "skipToContent": "Skip to main content"

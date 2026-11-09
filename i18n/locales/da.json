@@ -1037,7 +1037,9 @@
     "contactPhone": "Telefon",
     "contactEmail": "E-mail",
     "contactHours": "Telefontid",
-    "printReceipt": "Udskriv kvittering"
+    "printReceipt": "Udskriv kvittering",
+    "declaration": "Jeg erklærer, at oplysningerne er rigtige, og jeg ved, at kommunen kan kontrollere dem i registre.",
+    "declarationRequired": "Du skal erklære, at oplysningerne er rigtige, før du sender ansøgningen"
   },
   "a11y": {
     "skipToContent": "Spring til hovedindhold"

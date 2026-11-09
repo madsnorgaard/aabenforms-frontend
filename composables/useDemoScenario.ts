@@ -51,6 +51,8 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
   /** chosen radio value per prefill key with options */
   const choices = ref<Choices>({})
   const fieldErrors = ref<Record<string, string>>({})
+  /** The citizen's declaration tick (KL component 7); never persisted or prefilled. */
+  const declared = ref(false)
 
   const workflowSteps = ref<WorkflowStep[]>([])
   const animatedStepIndex = ref(-1)
@@ -400,6 +402,9 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
         errors[row.formKey] = t('demo.wizard.validation.required', { field: row.label })
       }
     }
+    if (!declared.value) {
+      errors.erklaering = t('form.declarationRequired')
+    }
     fieldErrors.value = errors
     return Object.keys(errors).length === 0
   }
@@ -410,6 +415,11 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
       delete next[key]
       fieldErrors.value = next
     }
+  }
+
+  function setDeclared(v: boolean) {
+    declared.value = v
+    if (v) clearFieldError('erklaering')
   }
 
   async function submit(): Promise<void> {
@@ -434,6 +444,11 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
       choices: chosenOptions.value,
       user: user.value as User,
     })
+    // The webforms require the declaration; it is the citizen's own tick
+    // from step 3, so it travels as the `erklaering` element, never hidden.
+    if (body.data && typeof body.data === 'object') {
+      (body.data as Record<string, unknown>).erklaering = declared.value ? 1 : 0
+    }
 
     try {
       const res = await $fetch<SubmissionResponse>(
@@ -553,6 +568,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     values.value = {}
     choices.value = {}
     fieldErrors.value = {}
+    declared.value = false
     workflowSteps.value = []
     animatedStepIndex.value = -1
     submissionId.value = ''
@@ -595,6 +611,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     values,
     choices,
     fieldErrors,
+    declared,
     workflowSteps,
     animatedStepIndex,
     submissionId,
@@ -635,6 +652,7 @@ export const useDemoScenario = (config: DemoScenarioConfig) => {
     continueToForm,
     validate,
     clearFieldError,
+    setDeclared,
     submit,
     refreshInbox,
     reset,

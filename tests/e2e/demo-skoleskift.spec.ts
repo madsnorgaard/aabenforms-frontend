@@ -122,6 +122,7 @@ test.describe('Skoleskift demo - full auth', () => {
     // Step 3: validation, axe, then schools and reason.
     await page.getByRole('button', { name: 'Fortsæt' }).click()
     await expect(currentStep(page)).toHaveText('Det kun du ved')
+    await page.locator('input#erklaering').check()
     await page.getByRole('button', { name: /Indsend ansøgning/i }).click()
     await expect(page.locator('[data-module="error-summary"] a')).toHaveCount(2)
     await scan(page)

@@ -683,6 +683,38 @@ function buildPayload(): Record<string, any> {
   return out
 }
 
+// Field errors from the backend (422 `errors: { key: message }`): shown on
+// the fields and in the Fejlopsummering, on the step that holds the first
+// one; messages for unknown keys go to the general error list.
+async function applyServerFieldErrors(errors: Record<string, string>) {
+  const byKey: Record<string, string> = {}
+  const items: FdsErrorSummaryItem[] = []
+  const general: string[] = []
+  let firstStep = -1
+  for (const [key, raw] of Object.entries(errors)) {
+    const message = Array.isArray(raw) ? raw.join(' ') : String(raw)
+    const step = steps.value.findIndex((s) => s.elements.includes(key))
+    if (step === -1) {
+      general.push(message)
+      continue
+    }
+    if (firstStep === -1) {
+      firstStep = step
+    }
+    byKey[key] = message
+    items.push({ id: webformFieldId(key), message })
+  }
+  if (firstStep !== -1 && firstStep !== currentIndex.value) {
+    await goToStep(firstStep)
+  }
+  fieldErrors.value = byKey
+  summaryErrors.value = items
+  validationErrors.value = general
+  if (firstStep !== -1) {
+    errorSteps.value = new Set([...errorSteps.value, firstStep])
+  }
+}
+
 // The reference the citizen can quote: a case number when the backend sends
 // one, else the submission id.
 function referenceFrom(response: any): string | null {
@@ -752,13 +784,18 @@ async function submitForm() {
     document.querySelector('.success')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
   } catch (e: any) {
-    if (e.response?.data?.errors) {
+    const body = e?.data ?? e?.response?._data ?? e?.response?.data
+    if (body?.errors && !Array.isArray(body.errors) && typeof body.errors === 'object') {
+      // 422 { error, field, errors: { key: message } }: the message lands on
+      // the field itself when the element is known.
+      await applyServerFieldErrors(body.errors as Record<string, string>)
+    } else if (Array.isArray(body?.errors)) {
       // Extract validation errors from JSON:API error response
-      validationErrors.value = e.response.data.errors.map((err: any) =>
+      validationErrors.value = body.errors.map((err: any) =>
         err.detail || err.title || t('form.unknownError')
       )
     } else {
-      validationErrors.value = [e.message || t('form.submitError')]
+      validationErrors.value = [body?.error || e.message || t('form.submitError')]
     }
   } finally {
     submitting.value = false
