@@ -68,7 +68,7 @@ test.describe('Cookie banner (DKFDS cookiemeddelelse)', () => {
     await expect(banner).toHaveAttribute('role', 'complementary')
     await expect(banner).toHaveAttribute('aria-labelledby', 'cookie-message-heading')
     await expect(banner).toHaveAttribute('aria-describedby', 'cookie-message-text')
-    await expect(banner.locator('h2#cookie-message-heading')).toHaveText('Fortæl os om du accepterer cookies')
+    await expect(banner.locator('h2#cookie-message-heading')).toHaveText('Fortæl os, om du accepterer cookies')
     await expect(banner.locator('p#cookie-message-text a')).toHaveAttribute('href', '/cookies')
     await expect(banner.locator('ul.inline-list button.button.button-secondary')).toHaveCount(2)
     await expect(banner.getByRole('button', { name: 'Accepter cookies' })).toBeVisible()
