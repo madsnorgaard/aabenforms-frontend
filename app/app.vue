@@ -28,7 +28,7 @@
 // This is the root component of the Nuxt app.
 // Pages own their landmarks; TenantBranding injects tenant styling (no heading
 // of its own, so each page keeps a single h1).
-import spriteSource from '~/public/dkfds/img/all-svg-icons.svg?raw'
+import spriteSource from '~~/public/dkfds/img/all-svg-icons.svg?raw'
 
 // Per-language head: html lang, hreflang alternates, canonical og:url and a
 // description in the visitor's language (the static one in nuxt.config is
