@@ -110,7 +110,7 @@ test.describe('Byggetilladelse demo - full auth', () => {
 
     // Back on the wizard at step 2: the provenance table.
     await page.waitForURL(/\/demo\/byggetilladelse/, { timeout: 20000 })
-    await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: 'Det ved kommunen allerede' })).toBeVisible({ timeout: 15000 })
     const table = page.locator('table.demo-provenance__table')
     await expect(table).toBeVisible({ timeout: 15000 })
     await expect(table.locator('tr[data-prefill-key="applicant_name"]')).toContainText('Freja Nielsen')
