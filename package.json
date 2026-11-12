@@ -39,7 +39,7 @@
     "autoprefixer": "^10.6.2",
     "axe-core": "^4.12.1",
     "postcss": "^8.5.32",
-    "sass": "^1.107.1",
+    "sass": "^1.108.1",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.6.0",
     "vue-tsc": "^3.3.14"
