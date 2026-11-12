@@ -173,6 +173,13 @@ export default defineNuxtConfig({
       chunkSizeWarningLimit: 1000,
 
       // Let Nuxt handle chunk splitting automatically
+
+      // Vite 8 minifies CSS for Safari 16.4 and newer by default, which
+      // rewrites every min-width/max-width media query to range syntax
+      // (width>=768px). Safari before 16.4 ignores those, so iOS 15 and
+      // 16.0-16.3 lost all DKFDS and Tailwind breakpoints. These are the
+      // targets Vite 7 used, which keep the classic syntax.
+      cssTarget: ['chrome107', 'edge107', 'firefox104', 'safari16'],
     },
 
     // CSS code splitting
