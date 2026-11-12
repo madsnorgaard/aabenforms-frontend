@@ -35,7 +35,7 @@ async function scan(page: any) {
 const currentStep = (page: any) => page.locator('ol.step-indicator li.current .step-title').first()
 
 async function step2ChooseEmil(page: any) {
-  await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+  await expect(page.getByRole('heading', { name: 'Det ved kommunen allerede' })).toBeVisible({ timeout: 15000 })
   const table = page.locator('table.demo-provenance__table')
   await expect(table).toBeVisible({ timeout: 15000 })
   await expect(table.locator('tr[data-prefill-key="applicant_cpr"]')).toContainText(/\d{6}-XXXX/)
@@ -122,7 +122,7 @@ test.describe('Merudgifter demo - full auth', () => {
     await fillAndSubmit(page, '800')
     await expect(page.getByText('Partshøring').first()).toBeVisible()
     await expect(page.getByText(/klagefrist/i).first()).toBeVisible()
-    await expect(page.getByRole('heading', { name: 'Afslag med klagevejledning' })).toBeVisible({ timeout: 20000 })
+    await expect(page.getByRole('heading', { name: 'Afslag: merudgifterne dækkes ikke' })).toBeVisible({ timeout: 20000 })
     await expect(page.getByText(/ikke imødekommet \(afslag\)/).first()).toBeAttached()
     // The rejection letter itself carries the reason and the klagevejledning
     // (forvaltningsloven §25), not a reference to an attachment.

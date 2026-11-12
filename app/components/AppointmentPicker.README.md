@@ -322,7 +322,7 @@ The component follows WCAG 2.1 AA guidelines:
 ## Dependencies
 
 - Vue 3.5+
-- Nuxt 3
+- Nuxt 4
 - @nuxtjs/i18n
 - Native browser date input
 

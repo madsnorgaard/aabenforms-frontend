@@ -77,7 +77,7 @@ test.describe('Klage demo - full auth', () => {
     await page.waitForURL(/\/demo\/klage/, { timeout: 20000 })
 
     // Step 2: identity + the case register as a radio choice.
-    await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: 'Det ved kommunen allerede' })).toBeVisible({ timeout: 15000 })
     const table = page.locator('table.demo-provenance__table')
     await expect(table.locator('tr[data-prefill-key="applicant_cpr"]')).toContainText(/\d{6}-XXXX/)
     await expect(table.locator('tr[data-prefill-key="applicant_cpr"] .badge')).toHaveText('LIVE-PARAT')

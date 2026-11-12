@@ -8,3 +8,8 @@ playwright-report
 .pnpm-store
 *.spec.ts
 tests
+.env
+.env.*
+.playwright-mcp
+docs
+*.md

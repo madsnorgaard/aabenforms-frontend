@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   if (!WEBFORM_ID.test(webform)) {
     throw createError({ statusCode: 404, statusMessage: 'Unknown form' })
   }
-  const body = await readBody<Payload>(event)
+  const body = await readJsonBody<Payload>(event)
   if (!body || typeof body !== 'object' || !body.data || typeof body.data !== 'object') {
     setResponseStatus(event, 400)
     return { error: 'Invalid submission data' }

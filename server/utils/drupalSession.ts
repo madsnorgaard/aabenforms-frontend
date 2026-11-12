@@ -140,9 +140,14 @@ export async function drupalFetch<T>(event: H3Event, path: string, call: DrupalC
   catch (err) {
     if (err instanceof FetchError && err.response) {
       if (err.response.status === 401) clearSessionCookie(event)
-      // Same status and body as a direct call, so callers read errors as before.
+      // Same status as a direct call, and the JSON body when Drupal sent one,
+      // so callers read errors as before. An HTML error page from Drupal or
+      // the proxy (5xx, 429) is not forwarded to the browser.
       setResponseStatus(event, err.response.status)
-      return err.data as T
+      if (err.data && typeof err.data === 'object') {
+        return err.data as T
+      }
+      return { error: 'Backend error' } as T
     }
     if (internal && isConnectError(err)) {
       // Misconfigured network: stay available through the public proxy, at
@@ -159,4 +164,19 @@ export async function drupalFetch<T>(event: H3Event, path: string, call: DrupalC
 /** The Drupal base and forwarding headers, for calls that need the raw response. */
 export function drupalRequestTarget(event: H3Event) {
   return drupalTarget(event)
+}
+
+/** Largest JSON body the session routes accept (a form submission is a few KB). */
+export const MAX_JSON_BODY_BYTES = 256 * 1024
+
+/**
+ * Reads a JSON body after checking its declared size, so an oversized or
+ * chunked request is refused before it is buffered and parsed.
+ */
+export async function readJsonBody<T>(event: H3Event): Promise<T> {
+  const declared = Number(getRequestHeader(event, 'content-length'))
+  if (!Number.isFinite(declared) || declared > MAX_JSON_BODY_BYTES) {
+    throw createError({ statusCode: 413, statusMessage: 'Request body too large' })
+  }
+  return readBody<T>(event)
 }
