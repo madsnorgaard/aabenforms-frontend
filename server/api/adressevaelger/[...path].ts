@@ -13,15 +13,19 @@
 
 const ALLOWED_ENDPOINTS = new Set(['adresser', 'husnumre'])
 const ALLOWED_PARAMS = ['tekst', 'vejnavn', 'postnummer', 'kommuneKode', 'maksimum', 'medtagForeloebige']
+// Upstream ids are DAR UUIDs; "soeg" is the search action. Nothing else is
+// forwarded, so the token cannot be used to reach other upstream paths
+// (for example through an encoded ".." segment).
+const ALLOWED_ACTION = /^(soeg|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
 
   const pathParam = getRouterParam(event, 'path') || ''
   const segments = pathParam.split('/').filter(Boolean)
-  const endpoint = segments[0]
+  const [endpoint, action] = segments
 
-  if (!ALLOWED_ENDPOINTS.has(endpoint) || segments.length < 2) {
+  if (segments.length !== 2 || !ALLOWED_ENDPOINTS.has(endpoint) || !ALLOWED_ACTION.test(action)) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid address request' })
   }
 
@@ -37,7 +41,10 @@ export default defineEventHandler(async (event) => {
   }
   params.set('token', config.adressevaelgerToken as string)
 
-  const upstreamUrl = `${config.adressevaelgerApiUrl}/${segments.join('/')}?${params.toString()}`
+  const upstream = new URL(String(config.adressevaelgerApiUrl))
+  upstream.pathname = `${upstream.pathname.replace(/\/$/, '')}/${endpoint}/${action}`
+  upstream.search = params.toString()
+  const upstreamUrl = upstream.toString()
 
   try {
     const data = await $fetch(upstreamUrl, { timeout: 6000 })

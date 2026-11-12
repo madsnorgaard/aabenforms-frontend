@@ -59,7 +59,7 @@ test.describe('Klage med fuldmagt - full auth', () => {
     await page.waitForURL(/\/demo\/klage-fuldmagt/, { timeout: 20000 })
 
     // Step 2: acting for Birthe; her cases, never her full CPR.
-    await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: 'Det ved kommunen allerede' })).toBeVisible({ timeout: 15000 })
     await expect(page.getByTestId('demo-prefill-alert')).toContainText('Du handler på vegne af Birthe Jensen (240348-XXXX) med digital fuldmagt')
     const table = page.locator('table.demo-provenance__table')
     await expect(table.locator('tr[data-prefill-key="applicant_cpr"]')).toContainText('240348-XXXX')
@@ -110,7 +110,7 @@ test.describe('Klage med fuldmagt - fails closed', () => {
     await page.fill('#password', 'test1234')
     await page.click('#kc-login')
     await page.waitForURL(/\/demo\/klage-fuldmagt/, { timeout: 20000 })
-    await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: 'Det ved kommunen allerede' })).toBeVisible({ timeout: 15000 })
     // No cases offered (neither Birthe's nor Freja's own) and no way forward.
     await expect(page.locator('.form-group-radio input[type="radio"]')).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Fortsæt' })).toBeDisabled()

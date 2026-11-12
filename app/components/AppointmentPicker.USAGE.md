@@ -2,7 +2,7 @@
 
 ## Installation
 
-The component is automatically available in your Nuxt 3 project. No installation needed.
+The component is automatically available in your Nuxt 4 project. No installation needed.
 
 ## Basic Example
 

@@ -1211,7 +1211,7 @@
     },
     "workflow": {
       "title": "Workflow Status",
-      "text": "Here you can track the status of your application. You will also receive updates via email and Digital Post."
+      "text": "Here you can follow your case. You will be notified in Digital Post when something happens."
     }
   },
   "accessibility": {
@@ -1324,7 +1324,7 @@
       "cookies": {
         "title": "Cookie policy",
         "lead": "Read which cookies the solution uses and what they are for.",
-        "placeholder": "Today the solution only sets one necessary cookie that remembers your language choice. No statistics are collected.",
+        "placeholder": "Today the solution only sets necessary cookies that remember your language choice and your answer to the cookie banner. We do not collect statistics.",
         "body": "Necessary cookies do not require consent. If we add statistics later, you will be asked first."
       }
     }
@@ -1332,7 +1332,7 @@
   "cookies": {
     "banner": {
       "heading": "Tell us whether you accept cookies",
-      "text": "We collect statistics using third-party cookies to improve the user experience. All collected data is anonymised.",
+      "text": "We only use necessary cookies that remember your language and your choice here. We do not collect statistics.",
       "link": "Read more about our use of cookies",
       "accept": "Accept cookies",
       "reject": "No thanks to cookies"

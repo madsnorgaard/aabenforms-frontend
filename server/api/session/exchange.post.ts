@@ -8,7 +8,7 @@ interface ExchangeResponse {
 
 export default defineEventHandler(async (event) => {
   assertSameOrigin(event)
-  const body = await readBody<{ code?: unknown, code_verifier?: unknown }>(event)
+  const body = await readJsonBody<{ code?: unknown, code_verifier?: unknown }>(event)
   const res = await drupalFetch<ExchangeResponse>(event, '/api/mitid/session/exchange', {
     method: 'POST',
     body: { code: body?.code, code_verifier: body?.code_verifier },

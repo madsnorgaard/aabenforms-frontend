@@ -14,7 +14,7 @@
 // rebase.mjs rescales every rem in THIS file's output by 0.625 and the html
 // override below restores the 16px root, so DKFDS renders pixel-identical
 // while nothing else in the app shrinks. See docs/DKFDS_REFERENCE.md.
-@use '../../node_modules/dkfds/src/stylesheets/dkfds-virkdk' with (
+@use '../../../node_modules/dkfds/src/stylesheets/dkfds-virkdk' with (
   $font-path: '/dkfds/fonts/IBMPlexSans/',
   $image-path: '/dkfds/img/',
   $icons-folder-path: '/dkfds/img/svg-icons/'

@@ -1,11 +1,11 @@
 # ÅbenForms Frontend
 
-**The citizen-facing Nuxt 3 frontend for ÅbenForms, built on Det Fælles Designsystem (DKFDS).**
+**The citizen-facing Nuxt 4 frontend for ÅbenForms, built on Det Fælles Designsystem (DKFDS).**
 
-[![Nuxt](https://img.shields.io/badge/Nuxt-3.21-00DC82)](https://nuxt.com)
+[![Nuxt](https://img.shields.io/badge/Nuxt-4.6-00DC82)](https://nuxt.com)
 [![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D)](https://vuejs.org)
 [![DKFDS](https://img.shields.io/badge/DKFDS-11.3.0-0059B3)](https://designsystem.dk)
-[![Playwright](https://img.shields.io/badge/Playwright-1.63-45ba4b)](https://playwright.dev)
+[![Playwright](https://img.shields.io/badge/Playwright-1.64-45ba4b)](https://playwright.dev)
 [![License](https://img.shields.io/badge/License-GPL--2.0-green)](LICENSE)
 
 Live at **https://aabenforms.dk**. The backend (Drupal 11 + ECA) runs at https://api.aabenforms.dk. Its code is in [madsnorgaard/AabenForms](https://github.com/madsnorgaard/AabenForms).
@@ -44,13 +44,13 @@ Each scenario has a one-click persona login on a DKFDS-styled mock MitID page. T
 
 | Component | Version |
 |---|---|
-| Nuxt | 3.21 |
+| Nuxt | 4.6 |
 | Vue | 3.5 |
 | DKFDS (`dkfds`) | 11.3.0, Virk theme, self-hosted IBM Plex Sans |
-| @nuxtjs/i18n | 9 (Danish primary, English translation) |
-| Pinia (@pinia/nuxt) | 0.5 |
+| @nuxtjs/i18n | 10 (Danish primary, English translation) |
+| Pinia 3 (@pinia/nuxt) | 0.11 |
 | Tailwind CSS | 3.4, with preflight off so DKFDS owns base styles |
-| Playwright + @axe-core/playwright | 1.63 / 4.12 |
+| Playwright + @axe-core/playwright | 1.64 / 4.14 |
 | Node / pnpm | 22 / 9.15.0 |
 
 DKFDS rules for this repo, covering markup, palette and the rem rebase for DKFDS's 62.5% root font size, are in [`docs/DKFDS_REFERENCE.md`](docs/DKFDS_REFERENCE.md).
@@ -91,22 +91,29 @@ Personas for the mock MitID are defined in the backend realm file (`backend/.dde
 
 ## Project structure
 
+Nuxt 4 layout: the application code lives under `app/`, while `server/`, `public/`, `i18n/` and the config files stay at the root.
+
 ```
-components/
-  fds/            DKFDS wrappers (header, footer, inputs, alerts, step indicator, cookie banner)
-  demo/           Demo wizard, provenance panel, persona login, Digital Post inbox
-  auth/ landing/ ui/ workflow/
-composables/
-  scenarios/      One config per demo scenario
-  useAuth.ts usePrefill.ts useDemoScenario.ts useConsent.ts useApi.ts ...
-pages/
-  demo/           /demo hub and the five scenarios
-  forms/[slug].vue  webform rendering
-  cases/inbox.vue   caseworker inbox
-  cookies.vue tilgaengelighed.vue kontakt.vue auth/callback.vue
-stores/           user, case, form, tenant
+app/
+  app.vue error.vue
+  components/
+    fds/          DKFDS wrappers (header, footer, inputs, alerts, step indicator, cookie banner)
+    demo/         Demo wizard, provenance panel, persona login, Digital Post inbox
+    auth/ landing/ ui/ workflow/
+  composables/
+    scenarios/    One config per demo scenario
+    useAuth.ts usePrefill.ts useDemoScenario.ts useConsent.ts useApi.ts ...
+  pages/
+    demo/         /demo hub and the five scenarios
+    forms/[slug].vue  webform rendering
+    cases/inbox.vue   caseworker inbox
+    cookies.vue tilgaengelighed.vue kontakt.vue auth/callback.vue
+  stores/         user, case, tenant (Pinia)
+  plugins/        consent.client.ts, dkfds.client.ts
+  middleware/ types/ assets/css/dkfds.scss
+server/           Nitro routes: session proxy (/api/session/**), Adressevælger proxy, sitemap, robots
 i18n/locales/     da.json, en.json
-plugins/          consent.client.ts, dkfds.client.ts
+public/           DKFDS fonts, images and icons, favicons, manifest
 tests/e2e/        Playwright specs, a11y/ holds the axe suite
 docs/             DKFDS_REFERENCE.md, testing.md, guides/, reports/
 ```

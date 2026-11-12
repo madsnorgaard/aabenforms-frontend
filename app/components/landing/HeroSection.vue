@@ -22,7 +22,7 @@
           </p>
 
           <p class="landing-hero__stack mt-0 mb-7">
-            Drupal 11 &middot; Nuxt 3 &middot; ECA &middot; JSON:API
+            Drupal 11 &middot; Nuxt 4 &middot; ECA &middot; JSON:API
           </p>
 
           <!-- Primary jumps straight into the live demo when it is enabled

@@ -2,7 +2,7 @@ import dkfdsRemRebase from './postcss/dkfds-rem-rebase.mjs'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: '2026-11-01',
   devtools: { enabled: true },
 
   modules: [
@@ -22,11 +22,13 @@ export default defineNuxtConfig({
     // onto the resolved PostCSS chain here because `postcss.plugins` entries
     // are resolved by name through jiti, which silently drops local files.
     'vite:extendConfig'(config) {
-      config.css ??= {}
-      if (!config.css.postcss || typeof config.css.postcss === 'string') {
-        config.css.postcss = { plugins: [] }
+      // Vite 8 types the resolved config as read-only; we mutate it on purpose.
+      const vite = config as { css?: { postcss?: string | { plugins?: unknown[] } } }
+      vite.css ??= {}
+      if (!vite.css.postcss || typeof vite.css.postcss === 'string') {
+        vite.css.postcss = { plugins: [] }
       }
-      ;(config.css.postcss.plugins ??= []).push(dkfdsRemRebase())
+      ;(vite.css.postcss.plugins ??= []).push(dkfdsRemRebase())
     },
   },
 
@@ -178,8 +180,8 @@ export default defineNuxtConfig({
       devSourcemap: true,
     },
 
+    // The dev server host is set in devServer.host below (Nuxt 4 drops vite.server.host).
     server: {
-      host: true,
       strictPort: false,
       allowedHosts: ['aabenforms-frontend.ddev.site', 'localhost', '127.0.0.1'],
       hmr: {
@@ -197,10 +199,8 @@ export default defineNuxtConfig({
     },
   },
 
-  // Experimental features for better performance
+  // Payload extraction and JSON payloads are Nuxt 4 defaults; typed pages are opt-in.
   experimental: {
-    payloadExtraction: true,
-    renderJsonPayloads: true,
     typedPages: true,
   },
 

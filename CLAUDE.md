@@ -1,8 +1,8 @@
-# ÅbenForms Frontend - Nuxt 3
+# ÅbenForms Frontend - Nuxt 4
 
 ## Project Overview
 
-**ÅbenForms Frontend** is the user-facing Nuxt 3 application that provides:
+**ÅbenForms Frontend** is the user-facing Nuxt 4 application that provides:
 - Multi-tenant marketing and application interfaces
 - Dynamic webform rendering from Drupal backend
 - Workflow task management dashboards
@@ -14,12 +14,12 @@ This frontend connects to the [ÅbenForms Drupal backend](https://github.com/mad
 
 | Component | Version | Purpose |
 |-----------|---------|---------|
-| Nuxt | 3.21.0 | Vue.js framework |
-| Vue | 3.5.27 | UI library |
+| Nuxt | 4.6 | Vue.js framework (Nuxt 3 reached end of life on 31 July 2026) |
+| Vue | 3.5 | UI library |
 | Node.js | 22 | Runtime |
 | pnpm | 9.15.0 | Package manager |
 | TypeScript | 5.9.3 | Type safety |
-| Vite | 7.3.1 | Build tool |
+| Vite | 8 (rolldown) | Build tool |
 | DDEV | Latest | Local development |
 
 ## Essential Commands
@@ -58,7 +58,7 @@ ddev exec pnpm run build
 ddev exec pnpm run preview
 
 # Type checking
-ddev exec pnpm run vue-tsc --noEmit
+ddev exec pnpm exec nuxt typecheck
 ```
 
 ### Development Workflow
@@ -81,42 +81,28 @@ ddev exec pnpm update
 ### Directory Structure
 ```
 frontend/
-├── .ddev/                    # DDEV configuration
-│   └── config.yaml          # Node.js 22, Nuxt daemon
+├── .ddev/                    # DDEV configuration (Node 22, production build served as a daemon)
 ├── .nuxt/                    # Generated (gitignored)
-├── assets/                   # Global CSS, images
-│   └── css/
-├── components/               # Vue components
-│   ├── WebformRenderer.vue   # Dynamic form rendering
-│   ├── WorkflowDashboard.vue # User task dashboard
-│   └── TenantBranding.vue    # Per-tenant styling
-├── composables/              # Vue composables
-│   ├── useApi.ts            # JSON:API client
-│   ├── useTenant.ts         # Tenant detection
-│   └── useAuth.ts           # Authentication (future)
-├── layouts/                  # Page layouts
-│   ├── default.vue          # Standard layout
-│   └── marketing.vue        # Marketing site layout
-├── locales/                  # i18n translations
-│   ├── da.json              # Danish
-│   └── en.json              # English
-├── pages/                    # File-based routing
-│   ├── index.vue            # Marketing home
-│   ├── forms/               # Form pages
-│   │   └── [slug].vue       # Dynamic form rendering
-│   └── workflows/           # Workflow pages
-│       └── tasks.vue        # User task list
-├── stores/                   # Pinia state management
-│   ├── tenant.ts            # Tenant state
-│   └── user.ts              # User session
-├── types/                    # TypeScript types
-│   ├── tenant.ts
-│   ├── webform.ts
-│   └── workflow.ts
-├── app.vue                   # Root component
-├── nuxt.config.ts           # Nuxt configuration
-├── package.json             # Dependencies
-└── tsconfig.json            # TypeScript config
+├── app/                      # Nuxt 4 source directory (`~` resolves here)
+│   ├── app.vue               # Root component (sprite, per-language head)
+│   ├── error.vue             # Error page
+│   ├── assets/css/dkfds.scss # DKFDS entry stylesheet
+│   ├── components/           # Vue components (fds/, demo/, auth/, landing/, ui/, workflow/)
+│   ├── composables/          # useApi, useAuth, usePrefill, useDemoScenario, scenarios/ ...
+│   ├── middleware/           # auth.ts, tenant.ts
+│   ├── pages/                # File-based routing (demo/, forms/, cases/, workflows/, auth/)
+│   ├── plugins/              # consent, dkfds, tenant, a11y-focus, chunk-reload (client)
+│   ├── stores/               # Pinia stores: user, case, tenant
+│   └── types/                # TypeScript types
+├── i18n/locales/             # da.json, en.json (@nuxtjs/i18n 10)
+├── public/                   # DKFDS fonts, images and icons, favicons, manifest
+├── server/                   # Nitro: /api/session/** proxy, Adressevælger proxy, sitemap, robots
+├── postcss/                  # dkfds-rem-rebase plugin
+├── tests/e2e/                # Playwright specs, a11y/ holds the axe suite
+├── nuxt.config.ts            # Nuxt configuration
+├── tailwind.config.ts        # Tailwind (preflight off, DKFDS owns base styles)
+├── package.json              # Dependencies
+└── tsconfig.json             # Project references into .nuxt/tsconfig.*.json
 ```
 
 ### Routing
@@ -125,17 +111,17 @@ Nuxt uses file-based routing:
 
 | Route | File | Purpose |
 |-------|------|---------|
-| `/` | `pages/index.vue` | Marketing home (default tenant) |
-| `/forms/:slug` | `pages/forms/[slug].vue` | Webform rendering |
-| `/workflows/tasks` | `pages/workflows/tasks.vue` | User task dashboard |
-| `/demo` | `pages/demo.vue` | Interactive demo (future) |
+| `/` | `app/pages/index.vue` | Marketing home (default tenant) |
+| `/forms/:slug` | `app/pages/forms/[slug].vue` | Webform rendering |
+| `/workflows/tasks` | `app/pages/workflows/tasks.vue` | User task dashboard |
+| `/demo` | `app/pages/demo/index.vue` | Demo hub and scenarios |
 
 ### Multi-Tenancy
 
 The frontend detects the current tenant from the domain:
 
 ```typescript
-// composables/useTenant.ts
+// app/composables/useTenant.ts
 const { detectTenant } = useTenant()
 
 // Detects tenant from domain (e.g., aarhus.aabenforms.dk)
@@ -223,7 +209,7 @@ locale.value = 'en'
 
 ### Adding Translations
 
-1. Edit `locales/da.json`:
+1. Edit `i18n/locales/da.json`:
 ```json
 {
   "hero": {
@@ -232,7 +218,7 @@ locale.value = 'en'
 }
 ```
 
-2. Edit `locales/en.json`:
+2. Edit `i18n/locales/en.json`:
 ```json
 {
   "hero": {
@@ -315,11 +301,11 @@ console.log(config.public.apiBase) // https://aabenforms.ddev.site
 
 ```bash
 # Create new page
-touch pages/pricing.vue
+touch app/pages/pricing.vue
 ```
 
 ```vue
-<!-- pages/pricing.vue -->
+<!-- app/pages/pricing.vue -->
 <template>
   <div>
     <h1>{{ $t('pricing.title') }}</h1>
@@ -333,11 +319,11 @@ Automatically available at: `/pricing`
 
 ```bash
 # Create component
-touch components/FeatureCard.vue
+touch app/components/FeatureCard.vue
 ```
 
 ```vue
-<!-- components/FeatureCard.vue -->
+<!-- app/components/FeatureCard.vue -->
 <template>
   <div class="feature-card">
     <h3>{{ title }}</h3>
@@ -362,11 +348,11 @@ Use in pages (auto-imported):
 
 ```bash
 # Create store
-touch stores/user.ts
+touch app/stores/user.ts
 ```
 
 ```typescript
-// stores/user.ts
+// app/stores/user.ts
 import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore('user', {
@@ -416,7 +402,7 @@ Automatic via `.platform.app.yaml` in platform repository.
 ## Marketing vs. Application Pages
 
 ### Marketing Pages (Default Tenant)
-Located in `pages/`:
+Located in `app/pages/`:
 - `index.vue` - Home/hero
 - `features.vue` - Feature showcase
 - `pricing.vue` - Pricing plans
@@ -430,7 +416,7 @@ Located in `pages/`:
 - Product showcase
 
 ### Application Pages (Customer Tenants)
-Located in `pages/app/`:
+Located in `app/pages/app/`:
 - `app/forms/[slug].vue` - Form rendering
 - `app/workflows/tasks.vue` - Task dashboard
 - `app/profile.vue` - User profile

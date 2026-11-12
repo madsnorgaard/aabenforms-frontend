@@ -13,7 +13,7 @@
  */
 export default defineEventHandler(async (event) => {
   assertSameOrigin(event)
-  const body = await readBody<{ idpLogout?: unknown, returnPath?: unknown }>(event).catch(() => null)
+  const body = await readJsonBody<{ idpLogout?: unknown, returnPath?: unknown }>(event).catch(() => null)
   const idpLogout = body?.idpLogout !== false
   const path = typeof body?.returnPath === 'string' && body.returnPath.startsWith('/') && !body.returnPath.startsWith('//')
     ? body.returnPath

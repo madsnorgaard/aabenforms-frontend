@@ -74,7 +74,7 @@ test.describe('Logout - full auth', () => {
     await page.fill('#password', 'test1234')
     await page.click('#kc-login')
     await page.waitForURL(/\/demo\/klage/, { timeout: 20000 })
-    await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: 'Det ved kommunen allerede' })).toBeVisible({ timeout: 15000 })
     await expect(page.getByTestId('demo-persona-mismatch')).toHaveCount(0)
     await expect(page.locator('.form-group-radio input[type="radio"]:not(:disabled)').first()).toBeVisible()
     await expectSessionHiddenFromPage(page)
