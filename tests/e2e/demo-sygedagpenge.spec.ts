@@ -72,7 +72,7 @@ test.describe('Sygedagpenge demo - full auth', () => {
     if (await noCookies.isVisible()) await noCookies.click()
 
     // Step 2: employer, hours requirement and first sick day are fetched.
-    await expect(page.getByRole('heading', { name: 'Det spurgte vi ikke om' })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('heading', { name: 'Det ved kommunen allerede' })).toBeVisible({ timeout: 15000 })
     const table = page.locator('table.demo-provenance__table')
     await expect(table).toBeVisible({ timeout: 15000 })
     await expect(table.locator('tr[data-prefill-key="applicant_cpr"]')).toContainText('150285-XXXX')

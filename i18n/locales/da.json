@@ -3,7 +3,7 @@
     "title": "Sagsindbakke",
     "subtitle": "Åbne sager og deres frister.",
     "loading": "Indlæser sager...",
-    "loadError": "Kunne ikke indlæse sager.",
+    "loadError": "Vi kunne ikke hente sagerne.",
     "empty": "Ingen sager.",
     "colId": "ID",
     "colTitle": "Titel",
@@ -62,7 +62,7 @@
       "us": "Drupal 11 og velkendte moduler som Webform, ECA og OpenID Connect",
       "them": "Leverandørens egen, lukkede platform"
     },
-    "footnote": "De proprietære alternativer løser deres opgave fint. Vi løser den bare på en måde, du selv kan vedligeholde, uden licensomkostninger der vokser med antallet af sager.",
+    "footnote": "De proprietære alternativer løser deres opgave fint. Vi løser den bare på en måde, du selv kan vedligeholde, uden licensomkostninger, der vokser med antallet af sager.",
     "topicLabel": "Emne"
   },
   "features": {
@@ -208,7 +208,7 @@
           "intro": "Klag over en afgørelse fra kommunen med hjælp fra en pårørende.",
           "fetched": {
             "cases": "Dine sager hos kommunen (sagsregister)",
-            "deadline": "Klagefrist (sagsregister)",
+            "deadline": "Klagefrist, altså sidste dag du kan klage (sagsregister)",
             "cpr": "Navn og CPR (MitID)"
           },
           "typed": {
@@ -238,8 +238,8 @@
     "wizard": {
       "steps": {
         "login": "Log ind med MitID",
-        "prefill": "Hentede oplysninger",
-        "form": "Det kun du ved",
+        "prefill": "Det ved kommunen allerede",
+        "form": "Det skal du selv oplyse",
         "workflow": "Sagsbehandling",
         "letter": "Digital Post"
       },
@@ -258,18 +258,18 @@
         "failure": "Fejlet"
       },
       "prefill": {
-        "heading": "Det spurgte vi ikke om",
-        "body": "Kommunen har allerede disse oplysninger. Her kan du se, hvad vi hentede, hvor det kommer fra, og med hvilken hjemmel. Hver linje har sit eget revisionsnummer.",
+        "heading": "Det ved kommunen allerede",
+        "body": "Kommunen har allerede disse oplysninger. Her kan du se, hvad vi hentede, hvor det kommer fra, og med hvilken hjemmel, altså hvilken lov der giver os lov til at hente dem. Hver linje har sit eget revisionsnummer.",
         "tableHeading": "Hentet fra registrene",
         "caption": "Oplysninger hentet fra registrene med kilde, hjemmel og status",
         "loading": "Henter oplysninger fra registrene ...",
-        "nothing": "Der blev ikke hentet nogen oplysninger til denne formular.",
+        "nothing": "Vi hentede ingen oplysninger til denne ansøgning.",
         "reload": "Hent igen",
         "col": {
           "field": "Oplysning",
           "value": "Værdi",
           "source": "Kilde",
-          "legal": "Hjemmel",
+          "legal": "Hjemmel (lovgrundlag)",
           "status": "Status"
         },
         "audit": "audit #{id}",
@@ -279,12 +279,12 @@
         "choose": "Vælg {field}",
         "chooseHint": "Hentet fra {register}. Vælg den, ansøgningen gælder.",
         "chooseFirst": "Vælg først i listen ovenfor.",
-        "youKnowHeading": "Det kun du ved",
+        "youKnowHeading": "Det skal du selv oplyse",
         "youKnowNone": "Alt er hentet. Du skal ikke skrive noget.",
         "nothingToChoose": "Der er intet at vælge under \"{field}\" lige nu: alle muligheder er allerede brugt eller udløbet. Prøv igen om lidt, eller kontakt kommunen."
       },
       "form": {
-        "heading": "Det kun du ved",
+        "heading": "Det skal du selv oplyse",
         "body": "Vi har udfyldt det, kommunen allerede ved. Udfyld resten.",
         "fromRegister": "fra {register}",
         "editHint": "Hentet fra {register}. Ret, hvis det ikke passer."
@@ -295,7 +295,7 @@
       "letter": {
         "heading": "Digital Post",
         "noLetterHeading": "Brevet er ikke nået frem endnu",
-        "noLetterBody": "Sagsbehandlingen kørte, men Digital Post-loggen har endnu ikke et brev til denne session. Tryk Opdater om lidt.",
+        "noLetterBody": "Sagsbehandlingen er kørt, men brevet er ikke registreret i Digital Post endnu. Tryk på Opdater om lidt.",
         "failedHeading": "Sagsbehandlingen stoppede",
         "failedBody": "Et trin i sagsbehandlingen fejlede. Se trinnet med fejl under Sagsbehandling, og prøv igen."
       },
@@ -306,7 +306,7 @@
       },
       "complete": {
         "heading": "Sagen er afgjort",
-        "body": "Fra login til brev i Digital Post uden et manuelt skridt på serveren."
+        "body": "Du kan læse afgørelsen i brevet i Digital Post herunder."
       },
       "validation": {
         "required": "Udfyld {field}",
@@ -317,9 +317,9 @@
       "errors": {
         "heading": "Der opstod en fejl",
         "sessionExpired": "Din MitID-session er udløbet (15 minutter). Log ind igen.",
-        "prefillFailed": "Oplysningerne kunne ikke hentes fra registrene. Prøv igen.",
+        "prefillFailed": "Vi kunne ikke hente oplysningerne fra registrene. Prøv igen.",
         "formNotFound": "Formularen findes ikke på serveren.",
-        "submitFailed": "Ansøgningen kunne ikke sendes. Prøv igen."
+        "submitFailed": "Vi kunne ikke sende din ansøgning. Prøv igen."
       },
       "mode": {
         "live": "LIVE",
@@ -343,7 +343,7 @@
       }
     },
     "interactive": "Interaktiv",
-    "interactiveDemo": "Interaktiv Demo",
+    "interactiveDemo": "Interaktiv demo",
     "forms": {
       "contact": {
         "title": "Kontaktformular",
@@ -355,7 +355,7 @@
         "selectSubject": "Vælg et emne",
         "message": "Din besked",
         "messagePlaceholder": "Skriv din besked her...",
-        "submit": "Send Besked",
+        "submit": "Send besked",
         "subjects": {
           "general": "Generel henvendelse",
           "support": "Support",
@@ -369,10 +369,10 @@
         "step": "Trin 1 af 4:",
         "stepInfo": "Borgerens ansøgning",
         "cpr": "CPR-nummer",
-        "cprHelp": "Auto-udfyldes efter MitID login i produktion",
+        "cprHelp": "I drift henter vi dit CPR-nummer fra dit MitID-login",
         "address": "Byggeadresse",
         "addressPlaceholder": "Søg adresse...",
-        "addressHelp": "Adressevælger autocomplete med validering",
+        "addressHelp": "Begynd at skrive, og vælg din adresse i listen",
         "buildingType": "Type af byggearbejde",
         "selectType": "Vælg type",
         "types": {
@@ -382,30 +382,30 @@
           "other": "Andet"
         },
         "description": "Beskrivelse af projekt",
-        "documents": "Upload tegninger og dokumenter",
+        "documents": "Vedhæft tegninger og dokumenter",
         "uploadHelp": "Klik for at vælge filer eller træk og slip",
         "uploadFormats": "PDF, DWG, JPG (maks 10 MB pr. fil)",
-        "submit": "Send Ansøgning"
+        "submit": "Send ansøgning"
       }
     },
     "security": {
       "title": "Sikkerhed",
-      "message": "Alle persondata krypteres automatisk ved indsendelse og håndteres i henhold til GDPR"
+      "message": "Vi krypterer alle personoplysninger, når du sender dem, og behandler dem efter databeskyttelsesreglerne"
     },
     "success": {
-      "title": "Tak for din indsendelse!",
-      "message": "Dette er en demo - ingen data er blevet gemt. I produktion ville din ansøgning nu blive sendt til sagsbehandling og du vil modtage bekræftelse via Digital Post.",
+      "title": "Tak for din ansøgning",
+      "message": "Dette er en demo, så vi har ikke gemt noget. I drift ville vi nu sende din ansøgning til sagsbehandling, og du ville få en bekræftelse i Digital Post.",
       "close": "Luk"
     },
     "workflow": {
-      "title": "Workflow gennemført",
-      "failedTitle": "Workflow gennemført med fejl",
+      "title": "Sagsbehandlingen er gennemført",
+      "failedTitle": "Sagsbehandlingen er gennemført med fejl",
       "submissionId": "Indsendelse",
       "stepsCompleted": "trin gennemført",
       "nextPhase": "Hvad sker der nu",
-      "nextPhaseDesc": "Følgende trin kører automatisk i produktion",
-      "experienceWorkflow": "Oplev hele workflowet",
-      "submitAnother": "Indsend en ny formular"
+      "nextPhaseDesc": "Disse trin kører automatisk i drift",
+      "experienceWorkflow": "Prøv hele forløbet",
+      "submitAnother": "Send en ny ansøgning"
     },
     "step": {
       "step": "Trin",
@@ -417,43 +417,43 @@
       "parent2Name": "Lars Hansen",
       "caseworkerName": "Aarhus Kommune",
       "approved": "godkendt",
-      "approvedViaMitId": "Autentificeret og godkendt via MitID",
+      "approvedViaMitId": "Bekræftet med MitID og godkendt",
       "approvalReceived": "Du har modtaget en godkendelsesanmodning",
-      "approvalDesc": "En samtykkeanmodning om fælles forældre myndighed kræver din godkendelse. Gennemgådetaljerne og autentificer med MitID for at bekræfte.",
-      "authenticateApprove": "Autentificer med MitID og godkend",
+      "approvalDesc": "Du skal godkende en anmodning, der kræver samtykke fra begge forældremyndighedsindehavere. Læs oplysningerne, og bekræft med MitID.",
+      "authenticateApprove": "Bekræft med MitID, og godkend",
       "caseReview": "Sag klar til gennemgang",
-      "caseReviewDesc": "Begge forældre har autentificeret via MitID og godkendt. Gennemgåansøgningen og tag en beslutning.",
+      "caseReviewDesc": "Begge forældre har bekræftet med MitID og godkendt. Læs ansøgningen, og træf en afgørelse.",
       "approveApplication": "Godkend ansøgning",
-      "completeTitle": "Workflow gennemført",
-      "completeDesc": "Byggetilladelsesansøgningen er behandlet gennem alle 4 faser - fra borgerindsendelse gennem dobbelt-forælder MitID-godkendelse til sagsbehandler-godkendelse.",
+      "completeTitle": "Sagsbehandlingen er gennemført",
+      "completeDesc": "Ansøgningen om byggetilladelse er nu igennem alle 4 trin: borgeren sendte den, begge forældre godkendte med MitID, og sagsbehandleren godkendte.",
       "processing": "Behandler...",
       "address": "Adresse",
       "type": "Type",
       "descriptionLabel": "Beskrivelse",
-      "digitalPost": "Afgørelse leveret til borger via Digital Post",
+      "digitalPost": "Afgørelsen er sendt til borgeren i Digital Post",
       "runAgain": "Kør demo igen",
-      "citizenAction": "Ansøgning indsendt og valideret",
-      "parentAction": "Autentificeret via MitID og godkendt",
-      "caseworkerAction": "Gennemgået og godkendt ansøgning",
-      "emailParent1": "Forælder 1 godkendelses-email",
-      "emailParent2": "Forælder 2 godkendelses-email",
-      "emailParentDesc": "Sikker godkendelseslink sendt med 7 dages frist",
-      "mitidParent1": "Forælder 1 MitID-autentificering",
-      "mitidParent2": "Forælder 2 MitID-autentificering",
-      "mitidParentDesc": "Forælder autentificerer med MitID og godkender",
-      "caseworkerAssigned": "Sagsbehandler-gennemgang",
-      "caseworkerAssignedDesc": "Begge forældre godkendt - sag tildelt sagsbehandler",
+      "citizenAction": "Ansøgningen er sendt og kontrolleret",
+      "parentAction": "Bekræftet med MitID og godkendt",
+      "caseworkerAction": "Har læst og godkendt ansøgningen",
+      "emailParent1": "E-mail til forælder 1 om godkendelse",
+      "emailParent2": "E-mail til forælder 2 om godkendelse",
+      "emailParentDesc": "Vi sender et sikkert link til godkendelse. Det gælder i 7 dage.",
+      "mitidParent1": "Forælder 1 bekræfter med MitID",
+      "mitidParent2": "Forælder 2 bekræfter med MitID",
+      "mitidParentDesc": "Forælderen bekræfter sin identitet med MitID og godkender",
+      "caseworkerAssigned": "Sagsbehandleren læser sagen",
+      "caseworkerAssignedDesc": "Begge forældre har godkendt. Sagen er hos en sagsbehandler.",
       "decision": "Afgørelse via Digital Post",
-      "decisionDesc": "Officiel afgørelse leveret til borger",
+      "decisionDesc": "Kommunen sender afgørelsen til borgeren",
       "backendSteps": {
-        "MitID Identity Validation": "MitID Identitetsvalidering",
-        "CPR Registry Lookup": "CPR-registret Opslag",
-        "GDPR Audit Trail": "GDPR Revisionslog"
+        "MitID Identity Validation": "Bekræftelse af identitet med MitID",
+        "CPR Registry Lookup": "Opslag i CPR-registret",
+        "GDPR Audit Trail": "Revisionslog (databeskyttelse)"
       },
       "backendDescs": {
-        "Citizen identity verified via NemID/MitID national eID": "Borgeridentitet bekræftet via NemID/MitID nationalt eID",
-        "Personal data retrieved from the national CPR registry (SF1520)": "Persondata hentet fra det nationale CPR-register (SF1520)",
-        "Audit log entry created for regulatory compliance": "Revisionslog-post oprettet for lovmæssig overholdelse"
+        "Citizen identity verified via NemID/MitID national eID": "Borgerens identitet er bekræftet med MitID",
+        "Personal data retrieved from the national CPR registry (SF1520)": "Personoplysninger hentet fra CPR-registret (SF1520)",
+        "Audit log entry created for regulatory compliance": "Opslaget er skrevet i revisionsloggen, som loven kræver"
       }
     },
     "klage": {
@@ -463,7 +463,7 @@
       "hub": {
         "fetched": {
           "cases": "Dine sager med afgørelse (sagsregister)",
-          "deadline": "Klagefrist, beregnet med helligdage (sagsregister)",
+          "deadline": "Klagefrist, altså sidste dag du kan klage, beregnet med helligdage (sagsregister)",
           "cpr": "Navn og CPR (MitID)"
         },
         "typed": {
@@ -474,7 +474,7 @@
         }
       },
       "prefill": {
-        "exempt": "Birthe er fritaget fra Digital Post. Breve til hende sendes derfor som fysisk brev."
+        "exempt": "Birthe er fritaget fra Digital Post. Vi sender derfor breve til hende med posten."
       },
       "option": {
         "decision": "Afgørelse: {type}",
@@ -506,7 +506,7 @@
       },
       "complete": {
         "heading": "Klagen er registreret",
-        "body": "Sagen har nu status Påklaget. Kvitteringen sendes til Birthe som fysisk brev, fordi hun er fritaget fra Digital Post."
+        "body": "Sagen har nu status Påklaget. Vi sender kvitteringen til Birthe som fysisk brev, fordi hun er fritaget fra Digital Post."
       },
       "commentary": {
         "login": "MitID-login giver kommunen Birthes CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
@@ -526,7 +526,7 @@
         "funktionsnedsaettelse": "Beskriv barnets funktionsnedsættelse",
         "funktionsnedsaettelseHint": "Fx diagnose og hvilke ekstra udgifter den giver i hverdagen.",
         "maanedligMerudgift": "Anslåede nødvendige merudgifter (kr./måned)",
-        "maanedligMerudgiftHint": "I demoen er grænsen 1.000 kr./md.: fra 1.000 kr. gives medhold, under 1.000 kr. ender sagen med afslag og klagevejledning."
+        "maanedligMerudgiftHint": "I demoen er grænsen 1.000 kr. om måneden: fra 1.000 kr. får du medhold (ja til dækning), under 1.000 kr. får du afslag (nej) og en vejledning i, hvordan du klager."
       },
       "validation": {
         "funktionsnedsaettelse": "Beskriv barnets funktionsnedsættelse",
@@ -535,11 +535,11 @@
       "complete": {
         "medhold": {
           "heading": "Medhold: merudgifterne dækkes",
-          "body": "Beløbet er mindst 1.000 kr./md., så flowet traf afgørelse om medhold, sendte afgørelsesbrevet og lukkede sagen via SF2900."
+          "body": "Beløbet er mindst 1.000 kr. om måneden, så kommunen gav medhold, sendte afgørelsesbrevet og lukkede sagen (SF2900)."
         },
         "afslag": {
-          "heading": "Afslag med klagevejledning",
-          "body": "Beløbet er under 1.000 kr./md. Flowet gennemførte partshøring, traf afgørelse om afslag, sendte brevet med klagevejledning og startede en klagefrist på 4 uger."
+          "heading": "Afslag: merudgifterne dækkes ikke",
+          "body": "Beløbet er under 1.000 kr. om måneden. Kommunen holdt partshøring (du fik mulighed for at svare, før den afgjorde sagen), gav afslag, sendte brevet med en vejledning i, hvordan du klager, og startede en klagefrist på 4 uger."
         },
         "neutral": {
           "heading": "Afgørelsen er sendt",
@@ -548,7 +548,7 @@
       },
       "commentary": {
         "login": "MitID-login giver kommunen dit CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
-        "prefill": "GET /api/prefill/merudgifter henter dine børn fra CPR Familie+ (SF6006, demo). Husstandsindkomsten hentes ikke, fordi § 41 ikke afhænger af forældrenes indkomst (dataminimering). Hvert opslag logges med hjemmel: Serviceloven §41, Forvaltningsloven §7, DBF art. 6(1)(e).",
+        "prefill": "GET /api/prefill/merudgifter henter dine børn fra CPR Familie+ (SF6006, demo). Husstandsindkomsten hentes ikke, fordi § 41 ikke afhænger af forældrenes indkomst (dataminimering). Hvert opslag logges med hjemmel: Serviceloven § 41, Forvaltningsloven § 7, Databeskyttelsesforordningen artikel 6, stk. 1, litra e.",
         "form": "Kun det, registrene ikke ved: barnets funktionsnedsættelse og de månedlige merudgifter. Beløbet styrer afgørelsen i demoen: 1.000 kr./md. eller mere giver medhold, mindre giver partshøring og afslag.",
         "workflow": "ECA-flowet opretter og journaliserer sagen og forgrener på beløbet: medhold lukkes via SF2900, afslag går gennem partshøring og starter en klagefrist. Indkomsten indgår ikke.",
         "letter": "Afgørelsesbrevet sendes til Digital Post (simuleret). Ved afslag indeholder det klagevejledning, og klagefristen er startet på sagen."
@@ -646,7 +646,7 @@
           "medhold": "Skoleskift godkendt",
           "afslag": "Skoleskift afvist"
         },
-        "loadError": "Kvitteringen kunne ikke hentes. Prøv igen om lidt."
+        "loadError": "Vi kunne ikke hente kvitteringen. Prøv igen om lidt."
       },
       "leaderNext": {
         "heading": "Næste skridt: skolelederen træffer afgørelse",
@@ -677,31 +677,31 @@
       "kickoff": {
         "eyebrow": "Live demo · Byggetilladelse",
         "heading": "Klik dig gennem hele MitID-flowet på 60 sekunder",
-        "lead": "Fra borgerens MitID-login over CPR-udfyldning og det visuelle workflow til Digital Post-leveringen. ECA-workflowet kører rigtigt på serveren; CPR-opslag og Digital Post kører i demo-tilstand med testdata, indtil Serviceplatformen-certifikater og MitID-registrering er på plads.",
+        "lead": "Du følger forløbet fra MitID-login over udfyldning med dine CPR-oplysninger til brevet i Digital Post. Sagsbehandlingen kører rigtigt på serveren. CPR-opslag og Digital Post kører med testdata, indtil certifikater og aftaler med Serviceplatformen og MitID er på plads.",
         "cta": "Start demo med MitID",
         "altCta": "Læs den tekniske gennemgang",
         "runtime": "Cirka 60 sekunder"
       },
       "mockBanner": {
         "title": "Mock-IdP - ikke ægte MitID",
-        "body": "Du autentificerer mod en lokal Keycloak-instans der efterligner MitID. Intet rigtigt CPR-nummer transmitteres."
+        "body": "Du logger ind hos en lokal testtjeneste (Keycloak), der efterligner MitID. Intet rigtigt CPR-nummer er i spil."
       },
       "steps": {
-        "auth": "Autentificering",
+        "auth": "Log ind",
         "form": "Bekræft data",
-        "workflow": "Workflow",
+        "workflow": "Sagsbehandling",
         "inbox": "Digital Post"
       },
       "auth": {
-        "heading": "Trin 1 · Autentificer med MitID",
+        "heading": "Trin 1 · Log ind med MitID",
         "body": "Du sendes til mock-MitID for at logge ind. Vælg en demo-bruger, fx Freja Nielsen, kodeord test1234.",
         "cta": "Log ind via mock-MitID",
-        "processing": "Forbereder autentificering …",
+        "processing": "Forbereder login …",
         "callbackProcessing": "Henter dine MitID-data …"
       },
       "form": {
         "heading": "Trin 2 · Bekræft byggeoplysninger",
-        "body": "MitID-claims er hentet og udfyldt på forhånd. Tilføj de manglende detaljer om dit byggeprojekt.",
+        "body": "Vi har udfyldt navn, CPR-nummer og adresse fra dit MitID-login. Skriv resten om dit byggeprojekt.",
         "prefilledPill": "Udfyldt fra MitID",
         "manualPill": "Manuel indtastning",
         "editLink": "Rediger",
@@ -716,19 +716,19 @@
           "descriptionPlaceholder": "Fx tilbygning på 30 m² mod nordfacaden, etage 1, materialer …"
         },
         "submit": "Indsend ansøgning",
-        "submitting": "Indsender til ECA-engine …",
-        "validation": "Udfyld venligst alle felter inden indsendelse"
+        "submitting": "Sender ansøgningen …",
+        "validation": "Udfyld alle felter, før du sender ansøgningen"
       },
       "workflow": {
-        "heading": "Trin 3 · Workflow kører",
-        "body": "ECA-flowet kører trin for trin på serveren. Hvert trin er en rigtig plugin-handling - CPR-opslag, audit-log og afsendelse til Digital Post.",
+        "heading": "Trin 3 · Vi behandler din ansøgning",
+        "body": "Sagsbehandlingen kører trin for trin på serveren: CPR-opslag, revisionslog og afsendelse til Digital Post. Hvert trin er en rigtig handling i flowet.",
         "waiting": "Venter på serverens svar …",
         "completed": "Alle trin gennemført",
         "noSteps": "Workflowet returnerede ingen trin. Tjek backend-loggen."
       },
       "inbox": {
         "heading": "Trin 4 · Afgørelse leveret",
-        "body": "Bekræftelsen er skrevet til Digital Post. I produktion landede dette brev i borgerens NgDP-indbakke. Her ser du den faktiske besked fra log-tabellen.",
+        "body": "Vi har sendt bekræftelsen til Digital Post. I drift ville brevet ligge i din Digital Post. Her ser du den besked, der blev sendt.",
         "empty": "Ingen breve fundet endnu - det kan tage et par sekunder.",
         "refresh": "Opdater",
         "refreshing": "Henter …",
@@ -760,7 +760,7 @@
         "inbox": "GET /api/digital-post/recent slår op i aabenforms_digital_post_log via SHA-256 af din session-CPR. Brevteksten renses på serveren, før den vises."
       },
       "assurance": {
-        "label": "NSIS-niveau",
+        "label": "Sikkerhedsniveau for dit login (NSIS)",
         "low": "Lav",
         "substantial": "Betydelig",
         "high": "Høj"
@@ -795,7 +795,7 @@
         "applicantCpr": "Dit CPR-nummer",
         "employer": "Arbejdsgiver",
         "employerCvr": "Arbejdsgiverens CVR-nummer",
-        "hoursRequirement": "Beskæftigelseskrav",
+        "hoursRequirement": "Beskæftigelseskrav (hvor meget du skal have arbejdet)",
         "hoursMet": "{hours} timer de seneste {months} måneder - kravet på {required} timer er opfyldt",
         "hoursNotMet": "{hours} timer de seneste {months} måneder - kravet på {required} timer er ikke opfyldt",
         "firstSickDay": "Første sygedag",
@@ -819,14 +819,14 @@
       },
       "commentary": {
         "login": "MitID-login giver kommunen dit CPR-nummer. Det sendes kun maskeret til browseren og fyldes ind på serveren ved indsendelse.",
-        "prefill": "GET /api/prefill/sygedagpenge henter arbejdsgiver og arbejdstimer fra eIndkomst (demo) og første sygedag fra arbejdsgiverens sygemelding i NemRefusion (demo). Lønnen bruges af kommunen til beregningen, men sendes ikke til browseren. Hvert opslag logges med hjemmel: Sygedagpengeloven §32, Forvaltningsloven §7, DBF art. 6(1)(e).",
+        "prefill": "GET /api/prefill/sygedagpenge henter arbejdsgiver og arbejdstimer fra eIndkomst (demo) og første sygedag fra arbejdsgiverens sygemelding i NemRefusion (demo). Lønnen bruges af kommunen til beregningen, men sendes ikke til browseren. Hvert opslag logges med hjemmel: Sygedagpengeloven § 32, Forvaltningsloven § 7, Databeskyttelsesforordningen artikel 6, stk. 1, litra e.",
         "form": "Kun det, registrene ikke ved: hvad du ikke kan, hvor længe det forventes at vare, og om du er i behandling. Du skal ikke oplyse en diagnose. Er du uenig i arbejdsgiverens oplysninger, giver du kommunen besked.",
         "workflow": "ECA-flowet bekræfter MitID, opretter og journaliserer sagen og tjekker beskæftigelseskravet: mindst 240 timer i de seneste 6 hele kalendermåneder og mindst 40 timer i 5 af dem. Opfyldt giver ret til sygedagpenge, ellers partshøring og afslag med klagevejledning.",
         "letter": "Afgørelsesbrevet sendes til Digital Post (simuleret) i et klart sprog med datoen for den første opfølgningssamtale. Datoen er 8 uger efter første sygedag - en forenkling i demoen, borger.dk siger, at kommunen vurderer sagen inden for 8 uger."
       },
       "complete": {
         "heading": "Du har ret til sygedagpenge",
-        "body": "Beskæftigelseskravet er opfyldt. Arbejdsgiveren betaler de første 30 kalenderdage, derefter udbetaler kommunen. Brevet herunder har datoen for den første opfølgningssamtale."
+        "body": "Du har arbejdet nok til at opfylde beskæftigelseskravet. Arbejdsgiveren betaler de første 30 kalenderdage, derefter udbetaler kommunen. Brevet herunder har datoen for den første opfølgningssamtale."
       },
       "disabled": {
         "heading": "Den interaktive demo kører lokalt - vi viser den gerne live",
@@ -902,14 +902,14 @@
   "landingCta": {
     "eyebrow": "Prøv demoen",
     "heading": "MitID ind, afgørelse ud",
-    "lead": "Klik dig gennem hele forløbet for en byggetilladelse. Du logger ind med vores mock-MitID, ser ECA-flowet køre og finder afgørelsen i Digital Post-indbakken.",
+    "lead": "Klik dig gennem hele forløbet for en byggetilladelse. Du logger ind med vores mock-MitID, ser sagsbehandlingen køre og finder afgørelsen i Digital Post.",
     "cta": "Åbn den interaktive demo",
     "altCta": "Læs den tekniske gennemgang",
     "bullet1": "Ægte OIDC-login med PKCE og nonce mod en test-IdP",
     "bullet2": "ECA-flowet kører synkront og returnerer hvert trin",
     "bullet3": "Afgørelsen hentes ud af Digital Post-loggen efter afsendelse",
     "preview": {
-      "stepLabel": "Trin 3 af 4: Flowet kører",
+      "stepLabel": "Trin 3 af 4: Vi behandler ansøgningen",
       "step1": "CPR-opslag (SF1520)",
       "step2": "Ansøgningen skrevet i revisionsloggen",
       "step3": "Kvittering sendes via Digital Post (SF1601)",
@@ -923,23 +923,23 @@
   "kontakt": {
     "title": "Kontakt",
     "heading": "Skriv til os",
-    "lead": "Vi vender tilbage hurtigst muligt. Bemærk: dette er en POC-platform - ikke en produktionsbåndbredde.",
+    "lead": "Vi svarer, så snart vi kan. Bemærk, at dette er en testplatform og ikke en driftsløsning.",
     "successTitle": "Tak for din besked",
-    "successMessage": "Vi har modtaget din henvendelse og vender tilbage hurtigst muligt."
+    "successMessage": "Vi har modtaget din besked og svarer, så snart vi kan."
   },
   "useCases": {
     "title": "Anvendelsesmuligheder",
     "municipal": {
       "title": "Kommuner",
-      "desc": "Digitalisér borgerservices med sikre, GDPR-compliant workflows",
+      "desc": "Digitalisér borgerservice med sikre sagsforløb, der overholder databeskyttelsesreglerne",
       "ex1": "Byggeansøgninger med automatisk sagsgang",
       "ex2": "Socialforvaltning med CPR-opslag",
       "ex3": "Digital Post integration til beskeder"
     },
     "business": {
       "title": "Virksomheder",
-      "desc": "Automatisér interne processer med MitID Erhverv authentication",
-      "ex1": "Medarbejder onboarding workflows",
+      "desc": "Automatisér interne processer med login via MitID Erhverv",
+      "ex1": "Forløb for nye medarbejdere",
       "ex2": "Udgiftsrefusion og godkendelser",
       "ex3": "HR-processer og dokumenthåndtering"
     },
@@ -958,7 +958,7 @@
   },
   "demoRequest": {
     "title": "Book en demo",
-    "subtitle": "Vi kontakter dig inden for 24 timer for at planlægge en guidet session.",
+    "subtitle": "Vi kontakter dig inden for 24 timer for at aftale en gennemgang.",
     "name": "Dit navn",
     "email": "E-mail",
     "organization": "Organisation",
@@ -967,7 +967,7 @@
     "submitting": "Sender...",
     "error": "Vi kunne ikke sende din anmodning. Prøv igen.",
     "successTitle": "Anmodning modtaget",
-    "successMessage": "Tak! Vi kontakter dig inden for 24 timer for at planlægge din demo-session."
+    "successMessage": "Tak. Vi kontakter dig inden for 24 timer for at aftale en gennemgang af demoen."
   },
   "footer": {
     "license": "Åben kildekode under GPL-2.0-licensen",
@@ -981,12 +981,12 @@
     "retry": "Prøv igen",
     "submit": "Indsend",
     "submitting": "Indsender...",
-    "success": "Tak for din indsendelse! Vi vender tilbage hurtigst muligt.",
-    "loadError": "Kunne ikke indlæse formularen. Prøv venligst igen.",
-    "submitError": "Der opstod en fejl ved indsendelse. Prøv venligst igen.",
-    "validationErrors": "Ret venligst følgende fejl:",
+    "success": "Tak. Vi har modtaget din henvendelse og vender tilbage til dig.",
+    "loadError": "Vi kunne ikke hente formularen. Prøv igen.",
+    "submitError": "Vi kunne ikke sende din ansøgning. Prøv igen.",
+    "validationErrors": "Ret disse fejl, før du sender:",
     "unknownError": "Ukendt fejl",
-    "unsupportedFieldType": "Dette felttype understøttes ikke endnu",
+    "unsupportedFieldType": "Vi kan ikke vise dette felt endnu. Kontakt kommunen, hvis du ikke kan udfylde ansøgningen.",
     "fieldRequired": "{field} skal udfyldes",
     "pageTitle": "Selvbetjeningsformular",
     "address": {
@@ -997,12 +997,12 @@
       "clear": "Ryd",
       "attribution": "Adressedata leveres af Danmarks Adresseregister (Dataforsyningen)"
     },
-    "mitidRequired": "Denne ansøgning kræver, at du bekræfter din identitet med MitID, før du kan udfylde den.",
+    "mitidRequired": "Log ind med MitID, før du udfylder ansøgningen. Så henter vi de oplysninger, kommunen allerede har om dig.",
     "mitidLoggedInAs": "Logget ind med MitID som",
     "selectPlaceholder": "Vælg",
     "cprHint": "Fx 010190-1234",
     "cvrHint": "Fx 12 34 56 78",
-    "successHeading": "Din indsendelse er modtaget"
+    "successHeading": "Vi har modtaget din ansøgning"
   },
   "a11y": {
     "skipToContent": "Spring til hovedindhold"
@@ -1017,9 +1017,9 @@
     "user": "Bruger",
     "cpr": "CPR",
     "myTasks": "Mine opgaver",
-    "sessionExpired": "Din session er udløbet. Log venligst ind igen.",
+    "sessionExpired": "Din session er udløbet. Log ind igen.",
     "loginRequired": "Du skal være logget ind for at se denne side.",
-    "loginFailed": "Login mislykkedes",
+    "loginFailed": "Vi kunne ikke logge dig ind",
     "loginSuccess": "Du er nu logget ind",
     "returnHome": "Tilbage til forsiden"
   },
@@ -1027,15 +1027,15 @@
     "myTasks": "Mine opgaver",
     "taskCount": "{count} opgaver",
     "loadingTasks": "Indlæser opgaver...",
-    "loadError": "Kunne ikke indlæse opgaver. Prøv venligst igen.",
+    "loadError": "Vi kunne ikke hente opgaverne. Prøv igen.",
     "retry": "Prøv igen",
     "noTasks": "Ingen opgaver at vise",
     "filterAll": "Alle",
-    "filterPending": "Afventende",
+    "filterPending": "Afventer",
     "filterApproved": "Godkendt",
     "filterRejected": "Afvist",
     "status": {
-      "pending": "Afventende",
+      "pending": "Afventer",
       "approved": "Godkendt",
       "rejected": "Afvist",
       "in_progress": "I gang",
@@ -1046,10 +1046,10 @@
     "approve": "Godkend",
     "reject": "Afvis",
     "addComment": "Tilføj kommentar",
-    "commentPlaceholder": "Skriv din kommentar hier...",
+    "commentPlaceholder": "Skriv din kommentar her ...",
     "cancel": "Annuller",
     "submit": "Indsend",
-    "actionError": "Handlingen mislykkedes. Prøv venligst igen.",
+    "actionError": "Vi kunne ikke gennemføre handlingen. Prøv igen.",
     "today": "I dag",
     "yesterday": "I går",
     "daysAgo": "{days} dage siden",
@@ -1066,43 +1066,43 @@
     "proceedToPay": "Betal {amount} DKK",
     "cancel": "Annuller",
     "processing": "Behandler betaling...",
-    "processingNetsEasy": "Forbinder til Nets Easy betalingsgateway...",
+    "processingNetsEasy": "Forbinder til Nets Easy ...",
     "processingCreditCard": "Behandler kreditkortbetaling...",
-    "processingMobilepay": "Åbner MobilePay app...",
-    "processingBankTransfer": "Genererer bankoverførselsinstruktioner...",
+    "processingMobilepay": "Åbner MobilePay-appen ...",
+    "processingBankTransfer": "Henter oplysninger til bankoverførsel ...",
     "processingGeneric": "Behandler din betaling...",
-    "successTitle": "Betaling gennemført!",
-    "successMessage": "Din betaling er blevet behandlet succesfuldt.",
+    "successTitle": "Betalingen er gennemført",
+    "successMessage": "Vi har modtaget din betaling.",
     "errorTitle": "Betaling fejlede",
-    "errorGeneric": "Der opstod en fejl under betalingen. Prøv venligst igen.",
+    "errorGeneric": "Betalingen gik ikke igennem. Prøv igen.",
     "tryAgain": "Prøv igen",
     "continue": "Fortsæt",
     "receiptTitle": "Kvittering",
-    "downloadReceipt": "Download kvittering",
+    "downloadReceipt": "Hent kvittering",
     "netsEasyDescription": "Betal med Dankort, Visa eller Mastercard",
     "creditCard": "Kreditkort",
     "creditCardDescription": "Visa, Mastercard, American Express",
     "mobilepayDescription": "Betal med MobilePay",
     "bankTransfer": "Bankoverførsel",
-    "bankTransferDescription": "Modtag faktura med bankoplysninger",
+    "bankTransferDescription": "Du får en faktura med bankoplysninger",
     "validation": {
       "amountPositive": "Beløbet skal være større end 0",
-      "methodRequired": "Vælg venligst en betalingsmetode",
+      "methodRequired": "Vælg en betalingsmetode",
       "workflowIdRequired": "Workflow-ID mangler"
     }
   },
   "appointment": {
     "title": "Vælg tid til møde",
-    "subtitle": "Vælg en dato og et tidspunkt der passer dig",
+    "subtitle": "Vælg en dato og et tidspunkt, der passer dig",
     "startDate": "Startdato",
     "endDate": "Slutdato",
     "clearDates": "Ryd datofilter",
     "clear": "Ryd",
     "loading": "Indlæser ledige tider...",
     "retry": "Prøv igen",
-    "fetchError": "Kunne ikke hente ledige tider. Prøv venligst igen.",
+    "fetchError": "Vi kunne ikke hente ledige tider. Prøv igen.",
     "noSlots": "Ingen ledige tider",
-    "noSlotsHint": "Prøv at vælge et andet datointervall eller ryd filteret",
+    "noSlotsHint": "Prøv et andet datointerval, eller ryd filteret",
     "showAllDates": "Vis alle datoer",
     "slotsAvailable": "ledige tider",
     "minutes": "min",
@@ -1110,8 +1110,8 @@
     "cancel": "Annuller",
     "confirmBooking": "Bekræft booking",
     "booking": "Booker...",
-    "bookingError": "Booking fejlede. Prøv venligst igen.",
-    "bookingSuccess": "Din booking er bekræftet!",
+    "bookingError": "Vi kunne ikke gennemføre din booking. Prøv igen.",
+    "bookingSuccess": "Din tid er booket",
     "bookingSuccessMessage": "Du vil modtage en bekræftelse via e-mail og SMS."
   },
   "siteHeader": {
@@ -1137,19 +1137,19 @@
     "no": "Nej",
     "ok": "OK",
     "help": "Hjælp",
-    "required": "Påkrævet",
-    "optional": "Valgfri",
+    "required": "Skal udfyldes",
+    "optional": "Frivilligt",
     "search": "Søg",
     "filter": "Filtrer",
     "sort": "Sorter",
-    "download": "Download",
+    "download": "Hent",
     "upload": "Upload",
     "print": "Udskriv",
     "share": "Del",
     "copy": "Kopier",
     "copied": "Kopieret!",
     "error": "Fejl",
-    "success": "Succes",
+    "success": "Det lykkedes",
     "warning": "Advarsel",
     "info": "Information",
     "noResults": "Ingen resultater",
@@ -1162,26 +1162,26 @@
     "contactSupport": "Kontakt support"
   },
   "errors": {
-    "generic": "Der opstod en uventet fejl. Prøv venligst igen.",
+    "generic": "Der skete en uventet fejl. Prøv igen.",
     "network": "Netværksfejl. Tjek din internetforbindelse.",
-    "timeout": "Anmodningen tog for lang tid. Prøv venligst igen.",
-    "unauthorized": "Du har ikke adgang til denne ressource.",
-    "forbidden": "Adgang nægtet.",
-    "notFound": "Siden eller ressourcen blev ikke fundet.",
-    "serverError": "Serverfejl. Prøv venligst igen senere.",
-    "validationFailed": "Validering fejlede. Tjek dine indtastninger.",
-    "required": "Dette felt er påkrævet",
-    "invalidEmail": "Ugyldig e-mailadresse",
-    "invalidPhone": "Ugyldigt telefonnummer",
-    "invalidCPR": "Ugyldigt CPR-nummer (format: DDMMYY-XXXX)",
-    "invalidCVR": "Ugyldigt CVR-nummer (format: 12 34 56 78)",
+    "timeout": "Det tog for lang tid at få svar. Prøv igen.",
+    "unauthorized": "Du har ikke adgang til denne side.",
+    "forbidden": "Du har ikke adgang.",
+    "notFound": "Vi kan ikke finde siden.",
+    "serverError": "Der er en fejl på serveren. Prøv igen senere.",
+    "validationFailed": "Der er fejl i det, du har skrevet. Ret dem, og prøv igen.",
+    "required": "Du skal udfylde feltet",
+    "invalidEmail": "Skriv en gyldig e-mailadresse, fx navn{'@'}eksempel.dk",
+    "invalidPhone": "Skriv et gyldigt telefonnummer, fx 12 34 56 78",
+    "invalidCPR": "Skriv dit CPR-nummer med 10 cifre, fx 010190-1234",
+    "invalidCVR": "Skriv virksomhedens CVR-nummer med 8 cifre, fx 12 34 56 78",
     "tooShort": "For kort (minimum {min} tegn)",
     "tooLong": "For langt (maksimum {max} tegn)",
-    "invalidFormat": "Ugyldigt format",
-    "fileTooLarge": "Filen er for stor (maksimum {size})",
-    "unsupportedFileType": "Filtypen understøttes ikke",
+    "invalidFormat": "Det, du har skrevet, har ikke det rigtige format",
+    "fileTooLarge": "Filen er for stor. Den må højst fylde {size}",
+    "unsupportedFileType": "Vi kan ikke modtage denne filtype",
     "tryAgain": "Prøv igen",
-    "helpText": "Hvis problemet fortsætter, kontakt venligst support.",
+    "helpText": "Kontakt kommunen, hvis problemet fortsætter.",
     "page": {
       "solution": "Selvbetjening",
       "heading": "Siden kunne ikke vises",
@@ -1195,7 +1195,7 @@
   "help": {
     "cpr": {
       "title": "CPR-nummer",
-      "text": "Dit CPR-nummer er dit danske personnummer i formatet DDMMYY-XXXX. I produktion udfyldes dette automatisk efter MitID login."
+      "text": "Dit CPR-nummer er dit personnummer på 10 cifre, fx 010190-1234. I drift henter vi det fra dit MitID-login."
     },
     "cvr": {
       "title": "CVR-nummer",
@@ -1203,15 +1203,15 @@
     },
     "address": {
       "title": "Adressesøgning",
-      "text": "Begynd at skrive din adresse, og vælg fra listen. Adressen valideres automatisk mod Danmarks Adresseregister."
+      "text": "Begynd at skrive din adresse, og vælg den i listen. Vi kontrollerer adressen mod Danmarks Adresseregister."
     },
     "mitid": {
       "title": "MitID login",
-      "text": "MitID er Danmarks fælles digitale identitet. Log ind med din MitID app eller nøglekort."
+      "text": "MitID er dit digitale id i Danmark. Log ind med MitID-appen eller din kodeviser."
     },
     "workflow": {
-      "title": "Workflow status",
-      "text": "Her kan du følge status på din ansøgning. Du modtager også opdateringer via e-mail og Digital Post."
+      "title": "Status på din sag",
+      "text": "Her kan du følge din sag. Du får besked i Digital Post, når der sker noget nyt."
     }
   },
   "accessibility": {
@@ -1269,7 +1269,7 @@
     },
     "alert": {
       "info": "Information",
-      "success": "Succes",
+      "success": "Det lykkedes",
       "warning": "Advarsel",
       "error": "Fejl",
       "close": "Luk"
@@ -1324,15 +1324,15 @@
       "cookies": {
         "title": "Cookiepolitik",
         "lead": "Her kan du læse, hvilke cookies løsningen bruger, og hvad de bruges til.",
-        "placeholder": "Løsningen sætter i dag kun en nødvendig cookie, der husker dit sprogvalg. Der indsamles ikke statistik.",
+        "placeholder": "Løsningen sætter i dag kun nødvendige cookies, der husker dit sprogvalg og dit svar på cookiebanneret. Vi indsamler ikke statistik.",
         "body": "Nødvendige cookies kræver ikke samtykke. Hvis vi senere tilføjer statistik, bliver du spurgt først."
       }
     }
   },
   "cookies": {
     "banner": {
-      "heading": "Fortæl os om du accepterer cookies",
-      "text": "Vi indsamler statistik ved hjælp af tredjepartscookies til at forbedre brugeroplevelsen. Alle indsamlede data anonymiseres.",
+      "heading": "Fortæl os, om du accepterer cookies",
+      "text": "Vi bruger kun nødvendige cookies, der husker dit sprog og dit valg her. Vi indsamler ikke statistik.",
       "link": "Læs mere om vores brug af cookies",
       "accept": "Accepter cookies",
       "reject": "Nej tak til cookies"
