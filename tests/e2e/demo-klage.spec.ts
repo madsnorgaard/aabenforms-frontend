@@ -103,6 +103,7 @@ test.describe('Klage demo - full auth', () => {
     await page.getByRole('button', { name: 'Fortsæt' }).click()
     await expect(currentStep(page)).toHaveText('Det kun du ved')
     await expect(page.locator('textarea')).toHaveCount(1)
+    await page.locator('input#erklaering').check()
     await page.getByRole('button', { name: /Indsend/i }).click()
     await expect(page.locator('[data-module="error-summary"] a')).toHaveCount(1)
     await scan(page)

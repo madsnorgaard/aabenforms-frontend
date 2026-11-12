@@ -72,6 +72,7 @@ test.describe('Klage med fuldmagt - full auth', () => {
     // Step 3: only the reason.
     await page.getByRole('button', { name: 'Fortsæt' }).click()
     await page.locator('textarea').fill('Min mor har udgifter til medicin og transport på over 1.000 kr. om måneden. Afslaget bygger på et for lavt beløb.')
+    await page.locator('input#erklaering').check()
     await page.getByRole('button', { name: /Indsend/i }).click()
 
     // Steps 4 and 5: appeal registered in her name, copy in his inbox.

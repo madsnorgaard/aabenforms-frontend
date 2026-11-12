@@ -197,8 +197,21 @@
               />
             </template>
 
+            <!-- Erklæring (KL component 7): the citizen's own tick, required
+                 by the webform, so the submit waits for it. -->
+            <FdsCheckbox
+              id="erklaering"
+              name="erklaering"
+              :model-value="declared"
+              :label="$t('form.declaration')"
+              :error="fieldErrors.erklaering"
+              required
+              class="mt-5"
+              @update:model-value="setDeclared"
+            />
+
             <div class="button-group mt-6">
-              <FdsButton type="submit" variant="primary" :disabled="phase === 'submitting'">
+              <FdsButton type="submit" variant="primary" :disabled="phase === 'submitting' || !declared">
                 {{ phase === 'submitting' ? $t('demo.byggetilladelse.form.submitting') : $t('demo.byggetilladelse.form.submit') }}
               </FdsButton>
               <FdsButton variant="tertiary" :disabled="phase === 'submitting'" @click="goToStep(1)">
@@ -348,6 +361,7 @@ const {
   values,
   choices,
   fieldErrors,
+  declared,
   workflowSteps,
   animatedStepIndex,
   inboxLetters,
@@ -376,6 +390,7 @@ const {
   goToStep,
   continueToForm,
   clearFieldError,
+  setDeclared,
   submit,
   refreshInbox,
   reset,
@@ -423,7 +438,7 @@ function setValue(key: string, v: string | number) {
 }
 
 const summaryErrors = computed<FdsErrorSummaryItem[]>(() =>
-  Object.entries(fieldErrors.value).map(([key, message]) => ({ id: fieldId(key), message })),
+  Object.entries(fieldErrors.value).map(([key, message]) => ({ id: key === 'erklaering' ? 'erklaering' : fieldId(key), message })),
 )
 
 /** Labels for "Det kun du ved": config fields first, unknown keys verbatim. */

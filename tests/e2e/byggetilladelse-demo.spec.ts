@@ -127,7 +127,9 @@ test.describe('Byggetilladelse demo - full auth', () => {
     await page.getByRole('button', { name: 'Fortsæt' }).click()
     await expect(page.locator('ol.step-indicator li.current .step-title').first()).toHaveText('Det kun du ved')
 
-    // Validation goes to the DKFDS error summary.
+    // Validation goes to the DKFDS error summary (the declaration is ticked
+    // first, since the submit button waits for it).
+    await page.locator('input#erklaering').check()
     await page.getByRole('button', { name: /Indsend ansøgning/i }).click()
     await expect(page.locator('[data-module="error-summary"]')).toBeVisible()
     await expect(page.locator('[data-module="error-summary"] a')).toHaveCount(1)
