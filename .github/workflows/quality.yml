@@ -69,6 +69,7 @@ jobs:
           tests/e2e/a11y tests/e2e/cookies.spec.ts tests/e2e/landing.spec.ts tests/e2e/demo-hub.spec.ts
           tests/e2e/byggetilladelse-demo.spec.ts tests/e2e/demo-merudgifter.spec.ts tests/e2e/demo-skoleskift.spec.ts
           tests/e2e/demo-klage.spec.ts tests/e2e/demo-klage-fuldmagt.spec.ts tests/e2e/demo-sygedagpenge.spec.ts
+          tests/e2e/security-headers.spec.ts
           --project=chromium --workers=1 --reporter=line
       - uses: actions/upload-artifact@v7
         if: failure()

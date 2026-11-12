@@ -11,50 +11,6 @@
       <p class="tenant-name-text">{{ tenant?.name || 'ÅbenForms' }}</p>
     </div>
 
-    <!-- Dynamic Theme Styles -->
-    <component :is="'style'" v-if="tenant">
-      :root {
-        --color-primary: {{ tenant.primaryColor || '#0060a8' }};
-        --color-primary-50: {{ lighten(tenant.primaryColor || '#0060a8', 0.95) }};
-        --color-primary-100: {{ lighten(tenant.primaryColor || '#0060a8', 0.9) }};
-        --color-primary-600: {{ tenant.primaryColor || '#0060a8' }};
-        --color-primary-700: {{ darken(tenant.primaryColor || '#0060a8', 0.1) }};
-        --color-primary-900: {{ darken(tenant.primaryColor || '#0060a8', 0.2) }};
-
-        --color-secondary: {{ tenant.secondaryColor || '#28a745' }};
-        --color-secondary-50: {{ lighten(tenant.secondaryColor || '#28a745', 0.95) }};
-        --color-secondary-600: {{ tenant.secondaryColor || '#28a745' }};
-        --color-secondary-700: {{ darken(tenant.secondaryColor || '#28a745', 0.1) }};
-      }
-
-      /* Apply to primary buttons */
-      .bg-primary-600 {
-        background-color: var(--color-primary-600) !important;
-      }
-
-      .bg-primary-700 {
-        background-color: var(--color-primary-700) !important;
-      }
-
-      /* Text intentionally NOT re-coloured to the raw tenant primary: a
-         mid-tone brand blue (e.g. #007acc) fails WCAG AA as small text on
-         white. Eyebrow labels and links keep the Tailwind primary-600
-         (#0071c9, >= 4.5:1), so accessibility does not depend on the tenant's
-         chosen hue. Buttons/borders below still take the tenant colour. */
-
-      .border-primary-600 {
-        border-color: var(--color-primary-600) !important;
-      }
-
-      /* Apply to secondary buttons */
-      .bg-secondary-600 {
-        background-color: var(--color-secondary-600) !important;
-      }
-
-      .bg-secondary-700 {
-        background-color: var(--color-secondary-700) !important;
-      }
-    </component>
   </div>
 </template>
 
@@ -66,45 +22,61 @@ const props = defineProps<{
 
 const { tenant, detectTenant, applyBranding } = useTenant()
 
-// Detect tenant on mount
+// Detect tenant on mount. The colours are applied as CSS custom properties
+// on <html> through the CSSOM (stores/tenant.ts applyBranding), never as a
+// generated <style> element: the Content-Security-Policy allows no inline
+// style elements, and a style element built from tenant data would let a
+// tenant record inject arbitrary CSS.
 onMounted(async () => {
   await detectTenant()
   applyBranding()
 })
 
-// Helper functions for color manipulation
-function lighten(color: string, amount: number): string {
-  // Simple lighten - convert hex to rgb, increase values
-  const hex = color.replace('#', '')
-  const r = parseInt(hex.substring(0, 2), 16)
-  const g = parseInt(hex.substring(2, 4), 16)
-  const b = parseInt(hex.substring(4, 6), 16)
-
-  const newR = Math.min(255, Math.floor(r + (255 - r) * amount))
-  const newG = Math.min(255, Math.floor(g + (255 - g) * amount))
-  const newB = Math.min(255, Math.floor(b + (255 - b) * amount))
-
-  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`
-}
-
-function darken(color: string, amount: number): string {
-  // Simple darken - convert hex to rgb, decrease values
-  const hex = color.replace('#', '')
-  const r = parseInt(hex.substring(0, 2), 16)
-  const g = parseInt(hex.substring(2, 4), 16)
-  const b = parseInt(hex.substring(4, 6), 16)
-
-  const newR = Math.floor(r * (1 - amount))
-  const newG = Math.floor(g * (1 - amount))
-  const newB = Math.floor(b * (1 - amount))
-
-  return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`
-}
 </script>
+
+<style>
+/* Tenant colour hooks. The variables are set on :root by applyBranding();
+   without a tenant the defaults below apply. Text is intentionally NOT
+   re-coloured to the raw tenant primary: a mid-tone brand blue fails WCAG AA
+   as small text on white, so eyebrow labels and links keep the Tailwind
+   primary-600. Buttons and borders take the tenant colour. */
+:root {
+  --color-primary: #0060a8;
+  --color-primary-50: #f2f7fb;
+  --color-primary-100: #e6eff6;
+  --color-primary-600: #0060a8;
+  --color-primary-700: #005697;
+  --color-primary-900: #004c86;
+  --color-secondary: #28a745;
+  --color-secondary-50: #f4fbf6;
+  --color-secondary-600: #28a745;
+  --color-secondary-700: #24963e;
+}
+
+.bg-primary-600 {
+  background-color: var(--color-primary-600) !important;
+}
+
+.bg-primary-700 {
+  background-color: var(--color-primary-700) !important;
+}
+
+.border-primary-600 {
+  border-color: var(--color-primary-600) !important;
+}
+
+.bg-secondary-600 {
+  background-color: var(--color-secondary-600) !important;
+}
+
+.bg-secondary-700 {
+  background-color: var(--color-secondary-700) !important;
+}
+</style>
 
 <style scoped>
 .tenant-branding {
-  /* This component is mostly invisible, it just injects styles */
+  /* Mostly invisible: it carries the logo and name when asked for. */
 }
 
 .tenant-logo {

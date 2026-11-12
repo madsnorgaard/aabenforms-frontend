@@ -11,6 +11,32 @@ interface TenantState {
  * Tenant store for managing multi-tenancy state
  * Replaces the useState pattern in useTenant composable
  */
+const DEFAULT_PRIMARY = '#0060a8'
+const DEFAULT_SECONDARY = '#28a745'
+
+/**
+ * Tenant branding comes from a JSON:API record (and a localStorage copy of
+ * it), so it is data, not trusted CSS. Only a six-digit hex colour is used;
+ * anything else falls back to the platform default.
+ */
+export function safeHexColor(value: unknown, fallback: string): string {
+  return typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value) ? value.toLowerCase() : fallback
+}
+
+/**
+ * A logo is used as an <img src>; accept only https URLs and site-relative
+ * paths so a record cannot point the browser at javascript: or data: URIs.
+ */
+export function safeLogoUrl(value: unknown): string | undefined {
+  if (typeof value !== 'string' || value === '') return undefined
+  if (value.startsWith('/') && !value.startsWith('//')) return value
+  try {
+    return new URL(value).protocol === 'https:' ? value : undefined
+  } catch {
+    return undefined
+  }
+}
+
 export const useTenantStore = defineStore('tenant', {
   state: (): TenantState => ({
     tenant: null,
@@ -117,9 +143,9 @@ export const useTenantStore = defineStore('tenant', {
       return {
         name: domainData.attributes.name,
         domain: domainData.attributes.hostname,
-        logo: domainData.attributes.logo_url,
-        primaryColor: domainData.attributes.primary_color || '#0060a8',
-        secondaryColor: domainData.attributes.secondary_color || '#28a745',
+        logo: safeLogoUrl(domainData.attributes.logo_url),
+        primaryColor: safeHexColor(domainData.attributes.primary_color, DEFAULT_PRIMARY),
+        secondaryColor: safeHexColor(domainData.attributes.secondary_color, DEFAULT_SECONDARY),
         settings: {
           ...domainData.attributes.third_party_settings,
           enableMitId: domainData.attributes.third_party_settings?.aabenforms?.enable_mitid !== false,
@@ -175,17 +201,24 @@ export const useTenantStore = defineStore('tenant', {
       if (!process.client || !this.tenant) return
 
       const root = document.documentElement
+      const primary = safeHexColor(this.tenant.primaryColor, DEFAULT_PRIMARY)
+      const secondary = safeHexColor(this.tenant.secondaryColor, DEFAULT_SECONDARY)
 
-      // Set CSS custom properties
-      root.style.setProperty('--color-primary', this.tenant.primaryColor || '#0060a8')
-      root.style.setProperty('--color-secondary', this.tenant.secondaryColor || '#28a745')
-
-      // Generate lighter/darker variants
-      const primary = this.tenant.primaryColor || '#0060a8'
-      const secondary = this.tenant.secondaryColor || '#28a745'
-
+      // CSSOM only (no generated <style> element): allowed by the
+      // Content-Security-Policy, and a validated hex value cannot carry CSS.
+      root.style.setProperty('--color-primary', primary)
+      root.style.setProperty('--color-primary-50', this.lightenColor(primary, 95))
+      root.style.setProperty('--color-primary-100', this.lightenColor(primary, 90))
+      root.style.setProperty('--color-primary-600', primary)
+      root.style.setProperty('--color-primary-700', this.darkenColor(primary, 10))
+      root.style.setProperty('--color-primary-900', this.darkenColor(primary, 20))
       root.style.setProperty('--color-primary-light', this.lightenColor(primary, 20))
       root.style.setProperty('--color-primary-dark', this.darkenColor(primary, 20))
+
+      root.style.setProperty('--color-secondary', secondary)
+      root.style.setProperty('--color-secondary-50', this.lightenColor(secondary, 95))
+      root.style.setProperty('--color-secondary-600', secondary)
+      root.style.setProperty('--color-secondary-700', this.darkenColor(secondary, 10))
       root.style.setProperty('--color-secondary-light', this.lightenColor(secondary, 20))
       root.style.setProperty('--color-secondary-dark', this.darkenColor(secondary, 20))
     },
