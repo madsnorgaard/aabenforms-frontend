@@ -33,8 +33,10 @@ ENV NODE_ENV=production
 ARG NUXT_API_INTERNAL_BASE=http://aabenforms_drupal
 ENV NUXT_API_INTERNAL_BASE=$NUXT_API_INTERNAL_BASE
 
-# Copy only built output
-COPY --from=builder /app/.output ./
+# Copy only built output, owned by the unprivileged node user the image ships.
+COPY --from=builder --chown=node:node /app/.output ./
+
+USER node
 
 EXPOSE 3000
 
