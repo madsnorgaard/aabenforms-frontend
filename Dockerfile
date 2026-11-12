@@ -1,4 +1,4 @@
-# Multi-stage Nuxt 3 SSR build for aabenforms.dk
+# Multi-stage Nuxt 4 SSR build for aabenforms.dk
 # Stage 1: build
 FROM node:22-alpine AS builder
 

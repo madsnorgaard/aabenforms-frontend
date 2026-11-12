@@ -17,7 +17,7 @@ The frontend automatically detects the current tenant based on the domain name a
                    │ 1. Page load
                    ▼
 ┌─────────────────────────────────────────────────┐
-│  Frontend (Nuxt 3)                              │
+│  Frontend (Nuxt 4)                              │
 │  ├─ plugins/tenant.client.ts                    │
 │  │  └─ Auto-detect on app startup               │
 │  ├─ composables/useTenant.ts                    │
