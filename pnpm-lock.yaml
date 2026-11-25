@@ -68,8 +68,8 @@ importers:
         specifier: ^10.7.0
         version: 10.7.0(postcss@8.5.33)
       axe-core:
-        specifier: ^4.12.1
-        version: 4.14.0
+        specifier: ^4.14.1
+        version: 4.14.1
       postcss:
         specifier: ^8.5.33
         version: 8.5.33
@@ -2027,8 +2027,8 @@ packages:
     peerDependencies:
       postcss: ^8.1.0
 
-  axe-core@4.14.0:
-    resolution: {integrity: sha512-9WTZxEjsZ7b13TH8JPmbV2z8CHbl80/2hm3XPEG4JgNdQLK81IBRXmSxHfMAOkSqQeRxT/0dwNDz2GOm3zzpcQ==}
+  axe-core@4.14.1:
+    resolution: {integrity: sha512-FHfa+lmNjQZfJz1q8wKqIDwC6DExcHt/pkjNQb09a3NPjCKg2rhu5qb2S4r76ASyFNNtuFooJpZe37OgudVGtQ==}
     engines: {node: '>=4'}
 
   b4a@1.9.0:
@@ -4771,7 +4771,7 @@ snapshots:
 
   '@axe-core/playwright@4.14.0(playwright-core@1.65.1)':
     dependencies:
-      axe-core: 4.14.0
+      axe-core: 4.14.1
       playwright-core: 1.65.1
 
   '@babel/code-frame@7.29.7':
@@ -6932,7 +6932,7 @@ snapshots:
       postcss: 8.5.33
       postcss-value-parser: 4.2.0
 
-  axe-core@4.14.0: {}
+  axe-core@4.14.1: {}
 
   b4a@1.9.0: {}
 
